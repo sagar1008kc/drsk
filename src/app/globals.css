@@ -1,0 +1,173 @@
+@import 'primereact/resources/themes/lara-dark-indigo/theme.css';
+@import 'primereact/resources/primereact.min.css';
+@import 'primeicons/primeicons.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 0, 0, 0;
+  --primary: 37, 99, 235;
+  --secondary: 147, 51, 234;
+  --accent: 56, 189, 248;
+  --purple-glow: 168, 85, 247;
+  --silver: 226, 232, 240;
+}
+
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 3s linear infinite;
+  background-size: 200% auto;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+}
+
+/* Circuit Grid */
+.circuit-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(var(--primary), 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--primary), 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.15;
+  mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 70%);
+}
+
+/* Node points */
+.node-points {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.node-point {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(var(--purple-glow), 0.8);
+  border-radius: 50%;
+  filter: blur(2px);
+  animation: nodePulse 4s ease-in-out infinite;
+  box-shadow:
+    0 0 10px rgba(var(--purple-glow), 0.5),
+    0 0 20px rgba(var(--purple-glow), 0.3),
+    0 0 30px rgba(var(--purple-glow), 0.1);
+}
+
+.node-point:nth-child(2n) {
+  background: rgba(var(--silver), 0.8);
+  box-shadow:
+    0 0 10px rgba(var(--silver), 0.5),
+    0 0 20px rgba(var(--silver), 0.3),
+    0 0 30px rgba(var(--silver), 0.1);
+}
+
+@keyframes nodePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.8;
+  }
+}
+
+/* Glow text effect */
+.glow-text {
+  text-shadow:
+    0 0 10px rgba(var(--primary), 0.5),
+    0 0 20px rgba(var(--primary), 0.3),
+    0 0 30px rgba(var(--primary), 0.1);
+  animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes textGlow {
+  from {
+    text-shadow:
+      0 0 10px rgba(var(--primary), 0.5),
+      0 0 20px rgba(var(--primary), 0.3),
+      0 0 30px rgba(var(--primary), 0.1);
+  }
+  to {
+    text-shadow:
+      0 0 15px rgba(var(--primary), 0.7),
+      0 0 25px rgba(var(--primary), 0.5),
+      0 0 35px rgba(var(--primary), 0.3);
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Certification card styles */
+.cert-card {
+  @apply relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-6 
+         hover:from-blue-900/30 hover:to-purple-900/30 transition-all duration-500 backdrop-blur-sm shadow-xl;
+}
+
+.cert-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, 
+    rgba(var(--purple-glow), 0.15) 0%, 
+    rgba(var(--primary), 0.1) 50%, 
+    transparent 100%);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.cert-card:hover::before {
+  opacity: 1;
+}
+
+.cert-image {
+  @apply relative w-20 h-20 mx-auto mb-4 transition-transform duration-500;
+  filter: drop-shadow(0 0 10px rgba(var(--purple-glow), 0.3));
+}
+
+.cert-card:hover .cert-image {
+  transform: scale(1.05);
+}
+
+/* LinkedIn Button */
+.libutton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 7px;
+  text-align: center;
+  outline: none;
+  text-decoration: none !important;
+  color: #ffffff !important;
+  width: 200px;
+  height: 32px;
+  border-radius: 16px;
+  background-color: #0A66C2;
+  font-family: "SF Pro Text", Helvetica, sans-serif;
+  transition: all 0.3s ease;
+  margin: 0 auto;
+}
+
+.libutton:hover {
+  background-color: #004182;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);
+}
