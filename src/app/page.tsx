@@ -1,9 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ProgressBar } from 'primereact/progressbar';
+import { useEffect, useCallback, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const certifications = [
   { name: 'Google Cloud Architect', icon: '/googleIcon.png' },
@@ -99,187 +98,248 @@ const skillCategories = {
 };
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false);
+  const navFlowRef = useRef<HTMLDivElement>(null);
+  const dataStreamRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number>();
+
   useEffect(() => {
-    // Create flashes
-    const createFlashes = () => {
-      const container = document.querySelector('.flash-layer');
-      if (!container) return;
-      container.innerHTML = '';
-      for (let i = 0; i < 12; i++) { // Increased number of flashes
-        const flash = document.createElement('div');
-        flash.className = 'flash';
-        flash.style.left = `${Math.random() * 100}%`;
-        flash.style.top = `${Math.random() * 100}%`;
-        flash.style.width = `${Math.random() * 200 + 100}px`;
-        flash.style.height = flash.style.width;
-        flash.style.animationDelay = `${Math.random() * 4}s`;
-        container.appendChild(flash);
-      }
-    };
-
-    // Create light streaks
-    const createStreaks = () => {
-      const container = document.querySelector('.flash-layer');
-      if (!container) return;
-      for (let i = 0; i < 15; i++) { // Increased number of streaks
-        const streak = document.createElement('div');
-        streak.className = 'light-streak';
-        streak.style.top = `${Math.random() * 100}%`;
-        streak.style.left = `${Math.random() * 100}%`;
-        streak.style.width = `${Math.random() * 150 + 100}px`; // Increased width
-        streak.style.transform = `rotate(${Math.random() * 360}deg)`;
-        streak.style.animationDelay = `${Math.random() * 3}s`;
-        container.appendChild(streak);
-      }
-    };
-
-    // Create floating orbs
-    const createOrbs = () => {
-      const container = document.querySelector('.flash-layer');
-      if (!container) return;
-      for (let i = 0; i < 8; i++) { // Increased number of orbs
-        const orb = document.createElement('div');
-        orb.className = 'orb';
-        orb.style.left = `${Math.random() * 100}%`;
-        orb.style.top = `${Math.random() * 100}%`;
-        orb.style.width = `${Math.random() * 120 + 60}px`; // Increased size
-        orb.style.height = orb.style.width;
-        orb.style.animationDelay = `${Math.random() * 4}s`;
-        container.appendChild(orb);
-      }
-    };
-
-    // Create nodes with enhanced effects
-    const createNodes = () => {
-      const container = document.querySelector('.node-points');
-      if (!container) return;
-      container.innerHTML = '';
-      for (let i = 0; i < 25; i++) { // Increased number of nodes
-        const node = document.createElement('div');
-        node.className = 'node-point';
-        node.style.left = `${Math.random() * 100}%`;
-        node.style.top = `${Math.random() * 100}%`;
-        node.style.animationDelay = `${Math.random() * 4}s`;
-        container.appendChild(node);
-
-        if (i > 0 && Math.random() > 0.4) { // Increased connection probability
-          const line = document.createElement('div');
-          line.className = 'connection-line';
-          line.style.width = `${Math.random() * 150 + 50}px`; // Varied line lengths
-          line.style.top = `${Math.random() * 100}%`;
-          line.style.left = `${Math.random() * 100}%`;
-          line.style.transform = `rotate(${Math.random() * 360}deg)`;
-          line.style.animationDelay = `${Math.random() * 3}s`;
-          container.appendChild(line);
-        }
-      }
-    };
-
-    // Initialize all effects
-    const initEffects = () => {
-      createFlashes();
-      createStreaks();
-      createOrbs();
-      createNodes();
-    };
-
-    initEffects();
-    window.addEventListener('resize', initEffects);
-
-    return () => {
-      window.removeEventListener('resize', initEffects);
-    };
+    setMounted(true);
+    return () => setMounted(false);
   }, []);
 
+  const createDataParticles = useCallback(() => {
+    if (!dataStreamRef.current || !mounted) return;
+    const container = dataStreamRef.current;
+    
+    const createParticle = () => {
+      const particle = document.createElement('div');
+      particle.className = 'data-particle';
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.top = '0';
+      const duration = 3 + Math.random() * 2;
+      particle.style.animation = `moveDown ${duration}s linear`;
+      container.appendChild(particle);
+      
+      setTimeout(() => {
+        if (particle && particle.parentNode === container) {
+          particle.remove();
+        }
+      }, duration * 1000);
+    };
+
+    const animate = () => {
+      createParticle();
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [mounted]);
+
+  const handleNavClick = useCallback((e: MouseEvent, targetId: string) => {
+    if (!navFlowRef.current || !mounted) return;
+    const container = navFlowRef.current;
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    e.preventDefault();
+    const targetRect = target.getBoundingClientRect();
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const endX = targetRect.left + targetRect.width / 2;
+    const endY = targetRect.top;
+
+    for (let i = 0; i < 20; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'nav-particle';
+      const progress = i / 19;
+      const x = startX + (endX - startX) * progress;
+      const y = startY + (endY - startY) * progress;
+      
+      particle.style.left = `${x}px`;
+      particle.style.top = `${y}px`;
+      particle.style.animation = `flowToTarget 0.5s ease ${i * 0.02}s forwards`;
+      
+      container.appendChild(particle);
+      setTimeout(() => {
+        if (particle && particle.parentNode === container) {
+          particle.remove();
+        }
+      }, 1000);
+    }
+
+    setTimeout(() => {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }, 200);
+  }, [mounted]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const cleanup = createDataParticles();
+
+    const navButtons = document.querySelectorAll('a[href^="#"]');
+    const clickHandlers = new Map();
+
+    navButtons.forEach(button => {
+      const handler = (e: Event) => {
+        const targetId = button.getAttribute('href')?.slice(1);
+        if (targetId) {
+          handleNavClick(e as unknown as MouseEvent, targetId);
+        }
+      };
+      clickHandlers.set(button, handler);
+      button.addEventListener('click', handler);
+    });
+
+    return () => {
+      cleanup?.();
+      navButtons.forEach(button => {
+        const handler = clickHandlers.get(button);
+        if (handler) {
+          button.removeEventListener('click', handler);
+        }
+      });
+    };
+  }, [createDataParticles, handleNavClick, mounted]);
+
+  if (!mounted) {
+    return null; // or a loading state
+  }
+
   return (
-    <main className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white overflow-hidden">
+    <main className="min-h-screen text-white overflow-hidden">
+      {/* SVG Definitions */}
+      <svg width="0" height="0" className="hidden">
+        <defs>
+          <clipPath id="wave-path">
+            <path d="M0,0 C50,0 50,4 100,4 L100,8 C50,8 50,4 0,4 Z" />
+          </clipPath>
+        </defs>
+      </svg>
+
       {/* Background elements */}
-      <div className="circuit-grid" />
-      <div className="node-points" />
+      <div className="ai-background" />
+      <div className="neural-grid" />
+      <div ref={dataStreamRef} className="data-stream" />
+      <div ref={navFlowRef} className="nav-flow" />
+      
+      {/* Golden Flash Effect */}
+      <div className="golden-flash-container">
+        <div className="golden-flash" />
+        <div className="golden-flash" />
+        <div className="golden-flash" />
+      </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-[100vh] flex items-center justify-center px-4 pt-8 pb-16">
-        <div className="relative z-10 text-center max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="relative text-5xl md:text-7xl font-bold mb-6">
-              <span className="absolute top-0 left-0 w-full h-full bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 animate-gradient-x blur-sm">
-                Dr. SK
-              </span>
-              <span className="relative bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 animate-gradient-x">
-                Dr. SK
-              </span>
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 rounded-full blur-sm animate-pulse"></span>
-            </h1>
+      <AnimatePresence mode="wait">
+        <motion.section 
+          key="hero-section"
+          className="relative min-h-[100vh] flex items-center justify-center px-4 pt-8 pb-16"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="relative z-10 text-center max-w-4xl mx-auto">
+            <motion.div
+              key="content-wrapper"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h1 className="relative text-5xl md:text-7xl font-bold text-center">
+                <span className="border-bottom-animated">
+                  <span className="typewriter-container">
+                    <span className="typewriter-text dr">Dr</span>
+                    <span className="typewriter-text dot">.</span>
+                    <span className="typewriter-text sk">SK</span>
+                    <span className="typewriter-cursor"></span>
+                  </span>
+                  <motion.div
+                    key={mounted ? 'mounted' : 'unmounted'}
+                    initial={{ scaleX: 0, opacity: 0 }}
+                    animate={{ scaleX: 1, opacity: 1 }}
+                    transition={{ 
+                      duration: 2, 
+                      ease: [0.4, 0, 0.2, 1],
+                      delay: 2.5,
+                      opacity: { duration: 0.8, delay: 2.5 }
+                    }}
+                    className="absolute -bottom-4 -left-[20%] w-[140%] h-[4px] bg-gradient-to-r from-transparent via-blue-500/80 via-purple-500/80 to-transparent"
+                    style={{ 
+                      transformOrigin: "left",
+                      boxShadow: "0 0 40px rgba(37,99,235,0.6), 0 0 80px rgba(147,51,234,0.4)"
+                    }}
+                  />
+                  <div className="wave-animation" />
+                </span>
+              </h1>
 
-            <div className="relative w-48 h-48 md:w-64 md:h-64 mx-auto mb-12">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 blur-lg opacity-50 animate-pulse"></div>
-              <div className="relative h-full rounded-full overflow-hidden ring-4 ring-blue-500/50 shadow-[0_0_30px_rgba(37,99,235,0.3)]">
-                <Image
-                  src="/sk.png"
-                  alt="Dr. SK"
-                  fill
-                  sizes="(max-width: 768px) 192px, 256px"
-                  className="object-cover hover:scale-110 transition-transform duration-500"
-                  priority
-                  quality={90}
-                />
+              <div className="title-container">
+                <motion.p
+                  key="title-1"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 3.5, duration: 0.8 }}
+                  className="subtitle text-2xl md:text-3xl text-gray-200 font-semibold"
+                >
+                  Sr. Software Engineer
+                </motion.p>
+                <motion.div
+                  key="title-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 3.8, duration: 0.8 }}
+                  className="space-y-3 text-gray-300"
+                >
+                  <p className="subtitle font-medium text-lg bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+                    Cybersecurity and AI Consultant
+                  </p>
+                  <p className="subtitle font-medium pb-8">Author</p>
+                </motion.div>
               </div>
-            </div>
 
-            <div className="space-y-4 mb-12">
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                className="text-2xl md:text-3xl text-gray-200 font-semibold"
-              >
-                Sr. Software Engineer
-              </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                className="space-y-3 text-gray-300"
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="flex justify-center items-center gap-2 sm:gap-4"
               >
-                <p className="font-medium text-lg bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
-                  Cybersecurity and AI Consultant
-                </p>
-                <p className="font-medium">Author</p>
+                <a 
+                  href="#about" 
+                  className="px-3 sm:px-6 py-2.5 text-sm sm:text-base bg-blue-600 rounded-full hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20 whitespace-nowrap"
+                >
+                  About Me
+                </a>
+                <a 
+                  href="#certifications" 
+                  className="px-3 sm:px-6 py-2.5 text-sm sm:text-base bg-purple-600 rounded-full hover:bg-purple-700 transition-colors shadow-lg shadow-purple-500/20 whitespace-nowrap"
+                >
+                  Education
+                </a>
+                <a 
+                  href="#work" 
+                  className="px-3 sm:px-6 py-2.5 text-sm sm:text-base bg-green-600 rounded-full hover:bg-green-700 transition-colors shadow-lg shadow-green-500/20 whitespace-nowrap"
+                >
+                  Projects
+                </a>
               </motion.div>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="flex justify-center items-center gap-2 sm:gap-4"
-            >
-              <a 
-                href="#about" 
-                className="px-3 sm:px-6 py-2.5 text-sm sm:text-base bg-blue-600 rounded-full hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20 whitespace-nowrap"
-              >
-                About Me
-              </a>
-              <a 
-                href="#certifications" 
-                className="px-3 sm:px-6 py-2.5 text-sm sm:text-base bg-purple-600 rounded-full hover:bg-purple-700 transition-colors shadow-lg shadow-purple-500/20 whitespace-nowrap"
-              >
-                Education
-              </a>
-              <a 
-                href="#work" 
-                className="px-3 sm:px-6 py-2.5 text-sm sm:text-base bg-green-600 rounded-full hover:bg-green-700 transition-colors shadow-lg shadow-green-500/20 whitespace-nowrap"
-              >
-                Projects
-              </a>
             </motion.div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </motion.section>
+      </AnimatePresence>
+
+      {/* Section Connector */}
+      <div className="section-connector">
+        <div className="connector-line" />
+        <div className="connector-dot top" />
+        <div className="connector-dot bottom" />
+      </div>
 
       {/* About Me Section */}
       <section id="about" className="relative py-20 px-4 bg-black/30">
@@ -356,6 +416,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Section Connector */}
+      <div className="section-connector">
+        <div className="connector-line" />
+        <div className="connector-dot top" />
+        <div className="connector-dot bottom" />
+      </div>
 
       {/* Certifications & Education Section */}
       <section id="certifications" className="relative py-20 px-4 bg-black/30">
@@ -442,6 +509,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Section Connector */}
+      <div className="section-connector">
+        <div className="connector-line" />
+        <div className="connector-dot top" />
+        <div className="connector-dot bottom" />
+      </div>
 
       {/* Projects Section */}
       <section id="work" className="relative py-20 px-4 bg-gradient-to-b from-black/50 to-gray-900/30">
@@ -541,6 +615,13 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Section Connector */}
+      <div className="section-connector">
+        <div className="connector-line" />
+        <div className="connector-dot top" />
+        <div className="connector-dot bottom" />
+      </div>
+
       {/* Author Section */}
       <section id="author" className="relative py-20 px-4 bg-black/30">
         <div className="max-w-5xl mx-auto">
@@ -619,6 +700,13 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      {/* Section Connector */}
+      <div className="section-connector">
+        <div className="connector-line" />
+        <div className="connector-dot top" />
+        <div className="connector-dot bottom" />
+      </div>
 
       {/* Contact Section */}
       <section id="contact" className="relative py-20 px-4">
