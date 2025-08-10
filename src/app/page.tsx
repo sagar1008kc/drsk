@@ -246,6 +246,20 @@ export default function Home() {
           transition={{ duration: 0.8 }}
         >
           <div className="relative z-10 text-center max-w-4xl mx-auto">
+            {/* Profile Image on Top */}
+            <div className="flex justify-center mb-6">
+              <div className="rounded-full border-4 border-blue-400 shadow-xl bg-gradient-to-br from-blue-900/60 to-purple-900/60 p-1" style={{width: 140, height: 140, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Image
+                  src="/sk.png"
+                  alt="Dr. SK Profile"
+                  width={128}
+                  height={128}
+                  className="rounded-full object-cover shadow-lg"
+                  priority
+                />
+              </div>
+            </div>
+            {/* Dr. SK Title */}
             <motion.div
               key="content-wrapper"
               initial={{ opacity: 0, y: 20 }}
@@ -258,7 +272,7 @@ export default function Home() {
                     <span className="typewriter-text dr">Dr</span>
                     <span className="typewriter-text dot">.</span>
                     <span className="typewriter-text sk">SK</span>
-                    <span className="typewriter-cursor"></span>
+                    {/* Remove cursor fade-out logic, keep cursor always visible if needed */}
                   </span>
                   <motion.div
                     key={mounted ? 'mounted' : 'unmounted'}
@@ -328,6 +342,12 @@ export default function Home() {
                 >
                   Projects
                 </a>
+                <a 
+                  href="#author" 
+                  className="px-3 sm:px-6 py-2.5 text-sm sm:text-base bg-yellow-500 rounded-full hover:bg-yellow-600 transition-colors shadow-lg shadow-yellow-500/20 whitespace-nowrap"
+                >
+                  Books
+                </a>
               </motion.div>
             </motion.div>
           </div>
@@ -344,7 +364,7 @@ export default function Home() {
       {/* About Me Section */}
       <section id="about" className="relative py-20 px-4 bg-black/30">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+          <h2 className="text-3xl md:text-4xl font-bold mt-6 mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
             About Me
           </h2>
           <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-8 backdrop-blur-sm shadow-xl space-y-12">
@@ -427,7 +447,7 @@ export default function Home() {
       {/* Certifications & Education Section */}
       <section id="certifications" className="relative py-20 px-4 bg-black/30">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+          <h2 className="text-3xl md:text-4xl font-bold mt-6 mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
             Education & Certifications
           </h2>
 
@@ -493,13 +513,13 @@ export default function Home() {
                 transition={{ delay: index * 0.1 }}
               >
                 <div className="cert-image">
-                  <Image
+        <Image
                     src={cert.icon}
                     alt={cert.name}
                     width={80}
                     height={80}
                     className="object-contain"
-                  />
+        />
                 </div>
                 <h3 className="text-center text-lg font-semibold text-gray-200">
                   {cert.name}
@@ -520,7 +540,7 @@ export default function Home() {
       {/* Projects Section */}
       <section id="work" className="relative py-20 px-4 bg-gradient-to-b from-black/50 to-gray-900/30">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+          <h2 className="text-3xl md:text-4xl font-bold mt-6 mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
             Projects
           </h2>
           
@@ -557,8 +577,8 @@ export default function Home() {
                   <div className="flex justify-center">
                     <a 
                       href="https://www.smindbusiness.com" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
                       className="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg shadow-blue-500/20"
                     >
                       <span className="mr-2">Visit Site</span>
@@ -579,13 +599,13 @@ export default function Home() {
             >
               <a href="https://www.avianaa.com" target="_blank" rel="noopener noreferrer" className="block">
                 <div className="relative h-64 overflow-hidden rounded-t-xl">
-                  <Image
+            <Image
                     src="/avianaa1.png"
                     alt="Avianaa"
                     fill
                     className="object-contain transform group-hover:scale-105 transition-transform duration-500"
                     style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
-                  />
+            />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-2 text-blue-300">Avianaa Game App</h3>
@@ -598,8 +618,8 @@ export default function Home() {
                   <div className="flex justify-center">
                     <a 
                       href="https://www.avianaa.com" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
                       className="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg shadow-blue-500/20"
                     >
                       <span className="mr-2">Visit Site</span>
@@ -621,85 +641,42 @@ export default function Home() {
         <div className="connector-dot top" />
         <div className="connector-dot bottom" />
       </div>
-
-      {/* Author Section */}
-      <section id="author" className="relative py-20 px-4 bg-black/30">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
-            About the Author
-          </h2>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-8 backdrop-blur-sm shadow-xl"
-          >
-            <div className="flex flex-col md:flex-row gap-8 items-start">
-              <div className="md:w-1/3 flex flex-col items-center">
-                <div className="relative w-64 h-64 mb-6 rounded-xl overflow-hidden">
-                  <Image
-                    src="/author.jpg"
-                    alt="sk"
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-                <a
-                  href="https://www.amazon.com/author/sagar2025"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg shadow-purple-500/20"
-                >
-                  <span className="mr-2">View Author Profile</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              </div>
-              
-              <div className="md:w-2/3 space-y-6">
-                <div className="prose prose-invert max-w-none">
-                  <p className="text-gray-300 leading-relaxed">
-                    Dr. SK is an IT professional currently working as Software Engineer at one of the world's top Fortune 500 companies, 
-                    with over a decade of experience spanning IT support, Software Development, Cybersecurity, Cloud Computing, and Artificial Intelligence(AI). 
-                    With a strong foundation as a former Mathematics Teacher, Section Officer, and Career Trainer in Nepal, Khatri brings a unique blend of 
-                    analytical thinking and real-world business insight to every project he undertakes.
-                  </p>
-                  
-                  <p className="text-gray-300 leading-relaxed mt-4">
-                    He holds the degrees of Associate of Science in Computer Science, Bachelor of Education in Mathematics, and Master of Education. 
-                    He is currently completing his Doctorate in Business Administration (DBA), specializing in Information Systems and Enterprise Resource Management. 
-                    His research focuses on AI-driven solutions for inventory management and fraud prevention in fuel industry.
-                  </p>
-
-                  <p className="text-gray-300 leading-relaxed mt-4">
-                    As an author, Khatri is passionate about simplifying complex technical concepts and making them accessible to professionals 
-                    seeking to adapt and thrive in the evolving world of IT. His books offer practical insights, interview preparation guides, 
-                    and hands-on strategies for anyone navigating today's tech-driven job market.
-                  </p>
-
-                  <p className="text-gray-300 leading-relaxed mt-4">
-                    In addition to his technical career, Khatri is passionate about motivational speaking and writing books that explore the 
-                    philosophy of life, self-love, and personal growth. He also coaches individuals seeking balance and purpose in both personal 
-                    and professional spheres. Beyond adult nonfiction, he enjoys creating imaginative and educational children's books that inspire 
-                    curiosity, creativity, and character development. His diverse body of work reflects a mission to uplift minds—both young and grown. 
-                    His mission is to inspire minds of all ages—through power of knowledge.
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-3 pt-4">
-                  <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">Software Engineering</span>
-                  <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">Cybersecurity</span>
-                  <span className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Cloud Computing</span>
-                  <span className="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-sm">Artificial Intelligence</span>
-                  <span className="px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-sm">Technical Writing</span>
-                  <span className="px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full text-sm">Education</span>
-                </div>
-              </div>
+<section id="books" className="relative py-20 px-4 bg-black/30">
+  <div className="max-w-4xl mx-auto">
+    <h2 className="text-3xl md:text-4xl font-bold bt-6 mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500">
+      Published Books
+    </h2>
+  </div>
+  <div className="flex flex-col items-center">
+            <a
+              href="https://www.amazon.com/author/sagar2025"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full max-w-xl mb-8 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300 bg-transparent"
+            >
+              <img src="/books.png" alt="Published Books by Dr. SK" className="object-contain w-full h-80 bg-transparent" />
+            </a>
+            <p className="text-gray-300 text-lg text-center max-w-2xl mb-6">
+              Explore a diverse collection of books authored by Dr. SK, covering topics from software engineering, cybersecurity, and AI to personal growth and education. Each book is crafted to empower readers with practical knowledge and inspiration for success in the modern world.
+            </p>
+            <p className="text-gray-400 text-center mb-8">
+              <span className="font-semibold text-yellow-400">Check out the full list of published books by clicking the image above or the author profile link below.</span>
+            </p>
+            <div className="flex justify-center">
+              <a
+                href="https://www.amazon.com/author/sagar2025"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg shadow-purple-500/20"
+              >
+                <span className="mr-2">View Author Profile</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </a>
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+</section>
 
       {/* Section Connector */}
       <div className="section-connector">
@@ -711,7 +688,7 @@ export default function Home() {
       {/* Contact Section */}
       <section id="contact" className="relative py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+          <h2 className="text-3xl md:text-4xl font-bold mt-6 mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
             Get In Touch
           </h2>
           <p className="text-gray-300 mb-12">
@@ -720,20 +697,20 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
             <a
               href="mailto:info@smindbusiness.com"
-              className="glow-effect inline-block px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transition-all duration-300"
+              className="libutton"
             >
               Contact Me
-            </a>
-            <a
+        </a>
+        <a
               className="libutton"
               href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=s777k"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+          target="_blank"
+          rel="noopener noreferrer"
+        >
               Follow on LinkedIn
-            </a>
+        </a>
           </div>
-        </div>
+    </div>
       </section>
     </main>
   );
