@@ -338,7 +338,7 @@ export default function Home() {
                 <img
                   src="/drskBooks.png"
                   alt="Published Books by Dr. SK"
-                  className="object-contain w-full h-80 bg-transparent"
+                  className="object-contain w-full h-120 bg-transparent"
                 />
               </a>
 
