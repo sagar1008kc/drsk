@@ -16,15 +16,15 @@ const certifications = [
 
 // ✅ Full https:// links
 const publicLinks = [
-  { label: 'Medium', href: 'https://medium.com/@drsk0', note: 'Articles' },
+  { label: 'Amazon Author Page', href: 'https://www.amazon.com/author/drsk1', note: 'Published books' },
+  { label: 'Medium', href: 'https://medium.com/@drskauthor', note: 'Articles' },
   {
     label: 'LinkedIn Articles',
     href: 'https://www.linkedin.com/pulse/how-ai-changing-our-emotional-balance-what-we-must-do-sagar-khatri--n6a5c',
     note: 'Writing & posts',
   },
-  { label: 'Amazon Author Page', href: 'https://www.amazon.com/author/drsk1', note: 'Published books' },
-  { label: 'LinkedIn Profile', href: 'https://www.linkedin.com/in/drsk0', note: 'Background & experience' },
-  { label: 'TikTok', href: 'https://www.tiktok.com/@drsk0', note: 'Short-form content' },
+  { label: 'LinkedIn Profile', href: 'https://www.linkedin.com/in/drskofficial', note: 'Background & experience' },
+  { label: 'TikTok', href: 'https://www.tiktok.com/@drskauthor', note: 'Short-form content' },
   { label: 'YouTube', href: 'https://www.youtube.com/@drskcreation', note: 'Video content' },
 ];
 
@@ -140,7 +140,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative">
-        <div className="mx-auto max-w-6xl px-4 pt-14 pb-16">
+        <div className="mx-auto max-w-6xl px-4 pt-14">
           <motion.div initial="hidden" animate="visible" variants={fadeUp} transition={{ duration: 0.6 }}>
             <div className="flex flex-col items-center text-center">
               {/* ✅ Profile Image (1:1, pb-0.5rem) */}
@@ -164,12 +164,7 @@ export default function Home() {
               <p>
                 I am <span className="text-white font-semibold">Dr. SK</span>—an author and technology professional with a
                 Doctorate in Business Administration (DBA). I publish books and public articles focused on stress,
-                productivity, self-growth, and modern life.
-              </p>
-              <p>
-                Alongside my writing, I have 9+ years of software engineering experience building enterprise applications
-                with React, Next.js, and cloud platforms. My work connects practical technology with clear, human-centered
-                thinking.
+                productivity, self-growth, and modern life. Software Engineer by profession, writer by passion. 
               </p>
             </div>
 
@@ -388,7 +383,7 @@ export default function Home() {
               </a>
 
               <a
-                href="https://www.linkedin.com/in/drsk0"
+                href="https://www.linkedin.com/in/drskofficial"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 rounded-full bg-indigo-600/90 hover:bg-indigo-600 transition"
