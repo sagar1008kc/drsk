@@ -127,7 +127,7 @@ export default function Home() {
               Official Links
             </button>
             <a
-              href={safeExternalHref('https://medium.com/@drsk0')}
+              href={safeExternalHref('https://medium.com/@drskauthor')}
               target="_blank"
               rel="noopener noreferrer"
               className="px-3 py-2 rounded-full text-sm bg-indigo-600/90 hover:bg-indigo-600 transition shadow-sm"
@@ -148,7 +148,7 @@ export default function Home() {
                 <div className="relative w-40 h-40 aspect-square rounded-full overflow-hidden border border-white/15 bg-white/5 shadow-sm">
                   <Image
                     src="/drsk.png"
-                    alt="Dr. SK profile photo"
+                    alt="Dr. SK"
                     fill
                     priority
                     className="object-cover"
@@ -213,7 +213,7 @@ export default function Home() {
           >
             <div>
               <h2 className="text-2xl md:text-3xl font-bold">Links</h2>
-              <p className="mt-2 text-gray-300">Official links to published writing, author page, and profiles.</p>
+              <p className="mt-2 text-gray-300">Official links to published articles, author page, and profiles.</p>
             </div>
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-5">
