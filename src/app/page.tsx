@@ -32,6 +32,7 @@ const sections = [
   { id: 'links', label: 'Links' },
   { id: 'certifications', label: 'Education' },
   { id: 'books', label: 'Books' },
+  { id: 'impact', label: 'Impact' },
   { id: 'contact', label: 'Contact' },
 ];
 
@@ -359,7 +360,62 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+{/* Knowledge Sharing & Community Impact */}
+<section id="impact" className="py-16">
+  <div className="mx-auto max-w-6xl px-4">
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={fadeUp}
+      transition={{ duration: 0.55 }}
+      className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-8 md:p-10"
+    >
+      <h2 className="text-2xl md:text-3xl font-bold">
+        Knowledge Sharing & Community Impact
+      </h2>
 
+      <p className="mt-4 text-gray-300 max-w-3xl leading-relaxed">
+        As an author and technologist, I actively share knowledge focused on
+        emotional balance, productivity, and navigating modern digital life.
+        My work bridges mindset, technology, and practical learning for everyday
+        people living in an increasingly connected world.
+      </p>
+
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="rounded-xl border border-white/10 bg-black/20 p-6">
+          <h3 className="text-lg font-semibold text-white">
+            Writing & Digital Education
+          </h3>
+          <p className="mt-3 text-gray-300 leading-relaxed">
+            I publish books and public articles that explore stress awareness,
+            self-growth, productivity habits, and responsible use of technology.
+            Through platforms such as Amazon KDP,  Medium, LinkedIn, youtube, and TikTok, I share
+            simplified insights designed for clarity, reflection, and real-world
+            application.
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-white/10 bg-black/20 p-6">
+          <h3 className="text-lg font-semibold text-white">
+            Community Learning & Outreach
+          </h3>
+          <p className="mt-3 text-gray-300 leading-relaxed">
+            I am open to virtual knowledge-sharing sessions, educational talks,
+            and community initiatives related to learning, technology awareness,
+            and personal development. This includes opportunities to contribute
+            to schools and learning programs in Nepal and internationally.
+          </p>
+        </div>
+      </div>
+
+      <p className="mt-8 text-sm text-gray-400 max-w-3xl">
+        These efforts are part of an ongoing commitment to meaningful education,
+        ethical use of technology, and lifelong learning in the digital age.
+      </p>
+    </motion.div>
+  </div>
+</section>
       {/* Contact */}
       <section id="contact" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
