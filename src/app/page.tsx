@@ -26,6 +26,7 @@ const publicLinks = [
   { label: 'LinkedIn Profile', href: 'https://www.linkedin.com/in/drskofficial', note: 'Background & experience' },
   { label: 'TikTok', href: 'https://www.tiktok.com/@drskauthor', note: 'Short-form content' },
   { label: 'YouTube', href: 'https://www.youtube.com/@drskcreation', note: 'Video content' },
+  { label: 'Amazon Author Page', href: 'https://www.amazon.com/author/sagar2025', note: 'publised as Sagar Khatri' },
 ];
 
 const sections = [
@@ -121,12 +122,6 @@ export default function Home() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => scrollToId('links')}
-              className="hidden sm:inline-flex px-3 py-2 rounded-full text-sm bg-white/10 hover:bg-white/15 border border-white/10 transition"
-            >
-              Official Links
-            </button>
             <a
               href={safeExternalHref('https://medium.com/@drskauthor')}
               target="_blank"
