@@ -199,6 +199,10 @@ export default function Home() {
       {/* Links */}
       <section id="links" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
+        <div className='text-center pb-3'>
+              <h2 className="text-2xl md:text-3xl font-bold">Links</h2>
+              <p className="mt-2 text-gray-300">Official links to published articles, author page, and profiles.</p>
+          </div>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -207,11 +211,6 @@ export default function Home() {
             transition={{ duration: 0.55 }}
             className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-8 md:p-10"
           >
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold">Links</h2>
-              <p className="mt-2 text-gray-300">Official links to published articles, author page, and profiles.</p>
-            </div>
-
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-5">
               {publicLinks.map((item) => (
                 <a
@@ -237,6 +236,7 @@ export default function Home() {
       {/* Education & Certifications */}
       <section id="certifications" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-center pb-3">Education & Certifications</h2>
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -245,7 +245,6 @@ export default function Home() {
             transition={{ duration: 0.55 }}
             className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-8 md:p-10"
           >
-            <h2 className="text-2xl md:text-3xl font-bold">Education & Certifications</h2>
 
             {/* Education */}
             <div className="mt-8 rounded-xl border border-white/10 bg-black/20 p-6">
@@ -314,16 +313,15 @@ export default function Home() {
       {/* Books */}
       <section id="books" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
+        <h2 className="text-2xl md:text-3xl font-bold pb-2xl pb-4 text-center">Published Books</h2>
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
             variants={fadeUp}
             transition={{ duration: 0.55 }}
-            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-8 md:p-10"
+            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-5 md:p-8 mb-5"
           >
-            <h2 className="text-2xl md:text-3xl font-bold">Published Books</h2>
-
             <div className="mt-8 flex flex-col items-center">
               <a
                 href="https://www.amazon.com/author/drsk1"
@@ -349,7 +347,44 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="mt-6 inline-flex items-center px-6 py-3 rounded-full bg-amber-500/90 hover:bg-amber-500 transition text-black font-semibold"
               >
-                View Author Profile ↗
+                Author Profile ↗
+              </a>
+            </div>
+          </motion.div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeUp}
+            transition={{ duration: 0.55 }}
+            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-5 md:p-8"
+          >
+            <div className="mt-8 flex flex-col items-center">
+              <a
+                href="https://www.amazon.com/author/drsk1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full max-w-2xl rounded-xl overflow-hidden border border-white/10 bg-black/20 hover:bg-black/30 transition"
+              >
+                <img
+                  src="/drsk_books.png"
+                  alt="Published Books by Sagar Khatri"
+                  className="object-contain w-full h-120 bg-transparent"
+                />
+              </a>
+
+              <p className="mt-6 text-gray-300 text-center max-w-2xl">
+              Explore three powerful books by Dr. SK published as Sagar Khatri designed to help you grow in the age of artificial intelligence. 
+              From mastering AI-driven software development, to cracking cybersecurity interviews, to building income-generating AI skills for beginners 
+              — each book delivers practical insights, real-world strategies, and future-ready knowledge for today’s digital world.
+              </p>
+              <a
+                href="https://www.amazon.com/author/sagar2025"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex items-center px-6 py-3 rounded-full bg-amber-500/90 hover:bg-amber-500 transition text-black font-semibold"
+              >
+                Author Profile ↗
               </a>
             </div>
           </motion.div>
