@@ -25,7 +25,7 @@ const publicLinks = [
   },
   { label: 'LinkedIn Profile', href: 'https://www.linkedin.com/in/drskofficial', note: 'Background & experience' },
   { label: 'TikTok', href: 'https://www.tiktok.com/@drskauthor', note: 'Short-form content' },
-  { label: 'YouTube', href: 'https://www.youtube.com/@drskcreation', note: 'Video content' },
+  { label: 'YouTube', href: 'https://www.youtube.com/@drskauthor', note: 'Video content' },
   { label: 'Amazon Author Page', href: 'https://www.amazon.com/author/sagar2025', note: 'publised as Sagar Khatri' },
 ];
 
