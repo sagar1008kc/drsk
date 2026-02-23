@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const certifications = [
+  {name: 'Certified Mental Health First Aider', icon: '/MHFA.png'},
   { name: 'Google Cloud Architect', icon: '/googleIcon.png' },
   { name: 'Azure Developer', icon: '/developerIcon.png' },
   { name: 'Azure DevOps Engineer', icon: '/devOpsIcon.jpg' },
@@ -155,12 +156,13 @@ export default function Home() {
               <h1 className="mt-6 text-4xl md:text-6xl font-bold tracking-tight">Dr. SK</h1>
 
               <h5 className="mt-3 text-lg md:text-xl text-gray-200">Author & Technologist</h5>
+              <p>Certified Mental Health First Aider</p>
 
               <div className="mt-5 text-gray-300 leading-relaxed space-y-4">
               <p>
                 I am <span className="text-white font-semibold">Dr. SK</span>—an author and technology professional with a
                 Doctorate in Business Administration (DBA). I publish books and public articles focused on stress,
-                productivity, self-growth, and modern life. Software Engineer by profession, writer by passion. 
+                productivity, self-growth, and modern life. Also, I am a certified Mental Health Aider. Software Engineer by profession, writer by passion. 
               </p>
             </div>
 
