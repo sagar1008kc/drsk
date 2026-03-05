@@ -445,6 +445,16 @@ export default function Home() {
         These efforts are part of an ongoing commitment to meaningful education,
         ethical use of technology, and lifelong learning in the digital age.
       </p>
+      <h1 className="text-lg font-semibold text-white mt-3">
+            Motivational & Business Growth Sessions
+          </h1>
+          <p className="mt-3 text-gray-300 leading-relaxed">
+            I conduct sessions focused on motivational growth, business development, and mental health awareness. These sessions are tailored to inspire individuals and teams to achieve their goals while maintaining a healthy mindset. 
+            Sessions are available in Nepali, English, and Hindi languages.
+          </p>
+          <p className="mt-3 text-gray-300 leading-relaxed">
+            For inquiries, please contact below:
+          </p>
     </motion.div>
   </div>
 </section>
@@ -459,10 +469,11 @@ export default function Home() {
             transition={{ duration: 0.55 }}
             className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-8 md:p-10 text-center"
           >
+         
             <h2 className="text-2xl md:text-3xl font-bold">Get In Touch</h2>
-            <p className="mt-4 text-gray-300">For collaborations, interviews, or writing opportunities, feel free to reach out.</p>
-
+            <div><p>contact: info.drsk0@gmail.com</p></div>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+            
               <a
                 href="mailto:info.drsk0@gmail.com"
                 className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 transition"
