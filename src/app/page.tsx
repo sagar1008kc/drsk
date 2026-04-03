@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
+import ContactForm from '@/component/Contact';
 
 const certifications = [
   {name: 'Certified Mental Health First Aider', icon: '/MHFA.png'},
@@ -15,7 +16,7 @@ const certifications = [
   { name: 'Certified AI Scientist', icon: '/CAIS.png' },
 ];
 
-// ✅ Full https:// links
+// Full https:// links
 const publicLinks = [
   { label: 'Amazon Author Page', href: 'https://www.amazon.com/author/drsk1', note: 'Published books' },
   { label: 'Medium', href: 'https://medium.com/@drskauthor', note: 'Articles' },
@@ -34,7 +35,7 @@ const sections = [
   { id: 'links', label: 'Links' },
   { id: 'certifications', label: 'Education' },
   { id: 'books', label: 'Books' },
-  { id: 'impact', label: 'Impact' },
+  { id: 'services', label: 'Services' },
   { id: 'contact', label: 'Contact' },
 ];
 
@@ -84,58 +85,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen text-white">
-      {/* Clean Background */}
-      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-[#070B14] via-[#0B1020] to-[#070B14]" />
-      <div className="fixed inset-0 -z-10 opacity-[0.06] pointer-events-none bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.6),transparent_40%),radial-gradient(circle_at_80%_30%,rgba(59,130,246,0.5),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.35),transparent_45%)]" />
-
-      {/* Sticky Navbar (desktop nav only) */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur-md">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          <button
-            onClick={() => scrollToId('about')}
-            className="flex items-center gap-3 hover:opacity-90 transition"
-            aria-label="Go to top"
-          >
-            <div className="h-11 w-11 rounded-full overflow-hidden border border-white/15 bg-white/5">
-              <Image src="/drsk.png" alt="Dr. SK" width={42} height={42} className="object-cover" />
-            </div>
-            <div className="text-left leading-tight">
-              <div className="font-semibold">Dr. SK</div>
-              <div className="text-xs text-gray-300">Author • Technologist</div>
-            </div>
-          </button>
-
-          <nav className="hidden md:flex items-center gap-2">
-            {sections.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => scrollToId(s.id)}
-                className={[
-                  'px-3 py-2 rounded-full text-sm transition border',
-                  active === s.id
-                    ? 'bg-white/10 border-white/15 text-white'
-                    : 'border-transparent text-gray-300 hover:text-white hover:bg-white/5',
-                ].join(' ')}
-              >
-                {s.label}
-              </button>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <a
-              href={safeExternalHref('https://medium.com/@drskauthor')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-2 rounded-full text-sm bg-indigo-600/90 hover:bg-indigo-600 transition shadow-sm"
-            >
-              Read Articles
-            </a>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero */}
+      {/* nav */}
       <section className="relative">
         <div className="mx-auto max-w-6xl px-4 pt-14">
           <motion.div initial="hidden" animate="visible" variants={fadeUp} transition={{ duration: 0.6 }}>
@@ -392,107 +342,24 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-{/* Knowledge Sharing & Community Impact */}
-<section id="impact" className="py-16">
-  <div className="mx-auto max-w-6xl px-4">
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      variants={fadeUp}
-      transition={{ duration: 0.55 }}
-      className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-8 md:p-10"
-    >
-      <h2 className="text-2xl md:text-3xl font-bold">
-        Knowledge Sharing & Community Impact
-      </h2>
+  {/* Contact */}
+  <section className="py-16">
+    <div className="mx-auto max-w-6xl px-4">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={fadeUp}
+        transition={{ duration: 0.55 }}
+        className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur md:p-10"
+      >
+        <h2 className="text-2xl font-bold md:text-3xl">Get In Touch</h2>
+        <p className="mt-2 text-sm text-gray-300">info.drsk0@gmail.com</p>
 
-      <p className="mt-4 text-gray-300 max-w-3xl leading-relaxed">
-        As an author and technologist, I actively share knowledge focused on
-        emotional balance, productivity, and navigating modern digital life.
-        My work bridges mindset, technology, and practical learning for everyday
-        people living in an increasingly connected world.
-      </p>
-
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="rounded-xl border border-white/10 bg-black/20 p-6">
-          <h3 className="text-lg font-semibold text-white">
-            Writing & Digital Education
-          </h3>
-          <p className="mt-3 text-gray-300 leading-relaxed">
-            I publish books and public articles that explore stress awareness,
-            self-growth, productivity habits, and responsible use of technology.
-            Through platforms such as Amazon KDP,  Medium, LinkedIn, youtube, and TikTok, I share
-            simplified insights designed for clarity, reflection, and real-world
-            application.
-          </p>
-        </div>
-
-        <div className="rounded-xl border border-white/10 bg-black/20 p-6">
-          <h3 className="text-lg font-semibold text-white">
-            Community Learning & Outreach
-          </h3>
-          <p className="mt-3 text-gray-300 leading-relaxed">
-            I am open to virtual knowledge-sharing sessions, educational talks,
-            and community initiatives related to learning, technology awareness,
-            and personal development. This includes opportunities to contribute
-            to schools and learning programs in Nepal and internationally.
-          </p>
-        </div>
-      </div>
-
-      <p className="mt-8 text-sm text-gray-400 max-w-3xl">
-        These efforts are part of an ongoing commitment to meaningful education,
-        ethical use of technology, and lifelong learning in the digital age.
-      </p>
-      <h1 className="text-lg font-semibold text-white mt-3">
-            Motivational & Business Growth Sessions
-          </h1>
-          <p className="mt-3 text-gray-300 leading-relaxed">
-            I conduct sessions focused on motivational growth, business development, and mental health awareness. These sessions are tailored to inspire individuals and teams to achieve their goals while maintaining a healthy mindset. 
-            Sessions are available in Nepali, English, and Hindi languages.
-          </p>
-          <p className="mt-3 text-gray-300 leading-relaxed">
-            For inquiries, please contact below:
-          </p>
-    </motion.div>
-  </div>
-</section>
-      {/* Contact */}
-      <section id="contact" className="py-16">
-        <div className="mx-auto max-w-6xl px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={fadeUp}
-            transition={{ duration: 0.55 }}
-            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-8 md:p-10 text-center"
-          >
-         
-            <h2 className="text-2xl md:text-3xl font-bold">Get In Touch</h2>
-            <div><p>contact: info.drsk0@gmail.com</p></div>
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-            
-              <a
-                href="mailto:info.drsk0@gmail.com"
-                className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 transition"
-              >
-                Email
-              </a>
-
-              <a
-                href="https://www.linkedin.com/in/drskofficial"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 rounded-full bg-indigo-600/90 hover:bg-indigo-600 transition"
-              >
-                LinkedIn
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+        <ContactForm />
+      </motion.div>
+    </div>
+  </section>
 
       {/* Footer */}
       <footer className="py-10 text-center text-gray-500 text-sm">
