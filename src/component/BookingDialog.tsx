@@ -3,11 +3,6 @@
 import { useMemo, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
-import { Dropdown } from 'primereact/dropdown';
-import { Calendar } from 'primereact/calendar';
-import { InputTextarea } from 'primereact/inputtextarea';
-
 export type Service = {
   key: 'business' | 'support';
   tag: string;
@@ -17,8 +12,7 @@ export type Service = {
   oldPrice: string;
   newPrice: string;
   duration: string;
-  bookingLink: string;
-  paymentLink: string;
+  paymentPriceId: string;
   accent: 'emerald' | 'sky';
   note?: string;
 };
@@ -53,9 +47,11 @@ export default function BookingDialog({
   const [phone, setPhone] = useState('');
   const [language, setLanguage] = useState<string>('');
   const [preferredDate, setPreferredDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string>('');
   const [notes, setNotes] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const today = useMemo(() => new Date(), []);
+  useMemo(() => new Date(), []);
 
   const resetForm = () => {
     setName('');
@@ -64,11 +60,55 @@ export default function BookingDialog({
     setLanguage('');
     setPreferredDate(null);
     setNotes('');
+    setLoading(false);
   };
 
   const handleHide = () => {
     resetForm();
     onHide();
+  };
+
+  const handleContinueToPayment = async () => {
+    if (!service) return;
+
+    if (!name.trim() || !email.trim()) {
+      alert('Name and email are required.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          serviceKey: service.key,
+          serviceTitle: service.title,
+          paymentPriceId: service.paymentPriceId,
+          name,
+          email,
+          phone,
+          language,
+          preferredDate: formatDateForInput(preferredDate),
+          notes,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data?.url) {
+        throw new Error(data?.error || 'Unable to start checkout.');
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong while starting payment. Please try again.');
+      setLoading(false);
+    }
   };
 
   if (!service) return null;
@@ -81,204 +121,168 @@ export default function BookingDialog({
       resizable={false}
       dismissableMask
       blockScroll
-      style={{ width: '95vw', maxWidth: '680px' }}
+      modal
+      style={{ width: '95vw', maxWidth: '720px' }}
+      className="rounded-[24px]"
+      contentClassName="bg-white text-black rounded-[24px]"
       header={
         <div className="pr-8">
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
             Book Session
           </div>
-          <div className="mt-1 text-2xl font-bold text-black">
+          <h2 className="mt-2 text-2xl font-bold md:text-3xl">
             {service.title}
-          </div>
-          <div className="mt-2 text-sm leading-6 text-black/70">
-            Fill out the details below, then continue to your booking page.
-          </div>
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-gray-600">
+            Fill out your details and continue to secure payment.
+          </p>
         </div>
       }
-      className="overflow-hidden rounded-[26px]"
     >
-      <form
-        action="https://formsubmit.co/info.drsk0@gmail.com"
-        method="POST"
-        onSubmit={resetForm}
-        className="space-y-5"
+      <div className="mt-4">
+        {/*input fields*/}
+        <div className="form-section">
+<div className="space-y-5 rounded-2xl border border-gray-200 bg-gray-50 p-5 md:p-6">
+  <div>     <p className="mt-2 text-xs leading-5 text-gray-500">
+  Provide a valid email address. After payment, the session invite will be sent to this email.
+</p></div>
+  <div className="grid gap-5 md:grid-cols-2">
+    <div>
+      <label className="mb-2 block text-sm font-semibold text-gray-800">
+        Name
+      </label>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        placeholder="Your name"
+        className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black shadow-sm outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+      />
+    </div>
+
+    <div>
+      <label className="mb-2 block text-sm font-semibold text-gray-800">
+        Email
+      </label>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        placeholder="Provide valid email"
+        className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black shadow-sm outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+      />
+    </div>
+  </div>
+
+  <div className="grid gap-5 md:grid-cols-2">
+    <div>
+      <label className="mb-2 block text-sm font-semibold text-gray-800">
+        Phone
+      </label>
+      <input
+        type="tel"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        placeholder="Optional phone number"
+        className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black shadow-sm outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+      />
+    </div>
+
+    <div>
+      <label className="mb-2 block text-sm font-semibold text-gray-800">
+        Language
+      </label>
+      <select
+        value={language}
+        onChange={(e) => setLanguage(e.target.value)}
+        className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black shadow-sm outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
       >
-        <input
-          type="hidden"
-          name="_subject"
-          value={`New booking lead: ${service.title}`}
-        />
-        <input type="hidden" name="_template" value="table" />
-        <input type="hidden" name="_captcha" value="false" />
-        <input type="hidden" name="_next" value={service.bookingLink} />
-        <input type="hidden" name="service" value={service.title} />
-        <input type="hidden" name="language_selected" value={language} />
-        <input
-          type="hidden"
-          name="preferred_date"
-          value={formatDateForInput(preferredDate)}
-        />
+        <option value="">Choose language</option>
+        <option value="English">English</option>
+        <option value="Nepali">Nepali</option>
+        <option value="Hindi">Hindi</option>
+      </select>
+    </div>
+  </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-black">Name</label>
-            <InputText
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              name="name"
-              placeholder="Your name"
-              className="w-full rounded-xl"
-            />
+  <div className="grid gap-5 md:grid-cols-2">
+    <div>
+      <label className="mb-2 block text-sm font-semibold text-gray-800">
+        Preferred date
+      </label>
+      <input
+        type="date"
+        value={preferredDate ? preferredDate.toISOString().split('T')[0] : ''}
+        onChange={(e) =>
+          setPreferredDate(e.target.value ? new Date(e.target.value) : null)
+        }
+        min={new Date().toISOString().split('T')[0]}
+        className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black shadow-sm outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+      />
+    </div>
+
+    <div>
+      <label className="mb-2 block text-sm font-semibold text-gray-800">
+        Choose time
+      </label>
+      <select
+        value={selectedTime}
+        onChange={(e) => setSelectedTime(e.target.value)}
+        className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black shadow-sm outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+      >
+        <option value="">Choose time</option>
+        <option value="09:00 AM">09:00 AM</option>
+        <option value="04:00 PM">05:00 PM</option>
+        <option value="05:00 PM">06:00 PM</option>
+        <option value="03:00 PM">07:00 PM</option>
+      </select>
+    </div>
+  </div>
+
+  <div>
+    <label className="mb-2 block text-sm font-semibold text-gray-800">
+      Notes
+    </label>
+    <textarea
+      value={notes}
+      onChange={(e) => setNotes(e.target.value)}
+      rows={4}
+      placeholder="Anything you want me to know before the session?"
+      className="w-full resize-none rounded-xl border border-gray-300 bg-white px-4 py-3 text-black shadow-sm outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+    />
+  </div>
+</div>
+      </div>
+        {service.note ? (
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-gray-800">
+            {service.note}
           </div>
+        ) : null}
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-black">Email</label>
-            <InputText
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              type="email"
-              name="email"
-              placeholder="you@example.com"
-              className="w-full rounded-xl"
-            />
-          </div>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-black">Phone</label>
-            <InputText
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              name="phone"
-              placeholder="Optional phone number"
-              className="w-full rounded-xl"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-black">
-              Choose language
-            </label>
-            <Dropdown
-              value={language}
-              onChange={(e) => setLanguage(e.value)}
-              options={languageOptions}
-              placeholder="Select language"
-              className="w-full"
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold text-black">
-            Preferred date
-          </label>
-          <Calendar
-            value={preferredDate}
-            onChange={(e) => setPreferredDate(e.value as Date)}
-            minDate={today}
-            showIcon
-            dateFormat="mm/dd/yy"
-            placeholder="Choose your preferred date"
-            className="w-full"
-            inputClassName="w-full"
-          />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold text-black">Notes</label>
-          <InputTextarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            name="notes"
-            rows={4}
-            autoResize
-            placeholder="Anything you want me to know before the session?"
-            className="w-full rounded-xl"
-          />
-        </div>
-
-        <div className="rounded-2xl border border-black/8 bg-[#FAF7F2] px-4 py-4">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="text-sm font-semibold text-black">
-                {service.title}
-              </div>
-              <div className="mt-1 text-sm text-black/70">
-                Continue to booking after form submission, or pay now securely.
-              </div>
-            </div>
-
-            <div className="flex items-end gap-2">
-              <span className="text-base font-semibold text-red-500 line-through">
-                {service.oldPrice}
-              </span>
-              <span className="text-2xl font-bold text-green-600">
-                {service.newPrice}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-3 pt-2">
+        <div className="pt-2">
           <Button
-            type="submit"
-            label="Continue to Booking"
+            type="button"
+            label={loading ? 'Redirecting...' : 'Continue to Secure Payment'}
             icon="pi pi-arrow-right"
             rounded
             severity="contrast"
+            disabled={loading}
+            onClick={handleContinueToPayment}
             pt={{
               root: {
-                className: 'px-4 py-3 font-semibold',
-              },
-            }}
-          />
-
-          <Button
-            type="button"
-            label="Pay"
-            icon="pi pi-credit-card"
-            rounded
-            outlined
-            onClick={() =>
-              window.open(
-                service.paymentLink,
-                '_blank',
-                'noopener,noreferrer'
-              )
-            }
-            pt={{
-              root: {
-                className:
-                  'px-4 py-3 font-semibold border-black text-black hover:bg-black hover:text-white',
-              },
-            }}
-          />
-
-          <Button
-            type="button"
-            label="Close"
-            icon="pi pi-times"
-            rounded
-            text
-            severity="secondary"
-            onClick={handleHide}
-            pt={{
-              root: {
-                className: 'px-3 py-3 font-semibold',
+                className: 'px-5 py-3 font-semibold',
               },
             }}
           />
         </div>
 
-        <p className="text-xs leading-6 text-black/65">
-          After submission, your details are sent to your email and the user is
-          redirected to the live booking page.
+        <p className="text-xs leading-6 text-gray-500">
+          You will be redirected to Stripe’s secure hosted checkout page. Your
+          session request should be considered confirmed only after successful payment.
         </p>
-      </form>
+      </div>
     </Dialog>
   );
 }

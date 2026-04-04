@@ -1,11 +1,14 @@
+/* External Libraries */
 @import 'primereact/resources/themes/lara-dark-indigo/theme.css';
 @import 'primereact/resources/primereact.min.css';
 @import 'primeicons/primeicons.css';
 
+/* Tailwind Base */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Root Variables */
 :root {
   --foreground-rgb: 255, 255, 255;
   --background-rgb: 6, 10, 20; /* deep navy */
@@ -16,6 +19,7 @@
   --secondary: 59, 130, 246; /* blue */
 }
 
+/* Global Styles */
 html {
   scroll-behavior: smooth;
 }
@@ -28,7 +32,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Professional container helpers */
+/* Utility Classes */
 .container-max {
   @apply mx-auto max-w-6xl px-4;
 }
@@ -59,17 +63,17 @@ a {
   text-decoration: none;
 }
 
-/* PrimeReact: keep it consistent */
+/* PrimeReact Overrides */
 .p-component {
   font-family: inherit;
 }
 
-/* Optional: slightly nicer selection */
+/* Selection Highlight */
 ::selection {
   background: rgba(99, 102, 241, 0.35);
 }
 
-/* Reduce motion support */
+/* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -80,7 +84,7 @@ a {
   }
 }
 
-/* Keep your LinkedIn button if you still use it */
+/* LinkedIn Button */
 .libutton {
   display: inline-flex;
   align-items: center;

@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import ContactForm from '@/component/Contact';
 
 const certifications = [
   {name: 'Certified Mental Health First Aider', icon: '/MHFA.png'},
@@ -90,7 +89,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 pt-14">
           <motion.div initial="hidden" animate="visible" variants={fadeUp} transition={{ duration: 0.6 }}>
             <div className="flex flex-col items-center text-center">
-              {/* ✅ Profile Image (1:1, pb-0.5rem) */}
+              {/* Profile Image (1:1, pb-0.5rem) */}
               <div className="flex justify-center pb-2">
                 <div className="relative w-40 h-40 aspect-square rounded-full overflow-hidden border border-white/15 bg-white/5 shadow-sm">
                   <Image
@@ -116,8 +115,8 @@ export default function Home() {
               </p>
             </div>
 
-              {/* ✅ Mobile-only quick nav (hide on desktop to avoid duplication) */}
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 md:hidden">
+              {/* Mobile-only quick nav (hide on desktop to avoid duplication) */}
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-3 md:hidden">
                 <button
                   onClick={() => scrollToId('links')}
                   className="px-2 py-1 rounded-full bg-indigo-600/90 hover:bg-indigo-600 transition"
@@ -163,7 +162,7 @@ export default function Home() {
             transition={{ duration: 0.55 }}
             className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-8 md:p-10"
           >
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-5">
               {publicLinks.map((item) => (
                 <a
                   key={item.label}
@@ -199,7 +198,7 @@ export default function Home() {
           >
 
             {/* Education */}
-            <div className="mt-8 rounded-xl border border-white/10 bg-black/20 p-6">
+            <div className="mt-2 rounded-xl border border-white/10 bg-black/20 p-6">
               <h3 className="text-xl font-semibold text-white">Academic Background</h3>
 
               <div className="mt-5 space-y-5 text-gray-300">
@@ -274,7 +273,7 @@ export default function Home() {
             transition={{ duration: 0.55 }}
             className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-5 md:p-8 mb-5"
           >
-            <div className="mt-8 flex flex-col items-center">
+            <div className="mt-2 flex flex-col items-center">
               <a
                 href="https://www.amazon.com/author/drsk1"
                 target="_blank"
@@ -311,7 +310,7 @@ export default function Home() {
             transition={{ duration: 0.55 }}
             className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-5 md:p-8"
           >
-            <div className="mt-8 flex flex-col items-center">
+            <div className="mt-2 flex flex-col items-center">
               <a
                 href="https://www.amazon.com/author/drsk1"
                 target="_blank"
@@ -342,29 +341,6 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-  {/* Contact */}
-  <section className="py-16">
-    <div className="mx-auto max-w-6xl px-4">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={fadeUp}
-        transition={{ duration: 0.55 }}
-        className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur md:p-10"
-      >
-        <h2 className="text-2xl font-bold md:text-3xl">Get In Touch</h2>
-        <p className="mt-2 text-sm text-gray-300">info.drsk0@gmail.com</p>
-
-        <ContactForm />
-      </motion.div>
-    </div>
-  </section>
-
-      {/* Footer */}
-      <footer className="py-10 text-center text-gray-500 text-sm">
-        Official website of Dr. SK • © {new Date().getFullYear()} • All rights reserved.
-      </footer>
     </main>
   );
 }

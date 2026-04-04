@@ -26,8 +26,7 @@ const services: Service[] = [
     oldPrice: '$250',
     newPrice: '$99',
     duration: '1 hour',
-    bookingLink: 'https://cal.com/your-handle/business-session',
-    paymentLink: 'https://buy.stripe.com/your-business-link',
+    paymentPriceId: process.env.NEXT_PUBLIC_STRIPE_BUSINESS_PRICE_ID || '',
     accent: 'emerald',
   },
   {
@@ -45,8 +44,7 @@ const services: Service[] = [
     oldPrice: '$250',
     newPrice: '$99',
     duration: '1 hour',
-    bookingLink: 'https://cal.com/your-handle/support-session',
-    paymentLink: 'https://buy.stripe.com/your-support-link',
+    paymentPriceId: process.env.NEXT_PUBLIC_STRIPE_SUPPORT_PRICE_ID || '',
     accent: 'sky',
     note:
       'Support sessions are educational and supportive only. No therapy, diagnosis, or medical treatment is provided.',
@@ -59,7 +57,6 @@ function getCardStyles(accent: Service['accent']) {
       glow: 'shadow-[0_18px_50px_rgba(2,132,199,0.10)]',
       badge: 'border border-sky-200 bg-sky-50 text-sky-700',
       iconBox: 'border border-sky-100 bg-white text-sky-700',
-      bookBtnSeverity: 'info' as const,
       accentBar: 'from-sky-500 to-cyan-400',
     };
   }
@@ -68,7 +65,6 @@ function getCardStyles(accent: Service['accent']) {
     glow: 'shadow-[0_18px_50px_rgba(16,185,129,0.10)]',
     badge: 'border border-emerald-200 bg-emerald-50 text-emerald-700',
     iconBox: 'border border-emerald-100 bg-white text-emerald-700',
-    bookBtnSeverity: 'success' as const,
     accentBar: 'from-emerald-500 to-lime-400',
   };
 }
@@ -124,16 +120,16 @@ export default function ServicesPage() {
                 <div className="rounded-3xl border border-black/10 bg-white p-5 shadow-sm">
                   <div className="flex items-start gap-3">
                     <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-2xl bg-black text-white">
-                      <i className="pi pi-calendar text-sm" />
+                      <i className="pi pi-credit-card text-sm" />
                     </div>
 
                     <div>
                       <h2 className="text-base font-bold text-black">
-                        Simple booking process
+                        Simple payment-first process
                       </h2>
                       <p className="mt-2 text-sm leading-7 text-black/75">
-                        Choose your session, pick your preferred time slot for the
-                        virtual meeting, and then complete secure payment.
+                        Share your details, continue to Stripe secure payment,
+                        and I will follow up with scheduling details after payment.
                       </p>
                     </div>
                   </div>
