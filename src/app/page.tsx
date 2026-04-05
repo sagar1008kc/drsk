@@ -32,10 +32,8 @@ const publicLinks = [
 
 const sections = [
   { id: 'links', label: 'Links' },
-  { id: 'certifications', label: 'Education' },
+  { id: 'experience', label: 'Experience' },
   { id: 'books', label: 'Books' },
-  { id: 'services', label: 'Services' },
-  { id: 'contact', label: 'Contact' },
 ];
 
 const fadeUp = {
@@ -135,12 +133,6 @@ export default function Home() {
                 >
                   Books
                 </button>
-                <button
-                  onClick={() => scrollToId('contact')}
-                  className="px-2 py-1 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 transition"
-                >
-                  Contact
-                </button>
               </div>
             </div>
           </motion.div>
@@ -160,7 +152,7 @@ export default function Home() {
             viewport={{ once: true, amount: 0.2 }}
             variants={fadeUp}
             transition={{ duration: 0.55 }}
-            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-8 md:p-10"
+            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur md:p-10"
           >
             <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-5">
               {publicLinks.map((item) => (
@@ -185,17 +177,97 @@ export default function Home() {
       </section>
 
       {/* Education & Certifications */}
-      <section id="certifications" className="py-16">
+      <section id="experience" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
-        <h2 className="text-2xl md:text-3xl font-bold text-center pb-3">Education & Certifications</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-center pb-3">Professional Background</h2>
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
             variants={fadeUp}
             transition={{ duration: 0.55 }}
-            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-8 md:p-10"
+            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur md:p-10"
           >
+        {/* Experiences */}
+          <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-6">
+            <h3 className="text-xl font-semibold text-white">Experience</h3>
+
+            <div className="mt-6 space-y-6">
+
+              {/* Item */}
+              <div className="group flex flex-col md:flex-row md:justify-between gap-2 border-l-2 border-white/10 pl-4 hover:border-blue-500 transition">
+                <div>
+                  <div className="text-white font-semibold">Software Engineer</div>
+                  <div className="text-gray-400 text-sm">General Motors · Full-time</div>
+                  <div className="text-gray-500 text-xs mt-1">Austin, TX · On-site</div>
+                </div>
+                <div className="text-gray-400 text-sm">May 2019 - Present</div>
+              </div>
+
+              <div className="group flex flex-col md:flex-row md:justify-between gap-2 border-l-2 border-white/10 pl-4 hover:border-blue-500 transition">
+                <div>
+                  <div className="text-white font-semibold">Director of Information Technology</div>
+                  <div className="text-gray-400 text-sm">SM Business · Self-employed</div>
+                  <div className="text-gray-500 text-xs mt-1">United States · Remote</div>
+                </div>
+                <div className="text-gray-400 text-sm">Apr 2023 - Present</div>
+              </div>
+
+              <div className="group flex flex-col md:flex-row md:justify-between gap-2 border-l-2 border-white/10 pl-4 hover:border-blue-500 transition">
+                <div>
+                  <div className="text-white font-semibold">Frontend Developer</div>
+                  <div className="text-gray-400 text-sm">SKcreation · Self-employed</div>
+                </div>
+                <div className="text-gray-400 text-sm">Feb 2016 - Apr 2019</div>
+              </div>
+
+              <div className="group flex flex-col md:flex-row md:justify-between gap-2 border-l-2 border-white/10 pl-4 hover:border-blue-500 transition">
+                <div>
+                  <div className="text-white font-semibold">IT Support Specialist</div>
+                  <div className="text-gray-400 text-sm">Experimax · Full-time</div>
+                  <div className="text-gray-500 text-xs mt-1">Houston, TX · On-site</div>
+                </div>
+                <div className="text-gray-400 text-sm">Jan 2016 - Apr 2019</div>
+              </div>
+
+              <div className="group flex flex-col md:flex-row md:justify-between gap-2 border-l-2 border-white/10 pl-4 hover:border-blue-500 transition">
+                <div>
+                  <div className="text-white font-semibold">Section Officer</div>
+                  <div className="text-gray-400 text-sm">Government of Nepal</div>
+                  <div className="text-gray-500 text-xs mt-1">Nepal</div>
+                </div>
+                <div className="text-gray-400 text-sm">May 2011 - Jun 2014</div>
+              </div>
+
+              <div className="group flex flex-col md:flex-row md:justify-between gap-2 border-l-2 border-white/10 pl-4 hover:border-blue-500 transition">
+                <div>
+                  <div className="text-white font-semibold">Lead Trainer | Motivational Speaker</div>
+                  <div className="text-gray-400 text-sm">Self-employed</div>
+                  <div className="text-gray-500 text-xs mt-1">Nepal</div>
+                </div>
+                <div className="text-gray-400 text-sm">Jul 2009 - May 2014</div>
+              </div>
+
+              <div className="group flex flex-col md:flex-row md:justify-between gap-2 border-l-2 border-white/10 pl-4 hover:border-blue-500 transition">
+                <div>
+                  <div className="text-white font-semibold">Guest Lecturer</div>
+                  <div className="text-gray-400 text-sm">Gyan Deep College</div>
+                  <div className="text-gray-500 text-xs mt-1">Nepal</div>
+                </div>
+                <div className="text-gray-400 text-sm">Mar 2012 - Sep 2013</div>
+              </div>
+
+              <div className="group flex flex-col md:flex-row md:justify-between gap-2 border-l-2 border-white/10 pl-4 hover:border-blue-500 transition">
+                <div>
+                  <div className="text-white font-semibold">Mathematics Teacher</div>
+                  <div className="text-gray-400 text-sm">Janata Higher Secondary School</div>
+                  <div className="text-gray-500 text-xs mt-1">Jumla, Nepal</div>
+                </div>
+                <div className="text-gray-400 text-sm">Aug 2008 - Mar 2011</div>
+              </div>
+
+            </div>
+          </div>
 
             {/* Education */}
             <div className="mt-2 rounded-xl border border-white/10 bg-black/20 p-6">
