@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
-import PaypalButton from './PaypalButton';
 
 export type Service = {
   key: 'business' | 'support';
@@ -16,7 +15,6 @@ export type Service = {
   duration: string;
   accent: 'emerald' | 'sky';
   note?: string;
-  paypalHostedButtonId?: string;
 };
 
 type BookingDialogProps = {
@@ -24,6 +22,13 @@ type BookingDialogProps = {
   service: Service | null;
   onHide: () => void;
 };
+
+type BookingApiResponse = {
+  message?: string;
+  error?: string;
+};
+
+const PAYPAL_PAYMENT_LINK = 'https://www.paypal.com/ncp/payment/3PTTLHVCCS6FW';
 
 function formatDateForInput(date: Date | null) {
   if (!date) return '';
@@ -46,6 +51,11 @@ export default function BookingDialog({
   const [selectedTime, setSelectedTime] = useState('');
   const [notes, setNotes] = useState('');
 
+  const [hasOpenedPayment, setHasOpenedPayment] = useState(false);
+  const [isSubmittingBooking, setIsSubmittingBooking] = useState(false);
+  const [bookingSent, setBookingSent] = useState(false);
+  const [bookingError, setBookingError] = useState('');
+
   const resetForm = () => {
     setName('');
     setEmail('');
@@ -54,6 +64,10 @@ export default function BookingDialog({
     setPreferredDate(null);
     setSelectedTime('');
     setNotes('');
+    setHasOpenedPayment(false);
+    setIsSubmittingBooking(false);
+    setBookingSent(false);
+    setBookingError('');
   };
 
   const handleHide = () => {
@@ -64,7 +78,57 @@ export default function BookingDialog({
   if (!service) return null;
 
   const isFormValid = Boolean(name.trim() && email.trim());
-  const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '';
+
+  const handlePayNow = () => {
+    if (!isFormValid) return;
+    setBookingError('');
+    setHasOpenedPayment(true);
+    window.open(PAYPAL_PAYMENT_LINK, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleSendBookingRequest = async () => {
+    if (!service) return;
+
+    setBookingError('');
+    setIsSubmittingBooking(true);
+
+    try {
+      const response = await fetch('/api/booking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          language: language.trim(),
+          preferredDate: preferredDate ? formatDateForInput(preferredDate) : '',
+          selectedTime: selectedTime.trim(),
+          notes: notes.trim(),
+          serviceTitle: service.title,
+          serviceKey: service.key,
+          paypalPaymentLink: PAYPAL_PAYMENT_LINK,
+        }),
+      });
+
+      const data = (await response.json()) as BookingApiResponse;
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send booking request.');
+      }
+
+      setBookingSent(true);
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Failed to send booking request.';
+      setBookingError(message);
+    } finally {
+      setIsSubmittingBooking(false);
+    }
+  };
 
   return (
     <Dialog
@@ -80,14 +144,15 @@ export default function BookingDialog({
       contentClassName="rounded-[24px] bg-white text-black"
       header={
         <div className="pr-8">
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
             Book Session
           </div>
           <h2 className="mt-2 text-2xl font-bold md:text-3xl">
             {service.title}
           </h2>
           <p className="mt-3 text-sm leading-6 text-gray-600">
-            Fill out your details and complete secure PayPal payment.
+            Fill out your details, pay securely with PayPal, and then send your
+            booking request for confirmation.
           </p>
         </div>
       }
@@ -95,8 +160,8 @@ export default function BookingDialog({
       <div className="mt-4 space-y-5">
         <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5 md:p-6">
           <p className="text-xs leading-5 text-gray-500">
-            Provide a valid email address. After payment, the session invite will
-            be sent to this email.
+            Provide a valid email address. After you submit the booking request,
+            I will contact you using this email to confirm the session.
           </p>
 
           <div className="mt-5 grid gap-5 md:grid-cols-2">
@@ -137,7 +202,10 @@ export default function BookingDialog({
               <input
                 type="tel"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={15}
                 placeholder="Optional phone number"
                 className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black shadow-sm outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
               />
@@ -180,7 +248,7 @@ export default function BookingDialog({
 
             <div>
               <label className="mb-2 block text-sm font-semibold text-gray-800">
-                Choose time(CT)
+                Choose time (CT)
               </label>
               <select
                 value={selectedTime}
@@ -190,16 +258,20 @@ export default function BookingDialog({
                 <option value="">Choose time</option>
                 <option value="06:00 PM">06:00 PM</option>
                 <option value="07:00 PM">07:00 PM</option>
-                <option value="05:00 PM">08:00 PM</option>
-                <option value="09:00 AM">Weekend Anytime</option>
+                <option value="08:00 PM">08:00 PM</option>
+                <option value="Weekend Anytime">Weekend Anytime</option>
               </select>
             </div>
           </div>
-<div>   <p className="mt-3 text-sm leading-6 text-gray-500">
-                All sessions are scheduled in Central Time (CT).Please select a time and I will do my best to accommodate it. After payment, I will contact you to finalize the schedule.
-                </p></div>
-          <div className="mt-5">
 
+          <div>
+            <p className="mt-3 text-sm leading-6 text-gray-500">
+              All sessions are scheduled in Central Time. Please select your
+              preferred time, and I will do my best to accommodate it.
+            </p>
+          </div>
+
+          <div className="mt-5">
             <label className="mb-2 block text-sm font-semibold text-gray-800">
               Notes
             </label>
@@ -225,7 +297,7 @@ export default function BookingDialog({
               <div className="min-w-0 pr-2">
                 <h3 className="text-lg font-bold text-black">Secure payment</h3>
                 <p className="mt-2 text-sm leading-6 text-gray-600">
-                  Complete your booking using PayPal.
+                  Complete payment first, then send your booking request.
                 </p>
               </div>
 
@@ -238,9 +310,11 @@ export default function BookingDialog({
                 </div>
               </div>
             </div>
-<hr className="my-5 border-gray-200" />
+
+            <hr className="my-5 border-gray-200" />
+
             {!isFormValid ? (
-              <div className="bg-gray-50 p-4 p-6 md:p-5">
+              <div className="rounded-2xl bg-gray-50 p-5">
                 <Button
                   type="button"
                   label="Enter name and email to continue"
@@ -259,35 +333,69 @@ export default function BookingDialog({
                   Name and email are required before payment is shown.
                 </p>
               </div>
-            ) : !paypalClientId || !service.paypalHostedButtonId ? (
-              <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3">
-                <p className="text-sm leading-6 text-red-600">
-                  PayPal is not configured yet.
+            ) : bookingSent ? (
+              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
+                <p className="text-base font-semibold text-emerald-700">
+                  Thank you. Your booking request has been sent successfully.
+                </p>
+                <p className="mt-2 text-sm leading-6 text-emerald-800">
+                  I received your details and will contact you by email to confirm
+                  the session.
                 </p>
               </div>
             ) : (
               <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 md:p-5">
-                <div className="paypal-button-wrap">
-                  <PaypalButton
-                    clientId={paypalClientId}
-                    hostedButtonId={service.paypalHostedButtonId}
-                    name={name}
-                    email={email}
-                    phone={phone}
-                    language={language}
-                    preferredDate={
-                      preferredDate ? formatDateForInput(preferredDate) : ''
-                    }
-                    selectedTime={selectedTime}
-                    notes={notes}
-                    serviceTitle={service.title}
+                <div className="flex flex-col gap-3 md:flex-row md:flex-wrap">
+                  <Button
+                    type="button"
+                    label="Pay Now"
+                    icon="pi pi-external-link"
+                    rounded
+                    severity="contrast"
+                    onClick={handlePayNow}
+                    pt={{
+                      root: {
+                        className: 'px-5 py-3 font-semibold',
+                      },
+                    }}
                   />
+
+                  {hasOpenedPayment ? (
+                    <Button
+                      type="button"
+                      label={
+                        isSubmittingBooking
+                          ? 'Sending Booking Request...'
+                          : 'I Completed Payment — Send Booking Request'
+                      }
+                      icon="pi pi-check-circle"
+                      rounded
+                      outlined
+                      disabled={isSubmittingBooking}
+                      onClick={handleSendBookingRequest}
+                      pt={{
+                        root: {
+                          className:
+                            'px-5 py-3 font-semibold border-black text-black hover:bg-black hover:text-white',
+                        },
+                      }}
+                    />
+                  ) : null}
                 </div>
 
                 <p className="mt-4 text-sm leading-6 text-gray-500">
-                  After successful payment, I will contact you using your provided
-                  email to finalize your session schedule.
+                  Step 1: click Pay Now and complete payment in PayPal. Step 2:
+                  return here and click “I Completed Payment — Send Booking
+                  Request”.
                 </p>
+
+                {bookingError ? (
+                  <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3">
+                    <p className="text-sm leading-6 text-red-600">
+                      {bookingError}
+                    </p>
+                  </div>
+                ) : null}
               </div>
             )}
           </div>
