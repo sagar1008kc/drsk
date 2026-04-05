@@ -180,7 +180,7 @@ export default function BookingDialog({
 
             <div>
               <label className="mb-2 block text-sm font-semibold text-gray-800">
-                Choose time
+                Choose time(CT)
               </label>
               <select
                 value={selectedTime}
@@ -188,15 +188,18 @@ export default function BookingDialog({
                 className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black shadow-sm outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
               >
                 <option value="">Choose time</option>
-                <option value="09:00 AM">09:00 AM</option>
-                <option value="05:00 PM">05:00 PM</option>
                 <option value="06:00 PM">06:00 PM</option>
                 <option value="07:00 PM">07:00 PM</option>
+                <option value="05:00 PM">08:00 PM</option>
+                <option value="09:00 AM">Weekend Anytime</option>
               </select>
             </div>
           </div>
-
+<div>   <p className="mt-3 text-sm leading-6 text-gray-500">
+                All sessions are scheduled in Central Time (CT).Please select a time and I will do my best to accommodate it. After payment, I will contact you to finalize the schedule.
+                </p></div>
           <div className="mt-5">
+
             <label className="mb-2 block text-sm font-semibold text-gray-800">
               Notes
             </label>
