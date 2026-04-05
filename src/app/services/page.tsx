@@ -145,7 +145,7 @@ export default function ServicesPage() {
                         className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${styles.accentBar}`}
                       />
 
-                      <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start justify-between">
                         <div>
                           <span
                             className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${styles.badge}`}
@@ -156,17 +156,6 @@ export default function ServicesPage() {
                           <h3 className="mt-4 text-2xl font-bold tracking-tight text-black">
                             {service.title}
                           </h3>
-                        </div>
-
-                        <div
-                          className={`min-w-[92px] rounded-2xl px-3 py-3 text-center shadow-sm ${styles.iconBox}`}
-                        >
-                          <div className="text-xs font-semibold uppercase tracking-wide text-black/70">
-                            Virtual
-                          </div>
-                          <div className="mt-1 text-xl font-bold leading-5 text-black">
-                            {service.duration}
-                          </div>
                         </div>
                       </div>
 

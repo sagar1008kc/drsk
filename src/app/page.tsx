@@ -122,10 +122,10 @@ export default function Home() {
                   Links
                 </button>
                 <button
-                  onClick={() => scrollToId('certifications')}
+                  onClick={() => scrollToId('experience')}
                   className="px-2 py-1 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 transition"
                 >
-                  Education
+                  Experience
                 </button>
                 <button
                   onClick={() => scrollToId('books')}

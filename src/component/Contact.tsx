@@ -227,10 +227,10 @@ export default function ContactForm() {
   const isNearLimit = messageLength >= 900;
 
   return (
-    <div className="flex min-h-[80vh] items-center justify-center px-4">
-      <div className="w-full max-w-xl rounded-3xl border border-gray-200 bg-white p-8 shadow-lg">
-        <h2 className="text-center text-2xl font-bold text-black">
-          Contact Me
+    <div className="flex min-h-[90vh] items-center justify-center px-4">
+      <div className="w-full max-w-xl rounded-3xl border border-gray-200 bg-white shadow-lg">
+        <h2 className="text-center text-2xl font-bold text-black mt-2">
+          Contact Us
         </h2>
 
         {status.type === 'success' ? (
@@ -256,7 +256,7 @@ export default function ContactForm() {
             <div>
               <label
                 htmlFor="name"
-                className="mb-2 block text-sm font-semibold text-black"
+                className="mb-2 block text-sm font-semibold text-black text-center"
               >
                 Name
               </label>
@@ -276,7 +276,7 @@ export default function ContactForm() {
             <div>
               <label
                 htmlFor="email"
-                className="mb-2 block text-sm font-semibold text-black"
+                className="block text-sm font-semibold text-black text-center"
               >
                 Email
               </label>
@@ -291,15 +291,15 @@ export default function ContactForm() {
                 placeholder="you@example.com"
                 className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black placeholder:text-gray-400 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
               />
-              <p className="mt-1 text-xs text-gray-500">
-                Please provide a valid email so I can respond to you.
+              <p className="mt-1 text-xs text-gray-500 text-center">
+                *Please provide a valid email so I can respond to you.
               </p>
             </div>
 
             <div>
               <label
                 htmlFor="message"
-                className="mb-2 block text-sm font-semibold text-black"
+                className="mb-2 block text-sm font-semibold text-black text-center"
               >
                 Message
               </label>
@@ -313,7 +313,7 @@ export default function ContactForm() {
                 value={form.message}
                 onChange={handleChange}
                 placeholder="Write your message here..."
-                className="w-full resize-none rounded-xl border border-gray-300 bg-white px-4 py-3 text-black placeholder:text-gray-400 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+                className="w-full  rounded-xl border border-gray-300 bg-white px-4 py-3 text-black placeholder:text-gray-400 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
               />
               <div
                 className={`mt-2 text-right text-xs ${
@@ -350,7 +350,7 @@ export default function ContactForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-full bg-black px-6 py-3 text-sm font-bold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded-full bg-black py-3 text-sm font-bold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading ? 'Sending...' : 'Send Message'}
             </button>
