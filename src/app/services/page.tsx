@@ -6,7 +6,7 @@ import { Button } from 'primereact/button';
 import BookingDialog, { Service } from '@/component/BookingDialog';
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 1, y: 24 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -26,8 +26,8 @@ const services: Service[] = [
     oldPrice: '$250',
     newPrice: '$99',
     duration: '1 hour',
-    paymentPriceId: process.env.NEXT_PUBLIC_STRIPE_BUSINESS_PRICE_ID || '',
     accent: 'emerald',
+    paypalHostedButtonId: 'M2PDKM9QK9KBJ',
   },
   {
     key: 'support',
@@ -44,8 +44,8 @@ const services: Service[] = [
     oldPrice: '$250',
     newPrice: '$99',
     duration: '1 hour',
-    paymentPriceId: process.env.NEXT_PUBLIC_STRIPE_SUPPORT_PRICE_ID || '',
     accent: 'sky',
+    paypalHostedButtonId: 'M2PDKM9QK9KBJ',
     note:
       'Support sessions are educational and supportive only. No therapy, diagnosis, or medical treatment is provided.',
   },
@@ -125,11 +125,12 @@ export default function ServicesPage() {
 
                     <div>
                       <h2 className="text-base font-bold text-black">
-                        Simple payment-first process
+                        Simple booking process
                       </h2>
                       <p className="mt-2 text-sm leading-7 text-black/75">
-                        Share your details, continue to Stripe secure payment,
-                        and I will follow up with scheduling details after payment.
+                        Choose your session, fill in your details, and complete
+                        secure payment with PayPal. After payment, I will follow up
+                        using your provided email to confirm scheduling.
                       </p>
                     </div>
                   </div>
@@ -212,7 +213,7 @@ export default function ServicesPage() {
                           pt={{
                             root: {
                               className:
-                                'px-4 py-3 font-semibold border-black text-black hover:bg-black hover:text-white',
+                                'px-4 py-3 font-semibold border-black bg-black text-white text-black hover:bg-sky-700',
                             },
                           }}
                         />

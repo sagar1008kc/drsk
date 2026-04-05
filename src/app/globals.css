@@ -1,5 +1,5 @@
 /* External Libraries */
-@import 'primereact/resources/themes/lara-dark-indigo/theme.css';
+@import 'primereact/resources/themes/lara-light-indigo/theme.css';
 @import 'primereact/resources/primereact.min.css';
 @import 'primeicons/primeicons.css';
 
@@ -10,13 +10,10 @@
 
 /* Root Variables */
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-rgb: 6, 10, 20; /* deep navy */
-  --card-rgb: 255, 255, 255;
-  --border-rgb: 255, 255, 255;
-
-  --primary: 99, 102, 241;   /* indigo */
-  --secondary: 59, 130, 246; /* blue */
+  --foreground-rgb: 17, 24, 39;      /* gray-900 */
+  --background-rgb: 255, 255, 255;   /* white */
+  --primary: 99, 102, 241;           /* indigo */
+  --secondary: 59, 130, 246;         /* blue */
 }
 
 /* Global Styles */
@@ -30,32 +27,6 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Utility Classes */
-.container-max {
-  @apply mx-auto max-w-6xl px-4;
-}
-
-.card {
-  @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-8;
-}
-
-/* Buttons */
-.btn {
-  @apply inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium transition;
-}
-
-.btn-primary {
-  @apply bg-indigo-600/90 hover:bg-indigo-600 text-white;
-}
-
-.btn-secondary {
-  @apply bg-white/10 hover:bg-white/15 border border-white/10 text-white;
-}
-
-.btn-amber {
-  @apply bg-amber-500/90 hover:bg-amber-500 text-black font-semibold;
 }
 
 /* Links */
@@ -78,6 +49,7 @@ a {
   html {
     scroll-behavior: auto;
   }
+
   * {
     animation: none !important;
     transition: none !important;
@@ -94,7 +66,7 @@ a {
   text-decoration: none !important;
   color: #ffffff !important;
   border-radius: 9999px;
-  background-color: #0A66C2;
+  background-color: #0a66c2;
   font-family: inherit;
   transition: all 0.2s ease;
   box-shadow: 0 6px 20px rgba(10, 102, 194, 0.15);
@@ -104,4 +76,20 @@ a {
   background-color: #004182;
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(10, 102, 194, 0.25);
+}
+
+/* PayPal */
+.paypal-button-wrap {
+  width: 100%;
+}
+
+.paypal-button-wrap > div,
+.paypal-button-wrap iframe {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.paypal-button-wrap iframe {
+  min-height: 120px;
+  border: 0;
 }

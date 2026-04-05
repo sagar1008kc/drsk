@@ -2,24 +2,29 @@
 
 export default function ContactForm() {
   return (
-    <div className="mt-10 flex justify-center px-4">
+    <div className="flex min-h-[80vh] items-center justify-center px-4">
       <form
         action="https://formsubmit.co/info.drsk0@gmail.com"
         method="POST"
-        className="w-full md:w-1/2 space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
+        className="w-full max-w-xl space-y-6 rounded-3xl border border-gray-200 bg-white p-8 shadow-lg"
       >
-        <h2 className="text-lg font-semibold text-black">
+        <h2 className="text-center text-2xl font-bold text-black">
           Contact Me
         </h2>
 
         {/* Name */}
         <div>
-          <label className="mb-2 block text-sm font-semibold text-gray-800">
+          <label
+            htmlFor="name"
+            className="mb-2 block text-sm font-semibold text-black"
+          >
             Name
           </label>
           <input
+            id="name"
             type="text"
             name="name"
+            autoComplete="name"
             required
             placeholder="Your name"
             className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black placeholder:text-gray-400 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
@@ -28,12 +33,17 @@ export default function ContactForm() {
 
         {/* Email */}
         <div>
-          <label className="mb-2 block text-sm font-semibold text-gray-800">
+          <label
+            htmlFor="email"
+            className="mb-2 block text-sm font-semibold text-black"
+          >
             Email
           </label>
           <input
+            id="email"
             type="email"
             name="email"
+            autoComplete="email"
             required
             placeholder="you@example.com"
             className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black placeholder:text-gray-400 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
@@ -45,11 +55,16 @@ export default function ContactForm() {
 
         {/* Message */}
         <div>
-          <label className="mb-2 block text-sm font-semibold text-gray-800">
+          <label
+            htmlFor="message"
+            className="mb-2 block text-sm font-semibold text-black"
+          >
             Message
           </label>
           <textarea
+            id="message"
             name="message"
+            autoComplete="off"
             required
             rows={5}
             placeholder="Write your message here..."
@@ -66,18 +81,13 @@ export default function ContactForm() {
         <input type="hidden" name="_captcha" value="false" />
         <input type="hidden" name="_template" value="table" />
 
-        {/* Optional success redirect */}
-        {/* <input type="hidden" name="_next" value="https://yourdomain.com/thank-you" /> */}
-
         {/* Button */}
-        <div className="flex justify-center">
-          <button
-            type="submit"
-            className="w-full md:w-1/2 rounded-full bg-black px-6 py-3 text-sm font-bold text-white transition hover:bg-gray-800"
-          >
-            Send Message
-          </button>
-        </div>
+        <button
+          type="submit"
+          className="w-full rounded-full bg-black px-6 py-3 text-sm font-bold text-white transition hover:bg-gray-800"
+        >
+          Send Message
+        </button>
       </form>
     </div>
   );
