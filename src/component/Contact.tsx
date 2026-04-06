@@ -225,8 +225,7 @@ export default function ContactForm() {
 
   const messageLength = form.message.length;
   const isNearLimit = messageLength >= 900;
-  console.log('site key:', process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
-  console.log('turnstile available:', typeof window !== 'undefined' ? !!window.turnstile : false);
+
   return (
     <div className="flex min-h-[90vh] items-center justify-center px-4">
       <div className="w-full max-w-xl rounded-3xl border border-gray-200 bg-white shadow-lg">
