@@ -34,9 +34,13 @@ type StatusState = {
   message: string;
 };
 
+type ContactFormProps = {
+  onClose?: () => void;
+};
+
 const MESSAGE_LIMIT = 1000;
 
-export default function ContactForm() {
+export default function ContactForm({ onClose }: ContactFormProps) {
   const [form, setForm] = useState<FormState>({
     name: '',
     email: '',
@@ -116,13 +120,17 @@ export default function ContactForm() {
     }
   };
 
-  const resetForm = () => {
+  const clearFormFields = () => {
     setForm({
       name: '',
       email: '',
       message: '',
       company: '',
     });
+  };
+
+  const resetForm = () => {
+    clearFormFields();
     setStatus({
       type: 'idle',
       message: '',
@@ -194,20 +202,20 @@ export default function ContactForm() {
         );
       }
 
-      setForm({
-        name: '',
-        email: '',
-        message: '',
-        company: '',
-      });
-
+      clearFormFields();
       resetCaptcha();
 
       setStatus({
         type: 'success',
         message:
-          'Thank you! Your message has been received. I will reach out to you soon.',
+          'Thank you for sending your message. Your inquiry has been received successfully. We will get back to you within 24 hours.',
       });
+
+      if (onClose) {
+        setTimeout(() => {
+          onClose();
+        }, 2500);
+      }
     } catch (error) {
       setStatus({
         type: 'error',
@@ -228,35 +236,33 @@ export default function ContactForm() {
 
   return (
     <div className="flex min-h-[90vh] items-center justify-center px-4">
-      <div className="w-full max-w-xl rounded-3xl border border-gray-200 bg-white shadow-lg">
-        <h2 className="text-center text-2xl font-bold text-black mt-2">
-          Contact Us
-        </h2>
-
+      <div className="w-full max-w-xl rounded-3xl border border-gray-200 bg-white p-6 shadow-lg md:p-8">
+      <p className="text-center text-x text-black">
+          Thank you so much for reaching out! I truly appreciate you taking the time to connect. I will personally review your message and get back to you as soon as possible. Your inquiry is important to me, and I look forward to assisting you.
+        </p>
         {status.type === 'success' ? (
-          <div className="mt-6 rounded-2xl border border-green-300 bg-green-50 p-6 text-center">
-            <div className="mb-2 text-xl font-semibold text-green-700">
-              Message Sent Successfully
-            </div>
+          <div className="text-center">
+            <p className="text-sm leading-6 text-gray-700">{status.message}</p>
 
-            <p className="text-sm leading-6 text-gray-700">
-              {status.message}
-            </p>
-
-            <button
-              type="button"
-              onClick={resetForm}
-              className="mt-5 rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800"
-            >
-              Send Another Message
-            </button>
+            {!onClose && (
+              <button
+                type="button"
+                onClick={resetForm}
+                className="mt-5 rounded-full bg-black px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
+              >
+                Send Another Message
+              </button>
+            )}
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+          <form onSubmit={handleSubmit} className="mt-6 space-y-6 px-5">
+             <h2 className="text-center text-2xl font-bold text-black">
+          Contact Us
+        </h2>
             <div>
               <label
                 htmlFor="name"
-                className="mb-2 block text-sm font-semibold text-black text-center"
+                className="mb-2 block text-sm font-semibold text-black"
               >
                 Name
               </label>
@@ -276,7 +282,7 @@ export default function ContactForm() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-semibold text-black text-center"
+                className="mb-2 block text-sm font-semibold text-black"
               >
                 Email
               </label>
@@ -291,15 +297,15 @@ export default function ContactForm() {
                 placeholder="you@example.com"
                 className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black placeholder:text-gray-400 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
               />
-              <p className="mt-1 text-xs text-gray-500 text-center">
-                *Please provide a valid email so I can respond to you.
+              <p className="mt-1 text-xs text-gray-500">
+                Please provide a valid email address so we can respond to your inquiry.
               </p>
             </div>
 
             <div>
               <label
                 htmlFor="message"
-                className="mb-2 block text-sm font-semibold text-black text-center"
+                className="mb-2 block text-sm font-semibold text-black"
               >
                 Message
               </label>
@@ -313,7 +319,7 @@ export default function ContactForm() {
                 value={form.message}
                 onChange={handleChange}
                 placeholder="Write your message here..."
-                className="w-full  rounded-xl border border-gray-300 bg-white px-4 py-3 text-black placeholder:text-gray-400 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black placeholder:text-gray-400 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
               />
               <div
                 className={`mt-2 text-right text-xs ${
@@ -350,7 +356,7 @@ export default function ContactForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-full bg-black py-3 text-sm font-bold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full px-4 rounded-full bg-black py-3 px-4 mt-2 text-sm font-bold text-white transition hover:text-sky-400"
             >
               {loading ? 'Sending...' : 'Send Message'}
             </button>

@@ -21,6 +21,7 @@ type BookingDialogProps = {
   visible: boolean;
   service: Service | null;
   onHide: () => void;
+  onBookingSuccess?: (message: string) => void;
 };
 
 type BookingApiResponse = {
@@ -42,6 +43,7 @@ export default function BookingDialog({
   visible,
   service,
   onHide,
+  onBookingSuccess,
 }: BookingDialogProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -50,7 +52,9 @@ export default function BookingDialog({
   const [preferredDate, setPreferredDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState('');
   const [notes, setNotes] = useState('');
-
+  const [paymentStage, setPaymentStage] = useState<
+  'initial' | 'payment-opened' | 'confirmed'
+>('initial');
   const [hasOpenedPayment, setHasOpenedPayment] = useState(false);
   const [isSubmittingBooking, setIsSubmittingBooking] = useState(false);
   const [bookingSent, setBookingSent] = useState(false);
@@ -68,6 +72,7 @@ export default function BookingDialog({
     setIsSubmittingBooking(false);
     setBookingSent(false);
     setBookingError('');
+    setPaymentStage('initial');
   };
 
   const handleHide = () => {
@@ -80,18 +85,34 @@ export default function BookingDialog({
   const isFormValid = Boolean(name.trim() && email.trim());
 
   const handlePayNow = () => {
-    if (!isFormValid) return;
+    if (!isFormValid) {
+      setBookingError('Please enter your name and email before continuing to payment.');
+      return;
+    }
+  
     setBookingError('');
     setHasOpenedPayment(true);
+    setPaymentStage('payment-opened');
+  
     window.open(PAYPAL_PAYMENT_LINK, '_blank', 'noopener,noreferrer');
   };
 
   const handleSendBookingRequest = async () => {
     if (!service) return;
-
+  
+    if (!name.trim() || !email.trim()) {
+      setBookingError('Please enter your name and email.');
+      return;
+    }
+  
+    if (!hasOpenedPayment) {
+      setBookingError('Please complete payment first.');
+      return;
+    }
+  
     setBookingError('');
     setIsSubmittingBooking(true);
-
+  
     try {
       const response = await fetch('/api/booking', {
         method: 'POST',
@@ -109,21 +130,32 @@ export default function BookingDialog({
           serviceTitle: service.title,
           serviceKey: service.key,
           paypalPaymentLink: PAYPAL_PAYMENT_LINK,
+          paymentMethod: 'PayPal',
+          paymentStatus: 'Customer clicked Pay Now and confirmed booking',
         }),
       });
-
+  
       const data = (await response.json()) as BookingApiResponse;
-
+  
       if (!response.ok) {
         throw new Error(data.error || 'Failed to send booking request.');
       }
-
+  
       setBookingSent(true);
+      setPaymentStage('confirmed');
+  
+      const successMessage =
+        'Thank you for your booking request. Your details have been received successfully. We will contact you within 24 hours.';
+  
+      setTimeout(() => {
+        handleHide();
+        onBookingSuccess?.(successMessage);
+      }, 800);
     } catch (error) {
       const message =
         error instanceof Error
           ? error.message
-          : 'Failed to send booking request.';
+          : 'Payment was unsuccessful or something went wrong. Please try again.';
       setBookingError(message);
     } finally {
       setIsSubmittingBooking(false);
@@ -314,90 +346,88 @@ export default function BookingDialog({
             <hr className="my-5 border-gray-200" />
 
             {!isFormValid ? (
-              <div className="rounded-2xl bg-gray-50 p-5">
-                <Button
-                  type="button"
-                  label="Enter name and email to continue"
-                  icon="pi pi-lock"
-                  rounded
-                  severity="contrast"
-                  disabled
-                  className="w-full md:w-auto"
-                  pt={{
-                    root: {
-                      className: 'px-5 py-3 font-semibold opacity-70',
-                    },
-                  }}
-                />
-                <p className="mt-3 text-sm leading-6 text-gray-500">
-                  Name and email are required before payment is shown.
-                </p>
-              </div>
-            ) : bookingSent ? (
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
-                <p className="text-base font-semibold text-emerald-700">
-                  Thank you. Your booking request has been sent successfully.
-                </p>
-                <p className="mt-2 text-sm leading-6 text-emerald-800">
-                  I received your details and will contact you by email to confirm
-                  the session.
-                </p>
-              </div>
-            ) : (
-              <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 md:p-5">
-                <div className="flex flex-col gap-3 md:flex-row md:flex-wrap">
-                  <Button
-                    type="button"
-                    label="Pay Now"
-                    icon="pi pi-external-link"
-                    rounded
-                    severity="contrast"
-                    onClick={handlePayNow}
-                    pt={{
-                      root: {
-                        className: 'px-5 py-3 font-semibold',
-                      },
-                    }}
-                  />
+  <div className="rounded-2xl bg-gray-50 p-5">
+    <Button
+      type="button"
+      label="Enter name and email to continue"
+      icon="pi pi-lock"
+      rounded
+      severity="contrast"
+      disabled
+      className="w-full md:w-auto"
+      pt={{
+        root: {
+          className: 'px-5 py-3 font-semibold opacity-70',
+        },
+      }}
+    />
+    <p className="mt-3 text-sm leading-6 text-gray-500">
+      Name and email are required before payment is shown.
+    </p>
+  </div>
+) : bookingSent ? (
+  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
+    <p className="text-base font-semibold text-emerald-700">
+      Booking request sent successfully.
+    </p>
+    <p className="mt-2 text-sm leading-6 text-emerald-800">
+      Your details have been received. Closing this window...
+    </p>
+  </div>
+) : (
+  <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 md:p-5">
+    <div className="flex flex-col items-center gap-4">
+      {paymentStage === 'initial' && (
+        <Button
+          type="button"
+          label="Pay Now"
+          icon="pi pi-external-link"
+          rounded
+          severity="contrast"
+          onClick={handlePayNow}
+          pt={{
+            root: {
+              className:
+                'min-w-[220px] justify-center px-6 py-3 font-semibold text-white bg-black border-black hover:bg-gray-800',
+            },
+          }}
+        />
+      )}
 
-                  {hasOpenedPayment ? (
-                    <Button
-                      type="button"
-                      label={
-                        isSubmittingBooking
-                          ? 'Sending Booking Request...'
-                          : 'I Completed Payment — Send Booking Request'
-                      }
-                      icon="pi pi-check-circle"
-                      rounded
-                      outlined
-                      disabled={isSubmittingBooking}
-                      onClick={handleSendBookingRequest}
-                      pt={{
-                        root: {
-                          className:
-                            'px-5 py-3 font-semibold border-black text-black hover:bg-black hover:text-white',
-                        },
-                      }}
-                    />
-                  ) : null}
-                </div>
+      {paymentStage === 'payment-opened' && (
+        <Button
+          type="button"
+          label={isSubmittingBooking ? 'Confirming Booking...' : 'Confirm Booking'}
+          icon="pi pi-check-circle"
+          rounded
+          outlined
+          disabled={isSubmittingBooking}
+          onClick={handleSendBookingRequest}
+          pt={{
+            root: {
+              className:
+                'min-w-[220px] justify-center px-6 py-3 font-semibold border-black text-black hover:bg-black hover:text-white',
+            },
+          }}
+        />
+      )}
+    </div>
 
-                <p className="mt-4 text-sm leading-6 text-gray-500">
-                  Step 1: click Pay Now and complete payment in PayPal. Step 2:
-                  return here and click “I Completed Payment — Send Booking
-                  Request”.
-                </p>
+    <p className="mt-4 text-center text-sm leading-6 text-gray-500">
+      {paymentStage === 'initial'
+        ? 'Click Pay Now to complete your payment in PayPal.'
+        : 'After completing your PayPal payment, click Confirm Booking to send your booking details.'}
+    </p>
 
-                {bookingError ? (
-                  <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3">
-                    <p className="text-sm leading-6 text-red-600">
-                      {bookingError}
-                    </p>
-                  </div>
-                ) : null}
-              </div>
-            )}
+    {bookingError ? (
+      <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3">
+        <p className="text-sm font-medium leading-6 text-red-600">
+          {bookingError}
+        </p>
+      </div>
+    ) : null}
+  </div>
+)}
           </div>
         </div>
       </div>
