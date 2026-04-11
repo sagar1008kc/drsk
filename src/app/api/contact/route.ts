@@ -6,7 +6,6 @@ type ContactRequestBody = {
   email?: string;
   message?: string;
   company?: string;
-  token?: string;
 };
 
 export async function POST(req: Request) {
@@ -17,7 +16,6 @@ export async function POST(req: Request) {
     const email = body.email?.trim() || '';
     const message = body.message?.trim() || '';
     const company = body.company?.trim() || '';
-    const token = body.token?.trim() || '';
 
     if (company) {
       return NextResponse.json(
@@ -41,55 +39,20 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!token) {
-      return NextResponse.json(
-        { error: 'Please complete the captcha.' },
-        { status: 400 }
-      );
-    }
-
     if (
       !process.env.CONTACT_EMAIL_USER ||
       !process.env.CONTACT_EMAIL_PASS ||
-      !process.env.CONTACT_EMAIL_TO ||
-      !process.env.TURNSTILE_SECRET_KEY
+      !process.env.CONTACT_EMAIL_TO
     ) {
       console.error('Missing env vars:', {
         CONTACT_EMAIL_USER: !!process.env.CONTACT_EMAIL_USER,
         CONTACT_EMAIL_PASS: !!process.env.CONTACT_EMAIL_PASS,
         CONTACT_EMAIL_TO: !!process.env.CONTACT_EMAIL_TO,
-        TURNSTILE_SECRET_KEY: !!process.env.TURNSTILE_SECRET_KEY,
       });
 
       return NextResponse.json(
         { error: 'Server environment variables are missing.' },
         { status: 500 }
-      );
-    }
-
-    const formData = new URLSearchParams();
-    formData.append('secret', process.env.TURNSTILE_SECRET_KEY);
-    formData.append('response', token);
-
-    const captchaResponse = await fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: formData.toString(),
-      }
-    );
-
-    const captchaResult = await captchaResponse.json();
-
-    if (!captchaResult.success) {
-      console.error('Turnstile failed:', captchaResult);
-
-      return NextResponse.json(
-        { error: 'Captcha verification failed.' },
-        { status: 400 }
       );
     }
 
@@ -143,10 +106,7 @@ ${message}
     const errorMessage =
       error instanceof Error ? error.message : 'Failed to send email';
 
-    return NextResponse.json(
-      { error: errorMessage },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
 

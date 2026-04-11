@@ -11,10 +11,12 @@ type BookingRequestBody = {
   notes?: string;
   serviceTitle?: string;
   serviceTag?: string;
+  serviceKey?: string;
   price?: string;
   duration?: string;
   paymentLink?: string;
   paymentMethod?: string;
+  paymentStatus?: string;
 };
 
 export async function POST(req: Request) {
@@ -30,10 +32,12 @@ export async function POST(req: Request) {
     const notes = body.notes?.trim() || '';
     const serviceTitle = body.serviceTitle?.trim() || '';
     const serviceTag = body.serviceTag?.trim() || '';
+    const serviceKey = body.serviceKey?.trim() || '';
     const price = body.price?.trim() || '';
     const duration = body.duration?.trim() || '';
     const paymentLink = body.paymentLink?.trim() || '';
     const paymentMethod = body.paymentMethod?.trim() || '';
+    const paymentStatus = body.paymentStatus?.trim() || '';
 
     if (!name || !email || !serviceTitle) {
       return NextResponse.json(
@@ -89,6 +93,7 @@ New Booking Request
 
 Service: ${serviceTitle}
 Category: ${serviceTag}
+Service key: ${serviceKey || 'N/A'}
 Price: ${price}
 Duration: ${duration}
 
@@ -101,6 +106,7 @@ Selected Time: ${selectedTime || 'N/A'}
 
 Payment Method: ${paymentMethod || 'N/A'}
 Payment Link Used: ${paymentLink || 'N/A'}
+Payment status note: ${paymentStatus || 'N/A'}
 
 Notes:
 ${notes || 'N/A'}
@@ -111,6 +117,7 @@ ${notes || 'N/A'}
 
           <p><strong>Service:</strong> ${escapeHtml(serviceTitle)}</p>
           <p><strong>Category:</strong> ${escapeHtml(serviceTag || 'N/A')}</p>
+          <p><strong>Service key:</strong> ${escapeHtml(serviceKey || 'N/A')}</p>
           <p><strong>Price:</strong> ${escapeHtml(price || 'N/A')}</p>
           <p><strong>Duration:</strong> ${escapeHtml(duration || 'N/A')}</p>
 
@@ -127,6 +134,7 @@ ${notes || 'N/A'}
 
           <p><strong>Payment Method:</strong> ${escapeHtml(paymentMethod || 'N/A')}</p>
           <p><strong>Payment Link Used:</strong> ${escapeHtml(paymentLink || 'N/A')}</p>
+          <p><strong>Payment status note:</strong> ${escapeHtml(paymentStatus || 'N/A')}</p>
 
           <p><strong>Notes:</strong></p>
           <div style="padding:12px;background:#f5f5f5;border-radius:8px;white-space:pre-wrap;">

@@ -336,7 +336,9 @@ export default function Home() {
       {/* Books */}
       <section id="books" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
-        <h2 className="text-2xl md:text-3xl font-bold pb-2xl pb-4 text-center">Published Books</h2>
+        <h2 className="pb-4 text-center text-2xl font-bold md:text-3xl">
+          Published Books
+        </h2>
           <motion.div
             initial="hidden"
             whileInView="visible"

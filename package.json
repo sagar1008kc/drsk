@@ -11,23 +11,21 @@
   "dependencies": {
     "@types/nodemailer": "^7.0.11",
     "framer-motion": "^12.23.9",
-    "next": "^14.1.0",
+    "next": "^14.2.28",
     "nodemailer": "^8.0.4",
-    "primeicons": "^7.0.0",
-    "primereact": "^10.9.7",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "stripe": "^22.0.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sonner": "^2.0.3"
   },
   "devDependencies": {
-    "@types/node": "^20.11.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "autoprefixer": "^10.4.17",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "14.1.0",
-    "postcss": "^8.4.33",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "@types/node": "^20.17.50",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.28",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3"
   }
 }

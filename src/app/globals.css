@@ -1,22 +1,14 @@
-/* External Libraries */
-@import 'primereact/resources/themes/lara-light-indigo/theme.css';
-@import 'primereact/resources/primereact.min.css';
-@import 'primeicons/primeicons.css';
-
-/* Tailwind Base */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Root Variables */
 :root {
-  --foreground-rgb: 17, 24, 39;      /* gray-900 */
-  --background-rgb: 255, 255, 255;   /* white */
-  --primary: 99, 102, 241;           /* indigo */
-  --secondary: 59, 130, 246;         /* blue */
+  --foreground-rgb: 17, 24, 39;
+  --background-rgb: 10, 10, 10;
+  --primary: 99, 102, 241;
+  --secondary: 59, 130, 246;
 }
 
-/* Global Styles */
 html {
   scroll-behavior: smooth;
 }
@@ -29,22 +21,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Links */
 a {
   text-decoration: none;
 }
 
-/* PrimeReact Overrides */
-.p-component {
-  font-family: inherit;
-}
-
-/* Selection Highlight */
 ::selection {
   background: rgba(99, 102, 241, 0.35);
 }
 
-/* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -56,7 +40,6 @@ a {
   }
 }
 
-/* LinkedIn Button */
 .libutton {
   display: inline-flex;
   align-items: center;
@@ -76,20 +59,4 @@ a {
   background-color: #004182;
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(10, 102, 194, 0.25);
-}
-
-/* PayPal */
-.paypal-button-wrap {
-  width: 100%;
-}
-
-.paypal-button-wrap > div,
-.paypal-button-wrap iframe {
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-.paypal-button-wrap iframe {
-  min-height: 120px;
-  border: 0;
 }
