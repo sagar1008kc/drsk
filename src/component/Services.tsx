@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
-import { toast } from 'sonner';
 import type { Service } from '@/lib/services';
 import { SESSION_SERVICES } from '@/lib/services';
 
@@ -27,6 +26,26 @@ function getCardStyles(accent: Service['accent']) {
     };
   }
 
+  if (accent === 'violet') {
+    return {
+      glow: 'shadow-[0_18px_50px_rgba(139,92,246,0.12)]',
+      badge: 'border border-violet-200 bg-violet-50 text-violet-800',
+      accentBar: 'from-violet-500 to-purple-400',
+      button:
+        'inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-800 hover:border-violet-800',
+    };
+  }
+
+  if (accent === 'rose') {
+    return {
+      glow: 'shadow-[0_18px_50px_rgba(244,63,94,0.10)]',
+      badge: 'border border-rose-200 bg-rose-50 text-rose-800',
+      accentBar: 'from-rose-500 to-pink-400',
+      button:
+        'inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-700 hover:border-rose-700',
+    };
+  }
+
   return {
     glow: 'shadow-[0_18px_50px_rgba(16,185,129,0.10)]',
     badge: 'border border-emerald-200 bg-emerald-50 text-emerald-700',
@@ -40,8 +59,8 @@ export default function Services() {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
 
-  const openBooking = (service: Service) => {
-    setSelectedService(service);
+  const openBooking = (svc: Service) => {
+    setSelectedService(svc);
     setDialogVisible(true);
   };
 
@@ -89,9 +108,9 @@ export default function Services() {
                     Simple booking process
                   </h2>
                   <p className="mt-2 text-sm leading-7 text-zinc-400">
-                    Choose your session, fill in your details, complete payment,
-                    and send your booking request. I will follow up using your
-                    provided email to confirm scheduling.
+                    Choose your session, share your preferences, and complete
+                    checkout on Stripe. After payment is confirmed, you will
+                    receive a confirmation email with meeting details.
                   </p>
                 </div>
               </div>
@@ -102,7 +121,7 @@ export default function Services() {
 
                   return (
                     <article
-                      key={service.key}
+                      key={service.id}
                       className={`group relative overflow-hidden rounded-[26px] border border-white/10 bg-white p-6 text-black transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_25px_60px_rgba(0,0,0,0.2)] md:p-7 ${styles.glow}`}
                     >
                       <div
@@ -140,14 +159,22 @@ export default function Services() {
                       </ul>
 
                       <div className="mt-8 flex flex-wrap items-end gap-3">
-                        <span className="text-lg font-semibold text-red-500 line-through">
-                          {service.oldPrice}
-                        </span>
-                        <span className="text-4xl font-bold tracking-tight text-green-600">
-                          {service.newPrice}
+                        {service.oldPriceDisplay ? (
+                          <span className="text-lg font-semibold text-red-500 line-through">
+                            {service.oldPriceDisplay}
+                          </span>
+                        ) : null}
+                        <span
+                          className={`text-4xl font-bold tracking-tight ${
+                            service.requiresPayment
+                              ? 'text-green-600'
+                              : 'text-violet-700'
+                          }`}
+                        >
+                          {service.priceDisplay}
                         </span>
                         <span className="pb-1 text-base font-medium text-black">
-                          / {service.duration}
+                          / {service.durationLabel}
                         </span>
                       </div>
 
@@ -192,7 +219,6 @@ export default function Services() {
         visible={dialogVisible}
         service={selectedService}
         onHide={closeBooking}
-        onBookingSuccess={(message) => toast.success(message, { duration: 6000 })}
       />
     </>
   );
