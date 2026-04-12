@@ -151,7 +151,7 @@ export default function Home() {
       <section id="links" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
           <div className="text-center mb-8">
-            <span className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-widest text-zinc-500">
+            <span className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-widest text-blue-500">
               Online Presence
             </span>
             <h2 className="mt-3 text-2xl md:text-3xl font-bold text-zinc-900">Links</h2>
@@ -223,9 +223,8 @@ export default function Home() {
 
               <div className="space-y-5">
                 {[
-                  { role: 'Software Engineer', org: 'General Motors · Full-time', loc: 'Austin, TX · On-site', dates: 'May 2019 – Present' },
-                  { role: 'Director of Information Technology', org: 'SM Business · Self-employed', loc: 'United States · Remote', dates: 'Apr 2023 – Present' },
-                  { role: 'Frontend Developer', org: 'SKcreation · Self-employed', loc: '', dates: 'Feb 2016 – Apr 2019' },
+                  { role: 'Software Engineer', org: 'GM · Full-time', loc: 'Austin, TX · On-site', dates: 'May 2019 – Present' },
+                  { role: 'Founder & CEO', org: 'SK Creation · Self-employed', loc: 'United States · Remote', dates: 'Apr 2023 – Present' },
                   { role: 'IT Support Specialist', org: 'Experimax · Full-time', loc: 'Houston, TX · On-site', dates: 'Jan 2016 – Apr 2019' },
                   { role: 'Section Officer', org: 'Government of Nepal', loc: 'Nepal', dates: 'May 2011 – Jun 2014' },
                   { role: 'Lead Trainer | Motivational Speaker', org: 'Self-employed', loc: 'Nepal', dates: 'Jul 2009 – May 2014' },
