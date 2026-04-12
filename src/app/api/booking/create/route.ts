@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import {
+  getCohortEventById,
   getServiceByType,
   STANDARD_MEETING_PLATFORM,
   totalCentsForBooking,
@@ -43,15 +44,31 @@ export async function POST(req: Request) {
 
     const priceCents = totalCentsForBooking(service, data.attendeeCount);
 
-    const notesCombined =
-      data.serviceType === 'business-career-session' && data.sessionFocus
-        ? [
-            `Session focus: ${data.sessionFocus}`,
-            data.notes?.trim(),
-          ]
-            .filter(Boolean)
-            .join('\n\n')
-        : data.notes?.trim() || null;
+    const notesCombined = (() => {
+      const base = data.notes?.trim() || '';
+      if (data.serviceType === 'business-career-session' && data.sessionFocus) {
+        const focusLine =
+          data.sessionFocus === 'Other' && data.sessionFocusOther?.trim()
+            ? `Session focus: Other — ${data.sessionFocusOther.trim()}`
+            : `Session focus: ${data.sessionFocus}`;
+        return [focusLine, base].filter(Boolean).join('\n\n');
+      }
+      if (
+        data.serviceType === 'nonprofit-community-session' &&
+        data.sessionFocus
+      ) {
+        const prog = `Program: ${data.sessionFocus}`;
+        return [prog, base].filter(Boolean).join('\n\n');
+      }
+      if (data.serviceType === 'scheduled-group-session' && data.cohortEventId) {
+        const ev = getCohortEventById(data.cohortEventId);
+        if (ev) {
+          const cohortLine = `Group cohort: ${ev.labelDisplay} — ${ev.focus}`;
+          return [cohortLine, base].filter(Boolean).join('\n\n');
+        }
+      }
+      return base || null;
+    })();
 
     try {
       const { id } = await insertBooking({

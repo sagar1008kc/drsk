@@ -22,6 +22,9 @@ type ContactFormProps = {
 
 const MESSAGE_LIMIT = 1000;
 
+const fieldClass =
+  'min-h-[48px] w-full rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-base text-white placeholder:text-zinc-500 outline-none transition focus:border-violet-400/50 focus:bg-white/[0.09] focus:ring-2 focus:ring-violet-500/25';
+
 export default function ContactForm({ onClose }: ContactFormProps) {
   const [form, setForm] = useState<FormState>({
     name: '',
@@ -140,110 +143,130 @@ export default function ContactForm({ onClose }: ContactFormProps) {
   const isNearLimit = messageLength >= 900;
 
   return (
-    <div className="flex min-h-0 items-center justify-center py-8">
-      <div className="w-full rounded-2xl border border-zinc-200 bg-white px-6 py-8 shadow-sm md:px-10 md:py-10">
-        <div className="mb-8 text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-zinc-900 md:text-3xl">
-            Send a Message
-          </h2>
-          <p className="mt-2 text-sm leading-6 text-zinc-500 md:text-base">
-            Share your name, email, and message. We typically reply within a
-            few business days.
-          </p>
+    <div className="flex min-h-0 w-full justify-center px-1 py-6 sm:px-2 sm:py-8">
+      <div className="relative w-full max-w-lg">
+        <div
+          className="pointer-events-none absolute -inset-px rounded-[1.35rem] bg-gradient-to-br from-violet-500/40 via-fuchsia-500/20 to-transparent opacity-70 blur-sm"
+          aria-hidden
+        />
+        <div className="relative overflow-hidden rounded-[1.25rem] border border-white/10 bg-zinc-950/90 shadow-2xl ring-1 ring-white/5 backdrop-blur-xl">
+          <div className="border-b border-white/5 bg-gradient-to-r from-violet-950/40 to-transparent px-5 py-6 sm:px-8 sm:py-8">
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+              Send a message
+            </h2>
+            <p className="mt-2 max-w-md text-sm leading-relaxed text-zinc-400">
+              We usually reply within a few business days.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5 px-5 pb-8 pt-6 sm:px-8">
+            <div>
+              <label
+                htmlFor="name"
+                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-400"
+              >
+                Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                name="name"
+                autoComplete="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="Your name"
+                className={fieldClass}
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="email"
+                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-400"
+              >
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                autoComplete="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
+                inputMode="email"
+                className={fieldClass}
+              />
+              <p className="mt-1.5 text-xs leading-relaxed text-zinc-500">
+                Provide a valid email address — we use it for replies and
+                confirmations.
+              </p>
+            </div>
+
+            <div>
+              <label
+                htmlFor="message"
+                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-400"
+              >
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={5}
+                maxLength={MESSAGE_LIMIT}
+                value={form.message}
+                onChange={handleChange}
+                placeholder="What would you like to share?"
+                className={`${fieldClass} min-h-[140px] resize-y sm:min-h-[160px]`}
+              />
+              <div
+                className={`mt-2 text-right text-xs ${
+                  isNearLimit ? 'text-amber-400' : 'text-zinc-500'
+                }`}
+              >
+                {messageLength}/{MESSAGE_LIMIT}
+              </div>
+            </div>
+
+            <div className="hidden" aria-hidden="true">
+              <label htmlFor="company">Company</label>
+              <input
+                id="company"
+                type="text"
+                name="company"
+                tabIndex={-1}
+                autoComplete="off"
+                value={form.company}
+                onChange={handleChange}
+              />
+            </div>
+
+            {status.type === 'error' && status.message ? (
+              <div
+                role="alert"
+                className="rounded-2xl border border-red-500/30 bg-red-950/50 px-4 py-3 text-sm text-red-200"
+              >
+                {status.message}
+              </div>
+            ) : null}
+
+            <button
+              type="submit"
+              disabled={!isFormReady || loading}
+              className="flex min-h-[52px] w-full items-center justify-center rounded-2xl bg-gradient-to-r from-violet-600 via-violet-500 to-indigo-600 px-4 text-sm font-bold text-white shadow-lg shadow-violet-900/30 transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100 sm:text-base"
+            >
+              {loading ? (
+                <span className="inline-flex items-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Sending…
+                </span>
+              ) : (
+                'Send message'
+              )}
+            </button>
+          </form>
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label
-              htmlFor="name"
-              className="mb-2 block text-sm font-semibold text-zinc-700"
-            >
-              Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              name="name"
-              autoComplete="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Your name"
-              className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="email"
-              className="mb-2 block text-sm font-semibold text-zinc-700"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              name="email"
-              autoComplete="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="you@example.com"
-              className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="message"
-              className="mb-2 block text-sm font-semibold text-zinc-700"
-            >
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows={6}
-              maxLength={MESSAGE_LIMIT}
-              value={form.message}
-              onChange={handleChange}
-              placeholder="Write your message here..."
-              className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15 resize-none"
-            />
-            <div
-              className={`mt-1.5 text-xs ${
-                isNearLimit ? 'text-amber-600' : 'text-zinc-400'
-              }`}
-            >
-              {messageLength}/{MESSAGE_LIMIT} characters
-            </div>
-          </div>
-
-          <div className="hidden" aria-hidden="true">
-            <label htmlFor="company">Company</label>
-            <input
-              id="company"
-              type="text"
-              name="company"
-              tabIndex={-1}
-              autoComplete="off"
-              value={form.company}
-              onChange={handleChange}
-            />
-          </div>
-
-          {status.type === 'error' && status.message ? (
-            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-              {status.message}
-            </div>
-          ) : null}
-
-          <button
-            type="submit"
-            disabled={!isFormReady || loading}
-            className="w-full rounded-full bg-zinc-900 px-4 py-3 text-sm font-bold text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            {loading ? 'Sending…' : 'Send Message'}
-          </button>
-        </form>
       </div>
     </div>
   );

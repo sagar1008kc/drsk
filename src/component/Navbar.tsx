@@ -9,48 +9,70 @@ export default function Navbar() {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[1000] bg-black/90 backdrop-blur-md border-b border-white/10">
-      <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3" aria-label="Go to home">
-          <div className="h-12 w-12 rounded-full overflow-hidden border border-white/20 bg-gray-800">
+    <header className="fixed top-0 left-0 right-0 z-[1000] border-b border-white/10 bg-black/90 backdrop-blur-md">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-4 sm:px-4 sm:py-3">
+        <Link
+          href="/"
+          className="flex min-w-0 shrink items-center gap-2 sm:gap-3"
+          aria-label="Go to home"
+        >
+          <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-white/20 bg-gray-800 sm:h-12 sm:w-12">
             <Image
               src="/drsk.png"
               alt="Dr. SK"
               width={48}
               height={48}
-              className="object-cover w-full h-full"
+              className="h-full w-full object-cover"
             />
           </div>
 
-          <div className="leading-tight">
-            <div className="text-xl font-bold text-white">Dr. SK</div>
-            <div className="text-xs text-gray-400">Author • Technologist</div>
+          <div className="min-w-0 leading-tight">
+            <div className="truncate text-base font-bold text-white sm:text-xl">
+              Dr. SK
+            </div>
+            <div className="hidden text-xs text-gray-400 sm:block">
+              Author • Technologist
+            </div>
           </div>
         </Link>
 
-      <nav className="flex items-center gap-3">
-        <Link
-          href="/"
-          className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
-            isActive('/')
-              ? 'bg-white text-black shadow-md'
-              : 'text-gray-300 hover:text-white hover:bg-white/10'
-          }`}
+        <nav
+          className="flex shrink-0 flex-nowrap items-center justify-end gap-0.5 sm:gap-2"
+          aria-label="Main"
         >
-          Portfolio
-        </Link>
+          <Link
+            href="/"
+            className={`whitespace-nowrap rounded-full px-2 py-1.5 text-[11px] font-semibold transition sm:px-4 sm:py-2 sm:text-sm ${
+              isActive('/')
+                ? 'bg-white text-black shadow-md'
+                : 'text-gray-300 hover:bg-white/10 hover:text-white'
+            }`}
+          >
+            Portfolio
+          </Link>
 
-        <Link
-          href="/services"
-          className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
-            isActive('/services')
-              ? 'bg-white text-black shadow-md'
-              : 'text-gray-300 hover:text-white hover:bg-white/10'
-          }`}
-        >
-          Services
-        </Link>
-      </nav>
+          <Link
+            href="/services"
+            className={`whitespace-nowrap rounded-full px-2 py-1.5 text-[11px] font-semibold transition sm:px-4 sm:py-2 sm:text-sm ${
+              isActive('/services')
+                ? 'bg-white text-black shadow-md'
+                : 'text-gray-300 hover:bg-white/10 hover:text-white'
+            }`}
+          >
+            Services
+          </Link>
+
+          <Link
+            href="/project"
+            className={`whitespace-nowrap rounded-full px-2 py-1.5 text-[11px] font-semibold transition sm:px-4 sm:py-2 sm:text-sm ${
+              isActive('/project')
+                ? 'bg-white text-black shadow-md'
+                : 'text-gray-300 hover:bg-white/10 hover:text-white'
+            }`}
+          >
+            Project
+          </Link>
+        </nav>
       </div>
     </header>
   );

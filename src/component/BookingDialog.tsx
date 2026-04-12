@@ -11,6 +11,9 @@ import {
 import { createPortal } from 'react-dom';
 import { toast } from 'sonner';
 import {
+  getCohortEventById,
+  GROUP_COHORT_EVENTS,
+  NONPROFIT_PROGRAM_OPTIONS,
   totalCentsForBooking,
   VIRTUAL_SESSION_FOCUS_OPTIONS,
   type Service,
@@ -18,9 +21,14 @@ import {
 import {
   CENTRAL_TZ,
   getTimeSlotsForChicagoDate,
-  isChicagoWeekend,
   todayYmdChicago,
 } from '@/lib/availability';
+import {
+  E164_MAX_DIGITS,
+  formatInternationalPhoneDisplay,
+  isValidOptionalInternationalPhone,
+  phoneDigits,
+} from '@/lib/phone';
 
 type BookingDialogProps = {
   visible: boolean;
@@ -59,10 +67,12 @@ export default function BookingDialog({
   const [preferredDate, setPreferredDate] = useState<Date | null>(null);
   const [preferredTime, setPreferredTime] = useState('');
   const [sessionFocus, setSessionFocus] = useState('');
+  const [sessionFocusOther, setSessionFocusOther] = useState('');
   const [attendeeCount, setAttendeeCount] = useState(2);
   const [notes, setNotes] = useState('');
   const [consent, setConsent] = useState(false);
   const [company, setCompany] = useState('');
+  const [cohortEventId, setCohortEventId] = useState('');
 
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -78,11 +88,36 @@ export default function BookingDialog({
     setAttendeeCount(service.groupPricing.min);
   }, [visible, service?.id]);
 
+  useEffect(() => {
+    if (!visible || !service) return;
+    setSessionFocus('');
+    setSessionFocusOther('');
+    setCohortEventId('');
+  }, [visible, service?.id]);
+
+  useEffect(() => {
+    if (!cohortEventId) return;
+    const ev = getCohortEventById(cohortEventId);
+    if (ev) setPreferredDate(new Date(`${ev.dateYmd}T12:00:00`));
+  }, [cohortEventId]);
+
   const timeSlotOptions = useMemo(() => {
     if (!preferredDate) return [];
     const ymd = formatDateForInput(preferredDate);
     return getTimeSlotsForChicagoDate(ymd);
   }, [preferredDate]);
+
+  useEffect(() => {
+    if (service?.id !== 'scheduled-group-session') return;
+    if (!cohortEventId || timeSlotOptions.length === 0) return;
+    if (
+      preferredTime &&
+      timeSlotOptions.includes(preferredTime as (typeof timeSlotOptions)[number])
+    ) {
+      return;
+    }
+    setPreferredTime(timeSlotOptions[0] ?? '');
+  }, [service?.id, cohortEventId, timeSlotOptions, preferredTime]);
 
   useEffect(() => {
     if (!preferredTime) return;
@@ -104,10 +139,12 @@ export default function BookingDialog({
     setPreferredDate(null);
     setPreferredTime('');
     setSessionFocus('');
+    setSessionFocusOther('');
     setAttendeeCount(2);
     setNotes('');
     setConsent(false);
     setCompany('');
+    setCohortEventId('');
     setTouched({});
     setSubmitting(false);
     setServerError('');
@@ -151,17 +188,41 @@ export default function BookingDialog({
     if (!email.trim()) errors.email = 'Email is required.';
     else if (!isValidEmail(email)) errors.email = 'Enter a valid email address.';
     if (!language) errors.language = 'Select a language.';
-    if (!preferredDate) errors.preferredDate = 'Choose a preferred date.';
-    if (!preferredTime) errors.preferredTime = 'Choose a preferred time.';
-    else if (
-      preferredDate &&
-      timeSlotOptions.length > 0 &&
-      !timeSlotOptions.includes(preferredTime as (typeof timeSlotOptions)[number])
-    ) {
-      errors.preferredTime = 'Choose a time that matches the selected day (weekday vs weekend).';
+
+    const cohortPending =
+      service?.id === 'scheduled-group-session' && !cohortEventId.trim();
+
+    if (!cohortPending) {
+      if (!preferredDate) errors.preferredDate = 'Choose a preferred date.';
+      if (!preferredTime) {
+        errors.preferredTime = 'Choose a preferred time.';
+      } else if (
+        preferredDate &&
+        timeSlotOptions.length > 0 &&
+        !timeSlotOptions.includes(preferredTime as (typeof timeSlotOptions)[number])
+      ) {
+        errors.preferredTime =
+          'Choose a time that matches the selected day (weekday vs weekend).';
+      }
     }
-    if (service?.id === 'business-career-session' && !sessionFocus.trim()) {
-      errors.sessionFocus = 'Select what you want to focus on in this session.';
+    if (service?.id === 'business-career-session') {
+      if (!sessionFocus.trim()) {
+        errors.sessionFocus = 'Select what you want to focus on in this session.';
+      } else if (sessionFocus === 'Other') {
+        const o = sessionFocusOther.trim();
+        if (o.length < 3) {
+          errors.sessionFocusOther =
+            'Describe your topic in at least 3 characters.';
+        } else if (o.length > 500) {
+          errors.sessionFocusOther = 'Use 500 characters or fewer.';
+        }
+      }
+    }
+    if (service?.id === 'nonprofit-community-session' && !sessionFocus.trim()) {
+      errors.sessionFocus = 'Select a program type.';
+    }
+    if (service?.id === 'scheduled-group-session' && !cohortEventId.trim()) {
+      errors.cohortEventId = 'Choose one of the scheduled cohort dates.';
     }
     if (service?.groupPricing) {
       const { min, max } = service.groupPricing;
@@ -182,19 +243,27 @@ export default function BookingDialog({
     if (notes.length > 1000) {
       errors.notes = 'Notes must be 1000 characters or fewer.';
     }
+    const p = phone.trim();
+    if (p && !isValidOptionalInternationalPhone(p)) {
+      errors.phone =
+        'Enter a complete international number (8–15 digits, country code first) or leave phone blank.';
+    }
     return errors;
   }, [
     fullName,
     email,
+    phone,
     language,
     preferredDate,
     preferredTime,
     sessionFocus,
+    sessionFocusOther,
     timeSlotOptions,
     attendeeCount,
     consent,
     notes,
     service,
+    cohortEventId,
   ]);
 
   const estimatedTotalCents = useMemo(() => {
@@ -259,8 +328,18 @@ export default function BookingDialog({
           attendeeCount: service.groupPricing ? attendeeCount : 1,
           notes: notes.trim() || undefined,
           sessionFocus:
-            service.id === 'business-career-session'
+            service.id === 'business-career-session' ||
+            service.id === 'nonprofit-community-session'
               ? sessionFocus.trim()
+              : undefined,
+          sessionFocusOther:
+            service.id === 'business-career-session' &&
+            sessionFocus === 'Other'
+              ? sessionFocusOther.trim()
+              : undefined,
+          cohortEventId:
+            service.id === 'scheduled-group-session'
+              ? cohortEventId.trim()
               : undefined,
           consent: true,
           company: company.trim() || undefined,
@@ -415,11 +494,6 @@ export default function BookingDialog({
                 <p className="mt-1 text-lg font-bold text-black">{service.title}</p>
               </div>
               <div className="text-right">
-                {service.oldPriceDisplay ? (
-                  <p className="text-sm text-gray-500 line-through">
-                    {service.oldPriceDisplay}
-                  </p>
-                ) : null}
                 {service.groupPricing && formattedEstimate ? (
                   <>
                     <p className="text-3xl font-bold text-green-600">
@@ -431,36 +505,48 @@ export default function BookingDialog({
                     </p>
                   </>
                 ) : (
-                  <p
-                    className={`text-3xl font-bold ${
-                      service.requiresPayment
-                        ? 'text-green-600'
-                        : 'text-violet-700'
-                    }`}
-                  >
-                    {service.priceDisplay}
-                  </p>
+                  <div className="flex flex-col items-end gap-0.5">
+                    {service.oldPriceDisplay ? (
+                      <p className="text-base font-semibold text-red-500 line-through decoration-red-500 sm:text-lg">
+                        {service.oldPriceDisplay}
+                      </p>
+                    ) : null}
+                    <p
+                      className={`text-3xl font-bold ${
+                        service.requiresPayment
+                          ? 'text-green-600'
+                          : 'text-violet-700'
+                      }`}
+                    >
+                      {service.priceDisplay}
+                    </p>
+                    <p className="text-sm font-medium text-gray-700">
+                      per session ({service.durationLabel})
+                    </p>
+                  </div>
                 )}
-                <p className="text-sm text-gray-600">/ {service.durationLabel}</p>
               </div>
             </div>
 
             <p className="mt-5 text-xs leading-5 text-gray-500">
-              {service.requiresPayment
-                ? 'Total is calculated from the session rate (and group size if applicable). You pay only after Stripe checkout.'
-                : 'This session has no charge. Times below are US Central Time (Chicago).'}
+              {service.requiresPayment ? (
+                <>
+                  You pay only after Stripe checkout. The total matches the
+                  session rate
+                  {service.groupPricing ? ' (× group size when applicable)' : ''}.
+                  Times are US Central (CT).
+                </>
+              ) : (
+                <>No charge. Times are US Central (CT).</>
+              )}
             </p>
             <p className="mt-2 text-xs leading-5 text-gray-500">
-              Video calls use <span className="font-semibold">Google Meet</span>{' '}
-              — the join link is added to your calendar invite after your booking
-              is confirmed.
+              Video is{' '}
+              <span className="font-semibold text-gray-700">Google Meet</span>
+              — the join link is in your confirmation email, not a separate
+              Calendar invite from us. Microsoft Teams is not set up
+              automatically; say so in Notes if you need Teams.
             </p>
-            {service.requiresPayment && !service.groupPricing ? (
-              <p className="mt-1 text-xs leading-5 text-gray-500">
-                Availability is in US Central Time (CT): weekdays 6–8 PM; weekends
-                9 AM–5 PM (hourly). Final time is confirmed by email after payment.
-              </p>
-            ) : null}
 
             {/* Honeypot — hidden from users */}
             <div
@@ -479,23 +565,119 @@ export default function BookingDialog({
               />
             </div>
 
+            {service.id === 'scheduled-group-session' ? (
+              <div className="mt-6 space-y-3">
+                <p className="text-sm font-semibold text-gray-800">
+                  Choose your cohort <span className="text-red-500">*</span>
+                </p>
+                <p className="text-xs text-gray-600">
+                  Date and topic are fixed for each option. You only choose a
+                  time (CT) after selecting your date.
+                </p>
+                <div className="space-y-2">
+                  {GROUP_COHORT_EVENTS.map((ev) => (
+                    <label
+                      key={ev.id}
+                      className={`flex cursor-pointer gap-3 rounded-xl border px-4 py-3 transition ${
+                        cohortEventId === ev.id
+                          ? 'border-black bg-white ring-2 ring-black/10'
+                          : 'border-gray-200 bg-white hover:border-gray-300'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="cohort"
+                        className="mt-1 h-4 w-4 shrink-0 border-gray-300 text-black focus:ring-black"
+                        checked={cohortEventId === ev.id}
+                        onChange={() => {
+                          setCohortEventId(ev.id);
+                          markTouched('cohortEventId');
+                        }}
+                      />
+                      <span className="min-w-0">
+                        <span className="block font-semibold text-gray-900">
+                          {ev.labelDisplay}
+                        </span>
+                        <span className="mt-0.5 block text-sm text-gray-600">
+                          {ev.focus}
+                        </span>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                {showErr('cohortEventId') ? (
+                  <p className="text-sm text-red-600">
+                    {fieldMessage('cohortEventId')}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
+
             {service.id === 'business-career-session' ? (
+              <div className="mt-6 space-y-4">
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-gray-800">
+                    Session focus <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={sessionFocus}
+                    onBlur={() => markTouched('sessionFocus')}
+                    onChange={(e) => {
+                      setSessionFocus(e.target.value);
+                      if (e.target.value !== 'Other') setSessionFocusOther('');
+                    }}
+                    className={`${inputClass}${showErr('sessionFocus') ? inputErrorClass : ''}`}
+                  >
+                    <option value="">Select a focus</option>
+                    {VIRTUAL_SESSION_FOCUS_OPTIONS.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>
+                  {showErr('sessionFocus') ? (
+                    <p className="mt-1.5 text-sm text-red-600">
+                      {fieldMessage('sessionFocus')}
+                    </p>
+                  ) : null}
+                </div>
+                {sessionFocus === 'Other' ? (
+                  <div>
+                    <label className="mb-2 block text-sm font-semibold text-gray-800">
+                      Describe your focus <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      value={sessionFocusOther}
+                      onBlur={() => markTouched('sessionFocusOther')}
+                      onChange={(e) => setSessionFocusOther(e.target.value)}
+                      rows={3}
+                      maxLength={500}
+                      placeholder="What would you like to work on?"
+                      className={`${inputClass} resize-none${showErr('sessionFocusOther') ? inputErrorClass : ''}`}
+                    />
+                    {showErr('sessionFocusOther') ? (
+                      <p className="mt-1.5 text-sm text-red-600">
+                        {fieldMessage('sessionFocusOther')}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
+            {service.id === 'nonprofit-community-session' ? (
               <div className="mt-6">
                 <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Session focus <span className="text-red-500">*</span>
+                  Program <span className="text-red-500">*</span>
                 </label>
-                <p className="mb-2 text-xs leading-5 text-gray-500">
-                  Choose one area for this session. You can add more detail in
-                  Notes below.
-                </p>
                 <select
                   value={sessionFocus}
                   onBlur={() => markTouched('sessionFocus')}
                   onChange={(e) => setSessionFocus(e.target.value)}
                   className={`${inputClass}${showErr('sessionFocus') ? inputErrorClass : ''}`}
                 >
-                  <option value="">Select a focus</option>
-                  {VIRTUAL_SESSION_FOCUS_OPTIONS.map((opt) => (
+                  <option value="">Select a program</option>
+                  {NONPROFIT_PROGRAM_OPTIONS.map((opt) => (
                     <option key={opt} value={opt}>
                       {opt}
                     </option>
@@ -572,6 +754,10 @@ export default function BookingDialog({
                   placeholder="you@example.com"
                   autoComplete="email"
                 />
+                <p className="mt-1.5 text-xs leading-relaxed text-gray-500">
+                  Provide a valid email address — we use it for replies and
+                  confirmations.
+                </p>
                 {showErr('email') ? (
                   <p className="mt-1.5 text-sm text-red-600">{fieldMessage('email')}</p>
                 ) : null}
@@ -579,16 +765,25 @@ export default function BookingDialog({
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Phone
+                  Phone{' '}
+                  <span className="font-normal text-gray-500">(optional)</span>
                 </label>
                 <input
                   type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className={inputClass}
-                  placeholder="Optional"
+                  inputMode="tel"
                   autoComplete="tel"
+                  value={formatInternationalPhoneDisplay(phone)}
+                  onChange={(e) =>
+                    setPhone(phoneDigits(e.target.value, E164_MAX_DIGITS))
+                  }
+                  className={`${inputClass}${showErr('phone') ? inputErrorClass : ''}`}
+                  placeholder="(555) 123-4567"
                 />
+                {showErr('phone') ? (
+                  <p className="mt-1.5 text-sm text-red-600">
+                    {fieldMessage('phone')}
+                  </p>
+                ) : null}
               </div>
 
               <div>
@@ -613,35 +808,49 @@ export default function BookingDialog({
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Preferred date <span className="text-red-500">*</span>
+                  {service.id === 'scheduled-group-session'
+                    ? 'Scheduled date & topic'
+                    : 'Preferred date'}{' '}
+                  <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="date"
-                  value={preferredDate ? formatDateForInput(preferredDate) : ''}
-                  onBlur={() => markTouched('preferredDate')}
-                  onChange={(e) =>
-                    setPreferredDate(
-                      e.target.value
-                        ? new Date(`${e.target.value}T12:00:00`)
-                        : null
-                    )
-                  }
-                  min={todayYmdChicago()}
-                  className={`${inputClass}${showErr('preferredDate') ? inputErrorClass : ''}`}
-                />
+                {service.id === 'scheduled-group-session' ? (
+                  cohortEventId ? (
+                    <div
+                      className={`rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800${showErr('preferredDate') ? ' border-red-400' : ''}`}
+                    >
+                      <p className="font-semibold text-gray-900">
+                        {getCohortEventById(cohortEventId)?.labelDisplay}
+                      </p>
+                      <p className="mt-1 text-gray-600">
+                        {getCohortEventById(cohortEventId)?.focus}
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+                      Select a cohort above to lock your date and topic.
+                    </p>
+                  )
+                ) : (
+                  <input
+                    type="date"
+                    value={preferredDate ? formatDateForInput(preferredDate) : ''}
+                    onBlur={() => markTouched('preferredDate')}
+                    onChange={(e) =>
+                      setPreferredDate(
+                        e.target.value
+                          ? new Date(`${e.target.value}T12:00:00`)
+                          : null
+                      )
+                    }
+                    min={todayYmdChicago()}
+                    className={`${inputClass}${showErr('preferredDate') ? inputErrorClass : ''}`}
+                  />
+                )}
                 {showErr('preferredDate') ? (
                   <p className="mt-1.5 text-sm text-red-600">
                     {fieldMessage('preferredDate')}
                   </p>
-                ) : (
-                  <p className="mt-1.5 text-xs text-gray-500">
-                    Pick a date first. To only offer your own blocked dates later,
-                    tools like{' '}
-                    <span className="font-medium">Cal.com</span> (free tier) or{' '}
-                    <span className="font-medium">Google Calendar</span>{' '}
-                    appointment schedules work well.
-                  </p>
-                )}
+                ) : null}
               </div>
 
               <div>
@@ -652,11 +861,24 @@ export default function BookingDialog({
                   value={preferredTime}
                   onBlur={() => markTouched('preferredTime')}
                   onChange={(e) => setPreferredTime(e.target.value)}
-                  disabled={!preferredDate}
-                  className={`${inputClass}${showErr('preferredTime') ? inputErrorClass : ''}${!preferredDate ? ' cursor-not-allowed opacity-70' : ''}`}
+                  disabled={
+                    !preferredDate ||
+                    (service.id === 'scheduled-group-session' && !cohortEventId)
+                  }
+                  className={`${inputClass}${showErr('preferredTime') ? inputErrorClass : ''}${
+                    !preferredDate ||
+                    (service.id === 'scheduled-group-session' && !cohortEventId)
+                      ? ' cursor-not-allowed opacity-70'
+                      : ''
+                  }`}
                 >
                   <option value="">
-                    {preferredDate ? 'Choose time' : 'Choose a date first'}
+                    {preferredDate &&
+                    (service.id !== 'scheduled-group-session' || cohortEventId)
+                      ? 'Choose time'
+                      : service.id === 'scheduled-group-session'
+                        ? 'Choose a cohort first'
+                        : 'Choose a date first'}
                   </option>
                   {timeSlotOptions.map((t) => (
                     <option key={t} value={t}>
@@ -668,24 +890,13 @@ export default function BookingDialog({
                   <p className="mt-1.5 text-sm text-red-600">
                     {fieldMessage('preferredTime')}
                   </p>
-                ) : preferredDate ? (
-                  <p className="mt-1.5 text-xs text-gray-500">
-                    {isChicagoWeekend(formatDateForInput(preferredDate))
-                      ? 'Weekend: choose an hour between 9 AM and 5 PM (Central Time).'
-                      : 'Weekday: 6 PM, 7 PM, or 8 PM only (Central Time).'}
-                  </p>
-                ) : (
-                  <p className="mt-1.5 text-xs text-gray-500">
-                    Times shown match the day you pick (weekday vs weekend).
-                  </p>
-                )}
+                ) : null}
               </div>
 
-              <div className="md:col-span-2 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm leading-6 text-gray-800">
+              <div className="md:col-span-2 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-gray-800">
                 <span className="font-semibold text-sky-900">Google Meet</span>{' '}
-                is used for all virtual sessions so you get one reliable join link
-                in email and on your calendar. If you need something different,
-                mention it in notes — we&apos;ll follow up by email.
+                — your confirmation includes the join link. (Server setup for Meet
+                is documented separately for administrators.)
               </div>
 
               <div className="md:col-span-2">

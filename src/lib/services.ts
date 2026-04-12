@@ -2,6 +2,7 @@ export const SERVICE_IDS = [
   'business-career-session',
   'mental-health-support-session',
   'group-session',
+  'scheduled-group-session',
   'nonprofit-community-session',
 ] as const;
 
@@ -46,10 +47,58 @@ export const VIRTUAL_SESSION_FOCUS_OPTIONS = [
   'Personal brand guidance',
   'Mental Health Awareness',
   'Book writing and publishing guidance',
+  'Other',
 ] as const;
 
 export type VirtualSessionFocus =
   (typeof VIRTUAL_SESSION_FOCUS_OPTIONS)[number];
+
+/** Nonprofit complimentary session: program type (booking dialog). */
+export const NONPROFIT_PROGRAM_OPTIONS = [
+  'Mental health awareness program',
+  'Career development',
+  "Student success program",
+  'Website development program',
+  'AI education',
+  'Community or school initiative (describe in Notes)',
+] as const;
+
+export type NonprofitProgramOption =
+  (typeof NONPROFIT_PROGRAM_OPTIONS)[number];
+
+/** Fixed-date group cohorts (date + topic locked at registration). */
+export type GroupCohortEvent = {
+  id: string;
+  /** YYYY-MM-DD (US Central calendar day). */
+  dateYmd: string;
+  focus: string;
+  labelDisplay: string;
+};
+
+export const GROUP_COHORT_EVENTS: GroupCohortEvent[] = [
+  {
+    id: 'cohort-2026-05-16',
+    dateYmd: '2026-05-16',
+    focus: 'Career development and strategy',
+    labelDisplay: 'May 16, 2026',
+  },
+  {
+    id: 'cohort-2026-06-20',
+    dateYmd: '2026-06-20',
+    focus: 'Mental health awareness',
+    labelDisplay: 'June 20, 2026',
+  },
+  {
+    id: 'cohort-2026-06-27',
+    dateYmd: '2026-06-27',
+    focus: 'Book writing and publishing guidance',
+    labelDisplay: 'June 27, 2026',
+  },
+];
+
+export function getCohortEventById(id: string): GroupCohortEvent | null {
+  return GROUP_COHORT_EVENTS.find((e) => e.id === id) ?? null;
+}
 
 const SERVICES_BY_ID: Record<ServiceTypeId, Service> = {
   'business-career-session': {
@@ -57,16 +106,16 @@ const SERVICES_BY_ID: Record<ServiceTypeId, Service> = {
     tag: 'Virtual Session',
     title: 'Virtual Session',
     shortDescription:
-      'One-on-one guidance for career growth, AI usage, personal branding, and next steps.',
+      'Private 1:1 session — guidance for career growth, AI usage, personal branding, and next steps.',
     description:
-      'One-on-one guidance for career growth, AI usage, personal branding, and next steps.',
+      'Private 1:1 (one-on-one) virtual session for career growth, AI usage, personal branding, and next steps.',
     bullets: [
       'Career development and strategy',
       'Personal brand guidance',
       'Mental Health Awareness',
       'Book writing and publishing guidance',
     ],
-    oldPriceDisplay: '',
+    oldPriceDisplay: '$250',
     priceDisplay: '$99',
     priceCents: 9900,
     currency: 'usd',
@@ -101,6 +150,29 @@ const SERVICES_BY_ID: Record<ServiceTypeId, Service> = {
     accent: 'sky',
     note:
       'Support sessions are educational and supportive only. No therapy, diagnosis, or medical treatment is provided.',
+  },
+  'scheduled-group-session': {
+    id: 'scheduled-group-session',
+    tag: 'Group cohort',
+    title: 'Group session',
+    shortDescription:
+      'Small-group video sessions on fixed dates with set topics. One price per seat.',
+    description:
+      'Register for a scheduled group session. Date and session focus are fixed for each cohort.',
+    bullets: [
+      'May 16, 2026 — Career development and strategy',
+      'June 20, 2026 — Mental health awareness',
+      'June 27, 2026 — Book writing and publishing guidance',
+    ],
+    oldPriceDisplay: '$150',
+    priceDisplay: '$49 / seat',
+    priceCents: 4900,
+    currency: 'usd',
+    durationMinutes: 90,
+    durationLabel: '90 minutes',
+    featured: true,
+    requiresPayment: true,
+    accent: 'violet',
   },
   'group-session': {
     id: 'group-session',

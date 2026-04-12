@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { sendHtmlEmail } from '@/lib/mail';
+import { isValidInternationalPhoneDigits } from '@/lib/phone';
 
 type ContactRequestBody = {
   name?: string;
@@ -73,6 +74,19 @@ export async function POST(req: Request) {
         { error: 'Phone, service type, and project details are required.' },
         { status: 400 }
       );
+    }
+
+    if (isWebsiteQuote) {
+      const digits = phone.replace(/\D/g, '');
+      if (!isValidInternationalPhoneDigits(digits)) {
+        return NextResponse.json(
+          {
+            error:
+              'Phone must be 8–15 digits including country code (digits only).',
+          },
+          { status: 400 }
+        );
+      }
     }
 
     const subject = isWebsiteQuote

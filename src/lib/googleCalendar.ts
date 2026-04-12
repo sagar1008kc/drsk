@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 import { createOAuth2Client } from '@/lib/googleAuth';
 import { getServiceByType } from '@/lib/services';
+import { americanTimeLabelTo24h } from '@/lib/timeLabels';
 
 export type MeetCreationResult = {
   meeting_event_id: string;
@@ -39,16 +40,12 @@ function getCalendarAuth():
 }
 
 /**
- * Builds Calendar API datetime without offset; paired with timeZone in the event body.
+ * Maps preferred-time dropdown labels (CT) to 24h HH:MM for Calendar `dateTime` strings.
+ * Meet links are created via `conferenceData`; the calendar event is not emailed to guests
+ * (`sendUpdates: 'none'`) — only the Meet URL is surfaced in your app’s confirmation flow.
  */
 function wallClockFromLabel(timeLabel: string): `${string}:${string}` | null {
-  const map: Record<string, `${string}:${string}`> = {
-    '06:00 PM': '18:00',
-    '07:00 PM': '19:00',
-    '08:00 PM': '20:00',
-    'Weekend Anytime': '10:00',
-  };
-  return map[timeLabel] ?? null;
+  return americanTimeLabelTo24h(timeLabel);
 }
 
 /** Same calendar day; sufficient for 1h slots that do not cross midnight. */
@@ -69,8 +66,14 @@ function addWallClockMinutes(
 }
 
 /**
- * Creates a Google Calendar event with a Google Meet link.
- * Prefers OAuth (GOOGLE_CLIENT_ID / SECRET / REFRESH_TOKEN); falls back to service account JWT.
+ * Creates a **Google Calendar** event so the API can return a **Google Meet** URL.
+ * Microsoft Teams links are not generated here — add a Teams URL manually in booking notes if needed.
+ *
+ * The event is created with `sendUpdates: 'none'`, so guests do not get a separate “calendar invite”
+ * from Google; you typically email only the **Meet link** from your own confirmation template.
+ *
+ * Auth: OAuth (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`) or
+ * service account (`GOOGLE_CLIENT_EMAIL`, `GOOGLE_PRIVATE_KEY`). See `docs/GOOGLE_MEET_SETUP.md`.
  */
 export async function createGoogleMeetEventForBooking(params: {
   bookingId: string;

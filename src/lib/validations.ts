@@ -1,7 +1,9 @@
 import {
   ALLOWED_LANGUAGES,
+  getCohortEventById,
   getServiceByType,
   isValidServiceType,
+  NONPROFIT_PROGRAM_OPTIONS,
   VIRTUAL_SESSION_FOCUS_OPTIONS,
   type ServiceTypeId,
 } from '@/lib/services';
@@ -9,6 +11,7 @@ import {
   isKnownPreferredTime,
   isValidTimeForChicagoDate,
 } from '@/lib/availability';
+import { isValidOptionalInternationalPhone } from '@/lib/phone';
 
 export type CreateBookingPayload = {
   serviceType: string;
@@ -23,8 +26,12 @@ export type CreateBookingPayload = {
   consent: boolean;
   company?: string;
   attendeeCount: number;
-  /** Required for virtual session (business-career-session). */
+  /** Virtual (business-career) or nonprofit program selection. */
   sessionFocus?: string;
+  /** Required when session focus is "Other" (virtual). */
+  sessionFocusOther?: string;
+  /** Scheduled group cohort (fixed date + topic). */
+  cohortEventId?: string;
 };
 
 export type FieldErrors = Record<string, string>;
@@ -67,6 +74,10 @@ export function validateCreateBookingPayload(
   const consent = b.consent === true;
   const sessionFocus =
     typeof b.sessionFocus === 'string' ? b.sessionFocus.trim() : '';
+  const sessionFocusOther =
+    typeof b.sessionFocusOther === 'string' ? b.sessionFocusOther.trim() : '';
+  const cohortEventId =
+    typeof b.cohortEventId === 'string' ? b.cohortEventId.trim() : '';
 
   const errors: FieldErrors = {};
 
@@ -134,7 +145,35 @@ export function validateCreateBookingPayload(
         sessionFocus as (typeof VIRTUAL_SESSION_FOCUS_OPTIONS)[number]
       )
     ) {
-      errors.sessionFocus = 'Please select what you want to focus on in this session.';
+      errors.sessionFocus =
+        'Please select what you want to focus on in this session.';
+    } else if (sessionFocus === 'Other') {
+      if (!sessionFocusOther || sessionFocusOther.length < 3) {
+        errors.sessionFocusOther =
+          'Please briefly describe what you want to focus on (at least 3 characters).';
+      } else if (sessionFocusOther.length > 500) {
+        errors.sessionFocusOther = 'Please keep this to 500 characters or fewer.';
+      }
+    }
+  }
+
+  if (serviceType === 'nonprofit-community-session') {
+    if (
+      !sessionFocus ||
+      !NONPROFIT_PROGRAM_OPTIONS.includes(
+        sessionFocus as (typeof NONPROFIT_PROGRAM_OPTIONS)[number]
+      )
+    ) {
+      errors.sessionFocus = 'Please select a program type for this request.';
+    }
+  }
+
+  if (serviceType === 'scheduled-group-session') {
+    const ev = getCohortEventById(cohortEventId);
+    if (!ev) {
+      errors.cohortEventId = 'Choose one of the scheduled group dates.';
+    } else if (preferredDate !== ev.dateYmd) {
+      errors.preferredDate = 'Date must match the selected cohort.';
     }
   }
   if (!consent) {
@@ -146,8 +185,13 @@ export function validateCreateBookingPayload(
   if (notes.length > 1000) {
     errors.notes = 'Notes must be 1000 characters or fewer.';
   }
-  if (phone.length > 40) {
-    errors.phone = 'Phone number is too long.';
+  if (phone) {
+    if (!/^\d+$/.test(phone)) {
+      errors.phone = 'Use digits only (no spaces or symbols).';
+    } else if (!isValidOptionalInternationalPhone(phone)) {
+      errors.phone =
+        'Enter a complete international number (8–15 digits, country code first) or leave phone blank.';
+    }
   }
 
   if (Object.keys(errors).length > 0) {
@@ -169,6 +213,8 @@ export function validateCreateBookingPayload(
       consent: true,
       attendeeCount,
       sessionFocus: sessionFocus || undefined,
+      sessionFocusOther: sessionFocusOther || undefined,
+      cohortEventId: cohortEventId || undefined,
     },
   };
 }

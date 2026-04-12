@@ -4,6 +4,12 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { toast } from 'sonner';
+import {
+  E164_MAX_DIGITS,
+  formatInternationalPhoneDisplay,
+  isValidInternationalPhoneDigits,
+  phoneDigits,
+} from '@/lib/phone';
 
 type WebsiteQuoteDialogProps = {
   visible: boolean;
@@ -110,8 +116,12 @@ export default function WebsiteQuoteDialog({
     if (!email.trim()) errors.email = 'Email is required.';
     else if (!isValidEmail(email)) errors.email = 'Enter a valid email address.';
 
-    if (!phone.trim()) {
+    const phoneDigitsOnly = phoneDigits(phone, E164_MAX_DIGITS);
+    if (!phoneDigitsOnly) {
       errors.phone = 'Phone number is required.';
+    } else if (!isValidInternationalPhoneDigits(phoneDigitsOnly)) {
+      errors.phone =
+        'Enter 8–15 digits with country code (e.g. 1 for US/Canada before the number).';
     }
 
     if (!serviceType) {
@@ -130,7 +140,14 @@ export default function WebsiteQuoteDialog({
     }
 
     return errors;
-  }, [email, fullName, otherServiceType, phone, projectDetails, serviceType]);
+  }, [
+    email,
+    fullName,
+    otherServiceType,
+    phone,
+    projectDetails,
+    serviceType,
+  ]);
 
   const canSubmit = Object.keys(validation).length === 0 && !company.trim();
 
@@ -163,7 +180,7 @@ export default function WebsiteQuoteDialog({
           type: 'website_quote',
           name: fullName.trim(),
           email: email.trim(),
-          phone: phone.trim(),
+          phone: phoneDigits(phone, E164_MAX_DIGITS),
           serviceType,
           otherServiceType:
             serviceType === 'Other' ? otherServiceType.trim() : undefined,
@@ -303,7 +320,7 @@ export default function WebsiteQuoteDialog({
                   ) : null}
                 </div>
 
-                <div>
+                <div className="md:col-span-2">
                   <label className="mb-2 block text-sm font-semibold text-zinc-100">
                     Email <span className="text-red-400">*</span>
                   </label>
@@ -316,22 +333,34 @@ export default function WebsiteQuoteDialog({
                     placeholder="you@example.com"
                     className={`${inputClass}${showError('email') ? inputErrorClass : ''}`}
                   />
+                  <p className="mt-1.5 text-xs leading-relaxed text-zinc-400">
+                    Provide a valid email address — we use it for replies and
+                    confirmations.
+                  </p>
                   {showError('email') ? (
                     <p className="mt-1.5 text-sm text-red-300">{validation.email}</p>
                   ) : null}
                 </div>
 
-                <div>
+                <div className="md:col-span-2">
                   <label className="mb-2 block text-sm font-semibold text-zinc-100">
-                    Phone Number <span className="text-red-400">*</span>
+                    Phone number <span className="text-red-400">*</span>
                   </label>
+                  <p className="mb-3 text-xs text-zinc-400">
+                    Digits only, with country code — 8 to 15 digits (E.164). No +
+                    sign.
+                  </p>
                   <input
                     type="tel"
-                    value={phone}
-                    onBlur={() => markTouched('phone')}
-                    onChange={(e) => setPhone(e.target.value)}
+                    inputMode="tel"
                     autoComplete="tel"
-                    placeholder="+1 (555) 123-4567"
+                    value={formatInternationalPhoneDisplay(phone)}
+                    onBlur={() => markTouched('phone')}
+                    onChange={(e) =>
+                      setPhone(phoneDigits(e.target.value, E164_MAX_DIGITS))
+                    }
+                    placeholder="e.g. 12025551234"
+                    aria-label="Phone number with country code"
                     className={`${inputClass}${showError('phone') ? inputErrorClass : ''}`}
                   />
                   {showError('phone') ? (
