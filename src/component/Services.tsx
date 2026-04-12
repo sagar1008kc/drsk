@@ -71,7 +71,7 @@ export default function Services() {
 
   return (
     <>
-      <main className="min-h-screen bg-[#0a0a0a] pb-16 text-white">
+      <main className="min-h-screen bg-[#F8F7F4] pb-16 text-zinc-900">
         <section id="services" className="py-8 md:py-12">
           <div className="mx-auto max-w-6xl px-4">
             <motion.div
@@ -80,34 +80,34 @@ export default function Services() {
               viewport={{ once: true, amount: 0.15 }}
               variants={fadeUp}
               transition={{ duration: 0.5 }}
-              className="overflow-hidden rounded-[28px] border border-white/10 bg-[#141414] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.45)] md:p-10"
+              className="overflow-hidden rounded-[28px] border border-zinc-200 bg-white p-6 shadow-sm md:p-10"
             >
               <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
                 <div>
-                  <div className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white shadow-sm">
+                  <div className="inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm">
                     Virtual Sessions
                   </div>
 
-                  <h1 className="mt-5 text-3xl font-bold tracking-tight text-white md:text-4xl">
+                  <h1 className="mt-5 text-3xl font-bold tracking-tight text-zinc-900 md:text-4xl">
                     How Can I Help You?
                   </h1>
 
-                  <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-300">
+                  <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-600">
                     I offer practical virtual sessions designed to help
                     individuals, professionals, and creators move forward with
                     more clarity, confidence, and direction.
                   </p>
 
-                  <p className="mt-4 text-base font-semibold text-white">
+                  <p className="mt-4 text-base font-semibold text-zinc-800">
                     Sessions available in English, Nepali, and Hindi.
                   </p>
                 </div>
 
-                <div className="rounded-3xl border border-white/10 bg-black/30 p-5 shadow-sm backdrop-blur-sm">
-                  <h2 className="text-base font-bold text-white">
+                <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5 shadow-sm">
+                  <h2 className="text-base font-bold text-zinc-900">
                     Simple booking process
                   </h2>
-                  <p className="mt-2 text-sm leading-7 text-zinc-400">
+                  <p className="mt-2 text-sm leading-7 text-zinc-500">
                     Choose your session, share your preferences, and complete
                     checkout on Stripe. After payment is confirmed, you will
                     receive a confirmation email with meeting details.

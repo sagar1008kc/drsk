@@ -16,17 +16,14 @@ function getResend(): Resend | null {
 }
 
 function getZohoTransport() {
-  const user = process.env.ZOHO_SMTP_USER;
-  const pass = process.env.ZOHO_SMTP_PASS;
+  const user = process.env.ZOHO_MAIL_USER;
+  const pass = process.env.ZOHO_MAIL_PASS;
   if (!user || !pass) return null;
 
-  const host = process.env.ZOHO_SMTP_HOST || 'smtp.zoho.com';
-  const port = Number(process.env.ZOHO_SMTP_PORT || '465');
-
   return nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
+    host: process.env.ZOHO_MAIL_HOST || 'smtppro.zoho.com',
+    port: Number(process.env.ZOHO_MAIL_PORT || '465'),
+    secure: process.env.ZOHO_MAIL_SECURE === 'true',
     auth: { user, pass },
   });
 }
@@ -34,9 +31,8 @@ function getZohoTransport() {
 function defaultFromAddress(): string | null {
   return (
     process.env.MAIL_FROM ||
-    process.env.ZOHO_SMTP_USER ||
+    process.env.ZOHO_MAIL_USER ||
     process.env.RESEND_FROM_EMAIL ||
-    process.env.CONTACT_EMAIL_USER ||
     null
   );
 }
@@ -52,7 +48,7 @@ export async function sendHtmlEmail(opts: {
 }): Promise<boolean> {
   const from = defaultFromAddress();
   if (!from) {
-    console.error('[mail] No MAIL_FROM / ZOHO_SMTP_USER / RESEND_FROM_EMAIL');
+    console.error('[mail] No MAIL_FROM / ZOHO_MAIL_USER / RESEND_FROM_EMAIL set.');
     return false;
   }
 
@@ -97,10 +93,10 @@ export async function sendAdminBookingNotification(
 ): Promise<boolean> {
   const to =
     process.env.ADMIN_NOTIFICATION_EMAIL ||
-    process.env.CONTACT_EMAIL_TO ||
-    process.env.ZOHO_SMTP_USER;
+    process.env.CONTACT_TO_EMAIL ||
+    process.env.ZOHO_MAIL_USER;
   if (!to) {
-    console.error('[mail] Set ADMIN_NOTIFICATION_EMAIL (or CONTACT_EMAIL_TO)');
+    console.error('[mail] Set ADMIN_NOTIFICATION_EMAIL or CONTACT_TO_EMAIL');
     return false;
   }
 

@@ -3,10 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 17, 24, 39;
-  --background-rgb: 10, 10, 10;
+  --foreground-rgb: 24, 24, 27;
+  --background-rgb: 248, 247, 244;
   --primary: 99, 102, 241;
   --secondary: 59, 130, 246;
+  --card-bg: 255, 255, 255;
+  --card-border: 228, 226, 221;
+  --muted: 113, 113, 122;
 }
 
 html {
@@ -26,7 +29,7 @@ a {
 }
 
 ::selection {
-  background: rgba(99, 102, 241, 0.35);
+  background: rgba(99, 102, 241, 0.2);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -59,4 +62,19 @@ a {
   background-color: #004182;
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(10, 102, 194, 0.25);
+}
+
+/* Subtle dot pattern for hero backgrounds */
+.dot-pattern {
+  background-image: radial-gradient(circle, #d4d3cf 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Card hover lift */
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
 }

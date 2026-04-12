@@ -140,23 +140,23 @@ export default function ContactForm({ onClose }: ContactFormProps) {
   const isNearLimit = messageLength >= 900;
 
   return (
-    <div className="flex min-h-0 items-center justify-center py-10">
-      <div className="w-full rounded-[28px] border border-white/10 bg-zinc-950/80 px-6 py-8 shadow-2xl backdrop-blur-md md:px-10 md:py-10">
+    <div className="flex min-h-0 items-center justify-center py-8">
+      <div className="w-full rounded-2xl border border-zinc-200 bg-white px-6 py-8 shadow-sm md:px-10 md:py-10">
         <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-white md:text-4xl">
-            Contact Us
+          <h2 className="text-2xl font-bold tracking-tight text-zinc-900 md:text-3xl">
+            Send a Message
           </h2>
-          <p className="mt-3 text-sm leading-6 text-zinc-400 md:text-base">
+          <p className="mt-2 text-sm leading-6 text-zinc-500 md:text-base">
             Share your name, email, and message. We typically reply within a
             few business days.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label
               htmlFor="name"
-              className="mb-2 block text-sm font-semibold text-zinc-200"
+              className="mb-2 block text-sm font-semibold text-zinc-700"
             >
               Name
             </label>
@@ -168,14 +168,14 @@ export default function ContactForm({ onClose }: ContactFormProps) {
               value={form.name}
               onChange={handleChange}
               placeholder="Your name"
-              className="w-full rounded-2xl border border-white/15 bg-black/40 px-5 py-4 text-base text-white placeholder:text-zinc-500 outline-none transition focus:border-indigo-400/80 focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
             />
           </div>
 
           <div>
             <label
               htmlFor="email"
-              className="mb-2 block text-sm font-semibold text-zinc-200"
+              className="mb-2 block text-sm font-semibold text-zinc-700"
             >
               Email
             </label>
@@ -187,14 +187,14 @@ export default function ContactForm({ onClose }: ContactFormProps) {
               value={form.email}
               onChange={handleChange}
               placeholder="you@example.com"
-              className="w-full rounded-2xl border border-white/15 bg-black/40 px-5 py-4 text-base text-white placeholder:text-zinc-500 outline-none transition focus:border-indigo-400/80 focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
             />
           </div>
 
           <div>
             <label
               htmlFor="message"
-              className="mb-2 block text-sm font-semibold text-zinc-200"
+              className="mb-2 block text-sm font-semibold text-zinc-700"
             >
               Message
             </label>
@@ -206,11 +206,11 @@ export default function ContactForm({ onClose }: ContactFormProps) {
               value={form.message}
               onChange={handleChange}
               placeholder="Write your message here..."
-              className="w-full rounded-2xl border border-white/15 bg-black/40 px-5 py-4 text-base text-white placeholder:text-zinc-500 outline-none transition focus:border-indigo-400/80 focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-500/15 resize-none"
             />
             <div
-              className={`mt-2 text-sm ${
-                isNearLimit ? 'text-amber-400' : 'text-zinc-500'
+              className={`mt-1.5 text-xs ${
+                isNearLimit ? 'text-amber-600' : 'text-zinc-400'
               }`}
             >
               {messageLength}/{MESSAGE_LIMIT} characters
@@ -231,7 +231,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
           </div>
 
           {status.type === 'error' && status.message ? (
-            <div className="rounded-2xl border border-red-500/30 bg-red-950/40 px-4 py-3 text-sm font-medium text-red-300">
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
               {status.message}
             </div>
           ) : null}
@@ -239,7 +239,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
           <button
             type="submit"
             disabled={!isFormReady || loading}
-            className="mb-4 mt-2 w-full rounded-full bg-white px-4 py-3 text-sm font-bold text-blue-700 transition hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-full bg-zinc-900 px-4 py-3 text-sm font-bold text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {loading ? 'Sending…' : 'Send Message'}
           </button>

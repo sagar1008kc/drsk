@@ -6,9 +6,9 @@ export const metadata = {
 
 export default function BookingCancelPage() {
   return (
-    <main className="min-h-[70vh] px-4 py-16 text-white">
+    <main className="min-h-[70vh] bg-[#F8F7F4] px-4 py-16">
       <div className="mx-auto max-w-lg text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-zinc-800 ring-1 ring-white/10">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-zinc-100 ring-2 ring-zinc-200">
           <svg
             className="h-8 w-8 text-zinc-400"
             fill="none"
@@ -23,18 +23,21 @@ export default function BookingCancelPage() {
             />
           </svg>
         </div>
-        <h1 className="mt-8 text-3xl font-bold tracking-tight md:text-4xl">
+
+        <h1 className="mt-8 text-3xl font-bold tracking-tight text-zinc-900 md:text-4xl">
           Payment canceled
         </h1>
-        <p className="mt-4 text-lg leading-8 text-zinc-400">
+
+        <p className="mt-4 text-lg leading-8 text-zinc-600">
           Your payment was canceled. You can return to the services page and try
           again whenever you are ready.
         </p>
+
         <Link
           href="/services"
-          className="mt-10 inline-flex rounded-full border-2 border-white bg-white px-8 py-3.5 text-sm font-semibold text-black transition hover:bg-zinc-200"
+          className="mt-10 inline-flex items-center gap-2 rounded-full border-2 border-zinc-900 bg-zinc-900 px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-zinc-700 hover:border-zinc-700"
         >
-          Back to services
+          Back to Services
         </Link>
       </div>
     </main>

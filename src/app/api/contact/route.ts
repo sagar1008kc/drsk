@@ -42,12 +42,13 @@ export async function POST(req: Request) {
     }
 
     const to =
+      process.env.CONTACT_TO_EMAIL ||
       process.env.CONTACT_EMAIL_TO ||
       process.env.ADMIN_NOTIFICATION_EMAIL ||
-      process.env.ZOHO_SMTP_USER;
+      process.env.ZOHO_MAIL_USER;
 
     if (!to) {
-      console.error('Missing CONTACT_EMAIL_TO / ADMIN_NOTIFICATION_EMAIL');
+      console.error('[contact] Missing CONTACT_TO_EMAIL / ADMIN_NOTIFICATION_EMAIL');
       return NextResponse.json(
         { error: 'Server environment variables are missing.' },
         { status: 500 }
