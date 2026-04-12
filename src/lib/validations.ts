@@ -1,10 +1,14 @@
 import {
   ALLOWED_LANGUAGES,
-  ALLOWED_PREFERRED_TIMES,
   getServiceByType,
   isValidServiceType,
+  VIRTUAL_SESSION_FOCUS_OPTIONS,
   type ServiceTypeId,
 } from '@/lib/services';
+import {
+  isKnownPreferredTime,
+  isValidTimeForChicagoDate,
+} from '@/lib/availability';
 
 export type CreateBookingPayload = {
   serviceType: string;
@@ -19,6 +23,8 @@ export type CreateBookingPayload = {
   consent: boolean;
   company?: string;
   attendeeCount: number;
+  /** Required for virtual session (business-career-session). */
+  sessionFocus?: string;
 };
 
 export type FieldErrors = Record<string, string>;
@@ -59,6 +65,8 @@ export function validateCreateBookingPayload(
   const notes =
     typeof b.notes === 'string' ? b.notes.trim() : '';
   const consent = b.consent === true;
+  const sessionFocus =
+    typeof b.sessionFocus === 'string' ? b.sessionFocus.trim() : '';
 
   const errors: FieldErrors = {};
 
@@ -108,12 +116,26 @@ export function validateCreateBookingPayload(
   }
   if (!preferredTime) {
     errors.preferredTime = 'Please choose a preferred time.';
-  } else if (
-    !ALLOWED_PREFERRED_TIMES.includes(
-      preferredTime as (typeof ALLOWED_PREFERRED_TIMES)[number]
-    )
-  ) {
+  } else if (!isKnownPreferredTime(preferredTime)) {
     errors.preferredTime = 'Invalid time selection.';
+  } else if (
+    preferredDate &&
+    /^\d{4}-\d{2}-\d{2}$/.test(preferredDate) &&
+    !isValidTimeForChicagoDate(preferredDate, preferredTime)
+  ) {
+    errors.preferredTime =
+      'That time is not available for the selected date. Weekdays (Mon–Fri): 6–8 PM CT. Weekends (Sat–Sun): 9 AM–5 PM CT.';
+  }
+
+  if (serviceType === 'business-career-session') {
+    if (
+      !sessionFocus ||
+      !VIRTUAL_SESSION_FOCUS_OPTIONS.includes(
+        sessionFocus as (typeof VIRTUAL_SESSION_FOCUS_OPTIONS)[number]
+      )
+    ) {
+      errors.sessionFocus = 'Please select what you want to focus on in this session.';
+    }
   }
   if (!consent) {
     const paidFlow = serviceConfig?.requiresPayment ?? true;
@@ -146,6 +168,7 @@ export function validateCreateBookingPayload(
       notes: notes || undefined,
       consent: true,
       attendeeCount,
+      sessionFocus: sessionFocus || undefined,
     },
   };
 }

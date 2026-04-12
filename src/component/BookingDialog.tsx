@@ -10,10 +10,17 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { toast } from 'sonner';
-import { totalCentsForBooking, type Service } from '@/lib/services';
-
-/** Stored on every booking; UI does not ask users to pick a timezone. */
-const CENTRAL_TZ = 'America/Chicago';
+import {
+  totalCentsForBooking,
+  VIRTUAL_SESSION_FOCUS_OPTIONS,
+  type Service,
+} from '@/lib/services';
+import {
+  CENTRAL_TZ,
+  getTimeSlotsForChicagoDate,
+  isChicagoWeekend,
+  todayYmdChicago,
+} from '@/lib/availability';
 
 type BookingDialogProps = {
   visible: boolean;
@@ -22,13 +29,6 @@ type BookingDialogProps = {
 };
 
 type FieldErrors = Record<string, string>;
-
-const TIME_OPTIONS = [
-  '06:00 PM',
-  '07:00 PM',
-  '08:00 PM',
-  'Weekend Anytime',
-] as const;
 
 function formatDateForInput(date: Date | null) {
   if (!date) return '';
@@ -58,6 +58,7 @@ export default function BookingDialog({
   const [language, setLanguage] = useState('');
   const [preferredDate, setPreferredDate] = useState<Date | null>(null);
   const [preferredTime, setPreferredTime] = useState('');
+  const [sessionFocus, setSessionFocus] = useState('');
   const [attendeeCount, setAttendeeCount] = useState(2);
   const [notes, setNotes] = useState('');
   const [consent, setConsent] = useState(false);
@@ -77,6 +78,24 @@ export default function BookingDialog({
     setAttendeeCount(service.groupPricing.min);
   }, [visible, service?.id]);
 
+  const timeSlotOptions = useMemo(() => {
+    if (!preferredDate) return [];
+    const ymd = formatDateForInput(preferredDate);
+    return getTimeSlotsForChicagoDate(ymd);
+  }, [preferredDate]);
+
+  useEffect(() => {
+    if (!preferredTime) return;
+    if (timeSlotOptions.length === 0) return;
+    if (!timeSlotOptions.includes(preferredTime as (typeof timeSlotOptions)[number])) {
+      setPreferredTime('');
+    }
+  }, [timeSlotOptions, preferredTime]);
+
+  useEffect(() => {
+    if (!preferredDate) setPreferredTime('');
+  }, [preferredDate]);
+
   const resetForm = useCallback(() => {
     setFullName('');
     setEmail('');
@@ -84,6 +103,7 @@ export default function BookingDialog({
     setLanguage('');
     setPreferredDate(null);
     setPreferredTime('');
+    setSessionFocus('');
     setAttendeeCount(2);
     setNotes('');
     setConsent(false);
@@ -133,6 +153,16 @@ export default function BookingDialog({
     if (!language) errors.language = 'Select a language.';
     if (!preferredDate) errors.preferredDate = 'Choose a preferred date.';
     if (!preferredTime) errors.preferredTime = 'Choose a preferred time.';
+    else if (
+      preferredDate &&
+      timeSlotOptions.length > 0 &&
+      !timeSlotOptions.includes(preferredTime as (typeof timeSlotOptions)[number])
+    ) {
+      errors.preferredTime = 'Choose a time that matches the selected day (weekday vs weekend).';
+    }
+    if (service?.id === 'business-career-session' && !sessionFocus.trim()) {
+      errors.sessionFocus = 'Select what you want to focus on in this session.';
+    }
     if (service?.groupPricing) {
       const { min, max } = service.groupPricing;
       if (
@@ -159,6 +189,8 @@ export default function BookingDialog({
     language,
     preferredDate,
     preferredTime,
+    sessionFocus,
+    timeSlotOptions,
     attendeeCount,
     consent,
     notes,
@@ -226,6 +258,10 @@ export default function BookingDialog({
           timezone: CENTRAL_TZ,
           attendeeCount: service.groupPricing ? attendeeCount : 1,
           notes: notes.trim() || undefined,
+          sessionFocus:
+            service.id === 'business-career-session'
+              ? sessionFocus.trim()
+              : undefined,
           consent: true,
           company: company.trim() || undefined,
         }),
@@ -421,7 +457,8 @@ export default function BookingDialog({
             </p>
             {service.requiresPayment && !service.groupPricing ? (
               <p className="mt-1 text-xs leading-5 text-gray-500">
-                All times are US Central Time (CT).
+                Availability is in US Central Time (CT): weekdays 6–8 PM; weekends
+                9 AM–5 PM (hourly). Final time is confirmed by email after payment.
               </p>
             ) : null}
 
@@ -441,6 +478,36 @@ export default function BookingDialog({
                 onChange={(e) => setCompany(e.target.value)}
               />
             </div>
+
+            {service.id === 'business-career-session' ? (
+              <div className="mt-6">
+                <label className="mb-2 block text-sm font-semibold text-gray-800">
+                  Session focus <span className="text-red-500">*</span>
+                </label>
+                <p className="mb-2 text-xs leading-5 text-gray-500">
+                  Choose one area for this session. You can add more detail in
+                  Notes below.
+                </p>
+                <select
+                  value={sessionFocus}
+                  onBlur={() => markTouched('sessionFocus')}
+                  onChange={(e) => setSessionFocus(e.target.value)}
+                  className={`${inputClass}${showErr('sessionFocus') ? inputErrorClass : ''}`}
+                >
+                  <option value="">Select a focus</option>
+                  {VIRTUAL_SESSION_FOCUS_OPTIONS.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+                {showErr('sessionFocus') ? (
+                  <p className="mt-1.5 text-sm text-red-600">
+                    {fieldMessage('sessionFocus')}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
 
             <div className="mt-6 grid gap-5 md:grid-cols-2">
               {service.groupPricing ? (
@@ -559,14 +626,22 @@ export default function BookingDialog({
                         : null
                     )
                   }
-                  min={new Date().toISOString().split('T')[0]}
+                  min={todayYmdChicago()}
                   className={`${inputClass}${showErr('preferredDate') ? inputErrorClass : ''}`}
                 />
                 {showErr('preferredDate') ? (
                   <p className="mt-1.5 text-sm text-red-600">
                     {fieldMessage('preferredDate')}
                   </p>
-                ) : null}
+                ) : (
+                  <p className="mt-1.5 text-xs text-gray-500">
+                    Pick a date first. To only offer your own blocked dates later,
+                    tools like{' '}
+                    <span className="font-medium">Cal.com</span> (free tier) or{' '}
+                    <span className="font-medium">Google Calendar</span>{' '}
+                    appointment schedules work well.
+                  </p>
+                )}
               </div>
 
               <div>
@@ -577,12 +652,15 @@ export default function BookingDialog({
                   value={preferredTime}
                   onBlur={() => markTouched('preferredTime')}
                   onChange={(e) => setPreferredTime(e.target.value)}
-                  className={`${inputClass}${showErr('preferredTime') ? inputErrorClass : ''}`}
+                  disabled={!preferredDate}
+                  className={`${inputClass}${showErr('preferredTime') ? inputErrorClass : ''}${!preferredDate ? ' cursor-not-allowed opacity-70' : ''}`}
                 >
-                  <option value="">Choose time</option>
-                  {TIME_OPTIONS.map((t) => (
+                  <option value="">
+                    {preferredDate ? 'Choose time' : 'Choose a date first'}
+                  </option>
+                  {timeSlotOptions.map((t) => (
                     <option key={t} value={t}>
-                      {t}
+                      {t} CT
                     </option>
                   ))}
                 </select>
@@ -590,9 +668,15 @@ export default function BookingDialog({
                   <p className="mt-1.5 text-sm text-red-600">
                     {fieldMessage('preferredTime')}
                   </p>
+                ) : preferredDate ? (
+                  <p className="mt-1.5 text-xs text-gray-500">
+                    {isChicagoWeekend(formatDateForInput(preferredDate))
+                      ? 'Weekend: choose an hour between 9 AM and 5 PM (Central Time).'
+                      : 'Weekday: 6 PM, 7 PM, or 8 PM only (Central Time).'}
+                  </p>
                 ) : (
                   <p className="mt-1.5 text-xs text-gray-500">
-                    US Central Time (Chicago, CT).
+                    Times shown match the day you pick (weekday vs weekend).
                   </p>
                 )}
               </div>

@@ -43,6 +43,16 @@ export async function POST(req: Request) {
 
     const priceCents = totalCentsForBooking(service, data.attendeeCount);
 
+    const notesCombined =
+      data.serviceType === 'business-career-session' && data.sessionFocus
+        ? [
+            `Session focus: ${data.sessionFocus}`,
+            data.notes?.trim(),
+          ]
+            .filter(Boolean)
+            .join('\n\n')
+        : data.notes?.trim() || null;
+
     try {
       const { id } = await insertBooking({
         service_type: service.id,
@@ -57,7 +67,7 @@ export async function POST(req: Request) {
         preferred_time: data.preferredTime,
         timezone: 'America/Chicago',
         meeting_preference: STANDARD_MEETING_PLATFORM,
-        notes: data.notes?.trim() || null,
+        notes: notesCombined || null,
         company: null,
         consent: data.consent,
         initial_payment_status: service.requiresPayment

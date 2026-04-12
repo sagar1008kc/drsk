@@ -112,11 +112,9 @@ export default function Home() {
               <h5 className="mt-2 text-lg md:text-xl font-medium text-zinc-600">
                 Author &amp; Technologist
               </h5>
-              <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                Certified Mental Health First Aider
-              </span>
-
+              <span className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-widest text-blue-500">
+               Certified Mental Health First Aider
+            </span>
               <div className="mt-6 max-w-2xl text-base leading-relaxed text-zinc-600">
                 <p>
                   I am <span className="font-semibold text-zinc-900">Dr. SK</span> — an author and technology
@@ -151,9 +149,10 @@ export default function Home() {
       <section id="links" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
           <div className="text-center mb-8">
-            <span className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-widest text-blue-500">
-              Online Presence
-            </span>
+          <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                Online Presence
+              </span>
             <h2 className="mt-3 text-2xl md:text-3xl font-bold text-zinc-900">Links</h2>
             <p className="mt-2 text-zinc-500 max-w-xl mx-auto">
               Official links to published articles, author pages, and profiles.
@@ -178,7 +177,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: i * 0.05 }}
-                className="group flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md hover:border-zinc-300"
+                className="group flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-2 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md hover:border-green-500"
               >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-zinc-50 border border-zinc-100 text-xl">
                   {item.emoji}

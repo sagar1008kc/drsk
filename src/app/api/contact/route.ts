@@ -4,6 +4,11 @@ import { sendHtmlEmail } from '@/lib/mail';
 type ContactRequestBody = {
   name?: string;
   email?: string;
+  phone?: string;
+  type?: 'contact' | 'website_quote' | string;
+  serviceType?: string;
+  otherServiceType?: string;
+  projectDetails?: string;
   message?: string;
   company?: string;
 };
@@ -16,6 +21,11 @@ export async function POST(req: Request) {
 
     const name = body.name?.trim() || '';
     const email = body.email?.trim() || '';
+    const phone = body.phone?.trim() || '';
+    const requestType = body.type?.trim() || 'contact';
+    const serviceType = body.serviceType?.trim() || '';
+    const otherServiceType = body.otherServiceType?.trim() || '';
+    const projectDetails = body.projectDetails?.trim() || '';
     const message = body.message?.trim() || '';
     const company = body.company?.trim() || '';
 
@@ -41,11 +51,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const to =
+    const contactTo =
       process.env.CONTACT_TO_EMAIL ||
       process.env.CONTACT_EMAIL_TO ||
       process.env.ADMIN_NOTIFICATION_EMAIL ||
       process.env.ZOHO_MAIL_USER;
+    const to =
+      requestType === 'website_quote' ? 'admin@skcreation.org' : contactTo;
 
     if (!to) {
       console.error('[contact] Missing CONTACT_TO_EMAIL / ADMIN_NOTIFICATION_EMAIL');
@@ -55,8 +67,38 @@ export async function POST(req: Request) {
       );
     }
 
-    const subject = `New Contact Form Message from ${name}`;
-    const html = `
+    const isWebsiteQuote = requestType === 'website_quote';
+    if (isWebsiteQuote && (!phone || !serviceType || !projectDetails)) {
+      return NextResponse.json(
+        { error: 'Phone, service type, and project details are required.' },
+        { status: 400 }
+      );
+    }
+
+    const subject = isWebsiteQuote
+      ? `New Digital solutions quote request from ${name}`
+      : `New Contact Form Message from ${name}`;
+    const html = isWebsiteQuote
+      ? `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+          <h2>New Digital solutions quote request</h2>
+          <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+          <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+          <p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
+          <p><strong>Service Type:</strong> ${escapeHtml(serviceType)}</p>
+          ${
+            otherServiceType
+              ? `<p><strong>Other Service:</strong> ${escapeHtml(otherServiceType)}</p>`
+              : ''
+          }
+          <p><strong>Project Details:</strong></p>
+          <div style="padding:12px;background:#f5f5f5;border-radius:8px;white-space:pre-wrap;">
+            ${escapeHtml(projectDetails)}
+          </div>
+          <p style="margin-top:12px;color:#666;font-size:12px;">Quotes start from $199.</p>
+        </div>
+      `
+      : `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">
           <h2>New Contact Form Message</h2>
           <p><strong>Name:</strong> ${escapeHtml(name)}</p>

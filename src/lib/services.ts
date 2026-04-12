@@ -40,29 +40,33 @@ export type Service = {
 
 export const ALLOWED_LANGUAGES = ['English', 'Nepali', 'Hindi'] as const;
 
-export const ALLOWED_PREFERRED_TIMES = [
-  '06:00 PM',
-  '07:00 PM',
-  '08:00 PM',
-  'Weekend Anytime',
+/** Virtual session: pick one focus before checkout (shown in booking dialog). */
+export const VIRTUAL_SESSION_FOCUS_OPTIONS = [
+  'Career development and strategy',
+  'Personal brand guidance',
+  'Mental Health Awareness',
+  'Book writing and publishing guidance',
 ] as const;
+
+export type VirtualSessionFocus =
+  (typeof VIRTUAL_SESSION_FOCUS_OPTIONS)[number];
 
 const SERVICES_BY_ID: Record<ServiceTypeId, Service> = {
   'business-career-session': {
     id: 'business-career-session',
-    tag: 'Business / Career',
-    title: 'Business & Career Advancement',
+    tag: 'Virtual Session',
+    title: 'Virtual Session',
     shortDescription:
-      'Virtual guidance for professionals, job seekers, and creators seeking direction and practical next steps.',
+      'One-on-one guidance for career growth, AI usage, personal branding, and next steps.',
     description:
-      'Focused virtual guidance for professionals, job seekers, and creators who want clearer direction, stronger positioning, and practical next steps.',
+      'One-on-one guidance for career growth, AI usage, personal branding, and next steps.',
     bullets: [
-      'Career development and job search strategy',
-      'Book writing and publishing support',
-      'AI integration and strategy for businesses and creators',
-      'Digital business and personal brand development',
+      'Career development and strategy',
+      'Personal brand guidance',
+      'Mental Health Awareness',
+      'Book writing and publishing guidance',
     ],
-    oldPriceDisplay: '$250',
+    oldPriceDisplay: '',
     priceDisplay: '$99',
     priceCents: 9900,
     currency: 'usd',

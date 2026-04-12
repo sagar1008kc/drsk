@@ -10,53 +10,113 @@ const BookingDialog = dynamic(() => import('@/component/BookingDialog'), {
   ssr: false,
 });
 
+const WebsiteQuoteDialog = dynamic(
+  () => import('@/component/WebsiteQuoteDialog'),
+  {
+    ssr: false,
+  }
+);
+
 const fadeUp = {
-  hidden: { opacity: 1, y: 24 },
+  hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0 },
 };
 
-function getCardStyles(accent: Service['accent']) {
-  if (accent === 'sky') {
-    return {
-      glow: 'shadow-[0_18px_50px_rgba(2,132,199,0.10)]',
-      badge: 'border border-sky-200 bg-sky-50 text-sky-700',
-      accentBar: 'from-sky-500 to-cyan-400',
-      button:
-        'inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-700 hover:border-sky-700',
-    };
-  }
+type ServiceCardProps = {
+  title: string;
+  subtitle: string;
+  bullets: string[];
+  price: string;
+  cta: string;
+  onClick: () => void;
+  eyebrow: string;
+  accent: 'emerald' | 'violet';
+};
 
-  if (accent === 'violet') {
-    return {
-      glow: 'shadow-[0_18px_50px_rgba(139,92,246,0.12)]',
-      badge: 'border border-violet-200 bg-violet-50 text-violet-800',
-      accentBar: 'from-violet-500 to-purple-400',
-      button:
-        'inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-800 hover:border-violet-800',
-    };
-  }
+function ServiceCard({
+  title,
+  subtitle,
+  bullets,
+  price,
+  cta,
+  onClick,
+  eyebrow,
+  accent,
+}: ServiceCardProps) {
+  const isViolet = accent === 'violet';
 
-  if (accent === 'rose') {
-    return {
-      glow: 'shadow-[0_18px_50px_rgba(244,63,94,0.10)]',
-      badge: 'border border-rose-200 bg-rose-50 text-rose-800',
-      accentBar: 'from-rose-500 to-pink-400',
-      button:
-        'inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-700 hover:border-rose-700',
-    };
-  }
+  return (
+    <motion.article
+      variants={fadeUp}
+      transition={{ duration: 0.45 }}
+      className={`group relative overflow-hidden rounded-3xl border p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_18px_50px_rgba(2,6,23,0.45)] md:p-8 ${
+        isViolet
+          ? 'border-violet-400/20 bg-gradient-to-br from-[#1A1730] via-[#121320] to-[#0C0D15]'
+          : 'border-emerald-400/20 bg-gradient-to-br from-[#13241F] via-[#101C1A] to-[#0C0F12]'
+      }`}
+    >
+      <div
+        className={`pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 ${
+          isViolet
+            ? 'bg-[radial-gradient(circle_at_top_right,rgba(167,139,250,0.2),transparent_55%)]'
+            : 'bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.2),transparent_55%)]'
+        }`}
+      />
+      <div className="relative z-[1]">
+        <span
+          className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] ${
+            isViolet
+              ? 'border-violet-300/30 bg-violet-400/10 text-violet-200'
+              : 'border-emerald-300/30 bg-emerald-400/10 text-emerald-200'
+          }`}
+        >
+          {eyebrow}
+        </span>
 
-  return {
-    glow: 'shadow-[0_18px_50px_rgba(16,185,129,0.10)]',
-    badge: 'border border-emerald-200 bg-emerald-50 text-emerald-700',
-    accentBar: 'from-emerald-500 to-lime-400',
-    button:
-      'inline-flex items-center justify-center gap-2 rounded-full border-2 border-black bg-black px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 hover:border-emerald-700',
-  };
+        <h3 className="mt-4 text-3xl font-bold tracking-tight text-white md:text-4xl">
+          {title}
+        </h3>
+
+        <p className="mt-4 text-base leading-7 text-zinc-300">{subtitle}</p>
+
+        <ul className="mt-6 space-y-3">
+          {bullets.map((item) => (
+            <li
+              key={item}
+              className="flex items-start gap-3 text-sm leading-7 text-zinc-200"
+            >
+              <span
+                className={`mt-2 h-2 w-2 shrink-0 rounded-full ${
+                  isViolet ? 'bg-violet-300' : 'bg-emerald-300'
+                }`}
+              />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-8 flex items-end justify-between gap-4">
+          <p className="text-xl font-semibold text-white md:text-2xl">{price}</p>
+          <button
+            type="button"
+            onClick={onClick}
+            className={`inline-flex min-h-[46px] items-center justify-center rounded-full border px-6 py-2.5 text-sm font-semibold transition ${
+              isViolet
+                ? 'border-violet-300/60 bg-violet-500 text-white hover:bg-violet-400'
+                : 'border-emerald-300/60 bg-emerald-500 text-white hover:bg-emerald-400'
+            }`}
+          >
+            {cta}
+          </button>
+        </div>
+      </div>
+    </motion.article>
+  );
 }
 
 export default function Services() {
   const [dialogVisible, setDialogVisible] = useState(false);
+  const [quoteDialogVisible, setQuoteDialogVisible] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   const openBooking = (svc: Service) => {
@@ -69,147 +129,93 @@ export default function Services() {
     setSelectedService(null);
   };
 
+  const virtualSessionService =
+    SESSION_SERVICES.find((s) => s.id === 'business-career-session') ||
+    SESSION_SERVICES[0] ||
+    null;
+
   return (
     <>
-      <main className="min-h-screen bg-[#F8F7F4] pb-16 text-zinc-900">
-        <section id="services" className="py-8 md:py-12">
+      <main className="min-h-screen bg-[#0A0B12] pb-16 text-white">
+        <section id="services" className="py-10 md:py-14">
           <div className="mx-auto max-w-6xl px-4">
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.15 }}
+              viewport={{ once: true, amount: 0.12 }}
               variants={fadeUp}
               transition={{ duration: 0.5 }}
-              className="overflow-hidden rounded-[28px] border border-zinc-200 bg-white p-6 shadow-sm md:p-10"
+              className="mb-10 text-center md:text-left"
             >
-              <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-                <div>
-                  <div className="inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm">
-                    Virtual Sessions
-                  </div>
+              <h1 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
+                Services
+              </h1>
+              <p className="mx-auto mt-4 max-w-3xl text-lg leading-8 text-zinc-300 md:mx-0">
+                Virtual sessions and digital solutions — book a session or request
+                a quote. Available in English, Nepali, and Hindi.
+              </p>
+            </motion.div>
 
-                  <h1 className="mt-5 text-3xl font-bold tracking-tight text-zinc-900 md:text-4xl">
-                    How Can I Help You?
-                  </h1>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.1 }}
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: { staggerChildren: 0.12 },
+                },
+              }}
+              className="grid gap-6 lg:grid-cols-2"
+            >
+              <ServiceCard
+                title="Virtual Session"
+                eyebrow="Virtual Session"
+                subtitle="One-on-one guidance for career growth, AI usage, personal branding, and next steps."
+                bullets={[
+                  'Career development and strategy',
+                  'Personal brand guidance',
+                  'Mental Health Awareness',
+                  'Book writing and publishing guidance',
+                ]}
+                price="$99 / session"
+                cta="Book Session"
+                accent="emerald"
+                onClick={() => {
+                  if (virtualSessionService) openBooking(virtualSessionService);
+                }}
+              />
 
-                  <p className="mt-4 max-w-3xl text-lg leading-8 text-zinc-600">
-                    I offer practical virtual sessions designed to help
-                    individuals, professionals, and creators move forward with
-                    more clarity, confidence, and direction.
-                  </p>
+              <ServiceCard
+                title="Digital solutions"
+                eyebrow="Digital solutions"
+                subtitle="Websites, integrations, hosting, and ongoing support — request a tailored quote for your project."
+                bullets={[
+                  'Website design and development',
+                  'Hosting setup and deployment',
+                  'Ongoing maintenance',
+                  'AI integration and smart features',
+                ]}
+                price="Quote — tailored pricing"
+                cta="Request a quote"
+                accent="violet"
+                onClick={() => setQuoteDialogVisible(true)}
+              />
+            </motion.div>
 
-                  <p className="mt-4 text-base font-semibold text-zinc-800">
-                    Sessions available in English, Nepali, and Hindi.
-                  </p>
-                </div>
-
-                <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5 shadow-sm">
-                  <h2 className="text-base font-bold text-zinc-900">
-                    Simple booking process
-                  </h2>
-                  <p className="mt-2 text-sm leading-7 text-zinc-500">
-                    Choose your session, share your preferences, and complete
-                    checkout on Stripe. After payment is confirmed, you will
-                    receive a confirmation email with meeting details.
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-10 grid gap-6 lg:grid-cols-2">
-                {SESSION_SERVICES.map((service) => {
-                  const styles = getCardStyles(service.accent);
-
-                  return (
-                    <article
-                      key={service.id}
-                      className={`group relative overflow-hidden rounded-[26px] border border-white/10 bg-white p-6 text-black transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_25px_60px_rgba(0,0,0,0.2)] md:p-7 ${styles.glow}`}
-                    >
-                      <div
-                        className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${styles.accentBar}`}
-                      />
-
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <span
-                            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${styles.badge}`}
-                          >
-                            {service.tag}
-                          </span>
-
-                          <h3 className="mt-4 text-2xl font-bold tracking-tight text-black">
-                            {service.title}
-                          </h3>
-                        </div>
-                      </div>
-
-                      <p className="mt-5 text-base leading-8 text-black/80">
-                        {service.description}
-                      </p>
-
-                      <ul className="mt-5 space-y-3">
-                        {service.bullets.map((item) => (
-                          <li
-                            key={item}
-                            className="flex items-start gap-3 text-sm leading-7 text-black"
-                          >
-                            <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-black" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className="mt-8 flex flex-wrap items-end gap-3">
-                        {service.oldPriceDisplay ? (
-                          <span className="text-lg font-semibold text-red-500 line-through">
-                            {service.oldPriceDisplay}
-                          </span>
-                        ) : null}
-                        <span
-                          className={`text-4xl font-bold tracking-tight ${
-                            service.requiresPayment
-                              ? 'text-green-600'
-                              : 'text-violet-700'
-                          }`}
-                        >
-                          {service.priceDisplay}
-                        </span>
-                        <span className="pb-1 text-base font-medium text-black">
-                          / {service.durationLabel}
-                        </span>
-                      </div>
-
-                      <div className="mt-8 flex flex-wrap gap-3">
-                        <button
-                          type="button"
-                          onClick={() => openBooking(service)}
-                          className={styles.button}
-                        >
-                          <svg
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                          </svg>
-                          Book Session
-                        </button>
-                      </div>
-
-                      {service.note ? (
-                        <p className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-black/80">
-                          {service.note}
-                        </p>
-                      ) : null}
-                    </article>
-                  );
-                })}
-              </div>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={fadeUp}
+              className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6 text-sm leading-7 text-zinc-300 md:p-8"
+            >
+              <h2 className="text-base font-bold text-white">How it works</h2>
+              <p className="mt-2">
+                For virtual sessions, choose your focus and time, then complete
+                secure checkout. For digital projects, send your scope — we reply
+                with a quote by email.
+              </p>
             </motion.div>
           </div>
         </section>
@@ -219,6 +225,10 @@ export default function Services() {
         visible={dialogVisible}
         service={selectedService}
         onHide={closeBooking}
+      />
+      <WebsiteQuoteDialog
+        visible={quoteDialogVisible}
+        onHide={() => setQuoteDialogVisible(false)}
       />
     </>
   );
