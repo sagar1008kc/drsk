@@ -9,16 +9,16 @@ export default function Navbar() {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[1000] border-b border-white/10 bg-black/90 backdrop-blur-md">
+    <header className="fixed top-0 left-0 right-0 z-[1000] border-b border-white/10 bg-black backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-4 sm:px-4 sm:py-3">
         <Link
           href="/"
           className="flex min-w-0 shrink items-center gap-2 sm:gap-3"
           aria-label="Go to home"
         >
-          <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-white/20 bg-gray-800 sm:h-12 sm:w-12">
+          <div className="h-10 w-10 shrink-0 overflow-hidden bg-gray-800 sm:h-12 sm:w-12">
             <Image
-              src="/drsk.png"
+              src="/drskauthor.png"
               alt="Dr. SK"
               width={48}
               height={48}
