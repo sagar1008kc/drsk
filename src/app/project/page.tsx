@@ -12,9 +12,6 @@ export default function ProjectPage() {
   return (
     <main className="min-h-screen bg-[#0A0B12] pb-20 pt-8 text-white md:pt-12">
       <div className="mx-auto max-w-5xl px-4">
-        <p className="text-center text-xs font-semibold uppercase tracking-[0.25em] text-violet-300/80">
-          Portfolio
-        </p>
         <h1 className="mt-3 text-center text-3xl font-bold tracking-tight md:text-4xl">
           Projects
         </h1>

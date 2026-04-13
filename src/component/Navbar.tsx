@@ -41,17 +41,6 @@ export default function Navbar() {
           aria-label="Main"
         >
           <Link
-            href="/"
-            className={`whitespace-nowrap rounded-full px-2 py-1.5 text-[11px] font-semibold transition sm:px-4 sm:py-2 sm:text-sm ${
-              isActive('/')
-                ? 'bg-white text-black shadow-md'
-                : 'text-gray-300 hover:bg-white/10 hover:text-white'
-            }`}
-          >
-            Portfolio
-          </Link>
-
-          <Link
             href="/services"
             className={`whitespace-nowrap rounded-full px-2 py-1.5 text-[11px] font-semibold transition sm:px-4 sm:py-2 sm:text-sm ${
               isActive('/services')
