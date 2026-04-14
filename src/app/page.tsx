@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
+import ContactForm from '@/component/Contact';
 
 const certifications = [
   { name: 'Certified Mental Health First Aider', icon: '/MHFA.png' },
@@ -394,6 +395,28 @@ export default function Home() {
           </div>
         </div>
       </section>
+            {/* Contact Section */}
+        <section id="contact" className="border-t border-white/10 bg-gradient-to-b from-[#0A0B12] via-[#0c0d14] to-zinc-950 py-16 md:py-20">
+          <div className="mx-auto max-w-6xl px-4">
+            <div className="text-center">
+              <span className="inline-flex items-center rounded-full border border-violet-500/25 bg-violet-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-200/90">
+                Contact
+              </span>
+              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">
+                Get In Touch
+              </h2>
+              <p className="mt-3 text-base text-zinc-400">
+                admin@skcreation.org
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-zinc-950 px-4 pb-16">
+          <div className="mx-auto w-full max-w-2xl">
+            <ContactForm />
+          </div>
+        </section>
     </main>
   );
 }

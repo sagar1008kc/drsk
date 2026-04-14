@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import type { Service } from '@/lib/services';
 import { SESSION_SERVICES } from '@/lib/services';
+import Link from 'next/link';
 
 const BookingDialog = dynamic(() => import('@/component/BookingDialog'), {
   ssr: false,
@@ -330,6 +331,23 @@ export default function Services() {
             </motion.section>
           </div>
         </section>
+        <p className="mt-12 text-center text-sm text-zinc-500">
+          Interested in something similar?{' '}
+          <Link
+            href="/project"
+            className="font-semibold text-violet-400 underline-offset-4 hover:text-violet-300 hover:underline"
+          >
+            View projects
+          </Link>{' '}
+          or{' '}
+          <Link
+            href="#contact"
+            className="font-semibold text-violet-400 underline-offset-4 hover:text-violet-300 hover:underline"
+          >
+            get in touch
+          </Link>
+          .
+        </p>
       </main>
 
       <BookingDialog
@@ -341,6 +359,7 @@ export default function Services() {
         visible={quoteDialogVisible}
         onHide={() => setQuoteDialogVisible(false)}
       />
+      
     </>
   );
 }
