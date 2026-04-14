@@ -223,17 +223,19 @@ export default function Services() {
                   transition: { staggerChildren: 0.1 },
                 },
               }}
-              className="grid items-stretch gap-6 md:grid-cols-2 xl:grid-cols-4"
+              className="grid items-stretch gap-6 md:grid-cols-2"
             >
               <ServiceCard
                 title="Virtual Session"
                 eyebrow="Virtual Session · 1:1"
-                subtitle="Private one-on-one (1:1) session for career growth, AI usage, personal branding, and next steps. Sessions are available in English, Nepali, or Hindi."
+                subtitle="Private one-on-one (1:1) session for:"
                 bullets={[
                   'Career development and strategy',
                   'Personal brand guidance',
                   'Mental Health Awareness',
                   'Book writing and publishing guidance',
+                  'Other',
+                  'Note: Sessions are available in English, Nepali, or Hindi',
                 ]}
                 compareAtPrice="$250"
                 price="$99 / session (1 hour)"
