@@ -133,7 +133,7 @@ export default function TermsPage() {
 
           <h2>13. Contact</h2>
           <p>
-            Questions: <strong>admin@skcreation.org</strong> (or the contact email
+            Questions: <strong>info@skcreation.org</strong> (or the contact email
             shown on this site).
           </p>
 

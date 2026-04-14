@@ -406,7 +406,7 @@ export default function Home() {
                 Get In Touch
               </h2>
               <p className="mt-3 text-base text-zinc-400">
-                admin@skcreation.org
+                info@skcreation.org
               </p>
             </div>
           </div>

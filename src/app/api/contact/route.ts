@@ -58,7 +58,7 @@ export async function POST(req: Request) {
       process.env.ADMIN_NOTIFICATION_EMAIL ||
       process.env.ZOHO_MAIL_USER;
     const to =
-      requestType === 'website_quote' ? 'admin@skcreation.org' : contactTo;
+      requestType === 'website_quote' ? 'info@skcreation.org' : contactTo;
 
     if (!to) {
       console.error('[contact] Missing CONTACT_TO_EMAIL / ADMIN_NOTIFICATION_EMAIL');

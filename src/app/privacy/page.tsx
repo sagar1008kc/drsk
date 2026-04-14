@@ -30,7 +30,7 @@ export default function PrivacyPage() {
           <h2>1. Who we are</h2>
           <p>
             This site is operated by Dr. SK in connection with professional and
-            creative services. Contact: <strong>admin@skcreation.org</strong> (or
+            creative services. Contact: <strong>info@skcreation.org</strong> (or
             the email listed in the contact section).
           </p>
 
