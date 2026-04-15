@@ -2,13 +2,13 @@ import { NextResponse } from 'next/server';
 import { createRouteHandlerSupabaseClient } from '@/lib/supabase/route-auth';
 
 const allowedProviders = new Set(['google']);
-const redirectTo = 'https://www.skcreation.org/auth/callback';
 
 export const runtime = 'nodejs';
 
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
+    const redirectTo = new URL('/auth/callback', url).toString();
     const provider = url.searchParams.get('provider');
 
     if (!provider || !allowedProviders.has(provider)) {

@@ -7,8 +7,6 @@ type SocialLoginButtonsProps = {
   loading: boolean;
 };
 
-const redirectTo = 'https://www.skcreation.org/auth/callback';
-
 function createBrowserSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -33,6 +31,7 @@ export default function SocialLoginButtons({ loading }: SocialLoginButtonsProps)
 
     try {
       const supabase = createBrowserSupabaseClient();
+      const redirectTo = `${window.location.origin}/auth/callback`;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: { redirectTo },
