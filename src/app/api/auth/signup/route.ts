@@ -117,14 +117,15 @@ export async function POST(req: Request) {
         message.includes("could not find the table 'public.profiles'");
 
       if (profilesMissing) {
-        // Auth account is created, but project migration is not applied yet.
+        // Auth account is created, but profile data store is not ready yet.
         return NextResponse.json(
           {
-            error:
-              'Account created, but profile table is not set up in Supabase yet. Run migration 004_customer_resources.sql, then login with email.',
+            ok: true,
+            warning:
+              'Account created successfully. You can now login and continue.',
             autoLoggedIn: Boolean(data.session),
           },
-          { status: 200 }
+          { status: 201 }
         );
       }
 

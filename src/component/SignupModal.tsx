@@ -27,12 +27,14 @@ const initialState: SignupFormState = {
 export default function SignupModal({ open, onClose, nextPath }: SignupModalProps) {
   const [form, setForm] = useState<SignupFormState>(initialState);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!open) {
       setForm(initialState);
       setError('');
+      setNotice('');
       setLoading(false);
     }
   }, [open]);
@@ -60,6 +62,7 @@ export default function SignupModal({ open, onClose, nextPath }: SignupModalProp
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError('');
+    setNotice('');
     setLoading(true);
 
     try {
@@ -70,6 +73,7 @@ export default function SignupModal({ open, onClose, nextPath }: SignupModalProp
       });
       const result = (await response.json()) as {
         error?: string;
+        warning?: string;
         autoLoggedIn?: boolean;
       };
 
@@ -83,8 +87,8 @@ export default function SignupModal({ open, onClose, nextPath }: SignupModalProp
         return;
       }
 
-      setError(
-        result.error ||
+      setNotice(
+        result.warning ||
           'Account created. Please confirm your email if required, then login.'
       );
     } catch {
@@ -217,6 +221,11 @@ export default function SignupModal({ open, onClose, nextPath }: SignupModalProp
           {error ? (
             <p className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
               {error}
+            </p>
+          ) : null}
+          {notice ? (
+            <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+              {notice}
             </p>
           ) : null}
 

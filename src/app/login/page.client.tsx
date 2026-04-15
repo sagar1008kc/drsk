@@ -132,7 +132,7 @@ export default function LoginPageClient({
           <div className="h-px flex-1 bg-zinc-200" />
         </div>
 
-        <SocialLoginButtons loading={loading} nextPath={nextPath} />
+        <SocialLoginButtons loading={loading} />
 
         <p className="mt-5 text-center text-sm text-zinc-500">
           Don&apos;t have an account?{' '}

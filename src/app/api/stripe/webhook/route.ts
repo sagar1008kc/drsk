@@ -7,6 +7,7 @@ import {
   getBookingByStripeSessionId,
 } from '@/lib/booking';
 import { fulfillBookingMeetAndEmails } from '@/lib/fulfillBooking';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
 export const runtime = 'nodejs';
 
@@ -57,6 +58,31 @@ async function fulfillPaidCheckout(session: Stripe.Checkout.Session) {
   await fulfillBookingMeetAndEmails(id);
 }
 
+async function fulfillPremiumPdfCheckout(session: Stripe.Checkout.Session) {
+  const userId = session.metadata?.userId;
+  const resourceId = session.metadata?.resourceId;
+
+  if (!userId || !resourceId) {
+    console.error('[stripe webhook] Missing premium PDF metadata', session.id);
+    return;
+  }
+
+  const admin = getSupabaseAdmin();
+  const { error } = await admin.from('user_resource_access').upsert(
+    {
+      user_id: userId,
+      resource_id: resourceId,
+      access_type: 'stripe_purchase',
+      expires_at: null,
+    },
+    { onConflict: 'user_id,resource_id' }
+  );
+
+  if (error) {
+    console.error('[stripe webhook] Failed to grant PDF access', error);
+  }
+}
+
 export async function POST(req: Request) {
   const stripe = getStripe();
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -84,7 +110,11 @@ export async function POST(req: Request) {
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
       if (session.payment_status === 'paid') {
-        await fulfillPaidCheckout(session);
+        if (session.metadata?.purchaseType === 'premium_pdf') {
+          await fulfillPremiumPdfCheckout(session);
+        } else {
+          await fulfillPaidCheckout(session);
+        }
       }
     }
   } catch (e) {

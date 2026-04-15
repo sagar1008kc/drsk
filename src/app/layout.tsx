@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import Script from 'next/script';
 import './globals.css';
+import BotpressWebchat from '@/component/BotpressWebchat';
 import Navbar from '@/component/Navbar';
 import Providers from '@/component/Providers';
 
@@ -148,17 +149,7 @@ export default function RootLayout({
           </nav>
         </footer>
 
-        {/* Botpress Webchat */}
-        <Script
-          id="botpress-webchat-inject"
-          src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"
-          strategy="afterInteractive"
-        />
-        <Script
-          id="botpress-webchat-config"
-          src="https://files.bpcontent.cloud/2026/04/05/14/20260405144045-G1PSKHY7.js"
-          strategy="afterInteractive"
-        />
+        <BotpressWebchat />
         <Script
           id="schema-person"
           type="application/ld+json"

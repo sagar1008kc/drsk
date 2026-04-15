@@ -9,8 +9,19 @@ import {
   getProfile,
 } from '@/lib/dashboard/data';
 import { getFirstName } from '@/lib/auth/validation';
+import PremiumPdfPurchaseCard from '@/component/PremiumPdfPurchaseCard';
+import {
+  getPremiumPdfPriceCents,
+  premiumPdfConfig,
+} from '@/lib/resources/premium-resource';
 
-export default async function DashboardPage() {
+type DashboardPageProps = {
+  searchParams?: {
+    purchase?: string;
+  };
+};
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const user = await getAuthenticatedUser();
   if (!user) redirect('/login');
 
@@ -18,6 +29,14 @@ export default async function DashboardPage() {
     getProfile(user.id),
     getAccessibleResources(user.id),
   ]);
+  const premiumPdfSlug = premiumPdfConfig.slug;
+  const hasPremiumPdf = resources.some(
+    ({ resource }) => resource.slug === premiumPdfSlug
+  );
+  const priceLabel = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: premiumPdfConfig.currency.toUpperCase(),
+  }).format(getPremiumPdfPriceCents() / 100);
   const guidedCount = resources.filter(({ resource }) => {
     const text = `${resource.category || ''} ${resource.resource_type || ''}`.toLowerCase();
     return text.includes('guide') || text.includes('material') || text.includes('workbook');
@@ -38,6 +57,17 @@ export default async function DashboardPage() {
 
         <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="space-y-6">
+            {searchParams?.purchase === 'success' ? (
+              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                Payment successful. Your secure PDF access will appear shortly.
+              </div>
+            ) : null}
+            {searchParams?.purchase === 'cancel' ? (
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                Checkout was cancelled. You can try again any time.
+              </div>
+            ) : null}
+
             <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
               <h2 className="text-lg font-semibold text-zinc-900">My Downloads / My Resources</h2>
               <p className="mt-1 text-sm text-zinc-500">
@@ -45,6 +75,15 @@ export default async function DashboardPage() {
                 premium PDFs.
               </p>
             </div>
+
+            {!hasPremiumPdf ? (
+              <PremiumPdfPurchaseCard
+                title={premiumPdfConfig.title}
+                description={premiumPdfConfig.description}
+                coverImage="/eb.png"
+                priceLabel={priceLabel}
+              />
+            ) : null}
 
             {resources.length ? (
               <div className="grid gap-4 sm:grid-cols-2">

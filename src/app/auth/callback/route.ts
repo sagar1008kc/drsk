@@ -7,7 +7,6 @@ export const runtime = 'nodejs';
 export async function GET(req: Request) {
   const requestUrl = new URL(req.url);
   const code = requestUrl.searchParams.get('code');
-  const next = requestUrl.searchParams.get('next') || '/dashboard';
 
   if (!code) {
     return NextResponse.redirect(new URL('/login?error=oauth-callback', req.url));
@@ -45,5 +44,5 @@ export async function GET(req: Request) {
     }
   );
 
-  return NextResponse.redirect(new URL(next, req.url));
+  return NextResponse.redirect(new URL('/dashboard', req.url));
 }

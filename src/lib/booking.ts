@@ -54,9 +54,7 @@ export async function insertBooking(
     console.error('insertBooking error:', error);
     const hint = error?.message ?? '';
     if (/attendee_count|column/i.test(hint)) {
-      throw new Error(
-        'Database is missing column attendee_count. Run supabase/migrations/003_booking_attendee_count.sql in Supabase SQL editor.'
-      );
+      throw new Error('Booking setup is incomplete. Please contact support.');
     }
     throw new Error(hint || 'Could not save booking.');
   }
