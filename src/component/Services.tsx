@@ -187,7 +187,7 @@ export default function Services() {
   return (
     <>
       <main className="min-h-screen bg-[#0A0B12] pb-16 text-white">
-        <section id="services" className="py-10 md:py-14">
+        <section id="services" className="pb-10 pt-6 md:py-14">
           <div className="mx-auto max-w-6xl px-4">
             <motion.div
               initial="hidden"
@@ -197,7 +197,7 @@ export default function Services() {
               transition={{ duration: 0.5 }}
               className="mb-12 text-center"
             >
-              <h1 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
+              <h1 className="text-4xl font-extrabold tracking-tight text-white md:text-5xl">
                 <span className="relative inline-block">
                   Services
                   <span
@@ -333,7 +333,18 @@ export default function Services() {
             </motion.section>
           </div>
         </section>
-        <p className="mt-12 text-center text-sm text-zinc-500">
+        <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-violet-500/25 bg-violet-500/10 px-4 py-5 text-center">
+          <p className="text-sm font-medium text-zinc-200 md:text-base">
+            Want to level up AI skills or emotional balance?
+          </p>
+          <Link
+            href="/books"
+            className="mt-3 inline-flex items-center rounded-full border border-violet-400/40 bg-violet-500/90 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-400"
+          >
+            Read Books
+          </Link>
+        </div>
+        <p className="mt-8 text-center text-sm text-zinc-500">
           Interested in something similar?{' '}
           <Link
             href="/project"
@@ -343,7 +354,7 @@ export default function Services() {
           </Link>{' '}
           or{' '}
           <Link
-            href="#contact"
+            href="/#contact"
             className="font-semibold text-violet-400 underline-offset-4 hover:text-violet-300 hover:underline"
           >
             get in touch

@@ -83,12 +83,26 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#F8F7F4] text-zinc-900">
+      <section className="relative z-[900] border-b border-white/10 bg-gradient-to-b from-[#0A0B12] via-[#0c0d14] to-zinc-950">
+        <div className="mx-auto max-w-6xl px-4 py-2.5 text-center text-sm font-medium text-zinc-100 sm:text-base">
+        Struggling with stress, overthinking, or emotional ups and downs?
+        This powerful book helps you calm your mind and take control of your emotions.{' '}
+          <a
+            href="https://a.co/d/0b33CrJD"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-violet-300 underline underline-offset-4 transition hover:text-violet-200"
+          >
+            Read on Amazon
+          </a>
+        </div>
+      </section>
 
       {/* Hero */}
       <section className="relative overflow-hidden">
         {/* Subtle dot texture */}
         <div className="absolute inset-0 dot-pattern opacity-60 pointer-events-none" />
-        <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-10">
+        <div className="relative mx-auto max-w-6xl px-4 pb-10 pt-10">
           <motion.div
             initial="hidden"
             animate="visible"

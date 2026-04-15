@@ -10,9 +10,30 @@ export const metadata: Metadata = {
 
 export default function ProjectPage() {
   return (
-    <main className="min-h-screen bg-[#0A0B12] pb-20 pt-8 text-white md:pt-12">
+    <main className="min-h-screen bg-[#0A0B12] pb-20 pt-5 text-white md:pt-12">
       <div className="mx-auto max-w-5xl px-4">
-        <h1 className="mt-3 text-center text-3xl font-bold tracking-tight md:text-4xl">
+        <div className="mx-auto mb-6 max-w-3xl rounded-2xl border border-violet-500/25 bg-violet-500/10 px-4 py-4 text-center shadow-sm">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-violet-200/90">
+            Ad
+          </p>
+          <p className="mt-1 text-sm leading-relaxed text-zinc-200 md:text-base">
+            Want to go deeper on practical AI development workflows? Explore{' '}
+            <span className="font-semibold text-white">
+              AI Powered Software Engineer
+            </span>{' '}
+            for implementation strategies, real-world patterns, and hands-on
+            guidance.
+          </p>
+          <a
+            href="https://a.co/d/06z7LV25"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center rounded-full border border-violet-400/40 bg-violet-500/90 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-400"
+          >
+            View on Amazon
+          </a>
+        </div>
+        <h1 className="mt-2 text-center text-3xl font-extrabold tracking-tight md:text-4xl">
           Projects
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed text-zinc-400">
@@ -145,7 +166,20 @@ export default function ProjectPage() {
             />
           </div>
         </article>
-        <p className="mt-12 text-center text-sm text-zinc-500">
+        <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-violet-500/25 bg-violet-500/10 px-4 py-5 text-center">
+          <p className="text-sm font-medium text-zinc-200 md:text-base">
+            Want to level up AI skills or emotional balance?
+          </p>
+          <a
+            href="https://www.amazon.com/author/drsk1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center rounded-full border border-violet-400/40 bg-violet-500/90 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-400"
+          >
+            Read Books
+          </a>
+        </div>
+        <p className="mt-8 text-center text-sm text-zinc-500">
           Interested in something similar?{' '}
           <Link
             href="/services"
@@ -155,7 +189,7 @@ export default function ProjectPage() {
           </Link>{' '}
           or{' '}
           <Link
-            href="#contact"
+            href="/#contact"
             className="font-semibold text-violet-400 underline-offset-4 hover:text-violet-300 hover:underline"
           >
             get in touch
