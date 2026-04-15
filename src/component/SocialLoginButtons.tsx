@@ -1,24 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
 
 type SocialLoginButtonsProps = {
   loading: boolean;
 };
-
-function createBrowserSupabaseClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error(
-      'Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY'
-    );
-  }
-
-  return createClient(supabaseUrl, supabaseAnonKey);
-}
 
 export default function SocialLoginButtons({ loading }: SocialLoginButtonsProps) {
   const [oauthLoading, setOauthLoading] = useState(false);
@@ -30,19 +16,10 @@ export default function SocialLoginButtons({ loading }: SocialLoginButtonsProps)
     setOauthLoading(true);
 
     try {
-      const supabase = createBrowserSupabaseClient();
-      const redirectTo = `${window.location.origin}/auth/callback`;
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo },
-      });
-
-      if (error) {
-        setOauthError(error.message || 'Unable to start Google sign-in.');
-      }
+      // Route OAuth through the server handler so redirect + error handling stay centralized.
+      window.location.assign('/api/auth/oauth?provider=google');
     } catch {
       setOauthError('Unable to start Google sign-in right now.');
-    } finally {
       setOauthLoading(false);
     }
   }

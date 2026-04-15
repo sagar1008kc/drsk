@@ -51,6 +51,43 @@ export async function getProfile(userId: string) {
 
 export async function getAccessibleResources(userId: string) {
   const supabase = createServerSupabaseReadOnlyClient();
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', userId)
+    .maybeSingle<{ role: string | null }>();
+
+  const isAdmin = (profile?.role || '').toLowerCase() === 'admin';
+
+  if (isAdmin) {
+    const { data, error } = await supabase
+      .from('resources')
+      .select(
+        `
+        id,
+        title,
+        slug,
+        description,
+        storage_key,
+        thumbnail_url,
+        category,
+        resource_type,
+        is_active
+      `
+      )
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
+      .returns<ResourceRow[]>();
+
+    if (error || !data) return [];
+
+    return data.map((resource) => ({
+      access_type: 'admin',
+      expires_at: null,
+      resource,
+    }));
+  }
+
   const { data, error } = await supabase
     .from('user_resource_access')
     .select(

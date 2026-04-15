@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import DashboardHeader from '@/component/DashboardHeader';
 import EmptyState from '@/component/EmptyState';
+import PlaceholderResourceCard from '@/component/PlaceholderResourceCard';
 import ProfileSummaryCard from '@/component/ProfileSummaryCard';
 import ResourceCard from '@/component/ResourceCard';
 import {
@@ -20,6 +21,33 @@ type DashboardPageProps = {
     purchase?: string;
   };
 };
+
+const placeholderResources = [
+  {
+    title: 'Emotional Balance Workbook',
+    description: 'A practical self-help workbook with calming and reflection exercises.',
+    category: 'Book',
+    resourceType: 'PDF',
+  },
+  {
+    title: 'Inner Clarity Journal',
+    description: 'A guided journal for daily reflection, stress release, and grounding.',
+    category: 'Guided Journal',
+    resourceType: 'PDF',
+  },
+  {
+    title: 'Healing Through Writing Journal',
+    description: 'Weekly prompts for emotional healing, gratitude, and self-awareness.',
+    category: 'Guided Journal',
+    resourceType: 'PDF',
+  },
+  {
+    title: 'Mindful Growth Playbook',
+    description: 'Structured prompts and action plans to build healthy habits.',
+    category: 'Book',
+    resourceType: 'PDF',
+  },
+];
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const user = await getAuthenticatedUser();
@@ -103,10 +131,31 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 })}
               </div>
             ) : (
-              <EmptyState
-                title="No resources yet"
-                message="Once resources are assigned to your account, your download buttons will appear here."
-              />
+              <div className="space-y-4">
+                <EmptyState
+                  title="No resources yet"
+                  message="Once resources are assigned to your account, your download buttons will appear here."
+                />
+                <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+                  <h3 className="text-base font-semibold text-zinc-900">
+                    Starter Library Preview
+                  </h3>
+                  <p className="mt-1 text-sm text-zinc-600">
+                    Placeholder examples for books and guided journal PDF files.
+                  </p>
+                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                    {placeholderResources.map((resource) => (
+                      <PlaceholderResourceCard
+                        key={resource.title}
+                        title={resource.title}
+                        description={resource.description}
+                        category={resource.category}
+                        resourceType={resource.resourceType}
+                      />
+                    ))}
+                  </div>
+                </section>
+              </div>
             )}
           </div>
 

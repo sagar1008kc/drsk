@@ -33,46 +33,84 @@ export async function GET(
     }
 
     const admin = getSupabaseAdmin();
-    const { data: access, error: accessError } = await admin
-      .from('user_resource_access')
-      .select(
-        `
-        id,
-        expires_at,
-        resources (
-          id,
-          title,
-          storage_key,
-          is_active
-        )
-      `
-      )
-      .eq('user_id', user.id)
-      .eq('resource_id', params.resourceId)
-      .maybeSingle<{
-        id: string;
-        expires_at: string | null;
-        resources: {
+    const { data: profile } = await admin
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .maybeSingle<{ role: string | null }>();
+
+    const isAdmin = (profile?.role || '').toLowerCase() === 'admin';
+
+    let resourceRecord:
+      | {
           id: string;
           title: string;
           storage_key: string;
           is_active: boolean;
-        } | null;
-      }>();
+        }
+      | null = null;
 
-    if (
-      accessError ||
-      !access?.resources ||
-      !access.resources.is_active ||
-      (access.expires_at && new Date(access.expires_at) < new Date())
-    ) {
-      return NextResponse.json({ error: 'Resource access denied.' }, { status: 403 });
+    if (isAdmin) {
+      const { data: resource, error: resourceError } = await admin
+        .from('resources')
+        .select('id,title,storage_key,is_active')
+        .eq('id', params.resourceId)
+        .maybeSingle<{
+          id: string;
+          title: string;
+          storage_key: string;
+          is_active: boolean;
+        }>();
+
+      if (resourceError || !resource || !resource.is_active) {
+        return NextResponse.json({ error: 'Resource access denied.' }, { status: 403 });
+      }
+
+      resourceRecord = resource;
+    } else {
+      const { data: access, error: accessError } = await admin
+        .from('user_resource_access')
+        .select(
+          `
+          id,
+          expires_at,
+          resources (
+            id,
+            title,
+            storage_key,
+            is_active
+          )
+        `
+        )
+        .eq('user_id', user.id)
+        .eq('resource_id', params.resourceId)
+        .maybeSingle<{
+          id: string;
+          expires_at: string | null;
+          resources: {
+            id: string;
+            title: string;
+            storage_key: string;
+            is_active: boolean;
+          } | null;
+        }>();
+
+      if (
+        accessError ||
+        !access?.resources ||
+        !access.resources.is_active ||
+        (access.expires_at && new Date(access.expires_at) < new Date())
+      ) {
+        return NextResponse.json({ error: 'Resource access denied.' }, { status: 403 });
+      }
+
+      resourceRecord = access.resources;
     }
 
     const { data: signedData, error: signedError } = await admin.storage
       .from(downloadsBucket)
-      .createSignedUrl(access.resources.storage_key, 60, {
-        download: sanitizeFilename(`${access.resources.title}.pdf`),
+      .createSignedUrl(resourceRecord.storage_key, 60, {
+        download: sanitizeFilename(`${resourceRecord.title}.pdf`),
       });
 
     if (signedError || !signedData?.signedUrl) {
@@ -90,14 +128,14 @@ export async function GET(
       );
     }
 
-    const ext = access.resources.storage_key.split('.').pop() || 'pdf';
-    const safeFileName = sanitizeFilename(`${access.resources.title}.${ext}`);
+    const ext = resourceRecord.storage_key.split('.').pop() || 'pdf';
+    const safeFileName = sanitizeFilename(`${resourceRecord.title}.${ext}`);
 
     const ipAddress = getClientIp(req);
     const userAgent = req.headers.get('user-agent');
     await admin.from('download_logs').insert({
       user_id: user.id,
-      resource_id: access.resources.id,
+      resource_id: resourceRecord.id,
       ip_address: ipAddress,
       user_agent: userAgent,
     });
