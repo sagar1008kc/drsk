@@ -96,13 +96,24 @@ export default function Home() {
             Read on Amazon
           </a>
         </div>
+        <div className="w-full">
+                <Image
+                  src="/drsk.png"
+                  alt="Dr. SK Author"
+                  width={1920}
+                  height={720}
+                  priority
+                  sizes="(max-width: 768px) 100vw, 1200px"
+                  className="h-auto w-full"
+                />
+              </div>
       </section>
 
       {/* Hero */}
       <section className="relative overflow-hidden">
         {/* Subtle dot texture */}
         <div className="absolute inset-0 dot-pattern opacity-60 pointer-events-none" />
-        <div className="relative mx-auto max-w-6xl px-4 pb-10 pt-10">
+        <div className="relative mx-auto max-w-6xl px-4 pb-2 pt-2">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -110,18 +121,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <div className="flex flex-col items-center text-center">
-              {/* Profile Image */}
-              <div className="relative w-36 h-36 rounded-full overflow-hidden border-4 border-white shadow-xl ring-1 ring-zinc-200">
-                <Image
-                  src="/drsk.png"
-                  alt="Dr. SK"
-                  fill
-                  priority
-                  className="object-cover"
-                />
-              </div>
-
-              <h1 className="mt-6 text-4xl md:text-6xl font-bold tracking-tight text-zinc-900">
+              <h1 className="mt-4 text-4xl md:text-6xl font-bold tracking-tight text-zinc-900">
                 Dr. SK
               </h1>
               <h5 className="mt-2 text-lg md:text-xl font-medium text-zinc-600">
@@ -237,13 +237,13 @@ export default function Home() {
 
               <div className="space-y-5">
                 {[
-                  { role: 'Software Engineer', org: 'GM · Full-time', loc: 'Austin, TX · On-site', dates: 'May 2019 – Present' },
+                  { role: 'Software Engineer', org: 'Fortune500 Company · Full-time', loc: 'USA · On-site', dates: 'May 2019 – Present' },
                   { role: 'Founder & CEO', org: 'SK Creation · Self-employed', loc: 'United States · Remote', dates: 'Apr 2023 – Present' },
-                  { role: 'IT Support Specialist', org: 'Experimax · Full-time', loc: 'Houston, TX · On-site', dates: 'Jan 2016 – Apr 2019' },
+                  { role: 'IT Support Specialist', org: 'Experimax · Full-time', loc: 'USA · On-site', dates: 'Jan 2016 – Apr 2019' },
                   { role: 'Section Officer', org: 'Government of Nepal', loc: 'Nepal', dates: 'May 2011 – Jun 2014' },
                   { role: 'Lead Trainer | Motivational Speaker', org: 'Self-employed', loc: 'Nepal', dates: 'Jul 2009 – May 2014' },
                   { role: 'Guest Lecturer', org: 'Gyan Deep College', loc: 'Nepal', dates: 'Mar 2012 – Sep 2013' },
-                  { role: 'Mathematics Teacher', org: 'Janata Higher Secondary School', loc: 'Jumla, Nepal', dates: 'Aug 2008 – Mar 2011' },
+                  { role: 'Mathematics Teacher', org: 'Janata Higher Secondary School', loc: 'Nepal', dates: 'Aug 2008 – Mar 2011' },
                 ].map((item) => (
                   <div
                     key={item.role}
