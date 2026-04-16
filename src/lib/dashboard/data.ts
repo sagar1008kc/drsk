@@ -1,5 +1,6 @@
 import { cache } from 'react';
 import { createServerSupabaseReadOnlyClient } from '@/lib/supabase/server-auth';
+import { freeSamplePdfConfig } from '@/lib/resources/premium-resource';
 
 export type ProfileRow = {
   id: string;
@@ -111,13 +112,49 @@ export async function getAccessibleResources(userId: string) {
     .eq('resources.is_active', true)
     .returns<ResourceAccessRow[]>();
 
-  if (error || !data) return [];
+  const resourceAccessList =
+    error || !data
+      ? []
+      : data
+          .filter((row) => row.resources)
+          .map((row) => ({
+            access_type: row.access_type,
+            expires_at: row.expires_at,
+            resource: row.resources as ResourceRow,
+          }));
 
-  return data
-    .filter((row) => row.resources)
-    .map((row) => ({
-      access_type: row.access_type,
-      expires_at: row.expires_at,
-      resource: row.resources as ResourceRow,
-    }));
+  const alreadyHasSample = resourceAccessList.some(
+    ({ resource }) => resource.slug === freeSamplePdfConfig.slug
+  );
+
+  if (!alreadyHasSample) {
+    const { data: freeSample } = await supabase
+      .from('resources')
+      .select(
+        `
+        id,
+        title,
+        slug,
+        description,
+        storage_key,
+        thumbnail_url,
+        category,
+        resource_type,
+        is_active
+      `
+      )
+      .eq('slug', freeSamplePdfConfig.slug)
+      .eq('is_active', true)
+      .maybeSingle<ResourceRow>();
+
+    if (freeSample) {
+      resourceAccessList.unshift({
+        access_type: 'free_sample',
+        expires_at: null,
+        resource: freeSample,
+      });
+    }
+  }
+
+  return resourceAccessList;
 }

@@ -10,11 +10,24 @@ export const premiumPdfConfig = {
     'Premium PDF by Dr. SK with practical guidance and exercises.',
   storageKey:
     process.env.NEXT_PUBLIC_PREMIUM_PDF_STORAGE_KEY || 'books/emotional-balance.pdf',
-  thumbnailUrl: '/eb.png',
+  thumbnailUrl: '/stop-overthinking.png',
   resourceType: 'PDF',
   category: 'premium',
   priceCents: Number(process.env.PREMIUM_PDF_PRICE_CENTS || defaultPriceCents),
   currency: (process.env.PREMIUM_PDF_CURRENCY || 'usd').toLowerCase(),
+};
+
+export const freeSamplePdfConfig = {
+  slug: process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_SLUG || 'relationship-sample',
+  title: process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_TITLE || 'Relationship Sample',
+  description:
+    process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_DESCRIPTION ||
+    'Free sample PDF for logged-in users with practical relationship insights.',
+  storageKey:
+    process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_STORAGE_KEY || 'books/relationship.pdf',
+  thumbnailUrl: '/relationship.png',
+  resourceType: 'PDF',
+  category: 'free-sample',
 };
 
 export function getPremiumPdfPriceCents() {
@@ -56,6 +69,44 @@ export async function ensurePremiumPdfResource() {
 
   if (error || !data?.id) {
     throw new Error('Unable to create premium PDF resource.');
+  }
+
+  return data.id;
+}
+
+export async function ensureFreeSamplePdfResource() {
+  const admin = getSupabaseAdmin();
+  const config = freeSamplePdfConfig;
+
+  const { data: existing, error: selectError } = await admin
+    .from('resources')
+    .select('id, slug')
+    .eq('slug', config.slug)
+    .maybeSingle<{ id: string; slug: string }>();
+
+  if (selectError) {
+    throw new Error('Unable to find free sample PDF resource.');
+  }
+
+  if (existing?.id) return existing.id;
+
+  const { data, error } = await admin
+    .from('resources')
+    .insert({
+      title: config.title,
+      slug: config.slug,
+      description: config.description,
+      storage_key: config.storageKey,
+      thumbnail_url: config.thumbnailUrl,
+      category: config.category,
+      resource_type: config.resourceType,
+      is_active: true,
+    })
+    .select('id')
+    .single<{ id: string }>();
+
+  if (error || !data?.id) {
+    throw new Error('Unable to create free sample PDF resource.');
   }
 
   return data.id;

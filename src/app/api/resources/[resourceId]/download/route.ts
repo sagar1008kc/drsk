@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createRouteHandlerSupabaseClient } from '@/lib/supabase/route-auth';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import { freeSamplePdfConfig } from '@/lib/resources/premium-resource';
 
 export const runtime = 'nodejs';
 const downloadsBucket =
@@ -68,43 +69,71 @@ export async function GET(
 
       resourceRecord = resource;
     } else {
-      const { data: access, error: accessError } = await admin
-        .from('user_resource_access')
-        .select(
-          `
-          id,
-          expires_at,
-          resources (
-            id,
-            title,
-            storage_key,
-            is_active
-          )
-        `
-        )
-        .eq('user_id', user.id)
-        .eq('resource_id', params.resourceId)
+      const { data: candidateResource, error: candidateError } = await admin
+        .from('resources')
+        .select('id,title,slug,storage_key,is_active')
+        .eq('id', params.resourceId)
         .maybeSingle<{
           id: string;
-          expires_at: string | null;
-          resources: {
-            id: string;
-            title: string;
-            storage_key: string;
-            is_active: boolean;
-          } | null;
+          title: string;
+          slug: string;
+          storage_key: string;
+          is_active: boolean;
         }>();
 
       if (
-        accessError ||
-        !access?.resources ||
-        !access.resources.is_active ||
-        (access.expires_at && new Date(access.expires_at) < new Date())
+        !candidateError &&
+        candidateResource &&
+        candidateResource.is_active &&
+        candidateResource.slug === freeSamplePdfConfig.slug
       ) {
-        return NextResponse.json({ error: 'Resource access denied.' }, { status: 403 });
+        resourceRecord = {
+          id: candidateResource.id,
+          title: candidateResource.title,
+          storage_key: candidateResource.storage_key,
+          is_active: candidateResource.is_active,
+        };
       }
 
-      resourceRecord = access.resources;
+      if (!resourceRecord) {
+        const { data: access, error: accessError } = await admin
+          .from('user_resource_access')
+          .select(
+            `
+            id,
+            expires_at,
+            resources (
+              id,
+              title,
+              storage_key,
+              is_active
+            )
+          `
+          )
+          .eq('user_id', user.id)
+          .eq('resource_id', params.resourceId)
+          .maybeSingle<{
+            id: string;
+            expires_at: string | null;
+            resources: {
+              id: string;
+              title: string;
+              storage_key: string;
+              is_active: boolean;
+            } | null;
+          }>();
+
+        if (
+          accessError ||
+          !access?.resources ||
+          !access.resources.is_active ||
+          (access.expires_at && new Date(access.expires_at) < new Date())
+        ) {
+          return NextResponse.json({ error: 'Resource access denied.' }, { status: 403 });
+        }
+
+        resourceRecord = access.resources;
+      }
     }
 
     const { data: signedData, error: signedError } = await admin.storage

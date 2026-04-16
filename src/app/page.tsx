@@ -409,8 +409,35 @@ export default function Home() {
           </div>
         </div>
       </section>
-            {/* Contact Section */}
-        <section id="contact" className="border-t border-white/10 bg-gradient-to-b from-[#0A0B12] via-[#0c0d14] to-zinc-950 py-16 md:py-20">
+           {/* Resources banner */}
+       <section className="border-t border-zinc-200 bg-zinc-900 py-10 mb-6">
+        <div className="mx-auto max-w-4xl px-4">
+          <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400">
+                Free &amp; Premium Downloads
+              </p>
+              <h2 className="mt-1 text-xl font-bold text-white">
+                Get your free PDF — or unlock premium resources
+              </h2>
+              <p className="mt-1 text-sm text-zinc-400">
+                Sign in for a free download. No purchase needed.
+              </p>
+            </div>
+            <a
+              href="/login"
+              className="shrink-0 inline-flex items-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-400 transition px-6 py-3 text-sm font-semibold text-white shadow"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Access My Resources
+            </a>
+          </div>
+        </div>
+      </section>
+      {/* Contact Section */}
+      <section id="contact" className="border-t border-white/10 bg-gradient-to-b from-[#0A0B12] via-[#0c0d14] to-zinc-950 py-16 md:py-20">
           <div className="mx-auto max-w-6xl px-4">
             <div className="text-center">
               <span className="inline-flex items-center rounded-full border border-violet-500/25 bg-violet-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-200/90">
@@ -422,15 +449,10 @@ export default function Home() {
               <p className="mt-3 text-base text-zinc-400">
                 info@skcreation.org
               </p>
+              <ContactForm />
             </div>
-          </div>
-        </section>
-
-        <section className="bg-zinc-950 px-4 pb-16">
-          <div className="mx-auto w-full max-w-2xl">
-            <ContactForm />
-          </div>
-        </section>
+            </div>
+            </section>
     </main>
   );
 }
