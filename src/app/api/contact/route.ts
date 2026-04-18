@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { sendHtmlEmail } from '@/lib/mail';
+import { getNotificationInboxEmail, sendHtmlEmail } from '@/lib/mail';
+import { buildContactNotificationEmail } from '@/lib/emails/contactEmails';
 import { isValidInternationalPhoneDigits } from '@/lib/phone';
 
 type ContactRequestBody = {
@@ -52,16 +53,12 @@ export async function POST(req: Request) {
       );
     }
 
-    const contactTo =
-      process.env.CONTACT_TO_EMAIL ||
-      process.env.CONTACT_EMAIL_TO ||
-      process.env.ADMIN_NOTIFICATION_EMAIL ||
-      process.env.ZOHO_MAIL_USER;
-    const to =
-      requestType === 'website_quote' ? 'info@skcreation.org' : contactTo;
+    const to = getNotificationInboxEmail();
 
     if (!to) {
-      console.error('[contact] Missing CONTACT_TO_EMAIL / ADMIN_NOTIFICATION_EMAIL');
+      console.error(
+        '[contact] Missing notification inbox email (NOTIFICATION_TO_EMAIL).'
+      );
       return NextResponse.json(
         { error: 'Server environment variables are missing.' },
         { status: 500 }
@@ -89,40 +86,16 @@ export async function POST(req: Request) {
       }
     }
 
-    const subject = isWebsiteQuote
-      ? `New Digital solutions quote request from ${name}`
-      : `New Contact Form Message from ${name}`;
-    const html = isWebsiteQuote
-      ? `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-          <h2>New Digital solutions quote request</h2>
-          <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-          <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-          <p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
-          <p><strong>Service Type:</strong> ${escapeHtml(serviceType)}</p>
-          ${
-            otherServiceType
-              ? `<p><strong>Other Service:</strong> ${escapeHtml(otherServiceType)}</p>`
-              : ''
-          }
-          <p><strong>Project Details:</strong></p>
-          <div style="padding:12px;background:#f5f5f5;border-radius:8px;white-space:pre-wrap;">
-            ${escapeHtml(projectDetails)}
-          </div>
-          <p style="margin-top:12px;color:#666;font-size:12px;">Quotes start from $199.</p>
-        </div>
-      `
-      : `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-          <h2>New Contact Form Message</h2>
-          <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-          <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-          <p><strong>Message:</strong></p>
-          <div style="padding:12px;background:#f5f5f5;border-radius:8px;white-space:pre-wrap;">
-            ${escapeHtml(message)}
-          </div>
-        </div>
-      `;
+    const { subject, html } = buildContactNotificationEmail({
+      requestType,
+      name,
+      email,
+      phone,
+      serviceType,
+      otherServiceType,
+      projectDetails,
+      message,
+    });
 
     const ok = await sendHtmlEmail({
       to,
@@ -150,13 +123,4 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
-}
-
-function escapeHtml(input: string) {
-  return input
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
 }

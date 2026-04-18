@@ -9,6 +9,33 @@ export type MeetCreationResult = {
   meeting_provider: 'google_meet';
 };
 
+type SafeGoogleError = {
+  code?: number;
+  status?: number | string;
+  message?: string;
+  reason?: string;
+};
+
+function getSafeGoogleError(err: unknown): SafeGoogleError {
+  const e = err as {
+    code?: number;
+    status?: number | string;
+    message?: string;
+    response?: { data?: { error?: string; error_description?: string } };
+    cause?: { message?: string };
+  };
+
+  return {
+    code: e?.code,
+    status: e?.status,
+    message: e?.message,
+    reason:
+      e?.response?.data?.error_description ||
+      e?.response?.data?.error ||
+      e?.cause?.message,
+  };
+}
+
 function getPrivateKey(): string | null {
   const raw = process.env.GOOGLE_PRIVATE_KEY;
   if (!raw) return null;
@@ -187,7 +214,11 @@ export async function createGoogleMeetEventForBooking(params: {
       meeting_provider: 'google_meet',
     };
   } catch (e) {
-    console.error('[googleCalendar] events.insert failed:', e);
+    const safeErr = getSafeGoogleError(e);
+    console.error(
+      '[googleCalendar] events.insert failed:',
+      JSON.stringify(safeErr)
+    );
     return null;
   }
 }

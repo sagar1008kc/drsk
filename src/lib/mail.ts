@@ -7,6 +7,7 @@ import {
 import type { BookingRow } from '@/types/booking';
 
 let resendSingleton: Resend | null = null;
+const DEFAULT_NOTIFICATION_EMAIL = 'info@skcreation.org';
 
 function getResend(): Resend | null {
   const key = process.env.RESEND_API_KEY;
@@ -30,11 +31,16 @@ function getZohoTransport() {
 
 function defaultFromAddress(): string | null {
   return (
+    getNotificationInboxEmail() ||
     process.env.MAIL_FROM ||
     process.env.ZOHO_MAIL_USER ||
     process.env.RESEND_FROM_EMAIL ||
-    null
+    DEFAULT_NOTIFICATION_EMAIL
   );
+}
+
+export function getNotificationInboxEmail(): string {
+  return process.env.NOTIFICATION_TO_EMAIL || DEFAULT_NOTIFICATION_EMAIL;
 }
 
 /**
@@ -56,7 +62,8 @@ export async function sendHtmlEmail(opts: {
   if (zoho) {
     try {
       await zoho.sendMail({
-        from: `"Dr. SK" <${from}>`,
+        // Keep sender header plain to avoid exposing personal display names.
+        from,
         to: opts.to,
         replyTo: opts.replyTo,
         subject: opts.subject,
@@ -91,12 +98,11 @@ export async function sendHtmlEmail(opts: {
 export async function sendAdminBookingNotification(
   booking: BookingRow
 ): Promise<boolean> {
-  const to =
-    process.env.ADMIN_NOTIFICATION_EMAIL ||
-    process.env.CONTACT_TO_EMAIL ||
-    process.env.ZOHO_MAIL_USER;
+  const to = getNotificationInboxEmail();
   if (!to) {
-    console.error('[mail] Set ADMIN_NOTIFICATION_EMAIL or CONTACT_TO_EMAIL');
+    console.error(
+      '[mail] Missing notification inbox email (NOTIFICATION_TO_EMAIL).'
+    );
     return false;
   }
 
@@ -112,6 +118,13 @@ export async function sendAdminBookingNotification(
 export async function sendCustomerBookingConfirmation(
   booking: BookingRow
 ): Promise<boolean> {
+  const customer = booking.customer_email.trim().toLowerCase();
+  const inbox = getNotificationInboxEmail().trim().toLowerCase();
+  if (customer && inbox && customer === inbox) {
+    // Avoid duplicate internal notifications when customer and admin inbox are same.
+    return true;
+  }
+
   const { subject, html } = buildCustomerConfirmationEmail(booking);
   return sendHtmlEmail({
     to: booking.customer_email,

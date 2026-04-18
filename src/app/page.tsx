@@ -437,22 +437,27 @@ export default function Home() {
         </div>
       </section>
       {/* Contact Section */}
-      <section id="contact" className="border-t border-white/10 bg-gradient-to-b from-[#0A0B12] via-[#0c0d14] to-zinc-950 py-16 md:py-20">
-          <div className="mx-auto max-w-6xl px-4">
+      <section id="contact" className="relative overflow-hidden border-t border-zinc-200 bg-gradient-to-b from-[#f8f7ff] via-white to-[#f4f7ff] py-16 md:py-20">
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-violet-200/40 blur-3xl" />
+            <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-sky-200/40 blur-3xl" />
+          </div>
+
+          <div className="relative mx-auto max-w-6xl px-4">
             <div className="text-center">
-              <span className="inline-flex items-center rounded-full border border-violet-500/25 bg-violet-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-200/90">
+              <span className="inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-700">
                 Contact
               </span>
-              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">
+              <h2 className="mt-4 text-3xl font-bold text-zinc-900 md:text-4xl">
                 Get In Touch
               </h2>
-              <p className="mt-3 text-base text-zinc-400">
+              <p className="mt-3 text-base text-zinc-600">
                 info@skcreation.org
               </p>
               <ContactForm />
             </div>
-            </div>
-            </section>
+          </div>
+      </section>
     </main>
   );
 }

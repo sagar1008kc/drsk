@@ -23,7 +23,7 @@ type ContactFormProps = {
 const MESSAGE_LIMIT = 1000;
 
 const fieldClass =
-  'min-h-[48px] w-full rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-base text-white placeholder:text-zinc-500 outline-none transition focus:border-violet-400/50 focus:bg-white/[0.09] focus:ring-2 focus:ring-violet-500/25';
+  'min-h-[48px] w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-violet-300 focus:ring-2 focus:ring-violet-200';
 
 export default function ContactForm({ onClose }: ContactFormProps) {
   const [form, setForm] = useState<FormState>({
@@ -146,16 +146,16 @@ export default function ContactForm({ onClose }: ContactFormProps) {
     <div className="flex min-h-0 w-full justify-center px-1 py-6 sm:px-2 sm:py-8">
       <div className="relative w-full max-w-lg">
         <div
-          className="pointer-events-none absolute -inset-px rounded-[1.35rem] bg-gradient-to-br from-violet-500/40 via-fuchsia-500/20 to-transparent opacity-70 blur-sm"
+          className="pointer-events-none absolute -inset-px rounded-[1.35rem] bg-gradient-to-br from-violet-300/60 via-sky-200/50 to-transparent opacity-80 blur-sm"
           aria-hidden
         />
-        <div className="relative overflow-hidden rounded-[1.25rem] border border-white/10 bg-zinc-950/90 shadow-2xl ring-1 ring-white/5 backdrop-blur-xl">
-          <div className="border-b border-white/5 bg-gradient-to-r from-violet-950/40 to-transparent px-5 py-6 sm:px-8 sm:py-8">
-            <h2 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        <div className="relative overflow-hidden rounded-[1.25rem] border border-zinc-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.12)] ring-1 ring-white/80">
+          <div className="border-b border-zinc-100 bg-gradient-to-r from-violet-50 via-white to-sky-50 px-5 py-6 sm:px-8 sm:py-8">
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
               Send a message
             </h2>
-            <p className="mt-2 max-w-md text-sm leading-relaxed text-zinc-400">
-              We usually reply within a few business days.
+            <p className="mt-2 max-w-md text-sm leading-relaxed text-zinc-600">
+              We usually reply within 1–2 business days.
             </p>
           </div>
 
@@ -163,7 +163,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
             <div>
               <label
                 htmlFor="name"
-                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-400"
+                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-500"
               >
                 Name
               </label>
@@ -182,7 +182,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
             <div>
               <label
                 htmlFor="email"
-                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-400"
+                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-500"
               >
                 Email
               </label>
@@ -206,7 +206,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
             <div>
               <label
                 htmlFor="message"
-                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-400"
+                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-500"
               >
                 Message
               </label>
@@ -222,7 +222,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
               />
               <div
                 className={`mt-2 text-right text-xs ${
-                  isNearLimit ? 'text-amber-400' : 'text-zinc-500'
+                  isNearLimit ? 'text-amber-600' : 'text-zinc-500'
                 }`}
               >
                 {messageLength}/{MESSAGE_LIMIT}
@@ -245,7 +245,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
             {status.type === 'error' && status.message ? (
               <div
                 role="alert"
-                className="rounded-2xl border border-red-500/30 bg-red-950/50 px-4 py-3 text-sm text-red-200"
+                className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
               >
                 {status.message}
               </div>
@@ -254,7 +254,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
             <button
               type="submit"
               disabled={!isFormReady || loading}
-              className="flex min-h-[52px] w-full items-center justify-center rounded-2xl bg-gradient-to-r from-violet-600 via-violet-500 to-indigo-600 px-4 text-sm font-bold text-white shadow-lg shadow-violet-900/30 transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100 sm:text-base"
+              className="mx-auto flex min-h-[52px] w-1/2 min-w-[180px] items-center justify-center rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-500 to-sky-500 px-4 text-sm font-bold text-white shadow-lg shadow-violet-300/40 transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100 sm:text-base"
             >
               {loading ? (
                 <span className="inline-flex items-center gap-2">

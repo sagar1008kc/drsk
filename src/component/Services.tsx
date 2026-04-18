@@ -147,7 +147,7 @@ function ServiceCard({
           <button
             type="button"
             onClick={onClick}
-            className={`flex min-h-[52px] w-full items-center justify-center rounded-2xl border px-5 py-3 text-center text-sm font-semibold tracking-wide transition ${s.button}`}
+            className={`mx-auto flex min-h-[52px] w-1/2 min-w-[170px] items-center justify-center rounded-2xl border px-5 py-3 text-center text-sm font-semibold tracking-wide transition ${s.button}`}
           >
             {cta}
           </button>
@@ -235,7 +235,6 @@ export default function Services() {
                   'Mental Health Awareness',
                   'Book writing and publishing guidance',
                   'Other',
-                  'Note: Sessions are available in English, Nepali, or Hindi',
                 ]}
                 compareAtPrice="$250"
                 price="$99 / session (1 hour)"
@@ -300,6 +299,10 @@ export default function Services() {
                 }}
               />
             </motion.div>
+
+            <p className="mt-5 text-center text-sm text-zinc-400">
+              Note: Sessions are available in English, Nepali, or Hindi.
+            </p>
 
             <motion.section
               initial="hidden"

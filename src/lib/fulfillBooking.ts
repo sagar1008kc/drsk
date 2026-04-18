@@ -10,6 +10,10 @@ import {
   sendCustomerBookingConfirmation,
 } from '@/lib/mail';
 
+function shouldAutoCreateGoogleMeet(): boolean {
+  return process.env.ENABLE_GOOGLE_MEET_AUTOCREATE === 'true';
+}
+
 /**
  * After payment is confirmed (Stripe) or a complimentary booking is claimed,
  * create Meet (if possible) and send notification emails. Idempotent via email flags.
@@ -25,7 +29,12 @@ export async function fulfillBookingMeetAndEmails(bookingId: string): Promise<vo
   const latestForMeet = await getBookingById(bookingId);
   if (latestForMeet) current = latestForMeet;
 
-  if (!current.meeting_url && current.preferred_date && current.preferred_time) {
+  if (
+    shouldAutoCreateGoogleMeet() &&
+    !current.meeting_url &&
+    current.preferred_date &&
+    current.preferred_time
+  ) {
     const meet = await createGoogleMeetEventForBooking({
       bookingId,
       serviceType: current.service_type,
@@ -49,6 +58,10 @@ export async function fulfillBookingMeetAndEmails(bookingId: string): Promise<vo
 
     const refreshed = await getBookingById(bookingId);
     if (refreshed) current = refreshed;
+  } else if (!shouldAutoCreateGoogleMeet()) {
+    console.info(
+      '[fulfillBooking] Automatic Google Meet creation is disabled (set ENABLE_GOOGLE_MEET_AUTOCREATE=true to enable).'
+    );
   }
 
   if (!current.admin_email_sent) {
