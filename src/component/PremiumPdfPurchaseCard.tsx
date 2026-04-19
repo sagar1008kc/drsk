@@ -53,57 +53,48 @@ export default function PremiumPdfPurchaseCard({
   }
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50 shadow-sm">
-      {/* Cover image — full-width on mobile, constrained on desktop */}
-      <div className="relative w-full overflow-hidden bg-white sm:hidden">
-        <div className="relative mx-auto w-full max-w-[200px] py-4">
-          <Image
-            src={coverImage}
-            alt={title}
-            width={200}
-            height={280}
-            className="mx-auto block h-auto w-full object-contain"
-            priority
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-5 p-5 sm:flex-row sm:items-start">
-        {/* Cover — desktop sidebar */}
-        <div className="relative hidden h-44 w-32 shrink-0 overflow-hidden rounded-xl border border-violet-100 bg-white sm:block">
+    <section className="overflow-hidden rounded-2xl shadow-xl shadow-zinc-900/[0.06]">
+      <div className="flex flex-col sm:flex-row">
+        {/* Cover — flush, no inner border or boxed background */}
+        <div className="relative aspect-[3/4] w-full shrink-0 bg-[#F8F7F4] sm:aspect-auto sm:h-[min(340px,52vh)] sm:w-[260px] sm:shrink-0">
           <Image
             src={coverImage}
             alt={title}
             fill
-            className="object-contain p-1"
-            sizes="128px"
+            className="object-contain object-center"
+            sizes="(max-width: 640px) 100vw, 260px"
+            priority
           />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/35 to-transparent sm:hidden" />
         </div>
 
-        {/* Content */}
-        <div className="min-w-0 flex-1">
+        <div className="flex min-w-0 flex-1 flex-col justify-center gap-4 px-5 py-6 sm:px-8 sm:py-8">
           <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="rounded-full border border-rose-200 bg-rose-50 px-2 py-1 font-semibold text-rose-700">
-              Paid Resource
+            <span className="rounded-full bg-white/90 px-2.5 py-1 font-semibold text-violet-800 shadow-sm ring-1 ring-violet-200/80 backdrop-blur-sm">
+              Premium PDF
             </span>
-            <span className="rounded-full border border-violet-200 bg-violet-100 px-2 py-1 font-semibold text-violet-700">
+            <span className="rounded-full bg-zinc-900 px-2.5 py-1 font-semibold text-white shadow-sm">
               {priceLabel}
             </span>
           </div>
-          <h2 className="mt-3 text-lg font-semibold text-zinc-900">{title}</h2>
-          <p className="mt-2 text-sm text-zinc-600">{description}</p>
-          <p className="mt-2 text-xs text-zinc-500">
-            This PDF unlocks only after successful Stripe payment.
-          </p>
-          <button
-            type="button"
-            onClick={handlePurchase}
-            disabled={loading}
-            className="mt-4 h-10 rounded-xl bg-violet-700 px-5 text-sm font-semibold text-white transition hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {loading ? 'Redirecting to Stripe...' : 'Buy and unlock PDF'}
-          </button>
-          {error ? <p className="mt-2 text-xs text-rose-600">{error}</p> : null}
+          <div>
+            <h2 className="text-xl font-semibold tracking-tight text-zinc-900">{title}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-600">{description}</p>
+            <p className="mt-3 text-xs text-zinc-500">
+              Unlocks instantly after Stripe confirms payment — tied to your account only.
+            </p>
+          </div>
+          <div>
+            <button
+              type="button"
+              onClick={handlePurchase}
+              disabled={loading}
+              className="inline-flex h-11 items-center justify-center rounded-xl bg-violet-700 px-6 text-sm font-semibold text-white shadow-md transition hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loading ? 'Redirecting to Stripe…' : 'Buy & unlock PDF'}
+            </button>
+            {error ? <p className="mt-2 text-xs text-rose-600">{error}</p> : null}
+          </div>
         </div>
       </div>
     </section>

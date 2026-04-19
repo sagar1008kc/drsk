@@ -73,8 +73,14 @@ export async function POST() {
     return NextResponse.json({ url: session.url }, { status: 200 });
   } catch (error) {
     console.error('[api/resources/premium/checkout] failed', error);
+    const msg = error instanceof Error ? error.message : '';
+    const dev = process.env.NODE_ENV === 'development';
     return NextResponse.json(
-      { error: 'Unable to start secure checkout.' },
+      {
+        error: dev
+          ? msg || 'Unable to start secure checkout.'
+          : 'Unable to start secure checkout. Confirm STRIPE_SECRET_KEY and SUPABASE_SERVICE_ROLE_KEY on the server (e.g. Vercel). Premium checkout also needs the Supabase `resources` table — see deployment logs for details.',
+      },
       { status: 500 }
     );
   }

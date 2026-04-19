@@ -1,3 +1,7 @@
+-- Creates public.resources, user_resource_access, download_logs (and profiles if missing).
+-- If PostgREST returns PGRST205 ("Could not find the table 'public.resources'"), run this entire file once:
+-- Supabase Dashboard → SQL → New query → paste → Run.
+
 create extension if not exists "pgcrypto";
 
 create table if not exists public.profiles (

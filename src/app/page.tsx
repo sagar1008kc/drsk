@@ -132,10 +132,7 @@ export default function Home() {
             </span>
               <div className="mt-6 max-w-2xl text-base leading-relaxed text-zinc-600">
                 <p>
-                  I am <span className="font-semibold text-zinc-900">Dr. SK</span> — an author and technology
-                  professional with a Doctorate in Business Administration (DBA). I publish books and articles
-                  focused on stress, productivity, self-growth, and modern life. Software Engineer by profession,
-                  writer by passion.
+                Dr. SK is a Doctorate-prepared technology professional, Software Engineer, and author specializing in the intersection of technology, business strategy, and human performance. With experience delivering scalable, user-focused solutions, he combines technical expertise with strategic insight to drive efficiency, innovation, and measurable impact. Through his writing and digital platforms, Dr. SK provides practical guidance on productivity, career growth, and modern challenges—helping individuals and organizations achieve sustainable success.
                 </p>
               </div>
 

@@ -1,13 +1,15 @@
 import { getSupabaseAdmin } from '@/lib/supabase';
 
-const defaultPriceCents = 1999;
+const defaultPriceCents = 999;
 
 export const premiumPdfConfig = {
   slug: process.env.NEXT_PUBLIC_PREMIUM_PDF_SLUG || 'emotional-balance',
-  title: process.env.NEXT_PUBLIC_PREMIUM_PDF_TITLE || 'Emotional Balance',
+  title:
+    process.env.NEXT_PUBLIC_PREMIUM_PDF_TITLE ||
+    'How to stop overthinking and find inner peace',
   description:
     process.env.NEXT_PUBLIC_PREMIUM_PDF_DESCRIPTION ||
-    'Premium PDF by Dr. SK with practical guidance and exercises.',
+    'A focused PDF guide by Dr. SK: calm looping thoughts, ground your mind, and build simple daily practices so you can think clearly again. One-time purchase — instant secure download after payment.',
   storageKey:
     process.env.NEXT_PUBLIC_PREMIUM_PDF_STORAGE_KEY || 'books/emotional-balance.pdf',
   thumbnailUrl: '/stop-overthinking.png',
@@ -36,6 +38,23 @@ export function getPremiumPdfPriceCents() {
   return value;
 }
 
+const RESOURCES_SCHEMA_HINT =
+  ' Apply migration supabase/migrations/004_customer_resources.sql once in Supabase Dashboard → SQL Editor (creates public.resources).';
+
+function hintIfResourcesTableMissing(error: {
+  code?: string;
+  message?: string;
+}): string {
+  const msg = String(error?.message || '');
+  if (
+    error?.code === 'PGRST205' ||
+    msg.includes("Could not find the table 'public.resources'")
+  ) {
+    return RESOURCES_SCHEMA_HINT;
+  }
+  return '';
+}
+
 export async function ensurePremiumPdfResource() {
   const admin = getSupabaseAdmin();
   const config = premiumPdfConfig;
@@ -47,7 +66,10 @@ export async function ensurePremiumPdfResource() {
     .maybeSingle<{ id: string; slug: string }>();
 
   if (selectError) {
-    throw new Error('Unable to find premium PDF resource.');
+    console.error('[ensurePremiumPdfResource] select failed', selectError);
+    throw new Error(
+      `Unable to load premium PDF resource: ${selectError.message || selectError.code || 'database error'}${hintIfResourcesTableMissing(selectError)}`
+    );
   }
 
   if (existing?.id) return existing.id;
@@ -67,8 +89,21 @@ export async function ensurePremiumPdfResource() {
     .select('id')
     .single<{ id: string }>();
 
+  if (error?.code === '23505') {
+    const { data: concurrent, error: retryErr } = await admin
+      .from('resources')
+      .select('id')
+      .eq('slug', config.slug)
+      .maybeSingle<{ id: string }>();
+
+    if (!retryErr && concurrent?.id) return concurrent.id;
+  }
+
   if (error || !data?.id) {
-    throw new Error('Unable to create premium PDF resource.');
+    console.error('[ensurePremiumPdfResource] insert failed', error);
+    throw new Error(
+      `Unable to create premium PDF resource: ${error?.message || error?.code || 'database error'}${hintIfResourcesTableMissing(error || {})}`
+    );
   }
 
   return data.id;
@@ -85,7 +120,9 @@ export async function ensureFreeSamplePdfResource() {
     .maybeSingle<{ id: string; slug: string }>();
 
   if (selectError) {
-    throw new Error('Unable to find free sample PDF resource.');
+    throw new Error(
+      `Unable to find free sample PDF resource.${hintIfResourcesTableMissing(selectError)}`
+    );
   }
 
   if (existing?.id) return existing.id;
@@ -106,7 +143,9 @@ export async function ensureFreeSamplePdfResource() {
     .single<{ id: string }>();
 
   if (error || !data?.id) {
-    throw new Error('Unable to create free sample PDF resource.');
+    throw new Error(
+      `Unable to create free sample PDF resource.${hintIfResourcesTableMissing(error || {})}`
+    );
   }
 
   return data.id;
