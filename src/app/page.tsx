@@ -114,30 +114,40 @@ export default function Home() {
         {/* Subtle dot texture */}
         <div className="absolute inset-0 dot-pattern opacity-60 pointer-events-none" />
         <div className="relative mx-auto max-w-6xl px-4 pb-2 pt-2">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex flex-col items-center text-center">
-              <h1 className="mt-4 text-4xl md:text-6xl font-bold tracking-tight text-zinc-900">
-                Dr. SK
-              </h1>
-              <h5 className="mt-2 text-lg md:text-xl font-medium text-zinc-600">
-                Author &amp; Technologist
-              </h5>
-              <span className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-widest text-blue-500">
-               Certified Mental Health First Aider
-            </span>
-              <div className="mt-6 max-w-2xl text-base leading-relaxed text-zinc-600">
+          <div>
+            <div className="flex w-full flex-col items-center">
+              <div className="flex w-full flex-col items-center text-center">
+                <h1 className="drsk-hero-line mt-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-6xl">
+                  Dr. SK
+                </h1>
+                <h5 className="drsk-hero-line drsk-hero-line-delay-1 mt-2 text-lg font-medium text-zinc-600 md:text-xl">
+                  Author &amp; Technologist
+                </h5>
+                <span className="drsk-hero-line drsk-hero-line-delay-2 mt-2 inline-flex items-center rounded-full border border-zinc-200 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-widest text-blue-500">
+                  Certified Mental Health First Aider
+                </span>
+              </div>
+              <div className="drsk-hero-line drsk-hero-line-delay-3 mt-8 w-full max-w-none text-left text-base leading-relaxed text-zinc-600">
                 <p>
-                Dr. SK is a Doctorate-prepared technology professional, Software Engineer, and author specializing in the intersection of technology, business strategy, and human performance. With experience delivering scalable, user-focused solutions, he combines technical expertise with strategic insight to drive efficiency, innovation, and measurable impact. Through his writing and digital platforms, Dr. SK provides practical guidance on productivity, career growth, and modern challenges—helping individuals and organizations achieve sustainable success.
+                  Dr. SK leverages{' '}
+                  <span className="rounded-md bg-teal-400 px-1.5 py-0.5 font-semibold text-white shadow-sm ring-1 ring-teal-500/40">
+                    AI
+                  </span>{' '}
+                  to build scalable{' '}
+                  <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 font-semibold text-emerald-800">
+                    digital solutions
+                  </span>{' '}
+                  that accelerate careers, increase income, and maximize productivity. He also
+                  provides{' '}
+                  <span className="rounded-md bg-purple-100 px-1.5 py-0.5 font-semibold text-purple-800 ring-1 ring-purple-200/80">
+                    mental wellness sessions
+                  </span>{' '}
+                  to help individuals gain clarity, reduce stress, and sustain long-term success.
                 </p>
               </div>
 
               {/* Mobile quick-nav */}
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-2 md:hidden">
+              <div className="drsk-hero-line drsk-hero-line-delay-4 mt-6 flex w-full flex-wrap items-center justify-center gap-2 md:hidden">
                 {sections.map((s) => (
                   <button
                     key={s.id}
@@ -153,7 +163,7 @@ export default function Home() {
                 ))}
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 

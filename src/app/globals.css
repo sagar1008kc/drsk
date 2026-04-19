@@ -43,6 +43,35 @@ a {
   }
 }
 
+/* Home hero: staggered slide-in (plain CSS — always runs; Tailwind animate-* was unreliable in dev). */
+@keyframes drsk-hero-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(-20px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.drsk-hero-line {
+  animation: drsk-hero-enter 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.drsk-hero-line-delay-1 {
+  animation-delay: 130ms;
+}
+.drsk-hero-line-delay-2 {
+  animation-delay: 260ms;
+}
+.drsk-hero-line-delay-3 {
+  animation-delay: 390ms;
+}
+.drsk-hero-line-delay-4 {
+  animation-delay: 520ms;
+}
+
 .libutton {
   display: inline-flex;
   align-items: center;

@@ -14,8 +14,20 @@ const config: Config = {
         'gradient-x': 'gradient-x 15s ease infinite',
         'gradient-y': 'gradient-y 15s ease infinite',
         'gradient-xy': 'gradient-xy 15s ease infinite',
+        /** Hero intro: slide in from the left (keyframes in theme.keyframes['hero-slide-in']). */
+        'hero-slide-in': 'hero-slide-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both',
       },
       keyframes: {
+        'hero-slide-in': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateX(-1.25rem)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateX(0)',
+          },
+        },
         'gradient-y': {
           '0%, 100%': {
             'background-size': '400% 400%',
