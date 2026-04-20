@@ -30,14 +30,14 @@ export default function ResourceCard({
 
   return (
     <article className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:shadow-md">
-      <div className="relative aspect-[16/9] w-full overflow-hidden bg-zinc-100">
+      <div className="relative mx-3 mt-3 aspect-[16/9] overflow-hidden rounded-xl bg-zinc-100 sm:mx-0 sm:mt-0 sm:rounded-none">
         {resource.thumbnail_url ? (
           <Image
             src={resource.thumbnail_url}
             alt={resource.title}
             fill
             className="object-cover"
-            sizes="(max-width: 640px) 100vw, 50vw"
+            sizes="(max-width: 640px) calc(100vw - 3rem), 50vw"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-xs font-medium text-zinc-500">

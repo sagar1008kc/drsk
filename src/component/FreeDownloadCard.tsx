@@ -35,21 +35,23 @@ export default function FreeDownloadCard({
   }
 
   return (
-    <section className="overflow-hidden rounded-2xl shadow-xl shadow-zinc-900/[0.06]">
+    <section className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white shadow-xl shadow-zinc-900/[0.06]">
       <div className="flex flex-col sm:flex-row">
-        <div className="relative aspect-square w-full shrink-0 bg-[#F8F7F4] sm:aspect-auto sm:h-[min(340px,52vh)] sm:w-[260px] sm:shrink-0">
-          <Image
-            src={coverImage}
-            alt={title}
-            fill
-            className="object-contain object-center"
-            sizes="(max-width: 640px) 100vw, 260px"
-            priority
-          />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/35 to-transparent sm:hidden" />
+        <div className="flex justify-center px-4 pb-2 pt-6 sm:contents">
+          <div className="relative aspect-square w-full max-w-[240px] shrink-0 overflow-hidden rounded-2xl bg-[#F8F7F4] shadow-sm ring-1 ring-zinc-200/50 sm:aspect-auto sm:h-[min(340px,52vh)] sm:w-[260px] sm:max-w-none sm:rounded-none sm:shadow-none sm:ring-0">
+            <Image
+              src={coverImage}
+              alt={title}
+              fill
+              className="object-contain object-center"
+              sizes="(max-width: 640px) 240px, 260px"
+              priority
+            />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/35 to-transparent sm:hidden" />
+          </div>
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col justify-center gap-4 px-5 py-6 sm:px-8 sm:py-8">
+        <div className="flex min-w-0 flex-1 flex-col justify-center gap-4 px-5 pb-7 pt-2 sm:px-8 sm:py-8 sm:pb-8 sm:pt-8">
           <div className="flex flex-wrap items-center gap-2 text-xs">
             <span className="rounded-full bg-emerald-700 px-2.5 py-1 font-semibold text-white shadow-sm">
               Free for members

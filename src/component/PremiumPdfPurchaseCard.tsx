@@ -53,23 +53,24 @@ export default function PremiumPdfPurchaseCard({
   }
 
   return (
-    <section className="overflow-hidden rounded-2xl shadow-xl shadow-zinc-900/[0.06]">
+    <section className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white shadow-xl shadow-zinc-900/[0.06]">
       <div className="flex flex-col sm:flex-row">
-        {/* Cover — flush, no inner border or boxed background */}
-        <div className="relative aspect-[3/4] w-full shrink-0 bg-[#F8F7F4] sm:aspect-auto sm:h-[min(340px,52vh)] sm:w-[260px] sm:shrink-0">
-          <Image
-            src={coverImage}
-            alt={title}
-            fill
-            className="object-contain object-center"
-            sizes="(max-width: 640px) 100vw, 260px"
-            priority
-          />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/35 to-transparent sm:hidden" />
+        {/* Mobile: centered cover with max width; sm+: fixed sidebar strip */}
+        <div className="flex justify-center px-4 pt-4 sm:contents">
+          <div className="relative aspect-[3/4] w-full max-w-[240px] shrink-0 bg-white sm:aspect-auto sm:h-[min(340px,52vh)] sm:w-[260px] sm:max-w-none sm:min-h-0">
+            <Image
+              src={coverImage}
+              alt={title}
+              fill
+              sizes="(max-width: 640px) 240px, 260px"
+              className="object-contain object-center"
+              priority
+            />
+          </div>
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col justify-center gap-4 px-5 py-6 sm:px-8 sm:py-8">
-          <div className="flex flex-wrap items-center gap-2 text-xs">
+        <div className="relative z-10 flex min-w-0 flex-1 flex-col justify-center gap-3 bg-white px-5 pb-5 pt-4 sm:gap-4 sm:px-8 sm:py-7">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-xs">
             <span className="rounded-full bg-white/90 px-2.5 py-1 font-semibold text-violet-800 shadow-sm ring-1 ring-violet-200/80 backdrop-blur-sm">
               Premium PDF
             </span>
@@ -78,13 +79,15 @@ export default function PremiumPdfPurchaseCard({
             </span>
           </div>
           <div>
-            <h2 className="text-xl font-semibold tracking-tight text-zinc-900">{title}</h2>
+            <h2 className="text-xl font-semibold leading-snug tracking-normal text-zinc-900">
+              {title}
+            </h2>
             <p className="mt-2 text-sm leading-relaxed text-zinc-600">{description}</p>
-            <p className="mt-3 text-xs text-zinc-500">
+            <p className="mt-2 text-xs text-zinc-500">
               Unlocks instantly after Stripe confirms payment — tied to your account only.
             </p>
           </div>
-          <div>
+          <div className="pt-0.5">
             <button
               type="button"
               onClick={handlePurchase}
