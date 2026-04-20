@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import {
   E164_MAX_DIGITS,
   formatInternationalPhoneDisplay,
-  isValidInternationalPhoneDigits,
+  isValidOptionalInternationalPhone,
   phoneDigits,
 } from '@/lib/phone';
 
@@ -117,11 +117,9 @@ export default function WebsiteQuoteDialog({
     else if (!isValidEmail(email)) errors.email = 'Enter a valid email address.';
 
     const phoneDigitsOnly = phoneDigits(phone, E164_MAX_DIGITS);
-    if (!phoneDigitsOnly) {
-      errors.phone = 'Phone number is required.';
-    } else if (!isValidInternationalPhoneDigits(phoneDigitsOnly)) {
+    if (!isValidOptionalInternationalPhone(phoneDigitsOnly)) {
       errors.phone =
-        'Enter 8–15 digits with country code (e.g. 1 for US/Canada before the number).';
+        'If provided, use 8–15 digits with country code (e.g. 1 for US/Canada). Max 15 digits.';
     }
 
     if (!serviceType) {
@@ -344,11 +342,11 @@ export default function WebsiteQuoteDialog({
 
                 <div className="md:col-span-2">
                   <label className="mb-2 block text-sm font-semibold text-zinc-100">
-                    Phone number <span className="text-red-400">*</span>
+                    Phone number <span className="font-normal text-zinc-400">(optional)</span>
                   </label>
                   <p className="mb-3 text-xs text-zinc-400">
-                    Digits only, with country code — 8 to 15 digits (E.164). No +
-                    sign.
+                    Optional — digits only with country code, 8–15 digits (standard E.164
+                    limit). Omit the + sign.
                   </p>
                   <input
                     type="tel"

@@ -4,6 +4,7 @@ import {
   buildAdminBookingEmail,
   buildCustomerConfirmationEmail,
 } from '@/lib/emails/bookingEmails';
+import { buildWebsiteQuoteCustomerConfirmationEmail } from '@/lib/emails/contactEmails';
 import type { BookingRow } from '@/types/booking';
 
 let resendSingleton: Resend | null = null;
@@ -110,6 +111,31 @@ export async function sendAdminBookingNotification(
   return sendHtmlEmail({
     to,
     replyTo: booking.customer_email,
+    subject,
+    html,
+  });
+}
+
+export async function sendWebsiteQuoteCustomerConfirmation(input: {
+  customerEmail: string;
+  name: string;
+  serviceType?: string;
+  otherServiceType?: string;
+}): Promise<boolean> {
+  const customer = input.customerEmail.trim().toLowerCase();
+  const inbox = getNotificationInboxEmail().trim().toLowerCase();
+  if (customer && inbox && customer === inbox) {
+    return true;
+  }
+
+  const { subject, html } = buildWebsiteQuoteCustomerConfirmationEmail({
+    name: input.name,
+    serviceType: input.serviceType,
+    otherServiceType: input.otherServiceType,
+  });
+
+  return sendHtmlEmail({
+    to: input.customerEmail,
     subject,
     html,
   });

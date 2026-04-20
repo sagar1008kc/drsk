@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
-import { getNotificationInboxEmail, sendHtmlEmail } from '@/lib/mail';
+import {
+  getNotificationInboxEmail,
+  sendHtmlEmail,
+  sendWebsiteQuoteCustomerConfirmation,
+} from '@/lib/mail';
 import { buildContactNotificationEmail } from '@/lib/emails/contactEmails';
-import { isValidInternationalPhoneDigits } from '@/lib/phone';
+import { isValidOptionalInternationalPhone } from '@/lib/phone';
 
 type ContactRequestBody = {
   name?: string;
@@ -66,20 +70,20 @@ export async function POST(req: Request) {
     }
 
     const isWebsiteQuote = requestType === 'website_quote';
-    if (isWebsiteQuote && (!phone || !serviceType || !projectDetails)) {
+    if (isWebsiteQuote && (!serviceType || !projectDetails)) {
       return NextResponse.json(
-        { error: 'Phone, service type, and project details are required.' },
+        { error: 'Service type and project details are required.' },
         { status: 400 }
       );
     }
 
     if (isWebsiteQuote) {
       const digits = phone.replace(/\D/g, '');
-      if (!isValidInternationalPhoneDigits(digits)) {
+      if (!isValidOptionalInternationalPhone(digits)) {
         return NextResponse.json(
           {
             error:
-              'Phone must be 8–15 digits including country code (digits only).',
+              'If provided, phone must be 8–15 digits including country code (digits only).',
           },
           { status: 400 }
         );
@@ -109,6 +113,21 @@ export async function POST(req: Request) {
         { error: 'Could not send message. Try again later.' },
         { status: 500 }
       );
+    }
+
+    if (isWebsiteQuote) {
+      const customerOk = await sendWebsiteQuoteCustomerConfirmation({
+        customerEmail: email,
+        name,
+        serviceType,
+        otherServiceType,
+      });
+      if (!customerOk) {
+        console.error(
+          '[contact] Customer confirmation failed for website_quote:',
+          email
+        );
+      }
     }
 
     return NextResponse.json(
