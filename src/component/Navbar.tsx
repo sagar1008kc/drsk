@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -58,39 +57,29 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[1000] border-b border-white/10 bg-black backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2 sm:gap-4 sm:px-4 sm:py-3">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-4 sm:px-4 sm:py-3">
         <Link
           href="/"
-          className="flex min-w-0 shrink items-center gap-2 sm:gap-3"
-          aria-label="Go to home"
+          className="min-w-0 max-w-[min(100%,11rem)] shrink sm:max-w-none"
+          aria-label="Dr. SK — home"
         >
-          <div className="h-10 w-10 shrink-0 overflow-hidden bg-gray-800 sm:h-12 sm:w-12">
-            <Image
-              src="/drskauthor.png"
-              alt="Dr. SK"
-              width={48}
-              height={48}
-              className="h-full w-full object-cover"
-            />
-          </div>
-
-          <div className="min-w-0 leading-tight">
-            <div className="truncate text-base font-bold text-white sm:text-xl">
+          <div className="leading-tight">
+            <div className="truncate text-sm font-bold tracking-tight text-white sm:text-lg md:text-xl">
               Dr. SK
             </div>
-            <div className="hidden text-xs text-gray-400 sm:block">
+            <div className="mt-0.5 hidden truncate text-[11px] text-gray-400 sm:block sm:text-xs">
               Author • Technologist
             </div>
           </div>
         </Link>
 
         <nav
-          className="flex shrink-0 flex-nowrap items-center justify-end gap-0.5 sm:gap-2"
+          className="flex min-w-0 shrink-0 flex-nowrap items-center justify-end gap-1 sm:gap-2"
           aria-label="Main"
         >
           <Link
             href="/services"
-            className={`whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-bold transition sm:px-4 sm:py-2 sm:text-sm ${
+            className={`whitespace-nowrap rounded-full border px-2 py-1.5 text-[11px] font-bold transition sm:px-4 sm:py-2 sm:text-sm ${
               isActive('/services')
                 ? 'border-white bg-white text-black shadow-md'
                 : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/10 hover:text-white'
@@ -101,7 +90,7 @@ export default function Navbar() {
 
           <Link
             href="/project"
-            className={`whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-bold transition sm:px-4 sm:py-2 sm:text-sm ${
+            className={`whitespace-nowrap rounded-full border px-2 py-1.5 text-[11px] font-bold transition sm:px-4 sm:py-2 sm:text-sm ${
               isActive('/project')
                 ? 'border-white bg-white text-black shadow-md'
                 : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/10 hover:text-white'
@@ -111,14 +100,14 @@ export default function Navbar() {
           </Link>
 
           {checkingSession ? (
-            <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-bold text-gray-400 sm:px-4 sm:py-2 sm:text-sm">
+            <span className="rounded-full border border-white/10 px-2 py-1.5 text-[11px] font-bold text-gray-400 sm:px-4 sm:py-2 sm:text-sm">
               ...
             </span>
           ) : user ? (
             <>
               <Link
                 href="/dashboard"
-                className={`whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-bold transition sm:px-4 sm:py-2 sm:text-sm ${
+                className={`whitespace-nowrap rounded-full border px-2 py-1.5 text-[11px] font-bold transition sm:px-4 sm:py-2 sm:text-sm ${
                   isActive('/dashboard')
                     ? 'border-white bg-white text-black shadow-md'
                     : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/10 hover:text-white'
@@ -130,7 +119,7 @@ export default function Navbar() {
                 type="button"
                 onClick={handleLogout}
                 disabled={loggingOut}
-                className="whitespace-nowrap rounded-full border border-white/10 px-2.5 py-1 text-xs font-bold text-gray-300 transition hover:border-white/20 hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm"
+                className="whitespace-nowrap rounded-full border border-white/10 px-2 py-1.5 text-[11px] font-bold text-gray-300 transition hover:border-white/20 hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm"
               >
                 {loggingOut ? '...' : 'Logout'}
               </button>
@@ -138,7 +127,7 @@ export default function Navbar() {
           ) : (
             <Link
               href="/login"
-              className={`whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-bold transition sm:px-4 sm:py-2 sm:text-sm ${
+              className={`whitespace-nowrap rounded-full border px-2 py-1.5 text-[11px] font-bold transition sm:px-4 sm:py-2 sm:text-sm ${
                 isActive('/login')
                   ? 'border-white bg-white text-black shadow-md'
                   : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/10 hover:text-white'

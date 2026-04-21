@@ -112,7 +112,7 @@ export default function RootLayout({
         <Providers />
         <Navbar />
 
-        <div className="pt-[4.5rem] md:pt-24">{children}</div>
+        <div className="pt-14 sm:pt-[4.25rem] md:pt-24">{children}</div>
         {/* Footer */}
         <footer className="border-t border-white/10 bg-zinc-900 px-4 py-10 text-center text-sm text-zinc-400">
           <p className="mt-1 text-zinc-500">
