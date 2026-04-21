@@ -6,6 +6,7 @@ import './globals.css';
 import BotpressWebchat from '@/component/BotpressWebchat';
 import Navbar from '@/component/Navbar';
 import Providers from '@/component/Providers';
+import StarFeedback from '@/component/StarFeedback';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -149,6 +150,7 @@ export default function RootLayout({
           </nav>
         </footer>
 
+        <StarFeedback />
         <BotpressWebchat />
         <Script
           id="schema-person"
