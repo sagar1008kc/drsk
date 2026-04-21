@@ -83,51 +83,47 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#F8F7F4] text-zinc-900">
-      <section className="relative z-[900] border-b border-white/10 bg-gradient-to-b from-[#0A0B12] via-[#0c0d14] to-zinc-950">
-        <div className="mx-auto max-w-6xl px-4 py-2.5 text-center text-sm font-medium text-zinc-100 sm:text-base">
-        Struggling with stress, overthinking, or emotional ups and downs?
-        This powerful book helps you calm your mind and take control of your emotions.{' '}
-          <a
-            href="https://a.co/d/0b33CrJD"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold text-violet-300 underline underline-offset-4 transition hover:text-violet-200"
-          >
-            Read on Amazon
-          </a>
-        </div>
-        <div className="w-full">
-                <Image
-                  src="/drsk.png"
-                  alt="Dr. SK Author"
-                  width={1920}
-                  height={720}
-                  priority
-                  sizes="(max-width: 768px) 100vw, 1200px"
-                  className="h-auto w-full"
-                />
-              </div>
-      </section>
+      {/* Slim promo strip */}
 
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        {/* Subtle dot texture */}
-        <div className="absolute inset-0 dot-pattern opacity-60 pointer-events-none" />
-        <div className="relative mx-auto max-w-6xl px-4 pb-2 pt-2">
-          <div>
-            <div className="flex w-full flex-col items-center">
-              <div className="flex w-full flex-col items-center text-center">
-                <h1 className="drsk-hero-line mt-4 text-4xl font-bold tracking-tight text-zinc-900 md:text-6xl">
-                  Dr. SK
-                </h1>
-                <h5 className="drsk-hero-line drsk-hero-line-delay-1 mt-2 text-lg font-medium text-zinc-600 md:text-xl">
-                  Author &amp; Technologist
-                </h5>
-                <span className="drsk-hero-line drsk-hero-line-delay-2 mt-2 inline-flex items-center rounded-full border border-zinc-200 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-widest text-blue-500">
-                  Certified Mental Health First Aider
-                </span>
+
+      {/* Profile-led hero — mobile-first */}
+      <section className="relative overflow-hidden border-b border-zinc-200/90 bg-[#F8F7F4]">
+        <div className="absolute inset-0 dot-pattern opacity-50 pointer-events-none" />
+        <div className="relative mx-auto max-w-6xl px-4 pb-10 pt-8 sm:pb-14 sm:pt-12 md:pb-16 md:pt-14">
+          <div className="flex flex-col items-center gap-8 md:flex-row md:items-center md:gap-12 lg:gap-14">
+            {/* Portrait — circular, centered */}
+            <div className="flex w-full shrink-0 justify-center md:w-auto md:flex-shrink-0">
+              <div className="relative mx-auto aspect-square w-[min(260px,78vw)] sm:w-64 md:w-72 lg:w-80">
+                <div
+                  className="pointer-events-none absolute -inset-2 rounded-full bg-gradient-to-br from-violet-300/35 via-white to-sky-200/40 opacity-90 blur-lg"
+                  aria-hidden
+                />
+                <div className="relative aspect-square h-full w-full overflow-hidden rounded-full bg-zinc-100 shadow-[0_20px_50px_-12px_rgba(15,23,42,0.18)] ring-2 ring-white ring-offset-2 ring-offset-[#F8F7F4]">
+                  <Image
+                    src="/profile.png"
+                    alt="Dr. SK — professional portrait"
+                    fill
+                    priority
+                    sizes="(max-width: 768px) 260px, 320px"
+                    className="object-cover object-center"
+                  />
+                </div>
               </div>
-              <div className="drsk-hero-line drsk-hero-line-delay-3 mt-8 w-full max-w-none text-left text-base leading-relaxed text-zinc-600">
+            </div>
+
+            {/* Intro copy */}
+            <div className="flex min-w-0 flex-1 flex-col items-center text-center md:items-start md:pt-2 md:text-left">
+              <h4 className="drsk-hero-line mt-3 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl md:text-6xl">
+                Dr. SK
+              </h4>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500 sm:text-xs">
+                Author · Technologist · Speaker
+              </p>
+              <span className="drsk-hero-line drsk-hero-line-delay-2 mt-3 inline-flex items-center rounded-full border border-zinc-200 bg-white px-4 py-1.5 text-[11px] font-semibold tracking-widest text-blue-600 shadow-sm sm:text-xs">
+                Mental Health Advocate | Certified MHFA
+              </span>
+
+              <div className="drsk-hero-line drsk-hero-line-delay-3 mt-8 w-full max-w-2xl text-left text-base leading-relaxed text-zinc-600 md:max-w-none">
                 <p>
                   Dr. SK leverages{' '}
                   <span className="rounded-md bg-teal-400 px-1.5 py-0.5 font-semibold text-white shadow-sm ring-1 ring-teal-500/40">
@@ -146,16 +142,16 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Mobile quick-nav */}
-              <div className="drsk-hero-line drsk-hero-line-delay-4 mt-6 flex w-full flex-wrap items-center justify-center gap-2 md:hidden">
+              <div className="drsk-hero-line drsk-hero-line-delay-4 mt-7 flex w-full flex-wrap items-center justify-center gap-2 md:hidden">
                 {sections.map((s) => (
                   <button
                     key={s.id}
+                    type="button"
                     onClick={() => scrollToId(s.id)}
-                    className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition ${
+                    className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition ${
                       active === s.id
-                        ? 'bg-zinc-900 text-white border-zinc-900'
-                        : 'bg-white text-zinc-700 border-zinc-200 hover:border-zinc-400'
+                        ? 'border-zinc-900 bg-zinc-900 text-white'
+                        : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-400'
                     }`}
                   >
                     {s.label}
@@ -166,7 +162,20 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      <section className="relative z-[900] border-b border-white/10 bg-gradient-to-b from-[#0A0B12] via-[#0c0d14] to-zinc-950">
+        <div className="mx-auto max-w-6xl px-4 py-2.5 text-center text-sm font-medium text-zinc-100 sm:text-base">
+          Struggling with stress, overthinking, or emotional ups and downs? This powerful book helps
+          you calm your mind and take control of your emotions.{' '}
+          <a
+            href="https://a.co/d/0b33CrJD"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-violet-300 underline underline-offset-4 transition hover:text-violet-200"
+          >
+            Read on Amazon
+          </a>
+        </div>
+      </section>
       {/* Links */}
       <section id="links" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
@@ -443,6 +452,38 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Full-width author visual — placed before contact for a grounded, editorial close */}
+      <section
+        className="border-t border-zinc-200 bg-zinc-50/90 py-10 md:py-14"
+        aria-labelledby="hero-author-visual-label"
+      >
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="mb-6 text-center">
+            <p
+              id="hero-author-visual-label"
+              className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:text-xs"
+            >
+              Books &amp; presence
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-600 md:text-base">
+              Dr. SK connects mental wellness insight with practical tools — online, in print, and in
+              conversation.
+            </p>
+          </div>
+          <div className="overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[0_12px_40px_-16px_rgba(15,23,42,0.12)]">
+            <Image
+              src="/drsk.png"
+              alt="Dr. SK with published work — author and educator"
+              width={1920}
+              height={720}
+              sizes="(max-width: 768px) 100vw, min(1152px, 96vw)"
+              className="h-auto w-full bg-zinc-50"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section id="contact" className="relative overflow-hidden border-t border-zinc-200 bg-gradient-to-b from-[#f8f7ff] via-white to-[#f4f7ff] py-16 md:py-20">
           <div className="pointer-events-none absolute inset-0">
