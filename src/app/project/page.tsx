@@ -86,6 +86,43 @@ export default function ProjectPage() {
             </p>
           </div>
         </article>
+        {/* Project 4 — TechOcean app */}
+        <article className="mt-12 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-zinc-900/80 to-zinc-950/90 shadow-2xl ring-1 ring-white/5">
+          <div className="border-b border-white/10 px-6 py-6 md:px-10 md:py-8">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-sky-400/90">
+                  Live app
+                </p>
+                <h2 className="mt-2 text-2xl font-bold md:text-3xl">TechOcean</h2>
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
+                  Interactive Streamlit application focused on practical workflows and
+                  a clean, lightweight experience for quick exploration.
+                </p>
+              </div>
+              <dl className="flex shrink-0 flex-wrap gap-4 text-sm md:flex-col md:gap-2">
+                <div>
+                  <dt className="text-zinc-500">Platform</dt>
+                  <dd className="font-medium text-zinc-200">Streamlit</dd>
+                </div>
+                <div>
+                  <dt className="text-zinc-500">Type</dt>
+                  <dd className="font-medium text-zinc-200">Web app</dd>
+                </div>
+              </dl>
+            </div>
+            <div className="mt-6">
+              <a
+                href="https://techocean.streamlit.app/?embed_options=show_toolbar,light_theme"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center rounded-full border border-sky-400/30 bg-sky-500/10 px-5 py-2 text-sm font-semibold text-sky-200 transition hover:border-sky-300/60 hover:bg-sky-400/20 hover:text-sky-100"
+              >
+                Open TechOcean app
+              </a>
+            </div>
+          </div>
+        </article>
         {/* Project 1 — SK Store */}
         <article className="mt-14 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-zinc-900/80 to-zinc-950/90 shadow-2xl ring-1 ring-white/5">
           <div className="border-b border-white/10 px-6 py-6 md:px-10 md:py-8">
