@@ -77,7 +77,7 @@ export default function Home() {
         <div className="absolute inset-0 dot-pattern opacity-50 pointer-events-none" />
         <div className="relative w-full">
           <Image
-            src="/profile.PNG"
+            src="/profile.png"
             alt="Dr. SK — professional portrait"
             width={2400}
             height={1400}

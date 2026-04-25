@@ -3,6 +3,7 @@ import { createRouteHandlerSupabaseClient } from '@/lib/supabase/route-auth';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {

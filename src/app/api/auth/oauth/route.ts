@@ -4,6 +4,7 @@ import { createRouteHandlerSupabaseClient } from '@/lib/supabase/route-auth';
 const allowedProviders = new Set(['google']);
 
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: Request) {
   try {
