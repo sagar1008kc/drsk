@@ -5,6 +5,7 @@ import {
   buildCustomerConfirmationEmail,
 } from '@/lib/emails/bookingEmails';
 import { buildWebsiteQuoteCustomerConfirmationEmail } from '@/lib/emails/contactEmails';
+import { buildHandbookThankYouEmail } from '@/lib/emails/subscribeEmails';
 import type { BookingRow } from '@/types/booking';
 
 let resendSingleton: Resend | null = null;
@@ -111,6 +112,30 @@ export async function sendAdminBookingNotification(
   return sendHtmlEmail({
     to,
     replyTo: booking.customer_email,
+    subject,
+    html,
+  });
+}
+
+function siteOriginForEmails(): string {
+  const vercel = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`.replace(/\/$/, '')
+    : '';
+  const raw = process.env.NEXT_PUBLIC_SITE_URL || vercel || 'https://www.skcreation.org';
+  return raw.replace(/\/$/, '');
+}
+
+/**
+ * Post–handbook-subscribe thank-you: PDF link, services, contact, login.
+ */
+export async function sendHandbookThankYouEmail(
+  customerEmail: string
+): Promise<boolean> {
+  const { subject, html } = buildHandbookThankYouEmail({
+    siteOrigin: siteOriginForEmails(),
+  });
+  return sendHtmlEmail({
+    to: customerEmail,
     subject,
     html,
   });

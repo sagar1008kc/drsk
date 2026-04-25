@@ -30,6 +30,15 @@ export const motivationalSampleCategories: {
 
 export const motivationalSamples: MotivationalSample[] = [
   {
+    id: 'handbook',
+    title: 'The Mind Matters Handbook',
+    description:
+      'A full free guide — mind, habits, and practical steps. Download below or get it by email when you subscribe.',
+    href: '/samples/the-mind-matters-handbook-by-drsk.pdf',
+    fileName: 'The-Mind-Matters-Handbook-by-Dr-SK.pdf',
+    category: 'mindfulness',
+  },
+  {
     id: '1',
     title: 'Morning Mindset Reset',
     description: 'Short prompts to start the day with intention — placeholder preview pages.',

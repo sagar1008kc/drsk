@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+public/samples/the-mind-matters-handbook-by-drsk.pdf
 
 # debug
 npm-debug.log*

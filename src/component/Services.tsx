@@ -24,9 +24,6 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 };
 
-/** Virtual = purplish, Digital = greenish, Group cohort = sky, Volunteering = rose */
-type CardTheme = 'purple' | 'green' | 'sky' | 'rose';
-
 type ServiceCardProps = {
   title: string;
   subtitle: string;
@@ -37,56 +34,10 @@ type ServiceCardProps = {
   cta: string;
   onClick: () => void;
   eyebrow: string;
-  theme: CardTheme;
 };
 
-const themeStyles: Record<
-  CardTheme,
-  {
-    shell: string;
-    glow: string;
-    badge: string;
-    dot: string;
-    button: string;
-  }
-> = {
-  purple: {
-    shell:
-      'border-violet-500/25 bg-gradient-to-br from-[#1e1040] via-[#151028] to-[#0c0a14]',
-    glow: 'bg-[radial-gradient(circle_at_top_right,rgba(167,139,250,0.28),transparent_55%)]',
-    badge: 'border-violet-400/35 bg-violet-500/15 text-violet-100',
-    dot: 'bg-violet-300',
-    button:
-      'border-violet-400/50 bg-violet-600 text-white hover:bg-violet-500 shadow-[0_8px_30px_rgba(124,58,237,0.35)]',
-  },
-  green: {
-    shell:
-      'border-emerald-500/25 bg-gradient-to-br from-[#0f2419] via-[#0c1a14] to-[#0a1210]',
-    glow: 'bg-[radial-gradient(circle_at_top_right,rgba(52,211,153,0.22),transparent_55%)]',
-    badge: 'border-emerald-400/35 bg-emerald-500/15 text-emerald-100',
-    dot: 'bg-emerald-300',
-    button:
-      'border-emerald-400/50 bg-emerald-600 text-white hover:bg-emerald-500 shadow-[0_8px_30px_rgba(16,185,129,0.3)]',
-  },
-  sky: {
-    shell:
-      'border-sky-500/25 bg-gradient-to-br from-[#0f1a28] via-[#0c1520] to-[#0a1018]',
-    glow: 'bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.18),transparent_55%)]',
-    badge: 'border-sky-400/35 bg-sky-500/15 text-sky-100',
-    dot: 'bg-sky-300',
-    button:
-      'border-sky-400/50 bg-sky-600 text-white hover:bg-sky-500 shadow-[0_8px_30px_rgba(14,165,233,0.28)]',
-  },
-  rose: {
-    shell:
-      'border-rose-500/25 bg-gradient-to-br from-[#301018] via-[#1a1014] to-[#0f0a0c]',
-    glow: 'bg-[radial-gradient(circle_at_top_right,rgba(251,113,133,0.2),transparent_55%)]',
-    badge: 'border-rose-400/35 bg-rose-500/12 text-rose-100',
-    dot: 'bg-rose-300',
-    button:
-      'border-rose-400/50 bg-rose-600 text-white hover:bg-rose-500 shadow-[0_8px_30px_rgba(225,29,72,0.28)]',
-  },
-};
+const cardShell =
+  'group relative flex h-full flex-col overflow-hidden rounded-2xl border border-stone-200/90 bg-gradient-to-b from-white to-[#F9F6F0] p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:shadow-stone-900/10 sm:rounded-2xl sm:p-7 md:p-8';
 
 function ServiceCard({
   title,
@@ -97,57 +48,53 @@ function ServiceCard({
   cta,
   onClick,
   eyebrow,
-  theme,
 }: ServiceCardProps) {
-  const s = themeStyles[theme];
-
   return (
     <motion.article
       variants={fadeUp}
-      transition={{ duration: 0.45 }}
-      className={`group relative flex h-full flex-col overflow-hidden rounded-3xl border p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] md:p-8 ${s.shell}`}
+      transition={{ duration: 0.4 }}
+      className={cardShell}
     >
-      <div
-        className={`pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 ${s.glow}`}
-      />
-      <div className="relative z-[1] flex flex-1 flex-col">
-        <span
-          className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] ${s.badge}`}
-        >
+      <div className="flex flex-1 flex-col">
+        <span className="inline-flex w-fit max-w-full items-center rounded-full border border-amber-200/80 bg-amber-50/80 px-3 py-1 text-[10px] font-semibold uppercase leading-tight tracking-[0.12em] text-amber-950/80 sm:text-xs sm:tracking-[0.14em]">
           {eyebrow}
         </span>
 
-        <h3 className="mt-4 text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl">
+        <h3 className="mt-3 text-xl font-bold tracking-tight text-stone-900 sm:mt-4 sm:text-2xl">
           {title}
         </h3>
 
-        <p className="mt-4 text-base leading-7 text-zinc-300">{subtitle}</p>
+        <p className="mt-2 text-sm leading-relaxed text-stone-600 sm:mt-3 sm:text-base">
+          {subtitle}
+        </p>
 
-        <ul className="mt-6 space-y-3">
+        <ul className="mt-5 space-y-2.5 sm:mt-6 sm:space-y-3">
           {bullets.map((item) => (
             <li
               key={item}
-              className="flex items-start gap-3 text-sm leading-7 text-zinc-200"
+              className="flex items-start gap-2.5 text-sm leading-6 text-stone-700 sm:gap-3 sm:leading-7"
             >
-              <span className={`mt-2 h-2 w-2 shrink-0 rounded-full ${s.dot}`} />
+              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-600/70 sm:mt-2" />
               <span>{item}</span>
             </li>
           ))}
         </ul>
 
-        <div className="mt-auto flex w-full flex-col gap-4 border-t border-white/10 pt-8">
+        <div className="mt-auto flex w-full flex-col gap-4 border-t border-stone-200/80 pt-6 sm:pt-8">
           <div>
             {compareAtPrice ? (
-              <p className="text-lg font-semibold text-red-400/90 line-through decoration-red-400/80">
+              <p className="text-base font-medium text-stone-400 line-through sm:text-lg">
                 {compareAtPrice}
               </p>
             ) : null}
-            <p className="text-xl font-semibold text-white md:text-2xl">{price}</p>
+            <p className="text-lg font-bold text-stone-900 sm:text-xl md:text-2xl">
+              {price}
+            </p>
           </div>
           <button
             type="button"
             onClick={onClick}
-            className={`mx-auto flex min-h-[52px] w-1/2 min-w-[170px] items-center justify-center rounded-2xl border px-5 py-3 text-center text-sm font-semibold tracking-wide transition ${s.button}`}
+            className="mx-auto flex min-h-[48px] w-full min-w-0 max-w-xs items-center justify-center rounded-xl border border-stone-800 bg-stone-900 px-4 py-3 text-center text-sm font-semibold tracking-wide text-[#FDF9F0] transition hover:bg-stone-800 sm:min-h-[50px] sm:rounded-2xl sm:px-5"
           >
             {cta}
           </button>
@@ -186,27 +133,36 @@ export default function Services() {
 
   return (
     <>
-      <main className="min-h-screen bg-[#0A0B12] pb-16 text-white">
-        <section id="services" className="pb-10 pt-6 md:py-14">
-          <div className="mx-auto max-w-6xl px-4">
+      <main className="min-h-screen bg-[#0a0a0b] pb-12 text-zinc-100 sm:pb-16">
+        <section id="services" className="relative border-b border-[#C9A962]/10 pb-8 pt-2 sm:pb-10 sm:pt-4 md:py-12">
+          <div className="pointer-events-none absolute inset-0 opacity-40 [mask-image:linear-gradient(180deg,white,transparent_85%)]">
+            <div
+              className="h-full w-full"
+              style={{
+                backgroundImage: 'radial-gradient(circle, rgba(201, 169, 98, 0.1) 1px, transparent 1px)',
+                backgroundSize: '28px 28px',
+              }}
+            />
+          </div>
+          <div className="relative mx-auto max-w-6xl px-3 sm:px-4">
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.12 }}
               variants={fadeUp}
               transition={{ duration: 0.5 }}
-              className="mb-12 text-center"
+              className="mb-8 text-center sm:mb-12"
             >
-              <h1 className="text-4xl font-extrabold tracking-tight text-white md:text-5xl">
+              <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
                 <span className="relative inline-block">
                   Services
                   <span
-                    className="absolute -bottom-1 left-0 right-0 h-[3px] rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-400 to-indigo-500"
+                    className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-[#5c4a22] via-[#D4B96A] to-[#5c4a22]"
                     aria-hidden
                   />
                 </span>
               </h1>
-              <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-zinc-400 md:text-lg">
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:mt-6 sm:text-base md:text-lg">
                 Book virtual sessions, request digital solutions, or apply for
                 complimentary nonprofit support — clear pricing and a simple booking
                 flow for each option.
@@ -223,7 +179,7 @@ export default function Services() {
                   transition: { staggerChildren: 0.1 },
                 },
               }}
-              className="grid items-stretch gap-6 md:grid-cols-2"
+              className="grid items-stretch gap-4 sm:gap-6 md:grid-cols-2"
             >
               <ServiceCard
                 title="Virtual Session"
@@ -239,7 +195,6 @@ export default function Services() {
                 compareAtPrice="$250"
                 price="$99 / session (1 hour)"
                 cta="Book Session"
-                theme="purple"
                 onClick={() => {
                   if (virtualSessionService) openBooking(virtualSessionService);
                 }}
@@ -257,7 +212,6 @@ export default function Services() {
                 ]}
                 price="Quote — tailored pricing"
                 cta="Request a quote"
-                theme="green"
                 onClick={() => setQuoteDialogVisible(true)}
               />
 
@@ -275,7 +229,6 @@ export default function Services() {
                 compareAtPrice="$150"
                 price="$49 / seat (90 min)"
                 cta="Register now"
-                theme="sky"
                 onClick={() => {
                   if (scheduledGroupSession) openBooking(scheduledGroupSession);
                 }}
@@ -293,14 +246,13 @@ export default function Services() {
                 ]}
                 price="Complimentary"
                 cta="Request session"
-                theme="rose"
                 onClick={() => {
                   if (nonprofitSession) openBooking(nonprofitSession);
                 }}
               />
             </motion.div>
 
-            <p className="mt-5 text-center text-sm text-zinc-400">
+            <p className="mt-4 text-center text-xs text-zinc-500 sm:text-sm">
               Note: Sessions are available in English, Nepali, or Hindi.
             </p>
 
@@ -310,20 +262,20 @@ export default function Services() {
               viewport={{ once: true, amount: 0.15 }}
               variants={fadeUp}
               transition={{ duration: 0.5 }}
-              className="mt-16 border-t border-white/10 pt-14 md:mt-20 md:pt-16"
+              className="mt-10 border-t border-zinc-800/80 pt-10 sm:mt-16 sm:pt-14 md:mt-20 md:pt-16"
               aria-labelledby="clients-heading"
             >
               <h2
                 id="clients-heading"
-                className="text-center text-sm font-semibold uppercase tracking-[0.2em] text-zinc-500"
+                className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-[#C9A962] sm:text-sm"
               >
                 Collaborations & clients
               </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-center text-base text-zinc-400">
+              <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-zinc-400 sm:mt-3 sm:text-base">
                 Organizations and partners we&apos;ve worked with across
                 technology, publishing, and community initiatives.
               </p>
-              <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40 shadow-inner">
+              <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-950/40 ring-1 ring-zinc-800/60 sm:mt-8">
                 <Image
                   src="/client.png"
                   alt="Client and collaboration logos"
@@ -336,31 +288,31 @@ export default function Services() {
             </motion.section>
           </div>
         </section>
-        <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-violet-500/25 bg-violet-500/10 px-4 py-5 text-center">
+        <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-[#C9A962]/25 bg-zinc-900/60 px-4 py-5 text-center ring-1 ring-zinc-800/80 sm:mt-12">
           <p className="text-sm font-medium text-zinc-200 md:text-base">
             Want to level up AI skills or emotional balance?
           </p>
           <Link
             href="/books"
-            className="mt-3 inline-flex items-center rounded-full border border-violet-400/40 bg-violet-500/90 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-400"
+            className="mt-3 inline-flex items-center justify-center rounded-full border border-[#8B7535] bg-gradient-to-b from-[#D4B96A] to-[#8E7235] px-5 py-2.5 text-sm font-bold text-zinc-950 shadow-md transition hover:brightness-110"
           >
             Read Books
           </Link>
         </div>
-        <p className="mt-8 text-center text-sm text-zinc-500">
+        <p className="mt-6 px-1 text-center text-sm leading-relaxed text-zinc-500 sm:mt-8">
           Interested in something similar?{' '}
           <Link
             href="/project"
-            className="font-semibold text-violet-400 underline-offset-4 hover:text-violet-300 hover:underline"
+            className="font-semibold text-[#C9A962] underline-offset-4 hover:text-white hover:underline"
           >
             View projects
           </Link>{' '}
           or{' '}
           <Link
             href="/#contact"
-            className="font-semibold text-violet-400 underline-offset-4 hover:text-violet-300 hover:underline"
+            className="font-semibold text-[#C9A962] underline-offset-4 hover:text-white hover:underline"
           >
-            get in touch
+            Get in touch
           </Link>
           .
         </p>

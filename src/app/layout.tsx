@@ -1,16 +1,20 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Playfair_Display } from 'next/font/google';
 import Link from 'next/link';
 import Script from 'next/script';
 import './globals.css';
 import BotpressWebchat from '@/component/BotpressWebchat';
 import Navbar from '@/component/Navbar';
 import Providers from '@/component/Providers';
-import StarFeedback from '@/component/StarFeedback';
-
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-playfair',
 });
 
 const siteUrl = 'https://www.skcreation.org';
@@ -106,51 +110,53 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className="scroll-smooth">
+    <html
+      lang="en"
+      className={`${inter.className} ${playfair.variable} scroll-smooth`}
+    >
       <body
         className={`${inter.className} antialiased bg-[#F8F7F4] text-zinc-900`}
       >
         <Providers />
         <Navbar />
 
-        <div className="pt-14 sm:pt-[4.25rem] md:pt-24">{children}</div>
+        <div className="pt-[4.75rem] sm:pt-20 md:pt-24">{children}</div>
         {/* Footer */}
-        <footer className="border-t border-white/10 bg-zinc-900 px-4 py-10 text-center text-sm text-zinc-400">
-          <p className="mt-1 text-zinc-500">
+        <footer className="border-t border-[#C9A962]/25 bg-zinc-950 px-4 py-10 text-center text-sm text-zinc-300">
+          <p className="mt-1 text-zinc-400">
             SK Creation • © {new Date().getFullYear()} • All rights reserved.
           </p>
           <nav
-            className="mx-auto mt-6 flex max-w-md flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-zinc-500 sm:text-sm"
+            className="mx-auto mt-6 flex max-w-md flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-zinc-400 sm:text-sm"
             aria-label="Legal"
           >
             <Link
               href="/terms"
-              className="text-zinc-400 underline-offset-2 hover:text-white hover:underline"
+              className="text-[#C9A962] underline-offset-2 hover:text-[#E8D5A3] hover:underline"
             >
               Terms of Service
             </Link>
-            <span className="text-zinc-700" aria-hidden>
+            <span className="text-[#8B7535]" aria-hidden>
               |
             </span>
             <Link
               href="/privacy"
-              className="text-zinc-400 underline-offset-2 hover:text-white hover:underline"
+              className="text-[#C9A962] underline-offset-2 hover:text-[#E8D5A3] hover:underline"
             >
               Privacy Policy
             </Link>
-            <span className="text-zinc-700" aria-hidden>
+            <span className="text-[#8B7535]" aria-hidden>
               |
             </span>
             <Link
               href="/disclaimer"
-              className="text-zinc-400 underline-offset-2 hover:text-white hover:underline"
+              className="text-[#C9A962] underline-offset-2 hover:text-[#E8D5A3] hover:underline"
             >
               Session disclaimer
             </Link>
           </nav>
         </footer>
 
-        <StarFeedback />
         <BotpressWebchat />
         <Script
           id="schema-person"

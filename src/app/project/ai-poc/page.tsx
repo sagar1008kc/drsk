@@ -72,15 +72,15 @@ const phases = [
 
 export default function AiPocPage() {
   return (
-    <main className="min-h-screen bg-[#0A0B12] pb-20 pt-8 text-white md:pt-12">
-      <div className="mx-auto max-w-6xl px-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/90">
+    <main className="min-h-screen bg-[#0a0a0b] pb-16 pt-3 text-zinc-100 sm:pb-20 sm:pt-4 md:pt-8">
+      <div className="mx-auto max-w-6xl px-3 sm:px-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C9A962]">
           AI POC
         </p>
-        <h1 className="mt-3 max-w-4xl text-3xl font-bold tracking-tight md:text-5xl">
+        <h1 className="mt-2 max-w-4xl font-display text-2xl font-bold tracking-tight sm:mt-3 sm:text-3xl md:text-4xl lg:text-5xl">
           Design Guide: AI Tools and AI Integration Services Platform
         </h1>
-        <p className="mt-5 max-w-3xl text-sm leading-relaxed text-zinc-300 md:text-base">
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-zinc-400 sm:mt-5 md:text-base">
           Practical AI solutions for smarter business operations. This demo focuses
           on measurable outcomes: faster customer responses, reduced repetitive
           work, improved lead capture, and stronger decision support.
@@ -109,7 +109,7 @@ export default function AiPocPage() {
 
         <section className="mt-10 grid gap-4 md:grid-cols-3">
           <article className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
-            <p className="text-xs uppercase tracking-widest text-cyan-300">
+            <p className="text-xs uppercase tracking-widest text-[#C9A962]">
               Direction 01
             </p>
             <h2 className="mt-2 text-lg font-semibold">AI Tools</h2>
@@ -119,7 +119,7 @@ export default function AiPocPage() {
             </p>
           </article>
           <article className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
-            <p className="text-xs uppercase tracking-widest text-cyan-300">
+            <p className="text-xs uppercase tracking-widest text-[#C9A962]">
               Direction 02
             </p>
             <h2 className="mt-2 text-lg font-semibold">Integration Services</h2>
@@ -129,7 +129,7 @@ export default function AiPocPage() {
             </p>
           </article>
           <article className="rounded-2xl border border-white/10 bg-zinc-900/60 p-5">
-            <p className="text-xs uppercase tracking-widest text-cyan-300">
+            <p className="text-xs uppercase tracking-widest text-[#C9A962]">
               Outcome
             </p>
             <h2 className="mt-2 text-lg font-semibold">Revenue Model</h2>

@@ -1,9 +1,15 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import ContactForm from '@/component/Contact';
+import HandbookSubscribeCTA from '@/component/HandbookSubscribeCTA';
+import {
+  HANDBOOK_DOWNLOAD_FILENAME,
+  HANDBOOK_PUBLIC_PATH,
+} from '@/lib/handbook-public';
 
 const certifications = [
   { name: 'Certified Mental Health First Aider', icon: '/MHFA.png' },
@@ -33,6 +39,7 @@ const publicLinks = [
 
 const sections = [
   { id: 'links', label: 'Links' },
+  { id: 'resources', label: 'Resources' },
   { id: 'experience', label: 'Experience' },
   { id: 'books', label: 'Books' },
 ];
@@ -84,8 +91,6 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#F8F7F4] text-zinc-900">
       {/* Slim promo strip */}
-
-
       {/* Profile-led hero — mobile-first */}
       <section className="relative overflow-hidden border-b border-zinc-200/90 bg-[#F8F7F4]">
         <div className="absolute inset-0 dot-pattern opacity-50 pointer-events-none" />
@@ -113,15 +118,12 @@ export default function Home() {
 
             {/* Intro copy */}
             <div className="flex min-w-0 flex-1 flex-col items-center text-center md:items-start md:pt-2 md:text-left">
-              <h4 className="drsk-hero-line mt-3 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl md:text-6xl">
-                Dr. SK
-              </h4>
+              <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-[#C9A962] sm:text-sm">
+              Dr. SK
+             </p>  
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500 sm:text-xs">
-                Author · Technologist · Speaker
+                Author · Technologist · Mental Health Advocate | Certified MHFA
               </p>
-              <span className="drsk-hero-line drsk-hero-line-delay-2 mt-3 inline-flex items-center rounded-full border border-zinc-200 bg-white px-4 py-1.5 text-[11px] font-semibold tracking-widest text-blue-600 shadow-sm sm:text-xs">
-                Mental Health Advocate | Certified MHFA
-              </span>
 
               <div className="drsk-hero-line drsk-hero-line-delay-3 mt-8 w-full max-w-2xl text-left text-base leading-relaxed text-zinc-600 md:max-w-none">
                 <p>
@@ -176,6 +178,80 @@ export default function Home() {
           </a>
         </div>
       </section>
+
+      {/* Free handbook, premium library (login), newsletter — typical placement after hook, before long bio */}
+      <section
+        id="resources"
+        className="scroll-mt-20 border-y border-zinc-200 bg-white py-12 sm:py-14"
+        aria-labelledby="resources-heading"
+      >
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
+            <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-zinc-600">
+              Resources
+            </span>
+            <h2
+              id="resources-heading"
+              className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl"
+            >
+              Free download, member content, and updates
+            </h2>
+            <p className="mt-2 text-sm text-zinc-600 sm:text-base">
+              Download the handbook with no account. Premium PDFs and your library live behind
+              sign-in. Subscribe for more from Dr. SK.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="flex flex-col rounded-2xl border border-zinc-200 bg-[#F8F7F4] p-6 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
+                Free
+              </p>
+              <h3 className="mt-2 text-lg font-bold text-zinc-900">The Mind Matters Handbook</h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-600">
+                PDF by Dr. SK — no email required. Save or share the file anytime.
+              </p>
+              <a
+                href={HANDBOOK_PUBLIC_PATH}
+                download={HANDBOOK_DOWNLOAD_FILENAME}
+                className="mt-5 inline-flex min-h-[44px] items-center justify-center rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700"
+              >
+                Download PDF
+              </a>
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-zinc-200 bg-zinc-900 p-6 text-zinc-100 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wider text-amber-200/90">
+                Premium
+              </p>
+              <h3 className="mt-2 text-lg font-bold text-white">Member library</h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-400">
+                Purchased PDFs, samples, and session materials are available after you sign in.
+              </p>
+              <Link
+                href="/login"
+                className="mt-5 inline-flex min-h-[44px] items-center justify-center rounded-full border border-amber-400/50 bg-amber-500/15 px-5 py-2.5 text-sm font-semibold text-amber-100 transition hover:bg-amber-500/25"
+              >
+                Sign in to access
+              </Link>
+            </div>
+
+            <div className="rounded-2xl border border-zinc-200 bg-white p-7 shadow-sm sm:p-8 lg:col-span-1">
+              <p className="text-xs font-semibold uppercase tracking-wider text-violet-700">
+                Newsletter
+              </p>
+              <h3 className="mt-2 text-lg font-bold text-zinc-900">Subscribe for more from Dr. SK</h3>
+              <p className="mt-2 text-sm text-zinc-600">
+                Get the thank-you email with the handbook link, services, and offers.
+              </p>
+              <div className="mt-6">
+                <HandbookSubscribeCTA minimal embedded />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Links */}
       <section id="links" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
@@ -425,33 +501,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-           {/* Resources banner */}
-       <section className="border-t border-zinc-200 bg-zinc-900 py-10 mb-6">
-        <div className="mx-auto max-w-4xl px-4">
-          <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left sm:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400">
-                Free &amp; Premium Downloads
-              </p>
-              <h2 className="mt-1 text-xl font-bold text-white">
-                Get your free PDF — or unlock premium resources
-              </h2>
-              <p className="mt-1 text-sm text-zinc-400">
-                Sign in for a free download. No purchase needed.
-              </p>
-            </div>
-            <a
-              href="/login"
-              className="shrink-0 inline-flex items-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-400 transition px-6 py-3 text-sm font-semibold text-white shadow"
-            >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Access My Resources
-            </a>
-          </div>
-        </div>
-      </section>
 
       {/* Full-width author visual — placed before contact for a grounded, editorial close */}
       <section
@@ -485,21 +534,24 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="relative overflow-hidden border-t border-zinc-200 bg-gradient-to-b from-[#f8f7ff] via-white to-[#f4f7ff] py-16 md:py-20">
+      <section
+        id="contact"
+        className="relative overflow-hidden border-t border-[#C9A962]/25 bg-zinc-950 py-16 md:py-20"
+      >
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-violet-200/40 blur-3xl" />
-            <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-sky-200/40 blur-3xl" />
+            <div className="absolute -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-[#C9A962]/15 blur-3xl" />
+            <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-[#D4B96A]/10 blur-3xl" />
           </div>
 
           <div className="relative mx-auto max-w-6xl px-4">
             <div className="text-center">
-              <span className="inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-700">
+              <span className="inline-flex items-center rounded-full border border-[#C9A962]/35 bg-[#C9A962]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#D4B96A]">
                 Contact
               </span>
-              <h2 className="mt-4 text-3xl font-bold text-zinc-900 md:text-4xl">
+              <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">
                 Get In Touch
               </h2>
-              <p className="mt-3 text-base text-zinc-600">
+              <p className="mt-3 text-base text-zinc-300">
                 info@skcreation.org
               </p>
               <ContactForm />
