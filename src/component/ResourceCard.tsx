@@ -20,8 +20,8 @@ export default function ResourceCard({
   isLocked,
 }: ResourceCardProps) {
   const badgeClassName = isLocked
-    ? 'border-amber-300 bg-amber-50 text-amber-700'
-    : 'border-emerald-300 bg-emerald-50 text-emerald-700';
+    ? 'bg-amber-50 text-amber-700'
+    : 'bg-emerald-50 text-emerald-700';
   const accessLabel = isLocked
     ? 'Locked'
     : accessType === 'free_sample'
@@ -49,15 +49,15 @@ export default function ResourceCard({
       <div className="space-y-4 p-4">
         <div>
           <div className="mb-3 flex flex-wrap items-center gap-2 text-xs">
-            <span className="rounded-full border border-zinc-300 bg-zinc-50 px-2 py-1 font-medium text-zinc-600">
+            <span className="rounded-full bg-zinc-50 px-2 py-1 font-medium text-zinc-600">
               {resource.resource_type || 'Resource'}
             </span>
             {resource.category ? (
-              <span className="rounded-full border border-zinc-300 bg-zinc-50 px-2 py-1 font-medium text-zinc-600">
+              <span className="rounded-full bg-zinc-50 px-2 py-1 font-medium text-zinc-600">
                 {resource.category}
               </span>
             ) : null}
-            <span className={`rounded-full border px-2 py-1 font-medium ${badgeClassName}`}>
+            <span className={`rounded-full px-2 py-1 font-medium ${badgeClassName}`}>
               {accessLabel}
             </span>
           </div>

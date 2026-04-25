@@ -56,7 +56,7 @@ function ServiceCard({
       className={cardShell}
     >
       <div className="flex flex-1 flex-col">
-        <span className="inline-flex w-fit max-w-full items-center rounded-full border border-amber-200/80 bg-amber-50/80 px-3 py-1 text-[10px] font-semibold uppercase leading-tight tracking-[0.12em] text-amber-950/80 sm:text-xs sm:tracking-[0.14em]">
+        <span className="inline-flex w-fit max-w-full items-center rounded-full bg-amber-50/80 px-3 py-1 text-[10px] font-semibold uppercase leading-tight tracking-[0.12em] text-amber-950/80 sm:text-xs sm:tracking-[0.14em]">
           {eyebrow}
         </span>
 

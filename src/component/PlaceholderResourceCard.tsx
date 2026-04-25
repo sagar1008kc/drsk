@@ -21,13 +21,13 @@ export default function PlaceholderResourceCard({
           <h3 className="text-base font-semibold text-zinc-900">{title}</h3>
           <p className="mt-1 text-sm text-zinc-600">{description}</p>
           <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-            <span className="rounded-full border border-zinc-300 bg-white px-2 py-1 font-medium text-zinc-600">
+            <span className="rounded-full bg-white px-2 py-1 font-medium text-zinc-600">
               {resourceType}
             </span>
-            <span className="rounded-full border border-zinc-300 bg-white px-2 py-1 font-medium text-zinc-600">
+            <span className="rounded-full bg-white px-2 py-1 font-medium text-zinc-600">
               {category}
             </span>
-            <span className="rounded-full border border-sky-300 bg-sky-50 px-2 py-1 font-medium text-sky-700">
+            <span className="rounded-full bg-sky-50 px-2 py-1 font-medium text-sky-700">
               Placeholder
             </span>
           </div>

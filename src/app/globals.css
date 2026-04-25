@@ -72,6 +72,46 @@ a {
   animation-delay: 520ms;
 }
 
+@keyframes drsk-hero-kenburns {
+  0% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1.09);
+  }
+}
+
+.drsk-hero-kenburns {
+  animation: drsk-hero-kenburns 16s ease-in-out infinite alternate;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+@keyframes drsk-hero-glow-shift {
+  0% {
+    transform: translate3d(-2%, -1%, 0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(2%, 1%, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate3d(-1%, 2%, 0);
+    opacity: 0.38;
+  }
+}
+
+.drsk-hero-glow {
+  background:
+    radial-gradient(circle at 18% 22%, rgba(167, 139, 250, 0.35), transparent 45%),
+    radial-gradient(circle at 82% 30%, rgba(129, 140, 248, 0.3), transparent 42%),
+    radial-gradient(circle at 50% 82%, rgba(196, 181, 253, 0.22), transparent 48%);
+  mix-blend-mode: screen;
+  animation: drsk-hero-glow-shift 12s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
 .libutton {
   display: inline-flex;
   align-items: center;

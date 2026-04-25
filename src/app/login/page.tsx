@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import LoginPageClient from '@/app/login/page.client';
 import { getAuthenticatedUser } from '@/lib/dashboard/data';
@@ -7,6 +8,15 @@ type LoginPageProps = {
     next?: string;
     error?: string;
   };
+};
+
+export const metadata: Metadata = {
+  title: 'Login',
+  description: 'Login to access your member dashboard and premium resources.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {

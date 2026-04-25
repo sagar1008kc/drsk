@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import DashboardHeader from '@/component/DashboardHeader';
 import DashboardQuickStats from '@/component/DashboardQuickStats';
@@ -24,6 +25,15 @@ type DashboardPageProps = {
   searchParams?: {
     purchase?: string;
   };
+};
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  description: 'Your private dashboard for resources, downloads, and member content.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
@@ -60,7 +70,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   );
 
   return (
-    <main className="min-h-screen bg-[#F3F1EC] px-4 pb-16 pt-6 sm:pt-10">
+    <main className="min-h-screen bg-[#F3F1EC] px-4 pb-16 pt-0">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
         <DashboardHeader greetingName={greeting} />
 
@@ -157,7 +167,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <section className="overflow-hidden rounded-2xl border border-indigo-200/80 bg-gradient-to-br from-indigo-50 via-white to-violet-50/90 p-6 shadow-md sm:p-8">
               <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <span className="inline-flex items-center rounded-full border border-indigo-200/90 bg-white/80 px-3 py-1 text-xs font-semibold text-indigo-800 shadow-sm">
+                  <span className="inline-flex items-center rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-indigo-800 shadow-sm">
                     Live sessions · revenue
                   </span>
                   <h3 className="mt-3 text-xl font-semibold tracking-tight text-zinc-900">

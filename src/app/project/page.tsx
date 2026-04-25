@@ -15,7 +15,7 @@ const linkBtn =
 
 export default function ProjectPage() {
   return (
-    <main className="min-h-screen bg-[#0a0a0b] pb-16 pt-2 text-zinc-100 sm:pb-20 sm:pt-4 md:pt-8">
+    <main className="min-h-screen bg-[#0a0a0b] pb-16 pt-0 text-zinc-100 sm:pb-20">
       <div className="relative">
         <div
           className="pointer-events-none absolute inset-0 bottom-auto h-48 opacity-30"
@@ -42,14 +42,11 @@ export default function ProjectPage() {
             href="https://a.co/d/06z7LV25"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center justify-center rounded-full border border-[#8B7535] bg-gradient-to-b from-[#D4B96A] to-[#8E7235] px-5 py-2.5 text-sm font-bold text-zinc-950 shadow-sm transition hover:brightness-110"
+            className="mt-3 inline-flex items-center justify-center rounded-full border border-violet-400/50 bg-gradient-to-b from-violet-300 to-violet-500 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:brightness-110"
           >
             View on Amazon
           </a>
         </div>
-        <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-[#C9A962] sm:text-sm">
-          Dr. SK
-        </p>
         <h1 className="mt-1 text-center font-display text-3xl font-bold tracking-tight text-white sm:mt-2 sm:text-4xl md:text-5xl">
           <span className="relative inline-block">
             Projects
@@ -143,61 +140,19 @@ export default function ProjectPage() {
             </div>
           </div>
         </article>
-        {/* Project 1 — SK Store */}
+        {/* Project 1 — Analytics platform */}
         <article className={`${cardClass} mt-8 sm:mt-12`}>
           <div className="border-b border-zinc-800/80 px-4 py-5 sm:px-6 sm:py-6 md:px-10 md:py-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div className="min-w-0">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-[#C9A962] sm:text-xs">
-                  E‑commerce
-                </p>
-                <h2 className="mt-2 text-xl font-bold sm:text-2xl md:text-3xl">SK Store</h2>
-                <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
-                  A modern retail storefront concept with category navigation,
-                  promotional hero, product grid, and subscription capture —
-                  optimized for mobile shopping and fast iteration on offers.
-                </p>
-              </div>
-              <dl className="flex shrink-0 flex-wrap gap-3 text-sm sm:gap-4 md:flex-col md:gap-2">
-                <div>
-                  <dt className="text-zinc-500">Role</dt>
-                  <dd className="font-medium text-zinc-200">Design & development</dd>
-                </div>
-                <div>
-                  <dt className="text-zinc-500">Focus</dt>
-                  <dd className="font-medium text-zinc-200">UX, UI, responsive layout</dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-          <div className="bg-zinc-200/10 p-2 sm:p-3">
-            <Image
-              src="/skstore.png"
-              alt="SK Store e-commerce website screenshot"
-              width={1920}
-              height={1200}
-              className="h-auto w-full rounded-lg object-contain shadow-md sm:rounded-xl"
-              priority
-              sizes="(max-width: 1024px) 100vw, 1024px"
-            />
-          </div>
-        </article>
-
-        {/* Project 2 — Platform / dashboard */}
-        <article className={`${cardClass} mt-8 sm:mt-10`}>
-          <div className="border-b border-zinc-800/80 px-4 py-5 sm:px-6 sm:py-6 md:px-10 md:py-8">
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div className="min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-[#C9A962] sm:text-xs">
-                  Product & data
+                  AI & Future
                 </p>
                 <h2 className="mt-2 text-xl font-bold sm:text-2xl md:text-3xl">
-                  Analytics & operations platform
+                  AI-powered future platform
                 </h2>
                 <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
-                  Dashboard-style experience for monitoring metrics and workflows.
-                  Built with attention to information hierarchy, accessibility, and
-                  consistency across dense data views.
+                  Future-ready AI interface for intelligent automation, insights, and scalable growth.
                 </p>
               </div>
               <dl className="flex shrink-0 flex-wrap gap-3 text-sm sm:gap-4 md:flex-col md:gap-2">
@@ -219,6 +174,82 @@ export default function ProjectPage() {
               width={1920}
               height={1080}
               className="h-auto w-full rounded-lg object-contain sm:rounded-xl"
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+            />
+          </div>
+        </article>
+
+        {/* Project 2 — SK Store */}
+        <article className={`${cardClass} mt-8 sm:mt-10`}>
+          <div className="border-b border-zinc-800/80 px-4 py-5 sm:px-6 sm:py-6 md:px-10 md:py-8">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-[#C9A962] sm:text-xs">
+                  E‑commerce
+                </p>
+                <h2 className="mt-2 text-xl font-bold sm:text-2xl md:text-3xl">SK Store</h2>
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
+                  E-commerce storefront layout featuring product highlights and shopping flow.
+                </p>
+              </div>
+              <dl className="flex shrink-0 flex-wrap gap-3 text-sm sm:gap-4 md:flex-col md:gap-2">
+                <div>
+                  <dt className="text-zinc-500">Role</dt>
+                  <dd className="font-medium text-zinc-200">Design & development</dd>
+                </div>
+                <div>
+                  <dt className="text-zinc-500">Focus</dt>
+                  <dd className="font-medium text-zinc-200">UX, UI, responsive layout</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+          <div className="bg-zinc-200/10 p-2 sm:p-3">
+            <Image
+              src="/skstore.png"
+              alt="SK Store e-commerce website screenshot"
+              width={1920}
+              height={1200}
+              className="h-auto w-full rounded-lg object-contain shadow-md sm:rounded-xl"
+              sizes="(max-width: 1024px) 100vw, 1024px"
+            />
+          </div>
+        </article>
+        {/* Project 3 — Project dashboard variant */}
+        <article className={`${cardClass} mt-8 sm:mt-10`}>
+          <div className="border-b border-zinc-800/80 px-4 py-5 sm:px-6 sm:py-6 md:px-10 md:py-8">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-[#C9A962] sm:text-xs">
+                  Product showcase
+                </p>
+                <h2 className="mt-2 text-xl font-bold sm:text-2xl md:text-3xl">
+                  Project interface concept
+                </h2>
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
+                  Clean project UI concept highlighting modules, layout, and navigation structure.
+                </p>
+              </div>
+              <dl className="flex shrink-0 flex-wrap gap-3 text-sm sm:gap-4 md:flex-col md:gap-2">
+                <div>
+                  <dt className="text-zinc-500">Role</dt>
+                  <dd className="font-medium text-zinc-200">UI implementation</dd>
+                </div>
+                <div>
+                  <dt className="text-zinc-500">Focus</dt>
+                  <dd className="font-medium text-zinc-200">Layout and visual clarity</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+          <div className="bg-zinc-950/80 p-2 sm:p-3">
+            <Image
+              src="/project1.png"
+              alt="Project interface concept screenshot"
+              width={1920}
+              height={1080}
+              className="h-auto w-full rounded-lg object-contain sm:rounded-xl"
               sizes="(max-width: 1024px) 100vw, 1024px"
             />
           </div>
@@ -231,7 +262,7 @@ export default function ProjectPage() {
             href="https://www.amazon.com/author/drsk1"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 inline-flex w-full min-h-[44px] items-center justify-center rounded-full border border-[#8B7535] bg-gradient-to-b from-[#D4B96A] to-[#8E7235] px-4 text-sm font-bold text-zinc-950 shadow-sm transition hover:brightness-110 sm:w-auto sm:px-5"
+            className="mt-3 inline-flex w-full min-h-[44px] items-center justify-center rounded-full border border-violet-400/50 bg-gradient-to-b from-violet-300 to-violet-500 px-4 text-sm font-bold text-white shadow-sm transition hover:brightness-110 sm:w-auto sm:px-5"
           >
             Read Books
           </a>
@@ -240,16 +271,16 @@ export default function ProjectPage() {
           Interested in something similar?{' '}
           <Link
             href="/services"
-            className="font-semibold text-[#C9A962] underline-offset-4 hover:text-white hover:underline"
+            className="font-semibold text-[#D4B96A] underline-offset-4 hover:text-amber-100 hover:underline"
           >
             View services
           </Link>{' '}
           or{' '}
           <Link
             href="/#contact"
-            className="font-semibold text-[#C9A962] underline-offset-4 hover:text-white hover:underline"
+            className="font-semibold text-[#D4B96A] underline-offset-4 hover:text-amber-100 hover:underline"
           >
-            Get in touch
+            get in touch
           </Link>
           .
         </p>

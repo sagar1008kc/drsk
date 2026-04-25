@@ -2,8 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import ContactForm from '@/component/Contact';
 import HandbookSubscribeCTA from '@/component/HandbookSubscribeCTA';
 import {
@@ -37,13 +37,6 @@ const publicLinks = [
   { label: 'Amazon Author Page', href: 'https://www.amazon.com/author/sagar2025', note: 'Published as Sagar Khatri', emoji: '📖' },
 ];
 
-const sections = [
-  { id: 'links', label: 'Links' },
-  { id: 'resources', label: 'Resources' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'books', label: 'Books' },
-];
-
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
   visible: { opacity: 1, y: 0 },
@@ -55,113 +48,94 @@ function safeExternalHref(href: string) {
   return `https://${href}`;
 }
 
-function scrollToId(id: string) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
 export default function Home() {
-  const [active, setActive] = useState<string>('links');
+  const introCardRef = useRef<HTMLDivElement | null>(null);
+  const resourcesHeaderRef = useRef<HTMLDivElement | null>(null);
 
-  const observerOptions = useMemo(
-    () => ({ root: null, rootMargin: '-35% 0px -55% 0px', threshold: 0 }),
-    []
-  );
+  const { scrollYProgress: introScrollProgress } = useScroll({
+    target: introCardRef,
+    offset: ['start center', 'end start'],
+  });
+  const introScale = useTransform(introScrollProgress, [0, 1], [1, 0.92]);
+  const introOpacity = useTransform(introScrollProgress, [0, 1], [1, 0.82]);
 
-  useEffect(() => {
-    const elements = sections
-      .map((s) => document.getElementById(s.id))
-      .filter(Boolean) as HTMLElement[];
-
-    if (!elements.length) return;
-
-    const io = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter((e) => e.isIntersecting)
-        .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0))[0];
-
-      if (visible?.target?.id) setActive(visible.target.id);
-    }, observerOptions);
-
-    elements.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, [observerOptions]);
+  const { scrollYProgress: resourcesScrollProgress } = useScroll({
+    target: resourcesHeaderRef,
+    offset: ['start center', 'end start'],
+  });
+  const resourcesScale = useTransform(resourcesScrollProgress, [0, 1], [1, 0.93]);
+  const resourcesOpacity = useTransform(resourcesScrollProgress, [0, 1], [1, 0.84]);
 
   return (
     <main className="min-h-screen bg-[#F8F7F4] text-zinc-900">
+      <h1 className="sr-only">
+        Dr. SK Official Website - Software Engineer, Author, and AI Educator
+      </h1>
       {/* Slim promo strip */}
       {/* Profile-led hero — mobile-first */}
       <section className="relative overflow-hidden border-b border-zinc-200/90 bg-[#F8F7F4]">
         <div className="absolute inset-0 dot-pattern opacity-50 pointer-events-none" />
-        <div className="relative mx-auto max-w-6xl px-4 pb-10 pt-8 sm:pb-14 sm:pt-12 md:pb-16 md:pt-14">
-          <div className="flex flex-col items-center gap-8 md:flex-row md:items-center md:gap-12 lg:gap-14">
-            {/* Portrait — circular, centered */}
-            <div className="flex w-full shrink-0 justify-center md:w-auto md:flex-shrink-0">
-              <div className="relative mx-auto aspect-square w-[min(260px,78vw)] sm:w-64 md:w-72 lg:w-80">
-                <div
-                  className="pointer-events-none absolute -inset-2 rounded-full bg-gradient-to-br from-violet-300/35 via-white to-sky-200/40 opacity-90 blur-lg"
-                  aria-hidden
-                />
-                <div className="relative aspect-square h-full w-full overflow-hidden rounded-full bg-zinc-100 shadow-[0_20px_50px_-12px_rgba(15,23,42,0.18)] ring-2 ring-white ring-offset-2 ring-offset-[#F8F7F4]">
-                  <Image
-                    src="/profile.png"
-                    alt="Dr. SK — professional portrait"
-                    fill
-                    priority
-                    sizes="(max-width: 768px) 260px, 320px"
-                    className="object-cover object-center"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Intro copy */}
-            <div className="flex min-w-0 flex-1 flex-col items-center text-center md:items-start md:pt-2 md:text-left">
-              <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-[#C9A962] sm:text-sm">
-              Dr. SK
-             </p>  
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500 sm:text-xs">
-                Author · Technologist · Mental Health Advocate | Certified MHFA
-              </p>
-
-              <div className="drsk-hero-line drsk-hero-line-delay-3 mt-8 w-full max-w-2xl text-left text-base leading-relaxed text-zinc-600 md:max-w-none">
-                <p>
-                  Dr. SK leverages{' '}
-                  <span className="rounded-md bg-teal-400 px-1.5 py-0.5 font-semibold text-white shadow-sm ring-1 ring-teal-500/40">
-                    AI
-                  </span>{' '}
-                  to build scalable{' '}
-                  <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 font-semibold text-emerald-800">
-                    digital solutions
-                  </span>{' '}
-                  that accelerate careers, increase income, and maximize productivity. He also
-                  provides{' '}
-                  <span className="rounded-md bg-purple-100 px-1.5 py-0.5 font-semibold text-purple-800 ring-1 ring-purple-200/80">
-                    mental wellness sessions
-                  </span>{' '}
-                  to help individuals gain clarity, reduce stress, and sustain long-term success.
-                </p>
-              </div>
-
-              <div className="drsk-hero-line drsk-hero-line-delay-4 mt-7 flex w-full flex-wrap items-center justify-center gap-2 md:hidden">
-                {sections.map((s) => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    onClick={() => scrollToId(s.id)}
-                    className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition ${
-                      active === s.id
-                        ? 'border-zinc-900 bg-zinc-900 text-white'
-                        : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-400'
-                    }`}
-                  >
-                    {s.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+        <div className="relative w-full">
+          <Image
+            src="/profile.PNG"
+            alt="Dr. SK — professional portrait"
+            width={2400}
+            height={1400}
+            priority
+            sizes="100vw"
+            className="h-auto w-full rounded-none object-cover object-center"
+          />
+        </div>
+        <div className="relative mx-auto max-w-6xl px-4 pb-10 pt-6 sm:pb-14 sm:pt-8 md:pb-16 md:pt-10">
+          <motion.div
+            ref={introCardRef}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.65, ease: 'easeOut' }}
+            style={{ scale: introScale, opacity: introOpacity }}
+            className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-3xl border border-violet-200/70 bg-white/75 p-6 text-center shadow-[0_20px_45px_-28px_rgba(76,29,149,0.35)] backdrop-blur-md sm:p-7 md:p-8"
+          >
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(196,181,253,0.38),transparent_42%),radial-gradient(circle_at_85%_80%,rgba(129,140,248,0.25),transparent_45%)]" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="relative grid w-full grid-cols-3 gap-1.5 sm:flex sm:w-auto sm:flex-wrap sm:justify-center sm:gap-2"
+            >
+              {['AI', 'Digital Solutions', 'Mental Wellness'].map((tag, index) => (
+                <motion.span
+                  key={tag}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.35, delay: 0.2 + index * 0.08 }}
+                  className={`flex min-w-0 items-center justify-center whitespace-nowrap rounded-full px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.03em] sm:px-3 sm:text-xs sm:tracking-wide ${
+                    tag === 'AI'
+                      ? 'bg-teal-50/85 text-teal-700'
+                      : tag === 'Digital Solutions'
+                        ? 'bg-blue-50/85 text-blue-700'
+                        : 'bg-violet-50/80 text-violet-700'
+                  }`}
+                >
+                  {tag}
+                </motion.span>
+              ))}
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.6, delay: 0.22 }}
+              className="relative mt-4 text-base leading-relaxed text-zinc-700 md:text-lg"
+            >
+              Dr. SK leverages AI to build scalable digital solutions that accelerate careers,
+              increase income, and maximize productivity. He also provides mental wellness
+              sessions to help individuals gain clarity, reduce stress, and sustain long-term
+              success.
+            </motion.p>
+          </motion.div>
         </div>
       </section>
       <section className="relative z-[900] border-b border-white/10 bg-gradient-to-b from-[#0A0B12] via-[#0c0d14] to-zinc-950">
@@ -186,8 +160,12 @@ export default function Home() {
         aria-labelledby="resources-heading"
       >
         <div className="mx-auto max-w-6xl px-4">
-          <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
-            <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-zinc-600">
+          <motion.div
+            ref={resourcesHeaderRef}
+            style={{ scale: resourcesScale, opacity: resourcesOpacity }}
+            className="mx-auto mb-8 max-w-2xl text-center sm:mb-10"
+          >
+            <span className="inline-flex items-center rounded-full bg-zinc-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-zinc-600">
               Resources
             </span>
             <h2
@@ -200,10 +178,17 @@ export default function Home() {
               Download the handbook with no account. Premium PDFs and your library live behind
               sign-in. Subscribe for more from Dr. SK.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="flex flex-col rounded-2xl border border-zinc-200 bg-[#F8F7F4] p-6 shadow-sm">
+          <div className="grid gap-6 lg:grid-cols-3 [perspective:1200px]">
+            <motion.div
+              initial={{ opacity: 0, y: 44, scale: 0.96, rotateX: 8 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -4, scale: 1.01 }}
+              className="flex flex-col rounded-2xl border border-zinc-200 bg-[#F8F7F4] p-6 shadow-sm"
+            >
               <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
                 Free
               </p>
@@ -218,9 +203,16 @@ export default function Home() {
               >
                 Download PDF
               </a>
-            </div>
+            </motion.div>
 
-            <div className="flex flex-col rounded-2xl border border-zinc-200 bg-zinc-900 p-6 text-zinc-100 shadow-sm">
+            <motion.div
+              initial={{ opacity: 0, y: 54, scale: 0.96, rotateX: 8 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.62, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -4, scale: 1.01 }}
+              className="flex flex-col rounded-2xl border border-zinc-200 bg-zinc-900 p-6 text-zinc-100 shadow-sm"
+            >
               <p className="text-xs font-semibold uppercase tracking-wider text-amber-200/90">
                 Premium
               </p>
@@ -234,9 +226,16 @@ export default function Home() {
               >
                 Sign in to access
               </Link>
-            </div>
+            </motion.div>
 
-            <div className="rounded-2xl border border-zinc-200 bg-white p-7 shadow-sm sm:p-8 lg:col-span-1">
+            <motion.div
+              initial={{ opacity: 0, y: 64, scale: 0.96, rotateX: 8 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.68, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -4, scale: 1.01 }}
+              className="rounded-2xl border border-zinc-200 bg-white p-7 shadow-sm sm:p-8 lg:col-span-1"
+            >
               <p className="text-xs font-semibold uppercase tracking-wider text-violet-700">
                 Newsletter
               </p>
@@ -247,7 +246,7 @@ export default function Home() {
               <div className="mt-6">
                 <HandbookSubscribeCTA minimal embedded />
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -256,7 +255,7 @@ export default function Home() {
       <section id="links" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
           <div className="text-center mb-8">
-          <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
+          <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                 Online Presence
               </span>
@@ -306,7 +305,7 @@ export default function Home() {
       <section id="experience" className="py-16 bg-white border-y border-zinc-200">
         <div className="mx-auto max-w-6xl px-4">
           <div className="text-center mb-10">
-            <span className="inline-flex items-center rounded-full border border-zinc-200 bg-zinc-50 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-zinc-500">
+            <span className="inline-flex items-center rounded-full bg-zinc-50 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-zinc-500">
               Background
             </span>
             <h2 className="mt-3 text-2xl md:text-3xl font-bold text-zinc-900">Professional Background</h2>
@@ -412,7 +411,7 @@ export default function Home() {
       <section id="books" className="py-16">
         <div className="mx-auto max-w-6xl px-4">
           <div className="text-center mb-10">
-            <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-amber-700">
+            <span className="inline-flex items-center rounded-full bg-amber-50 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-amber-700">
               Publications
             </span>
             <h2 className="mt-3 text-2xl md:text-3xl font-bold text-zinc-900">Published Books</h2>
@@ -505,31 +504,25 @@ export default function Home() {
       {/* Full-width author visual — placed before contact for a grounded, editorial close */}
       <section
         className="border-t border-zinc-200 bg-zinc-50/90 py-10 md:py-14"
-        aria-labelledby="hero-author-visual-label"
+        aria-label="Engineering and author journey"
       >
-        <div className="mx-auto max-w-5xl px-4">
-          <div className="mb-6 text-center">
-            <p
-              id="hero-author-visual-label"
-              className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:text-xs"
-            >
-              Books &amp; presence
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-600 md:text-base">
-              Dr. SK connects mental wellness insight with practical tools — online, in print, and in
-              conversation.
-            </p>
-          </div>
-          <div className="overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[0_12px_40px_-16px_rgba(15,23,42,0.12)]">
-            <Image
-              src="/drsk.png"
-              alt="Dr. SK with published work — author and educator"
-              width={1920}
-              height={720}
-              sizes="(max-width: 768px) 100vw, min(1152px, 96vw)"
-              className="h-auto w-full bg-zinc-50"
-            />
-          </div>
+        <div className="mx-auto mb-6 max-w-5xl px-4 text-center">
+          <h3 className="text-lg font-semibold tracking-tight text-zinc-800 sm:text-xl">
+            Software Engineering &amp; Author Journey
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-zinc-600 md:text-base">
+              Software engineer by profession, author by passion - explore my books and AI journey.
+          </p>
+        </div>
+        <div className="w-full overflow-hidden border-y border-zinc-200/90 bg-zinc-50">
+          <Image
+            src="/drsk.png"
+            alt="Dr. SK with published work — author and educator"
+            width={1920}
+            height={720}
+            sizes="100vw"
+            className="h-auto w-full bg-zinc-50"
+          />
         </div>
       </section>
 
@@ -545,7 +538,7 @@ export default function Home() {
 
           <div className="relative mx-auto max-w-6xl px-4">
             <div className="text-center">
-              <span className="inline-flex items-center rounded-full border border-[#C9A962]/35 bg-[#C9A962]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#D4B96A]">
+              <span className="inline-flex items-center rounded-full bg-[#C9A962]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#D4B96A]">
                 Contact
               </span>
               <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">

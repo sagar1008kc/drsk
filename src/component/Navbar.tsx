@@ -11,14 +11,14 @@ type SessionUser = {
   username: string | null;
 };
 
-const goldActive =
-  'border-[#C9A962] bg-[#C9A962] text-zinc-950 shadow-[0_0_20px_rgba(201,169,98,0.25)]';
-const goldIdle =
-  'border-white/10 text-zinc-300 hover:border-[#C9A962]/40 hover:bg-white/5 hover:text-white';
+const purpleActive =
+  'border-violet-400 bg-violet-500 text-white shadow-[0_0_20px_rgba(139,92,246,0.35)]';
+const purpleIdle =
+  'border-white/10 text-zinc-300 hover:border-violet-400/45 hover:bg-white/5 hover:text-white';
 
 function navButtonClass(active: boolean) {
   return `shrink-0 whitespace-nowrap rounded-full border px-2.5 py-1.5 text-[11px] font-semibold transition sm:px-3.5 sm:py-2 sm:text-sm ${
-    active ? goldActive : goldIdle
+    active ? purpleActive : purpleIdle
   }`;
 }
 
@@ -67,7 +67,7 @@ export default function Navbar() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[1000] border-b border-[#C9A962]/20 bg-zinc-950/95 shadow-[0_4px_30px_rgba(0,0,0,0.4)] backdrop-blur-md">
+    <header className="fixed top-0 left-0 right-0 z-[1000] border-b border-violet-400/25 bg-zinc-950/95 shadow-[0_4px_30px_rgba(0,0,0,0.4)] backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
         <Link
           href="/"
@@ -75,7 +75,7 @@ export default function Navbar() {
           aria-label="Dr. SK — home"
         >
           <div className="leading-tight">
-            <div className="font-display truncate text-base font-bold tracking-tight text-[#D4B96A] sm:text-lg md:text-xl">
+            <div className="font-display truncate text-base font-bold tracking-tight text-violet-300 sm:text-lg md:text-xl">
               Dr. SK
             </div>
             <div className="mt-0.5 hidden truncate text-[11px] text-zinc-500 sm:block sm:text-xs">
@@ -95,7 +95,7 @@ export default function Navbar() {
             Project
           </Link>
           {checkingSession ? (
-            <span className="shrink-0 rounded-full border border-white/10 px-2 py-1.5 text-[11px] font-bold text-zinc-500 sm:px-4 sm:py-2 sm:text-sm">
+            <span className="shrink-0 rounded-full bg-white/5 px-2 py-1.5 text-[11px] font-bold text-zinc-500 sm:px-4 sm:py-2 sm:text-sm">
               …
             </span>
           ) : user ? (

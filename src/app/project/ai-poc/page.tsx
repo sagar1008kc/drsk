@@ -72,7 +72,7 @@ const phases = [
 
 export default function AiPocPage() {
   return (
-    <main className="min-h-screen bg-[#0a0a0b] pb-16 pt-3 text-zinc-100 sm:pb-20 sm:pt-4 md:pt-8">
+    <main className="min-h-screen bg-[#0a0a0b] pb-16 pt-0 text-zinc-100 sm:pb-20">
       <div className="mx-auto max-w-6xl px-3 sm:px-4">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C9A962]">
           AI POC

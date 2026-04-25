@@ -120,7 +120,7 @@ export default function RootLayout({
         <Providers />
         <Navbar />
 
-        <div className="pt-[4.75rem] sm:pt-20 md:pt-24">{children}</div>
+        <div className="pt-14 sm:pt-[4.5rem] md:pt-[4.75rem]">{children}</div>
         {/* Footer */}
         <footer className="border-t border-[#C9A962]/25 bg-zinc-950 px-4 py-10 text-center text-sm text-zinc-300">
           <p className="mt-1 text-zinc-400">
