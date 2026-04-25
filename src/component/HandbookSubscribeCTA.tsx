@@ -79,7 +79,7 @@ export default function HandbookSubscribeCTA({
         return;
       }
       toast.success(
-        data.message || 'Thank you for subscribing. Please check your inbox for our thank-you email.'
+        data.message || 'Thank you for subscribing. Please check your inbox for a confirmation message.'
       );
       setEmail('');
     } catch {

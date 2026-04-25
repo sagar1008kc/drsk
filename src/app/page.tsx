@@ -241,7 +241,7 @@ export default function Home() {
               </p>
               <h3 className="mt-2 text-lg font-bold text-zinc-900">Subscribe for more from Dr. SK</h3>
               <p className="mt-2 text-sm text-zinc-600">
-                Get the thank-you email with the handbook link, services, and offers.
+                Subscribe to receive professional updates on resources, services, and new releases.
               </p>
               <div className="mt-6">
                 <HandbookSubscribeCTA minimal embedded />

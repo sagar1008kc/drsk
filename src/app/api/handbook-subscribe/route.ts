@@ -44,7 +44,7 @@ export async function POST(req: Request) {
         return NextResponse.json(
           {
             message:
-              'Thank you for subscribing. This email is already registered, and you can explore free and premium resources on our website anytime.',
+              'Thank you for subscribing. This email is already registered, and you will continue receiving updates from Dr. SK.',
             alreadySubscribed: true,
           },
           { status: 200 }
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           message:
-            'Thank you for subscribing. Please check your inbox for our thank-you email, and explore free and premium resources on our website.',
+            'Thank you for subscribing. Please check your inbox for a confirmation message and upcoming updates from Dr. SK.',
         },
         { status: 200 }
       );
@@ -86,7 +86,7 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           message:
-            'Thank you for subscribing. Please check your inbox for our thank-you email, and explore free and premium resources on our website.',
+            'Thank you for subscribing. Please check your inbox for a confirmation message and upcoming updates from Dr. SK.',
         },
         { status: 200 }
       );
@@ -95,7 +95,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         message:
-          'Thank you for subscribing. Please check your inbox for our thank-you email, and explore free and premium resources on our website.',
+          'Thank you for subscribing. Please check your inbox for a confirmation message and upcoming updates from Dr. SK.',
       },
       { status: 200 }
     );
