@@ -175,34 +175,43 @@ export default function Home() {
               Free download, member content, and updates
             </h2>
             <p className="mt-2 text-sm text-zinc-600 sm:text-base">
-              Download the handbook with no account. Premium PDFs and your library live behind
-              sign-in. Subscribe for more from Dr. SK.
+              Free handbook PDF (storybook-style mental health awareness). Premium library and
+              newsletter after sign-in or subscribe.
             </p>
           </motion.div>
 
-          <div className="grid gap-6 lg:grid-cols-3 [perspective:1200px]">
+          <div className="grid gap-6 [perspective:1200px] lg:grid-cols-3 lg:items-stretch">
             <motion.div
               initial={{ opacity: 0, y: 44, scale: 0.96, rotateX: 8 }}
               whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -4, scale: 1.01 }}
-              className="flex flex-col rounded-2xl border border-zinc-200 bg-[#F8F7F4] p-6 shadow-sm"
+              className="flex h-full min-h-0 flex-col rounded-2xl border border-zinc-200 bg-[#F8F7F4] p-6 shadow-sm lg:p-7"
             >
               <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
                 Free
               </p>
-              <h3 className="mt-2 text-lg font-bold text-zinc-900">The Mind Matters Handbook</h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-600">
-                PDF by Dr. SK — no email required. Save or share the file anytime.
+              <h3 className="mt-2 text-lg font-bold text-zinc-900 lg:text-xl">
+                The Mind Matters Handbook
+              </h3>
+              <p className="mt-1 text-xs font-medium uppercase tracking-wide text-emerald-800/80">
+                Mental health awareness · storybook by Dr. SK
               </p>
-              <a
-                href={HANDBOOK_PUBLIC_PATH}
-                download={HANDBOOK_DOWNLOAD_FILENAME}
-                className="mt-5 inline-flex min-h-[44px] items-center justify-center rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700"
-              >
-                Download PDF
-              </a>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-600 lg:text-[15px] lg:leading-7">
+                A gentle, story-style PDF that helps you notice stress, overthinking, and emotional
+                patterns with clarity. Practical takeaways for everyday life—download the full file
+                here with no account and share it freely.
+              </p>
+              <div className="mt-auto border-t border-zinc-200/80 pt-5">
+                <a
+                  href={HANDBOOK_PUBLIC_PATH}
+                  download={HANDBOOK_DOWNLOAD_FILENAME}
+                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                >
+                  Download PDF
+                </a>
+              </div>
             </motion.div>
 
             <motion.div
@@ -211,21 +220,28 @@ export default function Home() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.62, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -4, scale: 1.01 }}
-              className="flex flex-col rounded-2xl border border-zinc-200 bg-zinc-900 p-6 text-zinc-100 shadow-sm"
+              className="flex h-full min-h-0 flex-col rounded-2xl border border-zinc-200 bg-zinc-900 p-6 text-zinc-100 shadow-sm lg:p-7"
             >
               <p className="text-xs font-semibold uppercase tracking-wider text-amber-200/90">
                 Premium
               </p>
-              <h3 className="mt-2 text-lg font-bold text-white">Member library</h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-400">
-                Purchased PDFs, samples, and session materials are available after you sign in.
+              <h3 className="mt-2 text-lg font-bold text-white lg:text-xl">Member library</h3>
+              <p className="mt-1 text-xs font-medium uppercase tracking-wide text-amber-100/75">
+                Purchases, samples & assigned materials · one dashboard
               </p>
-              <Link
-                href="/login"
-                className="mt-5 inline-flex min-h-[44px] items-center justify-center rounded-full border border-amber-400/50 bg-amber-500/15 px-5 py-2.5 text-sm font-semibold text-amber-100 transition hover:bg-amber-500/25"
-              >
-                Sign in to access
-              </Link>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-400 lg:text-[15px] lg:leading-7">
+                Sign in to see everything tied to your account: premium PDFs you have bought,
+                guided samples, and session or program files from Dr. SK. New drops land here first,
+                and downloads stay private and user-locked for a secure library.
+              </p>
+              <div className="mt-auto border-t border-zinc-700/80 pt-5">
+                <Link
+                  href="/login"
+                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-amber-400/50 bg-amber-500/15 px-5 py-2.5 text-sm font-semibold text-amber-100 transition hover:bg-amber-500/25"
+                >
+                  Sign in to access
+                </Link>
+              </div>
             </motion.div>
 
             <motion.div
@@ -234,16 +250,23 @@ export default function Home() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.68, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -4, scale: 1.01 }}
-              className="rounded-2xl border border-zinc-200 bg-white p-7 shadow-sm sm:p-8 lg:col-span-1"
+              className="flex h-full min-h-0 flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm lg:p-7"
             >
               <p className="text-xs font-semibold uppercase tracking-wider text-violet-700">
                 Newsletter
               </p>
-              <h3 className="mt-2 text-lg font-bold text-zinc-900">Subscribe for more from Dr. SK</h3>
-              <p className="mt-2 text-sm text-zinc-600">
-                Subscribe to receive professional updates on resources, services, and new releases.
+              <h3 className="mt-2 text-lg font-bold text-zinc-900 lg:text-xl">
+                Updates from Dr. SK
+              </h3>
+              <p className="mt-1 text-xs font-medium uppercase tracking-wide text-violet-800/80">
+                Resources, services & releases · optional with the free PDF
               </p>
-              <div className="mt-6">
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-600 lg:text-[15px] lg:leading-7">
+                Get occasional, professional emails when there is something worth sharing—new
+                resources, services, or releases. The handbook stays free to download anytime;
+                subscribing is separate and you can leave the list whenever you like.
+              </p>
+              <div className="mt-auto border-t border-zinc-200/80 pt-5">
                 <HandbookSubscribeCTA minimal embedded />
               </div>
             </motion.div>

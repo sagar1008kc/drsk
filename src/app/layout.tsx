@@ -18,12 +18,17 @@ const playfair = Playfair_Display({
 });
 
 const siteUrl = 'https://www.skcreation.org';
-const seoTitle = 'Dr. SK | Official Site of Dr. SK Author';
+const seoTitle = 'Dr. SK | Author and Technologist';
 const seoDescription =
   'Official website of Dr. SK (also known as Dr SK and Dr. SK Author) - author, technologist, and founder of SK Creation.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  icons: {
+    icon: [{ url: '/logo.png', type: 'image/png' }],
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
   title: {
     default: seoTitle,
     template: '%s | Dr. SK',

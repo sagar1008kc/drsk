@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -71,17 +72,20 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
         <Link
           href="/"
-          className="min-w-0 max-w-[min(100%,11rem)] shrink-0 sm:max-w-none"
+          className="flex min-w-0 max-w-[min(100%,12rem)] shrink-0 flex-col gap-0.5 sm:max-w-none"
           aria-label="Dr. SK — home"
         >
-          <div className="leading-tight">
-            <div className="font-display truncate text-base font-bold tracking-tight text-violet-300 sm:text-lg md:text-xl">
-              Dr. SK
-            </div>
-            <div className="mt-0.5 hidden truncate text-[11px] text-zinc-500 sm:block sm:text-xs">
-              Author · Technologist
-            </div>
-          </div>
+          <Image
+            src="/logo.png"
+            alt=""
+            width={200}
+            height={200}
+            priority
+            className="h-8 w-auto max-w-[10.5rem] shrink-0 object-contain object-left sm:h-9 sm:max-w-none md:h-10"
+          />
+          <span className="hidden truncate text-[11px] leading-tight text-zinc-500 sm:block sm:text-xs">
+            Author · Technologist
+          </span>
         </Link>
 
         <nav

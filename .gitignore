@@ -23,7 +23,8 @@
 # misc
 .DS_Store
 *.pem
-public/samples/the-mind-matters-handbook-by-drsk.pdf
+# Large handbook PDF — host via CDN/storage or keep locally; GitHub rejects >100MB
+public/samples/the_mind_matters_handbook_by_drsk.pdf
 
 # debug
 npm-debug.log*

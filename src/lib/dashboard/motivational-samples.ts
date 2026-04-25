@@ -34,7 +34,7 @@ export const motivationalSamples: MotivationalSample[] = [
     title: 'The Mind Matters Handbook',
     description:
       'A full free guide — mind, habits, and practical steps. Download below or get it by email when you subscribe.',
-    href: '/samples/the-mind-matters-handbook-by-drsk.pdf',
+    href: '/samples/the_mind_matters_handbook_by_drsk.pdf',
     fileName: 'The-Mind-Matters-Handbook-by-Dr-SK.pdf',
     category: 'mindfulness',
   },
