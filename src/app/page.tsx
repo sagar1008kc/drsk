@@ -2,8 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import ContactForm from '@/component/Contact';
 import HandbookSubscribeCTA from '@/component/HandbookSubscribeCTA';
 import {
@@ -17,6 +17,9 @@ export default function Home() {
   const introCardRef = useRef<HTMLDivElement | null>(null);
   const resourcesHeaderRef = useRef<HTMLDivElement | null>(null);
   const customerSlides = ['/customer1.png', '/customer2.png', '/customer3.png', '/customer4.png'];
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false);
+  const [isDesktopViewport, setIsDesktopViewport] = useState(false);
   const ctaBaseClass =
     'inline-flex min-h-[44px] items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold transition';
 
@@ -33,6 +36,39 @@ export default function Home() {
   });
   const resourcesScale = useTransform(resourcesScrollProgress, [0, 1], [1, 0.93]);
   const resourcesOpacity = useTransform(resourcesScrollProgress, [0, 1], [1, 0.84]);
+  const cardsPerView = isDesktopViewport ? 2 : 1;
+  const totalPages = Math.max(1, customerSlides.length);
+  const visibleSlides = Array.from({ length: cardsPerView }, (_, offset) => {
+    return customerSlides[(activeSlide + offset) % customerSlides.length];
+  });
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    const updateViewport = () => setIsDesktopViewport(mediaQuery.matches);
+    updateViewport();
+    mediaQuery.addEventListener('change', updateViewport);
+    return () => mediaQuery.removeEventListener('change', updateViewport);
+  }, []);
+
+  useEffect(() => {
+    if (isCarouselPaused) return;
+    const timer = window.setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % customerSlides.length);
+    }, 6000);
+    return () => window.clearInterval(timer);
+  }, [customerSlides.length, isCarouselPaused]);
+
+  const goToSlide = (index: number) => {
+    setActiveSlide((index + customerSlides.length) % customerSlides.length);
+  };
+
+  const handlePrevious = () => {
+    goToSlide(activeSlide - 1);
+  };
+
+  const handleNext = () => {
+    goToSlide(activeSlide + 1);
+  };
 
   return (
     <main className="min-h-screen bg-[#F3F4FA] text-zinc-900">
@@ -269,28 +305,70 @@ export default function Home() {
             Supporting individuals and small businesses through practical guidance, digital
             solutions, and meaningful results.
           </p>
-          <div className="relative left-1/2 mt-6 w-screen -translate-x-1/2 overflow-hidden sm:mt-8">
-            <motion.div
-              className="flex w-max gap-4 p-4 sm:gap-6 sm:p-6"
-              animate={{ x: ['-50%', '0%'] }}
-              transition={{ duration: 22, ease: 'linear', repeat: Infinity }}
-            >
-              {[...customerSlides, ...customerSlides].map((src, idx) => (
-                <article
-                  key={`${src}-${idx}`}
-                  className="w-[280px] shrink-0 overflow-hidden rounded-xl bg-zinc-900 ring-1 ring-zinc-800 sm:w-[360px]"
+          <div
+            className="mx-auto mt-6 max-w-5xl sm:mt-8"
+            onMouseEnter={() => setIsCarouselPaused(true)}
+            onMouseLeave={() => setIsCarouselPaused(false)}
+          >
+            <div className="relative overflow-hidden rounded-2xl border border-zinc-800/90 bg-zinc-900/40 p-4 sm:p-5">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={activeSlide}
+                  initial={{ opacity: 0, x: 36 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -36 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  className="grid gap-4 md:grid-cols-2 md:gap-5"
                 >
-                  <Image
-                    src={src}
-                    alt={`Customer highlight ${((idx % customerSlides.length) + 1).toString()}`}
-                    width={720}
-                    height={1280}
-                    className="h-auto w-full object-cover object-center"
-                    sizes="(max-width: 640px) 280px, 360px"
-                  />
-                </article>
+                  {visibleSlides.map((src, idx) => (
+                    <article
+                      key={`${src}-${idx}`}
+                      className="overflow-hidden rounded-xl bg-zinc-900 ring-1 ring-zinc-800"
+                    >
+                      <Image
+                        src={src}
+                        alt={`Customer highlight ${((activeSlide + idx) % customerSlides.length) + 1}`}
+                        width={720}
+                        height={1280}
+                        className="h-auto w-full object-cover object-center"
+                        sizes="(max-width: 767px) 100vw, 50vw"
+                      />
+                    </article>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+
+              <button
+                type="button"
+                onClick={handlePrevious}
+                aria-label="Show previous collaboration highlight"
+                className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full border border-zinc-700 bg-zinc-900/85 p-2 text-zinc-200 transition hover:bg-zinc-800"
+              >
+                <span aria-hidden>←</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label="Show next collaboration highlight"
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full border border-zinc-700 bg-zinc-900/85 p-2 text-zinc-200 transition hover:bg-zinc-800"
+              >
+                <span aria-hidden>→</span>
+              </button>
+            </div>
+
+            <div className="mt-4 flex items-center justify-center gap-2">
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <button
+                  key={`carousel-dot-${index}`}
+                  type="button"
+                  aria-label={`Show collaboration slide ${index + 1}`}
+                  onClick={() => goToSlide(index)}
+                  className={`h-2.5 rounded-full transition-all ${
+                    index === activeSlide ? 'w-8 bg-[#C9A962]' : 'w-2.5 bg-zinc-600'
+                  }`}
+                />
               ))}
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
