@@ -256,36 +256,6 @@ export default function Services() {
               Note: Sessions are available in English, Nepali, or Hindi.
             </p>
 
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.15 }}
-              variants={fadeUp}
-              transition={{ duration: 0.5 }}
-              className="mt-10 border-t border-zinc-800/80 pt-10 sm:mt-16 sm:pt-14 md:mt-20 md:pt-16"
-              aria-labelledby="clients-heading"
-            >
-              <h2
-                id="clients-heading"
-                className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-[#C9A962] sm:text-sm"
-              >
-                Collaborations & clients
-              </h2>
-              <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-zinc-400 sm:mt-3 sm:text-base">
-                Organizations and partners we&apos;ve worked with across
-                technology, publishing, and community initiatives.
-              </p>
-              <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-950/40 ring-1 ring-zinc-800/60 sm:mt-8">
-                <Image
-                  src="/client.png"
-                  alt="Client and collaboration logos"
-                  width={1600}
-                  height={900}
-                  className="h-auto w-full object-contain object-center"
-                  sizes="(max-width: 1152px) 100vw, 1152px"
-                />
-              </div>
-            </motion.section>
           </div>
         </section>
         <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-[#C9A962]/25 bg-zinc-900/60 px-4 py-5 text-center ring-1 ring-zinc-800/80 sm:mt-12">

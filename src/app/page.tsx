@@ -16,6 +16,7 @@ import {
 export default function Home() {
   const introCardRef = useRef<HTMLDivElement | null>(null);
   const resourcesHeaderRef = useRef<HTMLDivElement | null>(null);
+  const customerSlides = ['/customer1.png', '/customer2.png', '/customer3.png', '/customer4.png'];
   const ctaBaseClass =
     'inline-flex min-h-[44px] items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold transition';
 
@@ -34,13 +35,13 @@ export default function Home() {
   const resourcesOpacity = useTransform(resourcesScrollProgress, [0, 1], [1, 0.84]);
 
   return (
-    <main className="min-h-screen bg-[#F8F7F4] text-zinc-900">
+    <main className="min-h-screen bg-[#F3F4FA] text-zinc-900">
       <h1 className="sr-only">
         AI resources, books, and customer services
       </h1>
       {/* Slim promo strip */}
       {/* AI-led hero — mobile-first */}
-      <section className="relative overflow-hidden border-b border-[#EADFC8] bg-[#F5EBD9]">
+      <section className="relative overflow-hidden border-b border-[#D9DCEF] bg-[#EEF0FA]">
         <div className="absolute inset-0 dot-pattern opacity-50 pointer-events-none" />
         <div className="relative w-full">
           <Image
@@ -61,7 +62,7 @@ export default function Home() {
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.65, ease: 'easeOut' }}
             style={{ scale: introScale, opacity: introOpacity }}
-            className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-3xl border border-[#E2D3B4] bg-[#FFF7E8]/95 p-6 text-center shadow-[0_20px_45px_-28px_rgba(120,86,30,0.28)] backdrop-blur-md sm:p-7 md:p-8"
+            className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-3xl border border-[#D7DBF3] bg-[#F9FAFF]/95 p-6 text-center shadow-[0_20px_45px_-30px_rgba(66,56,135,0.24)] backdrop-blur-md sm:p-7 md:p-8"
           >
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(196,181,253,0.38),transparent_42%),radial-gradient(circle_at_85%_80%,rgba(129,140,248,0.25),transparent_45%)]" />
             <motion.div
@@ -151,7 +152,7 @@ export default function Home() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -4, scale: 1.01 }}
-              className="flex h-full min-h-0 flex-col rounded-2xl border border-zinc-200 bg-[#F8F7F4] p-6 shadow-sm lg:p-7"
+              className="flex h-full min-h-0 flex-col rounded-2xl border border-zinc-200 bg-[#F5F6FC] p-6 shadow-sm lg:p-7"
             >
               <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
                 Free
@@ -243,6 +244,133 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="border-t border-zinc-200 bg-white py-14">
+        <div className="mx-auto max-w-6xl px-4">
+          <h2 className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-violet-700 sm:text-sm">
+            Collaborations & clients
+          </h2>
+          <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-zinc-600 sm:mt-3 sm:text-base">
+            Supporting individuals and small businesses through practical guidance, digital
+            solutions, and meaningful results.
+          </p>
+          <div className="relative left-1/2 mt-6 w-screen -translate-x-1/2 overflow-hidden bg-zinc-50/70 sm:mt-8">
+            <motion.div
+              className="flex w-max gap-4 p-4 sm:gap-6 sm:p-6"
+              animate={{ x: ['-50%', '0%'] }}
+              transition={{ duration: 22, ease: 'linear', repeat: Infinity }}
+            >
+              {[...customerSlides, ...customerSlides].map((src, idx) => (
+                <article
+                  key={`${src}-${idx}`}
+                  className="w-[280px] shrink-0 overflow-hidden rounded-xl bg-white/90 sm:w-[360px]"
+                >
+                  <Image
+                    src={src}
+                    alt={`Customer highlight ${((idx % customerSlides.length) + 1).toString()}`}
+                    width={720}
+                    height={1280}
+                    className="h-auto w-full object-cover object-center"
+                    sizes="(max-width: 640px) 280px, 360px"
+                  />
+                </article>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-zinc-200 bg-white py-16">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-8 text-center">
+            <span className="inline-flex items-center rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-violet-700">
+              Explore
+            </span>
+            <h3 className="mt-3 text-2xl font-bold tracking-tight text-zinc-900 md:text-3xl">
+              Designed for real outcomes
+            </h3>
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600 md:text-base">
+              Explore practical services, real project work, and trusted author resources designed
+              to support clarity, growth, and meaningful outcomes.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <article className="rounded-2xl border border-violet-200/80 bg-gradient-to-br from-[#F8F7FF] via-[#F3F1FF] to-[#EEF0FF] p-6 shadow-[0_14px_34px_rgba(91,75,155,0.12)]">
+              <div>
+                <h4 className="mt-2 text-xl font-bold text-zinc-900">Services</h4>
+                <p className="mt-2 text-sm text-zinc-700">
+                  AI, Clarity & Mental Wellness Guidance
+                </p>
+                <p className="mt-2 text-sm text-zinc-600">
+                  Feeling overwhelmed by stress, uncertainty, or the pace of change in the AI era?
+                  Book a private session with Dr. SK for supportive guidance focused on mental
+                  wellness awareness, clarity, resilience, and navigating personal or professional
+                  pressure.
+                </p>
+                <p className="mt-3 text-sm font-semibold text-zinc-800">Session may help with:</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-zinc-600">
+                  <li>Stress and overwhelm awareness</li>
+                  <li>Mental wellness support conversations</li>
+                  <li>Clarity during career or life transitions</li>
+                  <li>Healthy balance in an always-on digital world</li>
+                  <li>Practical guidance and trusted resource direction</li>
+                </ul>
+                <p className="mt-3 text-sm text-zinc-600">1:1 private session or Group Session</p>
+              </div>
+              <Link
+                href="/service"
+                className={`${ctaBaseClass} mt-5 border border-violet-300 bg-violet-600 text-white shadow-sm hover:bg-violet-700`}
+              >
+                Book a session
+              </Link>
+            </article>
+
+            <article className="rounded-2xl border border-violet-200/80 bg-gradient-to-br from-[#F8F7FF] via-[#F3F1FF] to-[#EEF0FF] p-6 shadow-[0_14px_34px_rgba(91,75,155,0.12)]">
+              <div>
+                <h4 className="mt-2 text-xl font-bold text-zinc-900">Projects</h4>
+                <p className="mt-2 text-sm text-zinc-700">
+                  Helping businesses work smarter with practical AI solutions.
+                </p>
+                <p className="mt-2 text-sm text-zinc-600">
+                  Business-first AI concepts designed for website assistance, lead capture, booking
+                  automation, feedback intelligence, and workflow acceleration for small and
+                  mid-sized businesses.
+                </p>
+                <p className="mt-3 text-sm font-semibold text-zinc-800">Focus Areas</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-zinc-600">
+                  <li>AI-Powered Workflow Automation</li>
+                  <li>Website & Application Development</li>
+                  <li>Smart Integrations and Assistants</li>
+                  <li>Operational Efficiency Solutions</li>
+                </ul>
+              </div>
+              <Link
+                href="/project"
+                className={`${ctaBaseClass} mt-5 border border-violet-300 bg-violet-600 text-white shadow-sm hover:bg-violet-700`}
+              >
+                Checkout projects
+              </Link>
+            </article>
+
+            <article className="rounded-2xl border border-violet-200/80 bg-gradient-to-br from-[#F8F7FF] via-[#F3F1FF] to-[#EEF0FF] p-6 shadow-[0_14px_34px_rgba(91,75,155,0.12)]">
+              <div>
+                <h4 className="mt-2 text-xl font-bold text-zinc-900">Know about Dr. SK</h4>
+                <p className="mt-2 text-sm text-zinc-600">
+                  USAII Certified AI scientist, Software Engineering background, education list, and
+                  Mental Health Advocate (MHFA Certified).
+                </p>
+              </div>
+              <Link
+                href="/about"
+                className={`${ctaBaseClass} mt-5 border border-violet-300 bg-violet-600 text-white shadow-sm hover:bg-violet-700`}
+              >
+                More about author here
+              </Link>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section id="books" className="border-t border-zinc-200 bg-white py-16">
         <div className="mx-auto max-w-6xl px-4">
           <div className="text-center">
@@ -328,104 +456,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-t border-zinc-200 bg-white py-16">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="mb-8 text-center">
-            <span className="inline-flex items-center rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-700">
-              Explore
-            </span>
-            <h3 className="mt-3 text-2xl font-bold tracking-tight text-zinc-900 md:text-3xl">
-              Services, projects, and more
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-600 md:text-base">
-              Clear paths with practical outcomes for customers.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <article className="rounded-2xl border border-zinc-800 bg-zinc-950 p-6 shadow-sm">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">01</p>
-                <h4 className="mt-2 text-xl font-bold text-white">Services</h4>
-                <p className="mt-2 text-sm text-zinc-200">
-                  AI, Clarity & Mental Wellness Guidance
-                </p>
-                <p className="mt-2 text-sm text-zinc-300">
-                  Feeling overwhelmed by stress, uncertainty, or the pace of change in the AI era?
-                  Book a private session with Dr. SK for supportive guidance focused on mental
-                  wellness awareness, clarity, resilience, and navigating personal or professional
-                  pressure.
-                </p>
-                <p className="mt-3 text-sm font-semibold text-zinc-100">Session may help with:</p>
-                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-zinc-300">
-                  <li>Stress and overwhelm awareness</li>
-                  <li>Mental wellness support conversations</li>
-                  <li>Clarity during career or life transitions</li>
-                  <li>Healthy balance in an always-on digital world</li>
-                  <li>Practical guidance and trusted resource direction</li>
-                </ul>
-                <p className="mt-3 text-sm text-zinc-300">1:1 private session or Group Session</p>
-              </div>
-              <Link
-                href="/service"
-                className={`${ctaBaseClass} mt-5 border border-indigo-400/40 bg-indigo-500/15 text-indigo-200 hover:bg-indigo-500/25`}
-              >
-                Book a session
-              </Link>
-            </article>
-
-            <article className="rounded-2xl border border-zinc-800 bg-zinc-950 p-6 shadow-sm">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">02</p>
-                <h4 className="mt-2 text-xl font-bold text-white">Projects</h4>
-                <p className="mt-2 text-sm text-zinc-200">
-                  Helping businesses work smarter with practical AI solutions.
-                </p>
-                <p className="mt-2 text-sm text-zinc-300">
-                  Business-first AI concepts designed for website assistance, lead capture, booking
-                  automation, feedback intelligence, and workflow acceleration for small and
-                  mid-sized businesses.
-                </p>
-                <p className="mt-3 text-sm font-semibold text-zinc-100">Focus Areas</p>
-                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-zinc-300">
-                  <li>AI-Powered Workflow Automation</li>
-                  <li>Website & Application Development</li>
-                  <li>Smart Integrations and Assistants</li>
-                  <li>Operational Efficiency Solutions</li>
-                </ul>
-              </div>
-              <Link
-                href="/project"
-                className={`${ctaBaseClass} mt-5 border border-indigo-400/40 bg-indigo-500/15 text-indigo-200 hover:bg-indigo-500/25`}
-              >
-                Checkout projects
-              </Link>
-            </article>
-
-            <article className="rounded-2xl border border-zinc-800 bg-zinc-950 p-6 shadow-sm">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">03</p>
-                <h4 className="mt-2 text-xl font-bold text-white">Know about Dr. SK</h4>
-                <p className="mt-2 text-sm text-zinc-300">
-                  USAII Certified AI scientist, Software Engineering background, education list, and
-                  Mental Health Advocate (MHFA Certified).
-                </p>
-              </div>
-              <Link
-                href="/about"
-                className={`${ctaBaseClass} mt-5 border border-indigo-400/40 bg-indigo-500/15 text-indigo-200 hover:bg-indigo-500/25`}
-              >
-                More about author here
-              </Link>
-            </article>
-          </div>
-        </div>
-      </section>
-
       {/* Contact Section */}
       <section
         id="contact"
-        className="relative overflow-hidden border-t border-[#E2D3B4] bg-[#F9F3E7] py-16 md:py-20"
+        className="relative overflow-hidden border-t border-[#D6DBF2] bg-[#F2F4FD] py-16 md:py-20"
       >
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.92),transparent_48%),radial-gradient(circle_at_80%_30%,rgba(255,255,255,0.7),transparent_42%),radial-gradient(#ffffff_1px,transparent_1px)] [background-size:auto,auto,20px_20px]" />

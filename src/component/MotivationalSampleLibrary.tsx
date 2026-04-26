@@ -175,11 +175,18 @@ export default function MotivationalSampleLibrary({
                   {item.isFree ? 'Free download' : priceLabel(item.priceCents)}
                 </p>
                 {item.isFree || unlockedSlugs.includes(item.slug) ? (
-                  resourceIdBySlug[item.slug] ? (
+                  item.isFree && !resourceIdBySlug[item.slug] ? (
+                    <a
+                      href="/api/resources/public-download/motivational-ebook-01"
+                      className="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-800"
+                    >
+                      Download
+                    </a>
+                  ) : resourceIdBySlug[item.slug] ? (
                     <DownloadButton resourceId={resourceIdBySlug[item.slug]} />
                   ) : (
                     <p className="text-xs text-amber-700">
-                      Resource is provisioning. Refresh in a moment.
+                      Access is being finalized. Refresh in a moment.
                     </p>
                   )
                 ) : (

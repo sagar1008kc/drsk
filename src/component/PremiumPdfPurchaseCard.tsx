@@ -8,6 +8,8 @@ type PremiumPdfPurchaseCardProps = {
   description: string;
   coverImage: string;
   priceLabel: string;
+  checkoutSlug?: string;
+  ctaLabel?: string;
 };
 
 export default function PremiumPdfPurchaseCard({
@@ -15,6 +17,8 @@ export default function PremiumPdfPurchaseCard({
   description,
   coverImage,
   priceLabel,
+  checkoutSlug,
+  ctaLabel,
 }: PremiumPdfPurchaseCardProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,8 +29,10 @@ export default function PremiumPdfPurchaseCard({
     setError('');
 
     try {
-      const response = await fetch('/api/resources/premium/checkout', {
+      const response = await fetch(checkoutSlug ? '/api/resources/checkout' : '/api/resources/premium/checkout', {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: checkoutSlug ? JSON.stringify({ slug: checkoutSlug }) : undefined,
       });
       const result = (await response.json()) as {
         url?: string;
@@ -94,7 +100,7 @@ export default function PremiumPdfPurchaseCard({
               disabled={loading}
               className="inline-flex h-11 items-center justify-center rounded-xl bg-violet-700 px-6 text-sm font-semibold text-white shadow-md transition hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? 'Redirecting to Stripe…' : 'Buy & unlock PDF'}
+              {loading ? 'Redirecting to Stripe…' : ctaLabel || 'Buy & unlock PDF'}
             </button>
             {error ? <p className="mt-2 text-xs text-rose-600">{error}</p> : null}
           </div>

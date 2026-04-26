@@ -4,6 +4,7 @@ import DashboardHeader from '@/component/DashboardHeader';
 import DashboardQuickStats from '@/component/DashboardQuickStats';
 import EmptyState from '@/component/EmptyState';
 import MotivationalSampleLibrary from '@/component/MotivationalSampleLibrary';
+import PremiumPdfPurchaseCard from '@/component/PremiumPdfPurchaseCard';
 import ProfileSummaryCard from '@/component/ProfileSummaryCard';
 import ResourceCard from '@/component/ResourceCard';
 import FreeDownloadCard from '@/component/FreeDownloadCard';
@@ -103,6 +104,14 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 Tip: bookmark this page — new drops and session offers land here first.
               </p>
             </div>
+            <PremiumPdfPurchaseCard
+              title="Stop Overthinking"
+              description="Premium practical guide for breaking overthinking loops, calming stress patterns, and moving ahead with clarity."
+              coverImage="/stop_overthinking.png"
+              priceLabel="$5.99"
+              checkoutSlug="stop-overthinking-premium"
+              ctaLabel="Buy now • $5.99"
+            />
 
             <div id="member-free">
               <FreeDownloadCard

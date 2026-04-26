@@ -120,46 +120,57 @@ export default function RootLayout({
       lang="en"
       className={`${inter.className} ${playfair.variable} scroll-smooth`}
     >
-      <body
-        className={`${inter.className} antialiased bg-[#F8F7F4] text-zinc-900`}
-      >
+      <body className={`${inter.className} bg-[#F3F4FA] text-zinc-900 antialiased`}>
         <Providers />
         <Navbar />
 
         <div className="pt-14 sm:pt-[4.5rem] md:pt-[4.75rem]">{children}</div>
         {/* Footer */}
-        <footer className="border-t border-[#C9A962]/25 bg-zinc-950 px-4 py-10 text-center text-sm text-zinc-300">
-          <div className="mx-auto mb-8 max-w-3xl text-left">
+        <footer className="relative overflow-hidden border-t border-violet-300/30 bg-[linear-gradient(160deg,rgba(7,7,10,1)_0%,rgba(18,11,31,1)_45%,rgba(39,17,63,1)_100%)] px-4 pb-10 pt-10 text-center text-sm text-zinc-300">
+          <div className="relative mx-auto mb-7 max-w-3xl text-left">
             <HandbookSubscribeCTA variant="dark" />
           </div>
-          <p className="mt-1 text-zinc-400">
+          <div className="relative left-1/2 h-16 w-screen -translate-x-1/2 overflow-hidden text-white/10">
+            <svg
+              viewBox="0 0 1200 120"
+              preserveAspectRatio="none"
+              className="h-full w-full"
+              aria-hidden
+            >
+              <path
+                d="M0,14 C180,118 360,118 540,48 C740,-20 920,-20 1200,62 L1200,120 L0,120 Z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          <p className="relative mt-4 text-zinc-400">
             SK Creation • © {new Date().getFullYear()} • All rights reserved.
           </p>
           <nav
-            className="mx-auto mt-6 flex max-w-md flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-zinc-400 sm:text-sm"
+            className="relative mx-auto mt-6 flex max-w-md flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-zinc-400 sm:text-sm"
             aria-label="Legal"
           >
             <Link
               href="/terms"
-              className="text-[#C9A962] underline-offset-2 hover:text-[#E8D5A3] hover:underline"
+              className="text-violet-200 underline-offset-2 hover:text-violet-100 hover:underline"
             >
               Terms of Service
             </Link>
-            <span className="text-[#8B7535]" aria-hidden>
+            <span className="text-violet-200/35" aria-hidden>
               |
             </span>
             <Link
               href="/privacy"
-              className="text-[#C9A962] underline-offset-2 hover:text-[#E8D5A3] hover:underline"
+              className="text-violet-200 underline-offset-2 hover:text-violet-100 hover:underline"
             >
               Privacy Policy
             </Link>
-            <span className="text-[#8B7535]" aria-hidden>
+            <span className="text-violet-200/35" aria-hidden>
               |
             </span>
             <Link
               href="/disclaimer"
-              className="text-[#C9A962] underline-offset-2 hover:text-[#E8D5A3] hover:underline"
+              className="text-violet-200 underline-offset-2 hover:text-violet-100 hover:underline"
             >
               Session disclaimer
             </Link>

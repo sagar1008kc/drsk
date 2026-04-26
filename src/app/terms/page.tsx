@@ -26,6 +26,9 @@ export default function TermsPage() {
           paid or complimentary services offered by Dr. SK (“we,” “us”). By booking
           a session, requesting a quote, or using the site, you agree to these terms.
         </p>
+        <p className="mt-2 text-sm text-zinc-500">
+          skcreation.org is part of <strong>SMIND BUSINESS LLC</strong>.
+        </p>
 
         <LegalProse>
           <h2>1. Services</h2>

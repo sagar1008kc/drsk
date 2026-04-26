@@ -1,6 +1,6 @@
 import { getSupabaseAdmin } from '@/lib/supabase';
 
-const defaultPriceCents = 999;
+const defaultPriceCents = 599;
 
 export const premiumPdfConfig = {
   slug: process.env.NEXT_PUBLIC_PREMIUM_PDF_SLUG || 'emotional-balance',
@@ -11,8 +11,8 @@ export const premiumPdfConfig = {
     process.env.NEXT_PUBLIC_PREMIUM_PDF_DESCRIPTION ||
     'A focused PDF guide by Dr. SK: calm looping thoughts, ground your mind, and build simple daily practices so you can think clearly again. One-time purchase — instant secure download after payment.',
   storageKey:
-    process.env.NEXT_PUBLIC_PREMIUM_PDF_STORAGE_KEY || 'books/emotional-balance.pdf',
-  thumbnailUrl: '/stop-overthinking.png',
+    process.env.NEXT_PUBLIC_PREMIUM_PDF_STORAGE_KEY || 'books/stop_overthinking.pdf',
+  thumbnailUrl: '/stop_overthinking.png',
   resourceType: 'PDF',
   category: 'premium',
   priceCents: Number(process.env.PREMIUM_PDF_PRICE_CENTS || defaultPriceCents),

@@ -40,20 +40,20 @@ export const motivationalEbooks: MotivationalEbook[] = [
     category: 'motivation',
     isFree: true,
     priceCents: null,
-    thumbnailUrl: '/relationship.png',
+    thumbnailUrl: '/stop_overthinking.png',
   },
   {
     id: '02',
-    slug: 'motivational-ebook-02',
-    title: 'Motivational eBook 02',
+    slug: 'stop-overthinking-premium',
+    title: 'Stop Overthinking',
     description:
-      'Premium workbook for building better daily habits with structured exercises and reflection templates.',
-    storageKey: 'ebook/motivational_ebook_02.pdf',
-    fileName: 'motivational_ebook_02.pdf',
-    category: 'habits',
+      'Premium practical guide for breaking overthinking loops, calming stress patterns, and moving ahead with clarity.',
+    storageKey: 'books/stop_overthinking.pdf',
+    fileName: 'stop_overthinking.pdf',
+    category: 'mindfulness',
     isFree: false,
-    priceCents: 399,
-    thumbnailUrl: '/stop-overthinking.png',
+    priceCents: 599,
+    thumbnailUrl: '/stop_overthinking.png',
   },
   {
     id: '03',
@@ -66,7 +66,7 @@ export const motivationalEbooks: MotivationalEbook[] = [
     category: 'mindfulness',
     isFree: false,
     priceCents: 399,
-    thumbnailUrl: '/stop-overthinking.png',
+    thumbnailUrl: '/stop_overthinking.png',
   },
   {
     id: '04',
@@ -79,7 +79,7 @@ export const motivationalEbooks: MotivationalEbook[] = [
     category: 'resilience',
     isFree: false,
     priceCents: 399,
-    thumbnailUrl: '/stop-overthinking.png',
+    thumbnailUrl: '/stop_overthinking.png',
   },
   {
     id: '05',
@@ -92,7 +92,7 @@ export const motivationalEbooks: MotivationalEbook[] = [
     category: 'motivation',
     isFree: false,
     priceCents: 399,
-    thumbnailUrl: '/stop-overthinking.png',
+    thumbnailUrl: '/stop_overthinking.png',
   },
 ];
 

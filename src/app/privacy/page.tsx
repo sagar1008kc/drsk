@@ -29,9 +29,10 @@ export default function PrivacyPage() {
         <LegalProse>
           <h2>1. Who we are</h2>
           <p>
-            This site is operated by Dr. SK in connection with professional and
-            creative services. Contact: <strong>info@skcreation.org</strong> (or
-            the email listed in the contact section).
+            This site (<strong>skcreation.org</strong>) is operated by Dr. SK in connection with
+            professional and creative services and is part of <strong>SMIND BUSINESS LLC</strong>.
+            Contact: <strong>info@skcreation.org</strong> (or the email listed in the contact
+            section).
           </p>
 
           <h2>2. Information we collect</h2>

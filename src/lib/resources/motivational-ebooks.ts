@@ -20,7 +20,21 @@ async function ensureCatalogResource(ebook: MotivationalEbook) {
     throw new Error(selectError.message || 'Unable to load ebook resource.');
   }
 
-  if (existing?.id) return existing.id;
+  if (existing?.id) {
+    await admin
+      .from('resources')
+      .update({
+        title: ebook.title,
+        description: ebook.description,
+        storage_key: ebook.storageKey,
+        thumbnail_url: ebook.thumbnailUrl,
+        category: ebook.isFree ? 'free-sample' : 'premium',
+        resource_type: 'PDF',
+        is_active: true,
+      })
+      .eq('id', existing.id);
+    return existing.id;
+  }
 
   const { data, error } = await admin
     .from('resources')

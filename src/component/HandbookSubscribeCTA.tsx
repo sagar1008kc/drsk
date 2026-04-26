@@ -128,11 +128,7 @@ export default function HandbookSubscribeCTA({
           </button>
         </form>
         <p className="mt-3 text-xs leading-relaxed text-zinc-500">
-          By subscribing you agree to receive updates from Dr. SK. See our{' '}
-          <a href="/privacy" className="text-zinc-700 underline-offset-2 hover:underline">
-            privacy policy
-          </a>
-          .
+          By subscribing you agree to receive updates from Dr. SK.
         </p>
       </div>
     );
@@ -180,11 +176,7 @@ export default function HandbookSubscribeCTA({
           </button>
         </form>
         <p className="mt-4 text-center text-xs leading-relaxed text-zinc-500">
-          By subscribing you agree to receive updates from Dr. SK. See our{' '}
-          <a href="/privacy" className="text-zinc-700 underline-offset-2 hover:underline">
-            privacy policy
-          </a>
-          .
+          By subscribing you agree to receive updates from Dr. SK.
         </p>
       </div>
     );
@@ -216,22 +208,8 @@ export default function HandbookSubscribeCTA({
             : 'mt-2 text-sm leading-relaxed text-zinc-600'
         }
       >
-        The PDF is free to download. Enter your email and we’ll send a thank-you message with the
-        same download link, our services, current offers, and the member portal link.
-      </p>
-      <p className={isDark ? 'mt-2 text-xs text-zinc-500' : 'mt-2 text-xs text-zinc-500'}>
-        <a
-          href={HANDBOOK_PUBLIC_PATH}
-          download={HANDBOOK_DOWNLOAD_FILENAME}
-          className={
-            isDark
-              ? 'font-medium text-[#D4B96A] underline-offset-2 hover:underline'
-              : 'font-medium text-violet-700 underline-offset-2 hover:underline'
-          }
-        >
-          Direct download
-        </a>{' '}
-        (no email required) — or subscribe below to stay on the list.
+        Subscribe to get updates on new handbooks, practical resources, and new releases
+        from SK Creation.
       </p>
       <form
         onSubmit={onSubmit}
@@ -269,18 +247,7 @@ export default function HandbookSubscribeCTA({
         </button>
       </form>
       <p className={isDark ? 'mt-3 text-xs text-zinc-500' : 'mt-3 text-xs text-zinc-500'}>
-        By subscribing you agree to receive this message and occasional updates. See our{' '}
-        <a
-          href="/privacy"
-          className={
-            isDark
-              ? 'text-[#D4B96A] underline-offset-2 hover:underline'
-              : 'text-violet-700 underline-offset-2 hover:underline'
-          }
-        >
-          privacy policy
-        </a>
-        .
+        By subscribing you agree to receive this message and occasional updates.
       </p>
     </div>
   );
