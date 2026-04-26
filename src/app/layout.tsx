@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Script from 'next/script';
 import './globals.css';
 import BotpressWebchat from '@/component/BotpressWebchat';
+import HandbookSubscribeCTA from '@/component/HandbookSubscribeCTA';
 import Navbar from '@/component/Navbar';
 import Providers from '@/component/Providers';
 const inter = Inter({
@@ -128,6 +129,9 @@ export default function RootLayout({
         <div className="pt-14 sm:pt-[4.5rem] md:pt-[4.75rem]">{children}</div>
         {/* Footer */}
         <footer className="border-t border-[#C9A962]/25 bg-zinc-950 px-4 py-10 text-center text-sm text-zinc-300">
+          <div className="mx-auto mb-8 max-w-3xl text-left">
+            <HandbookSubscribeCTA variant="dark" />
+          </div>
           <p className="mt-1 text-zinc-400">
             SK Creation • © {new Date().getFullYear()} • All rights reserved.
           </p>

@@ -29,6 +29,7 @@ export default function Navbar() {
   const [user, setUser] = useState<SessionUser | null>(null);
   const [checkingSession, setCheckingSession] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -56,6 +57,10 @@ export default function Navbar() {
       mounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   async function handleLogout() {
     if (loggingOut) return;
@@ -85,10 +90,10 @@ export default function Navbar() {
           />
         </Link>
 
-        <nav
-          className="no-scrollbar flex min-w-0 max-w-[calc(100%-9rem)] items-center justify-end gap-1 overflow-x-auto scroll-smooth sm:max-w-none sm:gap-1.5 sm:pl-2 md:gap-2"
-          aria-label="Main"
-        >
+        <nav className="hidden items-center gap-1.5 md:flex" aria-label="Main">
+          <Link href="/about" className={navButtonClass(isActive('/about'))}>
+            About
+          </Link>
           <Link href="/services" className={navButtonClass(isActive('/services'))}>
             Services
           </Link>
@@ -125,7 +130,62 @@ export default function Navbar() {
             </Link>
           )}
         </nav>
+
+        <button
+          type="button"
+          onClick={() => setMobileOpen((v) => !v)}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 text-zinc-200 transition hover:bg-white/5 md:hidden"
+          aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-main-menu"
+        >
+          <span className="sr-only">Menu</span>
+          <span className="flex flex-col gap-1.5" aria-hidden>
+            <span className="h-0.5 w-5 rounded-full bg-current" />
+            <span className="h-0.5 w-5 rounded-full bg-current" />
+            <span className="h-0.5 w-5 rounded-full bg-current" />
+          </span>
+        </button>
       </div>
+
+      {mobileOpen ? (
+        <div id="mobile-main-menu" className="border-t border-white/10 bg-zinc-950/95 px-3 pb-3 pt-2 md:hidden">
+          <nav className="flex flex-col gap-2" aria-label="Mobile main">
+            <Link href="/about" className={navButtonClass(isActive('/about'))}>
+              About
+            </Link>
+            <Link href="/services" className={navButtonClass(isActive('/services'))}>
+              Services
+            </Link>
+            <Link href="/project" className={navButtonClass(isActive('/project'))}>
+              Project
+            </Link>
+            {checkingSession ? (
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-zinc-500">
+                Loading...
+              </span>
+            ) : user ? (
+              <>
+                <Link href="/dashboard" className={navButtonClass(isActive('/dashboard'))}>
+                  Dashboard
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  disabled={loggingOut}
+                  className="rounded-full border border-white/10 px-3 py-2 text-left text-xs font-semibold text-zinc-300 transition hover:border-white/20 hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {loggingOut ? 'Logging out...' : 'Logout'}
+                </button>
+              </>
+            ) : (
+              <Link href="/login" className={navButtonClass(isActive('/login'))}>
+                Login
+              </Link>
+            )}
+          </nav>
+        </div>
+      ) : null}
     </header>
   );
 }

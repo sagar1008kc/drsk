@@ -20,13 +20,13 @@ export const premiumPdfConfig = {
 };
 
 export const freeSamplePdfConfig = {
-  slug: process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_SLUG || 'relationship-sample',
-  title: process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_TITLE || 'Relationship Sample',
+  slug: process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_SLUG || 'motivational-ebook-01',
+  title: process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_TITLE || 'Motivational eBook 01',
   description:
     process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_DESCRIPTION ||
-    'Free sample PDF for logged-in users with practical relationship insights.',
+    'Free starter motivational ebook available for every logged-in account.',
   storageKey:
-    process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_STORAGE_KEY || 'books/relationship.pdf',
+    process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_STORAGE_KEY || 'ebook/motivational_ebook_01.pdf',
   thumbnailUrl: '/relationship.png',
   resourceType: 'PDF',
   category: 'free-sample',

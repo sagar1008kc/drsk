@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "url": "https://mcp.supabase.com/mcp?project_ref=REPLACE_WITH_YOUR_PROJECT_REF"
+    }
+  }
+}

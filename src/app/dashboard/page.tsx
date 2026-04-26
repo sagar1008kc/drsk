@@ -13,13 +13,11 @@ import {
   getProfile,
 } from '@/lib/dashboard/data';
 import { getFirstName } from '@/lib/auth/validation';
-import PremiumPdfPurchaseCard from '@/component/PremiumPdfPurchaseCard';
 import {
   ensureFreeSamplePdfResource,
-  getPremiumPdfPriceCents,
-  premiumPdfConfig,
 } from '@/lib/resources/premium-resource';
 import { motivationalSamples } from '@/lib/dashboard/motivational-samples';
+import { ensureMotivationalCatalogResources } from '@/lib/resources/motivational-ebooks';
 
 type DashboardPageProps = {
   searchParams?: {
@@ -41,19 +39,12 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   if (!user) redirect('/login');
 
   await ensureFreeSamplePdfResource().catch(() => null);
+  await ensureMotivationalCatalogResources().catch(() => null);
 
   const [profile, resources] = await Promise.all([
     getProfile(user.id),
     getAccessibleResources(user.id),
   ]);
-  const premiumPdfSlug = premiumPdfConfig.slug;
-  const hasPremiumPdf = resources.some(
-    ({ resource }) => resource.slug === premiumPdfSlug
-  );
-  const priceLabel = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: premiumPdfConfig.currency.toUpperCase(),
-  }).format(getPremiumPdfPriceCents() / 100);
   const guidedCount = resources.filter(({ resource }) => {
     const text = `${resource.category || ''} ${resource.resource_type || ''}`.toLowerCase();
     return text.includes('guide') || text.includes('material') || text.includes('workbook');
@@ -68,6 +59,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     profile?.full_name || null,
     profile?.username || user.email?.split('@')[0] || 'there'
   );
+  const resourceIdBySlug = resources.reduce<Record<string, string>>((acc, item) => {
+    acc[item.resource.slug] = item.resource.id;
+    return acc;
+  }, {});
+  const unlockedSlugs = resources.map(({ resource }) => resource.slug);
 
   return (
     <main className="min-h-screen bg-[#F3F1EC] px-4 pb-16 pt-0">
@@ -108,17 +104,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               </p>
             </div>
 
-            {!hasPremiumPdf ? (
-              <div id="premium-offer">
-                <PremiumPdfPurchaseCard
-                  title={premiumPdfConfig.title}
-                  description={premiumPdfConfig.description}
-                  coverImage="/stop-overthinking.png"
-                  priceLabel={priceLabel}
-                />
-              </div>
-            ) : null}
-
             <div id="member-free">
               <FreeDownloadCard
                 title="When Relationship Hurt & Heal"
@@ -130,7 +115,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             </div>
 
             <div id="sample-library">
-              <MotivationalSampleLibrary />
+              <MotivationalSampleLibrary
+                resourceIdBySlug={resourceIdBySlug}
+                unlockedSlugs={unlockedSlugs}
+              />
             </div>
 
             {resources.length ? (
