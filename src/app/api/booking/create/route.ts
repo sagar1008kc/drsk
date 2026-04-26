@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
+import { meetingPreferenceLabel } from '@/lib/meetingPlatform';
 import {
   getCohortEventById,
   getServiceByType,
-  STANDARD_MEETING_PLATFORM,
   totalCentsForBooking,
 } from '@/lib/services';
 import { insertBooking } from '@/lib/booking';
@@ -83,7 +83,7 @@ export async function POST(req: Request) {
         preferred_date: data.preferredDate,
         preferred_time: data.preferredTime,
         timezone: 'America/Chicago',
-        meeting_preference: STANDARD_MEETING_PLATFORM,
+        meeting_preference: meetingPreferenceLabel(data.meetingPlatform),
         notes: notesCombined || null,
         company: null,
         consent: data.consent,

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isSupabaseConfigured, getSupabaseAdmin } from '@/lib/supabase';
-import { sendHandbookThankYouEmail } from '@/lib/mail';
+import { sendHandbookThankYouEmail, sendHandbookSubscribeAdminNotification } from '@/lib/mail';
 
 export const runtime = 'nodejs';
 
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
         return NextResponse.json(
           {
             message:
-              'Thank you for subscribing. This email is already registered, and you will continue receiving updates from Dr. SK.',
+              'You’re already subscribed with this email. You’ll continue to receive SK Creation updates.',
             alreadySubscribed: true,
           },
           { status: 200 }
@@ -72,33 +72,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: errMsg }, { status: 500 });
     }
 
+    if (savedToList) {
+      try {
+        await sendHandbookSubscribeAdminNotification(email);
+      } catch (e) {
+        console.error('[handbook-subscribe] admin notification failed:', e);
+      }
+    }
+
+    const successMessage =
+      'Thanks for subscribing. Check your inbox for a short note from SK Creation with useful links.';
+
     if (!savedToList && isSupabaseConfigured()) {
-      return NextResponse.json(
-        {
-          message:
-            'Thank you for subscribing. Please check your inbox for a confirmation message and upcoming updates from Dr. SK.',
-        },
-        { status: 200 }
-      );
+      return NextResponse.json({ message: successMessage }, { status: 200 });
     }
 
     if (!savedToList) {
-      return NextResponse.json(
-        {
-          message:
-            'Thank you for subscribing. Please check your inbox for a confirmation message and upcoming updates from Dr. SK.',
-        },
-        { status: 200 }
-      );
+      return NextResponse.json({ message: successMessage }, { status: 200 });
     }
 
-    return NextResponse.json(
-      {
-        message:
-          'Thank you for subscribing. Please check your inbox for a confirmation message and upcoming updates from Dr. SK.',
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({ message: successMessage }, { status: 200 });
   } catch (error) {
     console.error('handbook-subscribe error:', error);
     const errorMessage =

@@ -1,6 +1,10 @@
 import type { BookingRow } from '@/types/booking';
 import { getServiceByType } from '@/lib/services';
 import { buildEmailTemplate, escapeHtml } from '@/lib/emails/template';
+import {
+  BOOKING_MEETING_FROM_EMAIL,
+  prefersGoogleMeetAutoLink,
+} from '@/lib/meetingPlatform';
 
 function formatMoney(cents: number | null, currency: string): string {
   if (cents == null || cents === 0) {
@@ -75,10 +79,17 @@ export function buildAdminBookingEmail(booking: BookingRow): AdminEmailContent {
       },
       {
         title: 'Meeting',
-        bodyHtml:
-          booking.meeting_url && booking.meeting_provider === 'google_meet'
-            ? `<p style="margin:0 0 10px 0;color:#111827;font-size:14px;line-height:22px;"><strong>Google Meet:</strong> <a href="${escapeHtml(booking.meeting_url)}" style="color:#2563eb;text-decoration:none;">${escapeHtml(booking.meeting_url)}</a></p>`
-            : '<p style="margin:0 0 10px 0;color:#111827;font-size:14px;line-height:22px;">Google Meet link not created. Share manually in follow-up.</p>',
+        bodyHtml: (() => {
+          const pref = booking.meeting_preference || '—';
+          const hasMeet =
+            booking.meeting_url &&
+            booking.meeting_provider === 'google_meet' &&
+            prefersGoogleMeetAutoLink(booking.meeting_preference);
+          if (hasMeet) {
+            return `<p style="margin:0 0 10px 0;color:#111827;font-size:14px;line-height:22px;"><strong>Platform:</strong> ${escapeHtml(pref)}</p><p style="margin:0 0 10px 0;color:#111827;font-size:14px;line-height:22px;"><strong>Google Meet:</strong> <a href="${escapeHtml(booking.meeting_url!)}" style="color:#2563eb;text-decoration:none;">${escapeHtml(booking.meeting_url!)}</a></p>`;
+          }
+          return `<p style="margin:0 0 10px 0;color:#111827;font-size:14px;line-height:22px;"><strong>Preferred platform:</strong> ${escapeHtml(pref)}</p><p style="margin:0;color:#111827;font-size:14px;line-height:22px;">No auto-generated link on file. Send the join link from <strong>${escapeHtml(BOOKING_MEETING_FROM_EMAIL)}</strong> in follow-up.</p>`;
+        })(),
       },
       {
         title: 'Notes',
@@ -106,17 +117,29 @@ export function buildCustomerConfirmationEmail(
     : 'To be confirmed (Central Time)';
   const timezoneValue = booking.timezone || 'America/Chicago';
   const amountLabel = complimentary ? 'Complimentary (No Charge)' : amount;
-  const meetingContent =
-    booking.meeting_url && booking.meeting_provider === 'google_meet'
-      ? `
-      <p style="margin:0;color:#1f2937;font-size:14px;line-height:22px;">
-        Your meeting link is ready:<br />
-        <a href="${escapeHtml(booking.meeting_url)}" style="color:#2563eb;text-decoration:none;">${escapeHtml(booking.meeting_url)}</a>
+  const pref = booking.meeting_preference || 'Google Meet (Recommended)';
+  const fromAddr = escapeHtml(BOOKING_MEETING_FROM_EMAIL);
+  const hasGoogleMeetUrl =
+    Boolean(booking.meeting_url) &&
+    booking.meeting_provider === 'google_meet' &&
+    prefersGoogleMeetAutoLink(booking.meeting_preference);
+
+  const meetingContent = hasGoogleMeetUrl
+    ? `
+      <p style="margin:0 0 10px 0;color:#1f2937;font-size:14px;line-height:22px;">
+        Your Google Meet link is ready:<br />
+        <a href="${escapeHtml(booking.meeting_url!)}" style="color:#2563eb;text-decoration:none;">${escapeHtml(booking.meeting_url!)}</a>
+      </p>
+      <p style="margin:0;color:#4b5563;font-size:13px;line-height:20px;">
+        You may also receive updates from <strong>${fromAddr}</strong>.
       </p>
       `
-      : `
+    : `
+      <p style="margin:0 0 10px 0;color:#1f2937;font-size:14px;line-height:22px;">
+        You selected <strong>${escapeHtml(pref)}</strong>.
+      </p>
       <p style="margin:0;color:#1f2937;font-size:14px;line-height:22px;">
-        Meeting link will be shared in a follow-up email.
+        Your meeting link will be sent from <strong>${fromAddr}</strong> once your booking is confirmed.
       </p>
       `;
 

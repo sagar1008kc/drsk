@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import type { Service } from '@/lib/services';
 import { SESSION_SERVICES } from '@/lib/services';
+import { BOOKING_MEETING_FROM_EMAIL } from '@/lib/meetingPlatform';
 import Link from 'next/link';
 
 const BookingDialog = dynamic(() => import('@/component/BookingDialog'), {
@@ -242,7 +243,7 @@ export default function Services() {
                   'No payment — mission-driven contexts',
                   'Educational and supportive focus',
                   'Subject to availability',
-                  'Meet link sent by email after approval',
+                  `Meeting details from ${BOOKING_MEETING_FROM_EMAIL} after approval`,
                 ]}
                 price="Complimentary"
                 cta="Request session"

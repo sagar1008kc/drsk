@@ -24,6 +24,18 @@ export function isValidOptionalInternationalPhone(digits: string): boolean {
   return isValidInternationalPhoneDigits(digits);
 }
 
+/**
+ * E.164 value from `react-phone-number-input` → API payload (digits only, max
+ * {@link E164_MAX_DIGITS}), or undefined when empty.
+ */
+export function phonePayloadFromInternational(
+  value: string | undefined
+): string | undefined {
+  if (!value?.trim()) return undefined;
+  const digits = value.replace(/\D/g, '').slice(0, E164_MAX_DIGITS);
+  return digits || undefined;
+}
+
 /** Readable grouping (no “ext.”); spaces every 3 digits, max 15 digits stored. */
 export function formatInternationalPhoneDisplay(digits: string): string {
   const d = phoneDigits(digits, E164_MAX_DIGITS);

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BOOKING_MEETING_FROM_EMAIL } from '@/lib/meetingPlatform';
 
 export const metadata = {
   title: 'Booking confirmed',
@@ -37,8 +38,12 @@ export default function BookingSuccessPage({
         {complimentary ? (
           <>
             <p className="mt-4 text-lg leading-8 text-zinc-600">
-              Your complimentary session request has been received. Confirmation
-              and meeting details will be sent to your email shortly.
+              Your complimentary session request has been received. Watch for a
+              confirmation and meeting details from{' '}
+              <span className="font-medium text-zinc-800">
+                {BOOKING_MEETING_FROM_EMAIL}
+              </span>
+              .
             </p>
             <p className="mt-3 text-sm leading-7 text-zinc-400">
               If you do not see an email within a few minutes, check your spam folder.
@@ -47,8 +52,12 @@ export default function BookingSuccessPage({
         ) : (
           <>
             <p className="mt-4 text-lg leading-8 text-zinc-600">
-              Your payment was received. Your booking confirmation and meeting
-              details will be sent to your email shortly.
+              Your payment was received. Your confirmation and meeting link will
+              come from{' '}
+              <span className="font-medium text-zinc-800">
+                {BOOKING_MEETING_FROM_EMAIL}
+              </span>{' '}
+              shortly.
             </p>
             <p className="mt-3 text-sm leading-7 text-zinc-400">
               It can take a moment for confirmation to arrive while your payment is

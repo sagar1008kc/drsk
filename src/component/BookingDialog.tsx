@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { toast } from 'sonner';
+import { isValidPhoneNumber } from 'react-phone-number-input';
 import {
   getCohortEventById,
   GROUP_COHORT_EVENTS,
@@ -23,12 +24,13 @@ import {
   getTimeSlotsForChicagoDate,
   todayYmdChicago,
 } from '@/lib/availability';
+import { phonePayloadFromInternational } from '@/lib/phone';
+import PhoneInputField from '@/component/PhoneInputField';
 import {
-  E164_MAX_DIGITS,
-  formatInternationalPhoneDisplay,
-  isValidOptionalInternationalPhone,
-  phoneDigits,
-} from '@/lib/phone';
+  BOOKING_MEETING_FROM_EMAIL,
+  MEETING_PLATFORM_OPTIONS,
+  type MeetingPlatformId,
+} from '@/lib/meetingPlatform';
 
 type BookingDialogProps = {
   visible: boolean;
@@ -57,6 +59,7 @@ export default function BookingDialog({
 }: BookingDialogProps) {
   const titleId = useId();
   const companyFieldId = useId();
+  const phoneFieldId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -70,6 +73,8 @@ export default function BookingDialog({
   const [sessionFocusOther, setSessionFocusOther] = useState('');
   const [attendeeCount, setAttendeeCount] = useState(2);
   const [notes, setNotes] = useState('');
+  const [meetingPlatform, setMeetingPlatform] =
+    useState<MeetingPlatformId>('google_meet');
   const [consent, setConsent] = useState(false);
   const [company, setCompany] = useState('');
   const [cohortEventId, setCohortEventId] = useState('');
@@ -142,6 +147,7 @@ export default function BookingDialog({
     setSessionFocusOther('');
     setAttendeeCount(2);
     setNotes('');
+    setMeetingPlatform('google_meet');
     setConsent(false);
     setCompany('');
     setCohortEventId('');
@@ -243,10 +249,9 @@ export default function BookingDialog({
     if (notes.length > 1000) {
       errors.notes = 'Notes must be 1000 characters or fewer.';
     }
-    const p = phone.trim();
-    if (p && !isValidOptionalInternationalPhone(p)) {
+    if (phone && !isValidPhoneNumber(phone)) {
       errors.phone =
-        'Enter a complete international number (8–15 digits, country code first) or leave phone blank.';
+        'Enter a valid international number or leave phone blank.';
     }
     return errors;
   }, [
@@ -320,13 +325,14 @@ export default function BookingDialog({
           serviceType: service.id,
           fullName: fullName.trim(),
           email: email.trim(),
-          phone: phone.trim() || undefined,
+          phone: phonePayloadFromInternational(phone),
           language,
           preferredDate: formatDateForInput(preferredDate),
           preferredTime,
           timezone: CENTRAL_TZ,
           attendeeCount: service.groupPricing ? attendeeCount : 1,
           notes: notes.trim() || undefined,
+          meetingPlatform,
           sessionFocus:
             service.id === 'business-career-session' ||
             service.id === 'nonprofit-community-session'
@@ -456,11 +462,30 @@ export default function BookingDialog({
             <h2 id={titleId} className="mt-2 text-xl font-bold md:text-2xl">
               {service.title}
             </h2>
-            <p className="mt-2 text-sm leading-6 text-gray-600">
-              {service.requiresPayment
-                ? 'Complete the form, then pay securely with Stripe. Confirmation and your meeting link are sent after payment succeeds.'
-                : 'Complete the form to request a complimentary session. Confirmation and meeting details are sent by email — there is no payment step.'}
-            </p>
+            <div className="mt-2 space-y-2 text-sm leading-6 text-gray-600">
+              {service.requiresPayment ? (
+                <>
+                  <p>Complete the form and pay securely with Stripe.</p>
+                  <p>
+                    After payment is confirmed, you&apos;ll receive a confirmation
+                    email and meeting link for your selected platform.
+                  </p>
+                  <p>All times are US Central (CT).</p>
+                </>
+              ) : (
+                <>
+                  <p>Complete the form to request a complimentary session.</p>
+                  <p>
+                    After we confirm your request, you&apos;ll hear from{' '}
+                    <span className="font-medium text-gray-800">
+                      {BOOKING_MEETING_FROM_EMAIL}
+                    </span>{' '}
+                    with meeting details for your selected platform.
+                  </p>
+                  <p>All times are US Central (CT).</p>
+                </>
+              )}
+            </div>
           </div>
           <button
             type="button"
@@ -528,25 +553,11 @@ export default function BookingDialog({
               </div>
             </div>
 
-            <p className="mt-5 text-xs leading-5 text-gray-500">
-              {service.requiresPayment ? (
-                <>
-                  You pay only after Stripe checkout. The total matches the
-                  session rate
-                  {service.groupPricing ? ' (× group size when applicable)' : ''}.
-                  Times are US Central (CT).
-                </>
-              ) : (
-                <>No charge. Times are US Central (CT).</>
-              )}
-            </p>
-            <p className="mt-2 text-xs leading-5 text-gray-500">
-              Video is{' '}
-              <span className="font-semibold text-gray-700">Google Meet</span>
-              — the join link is in your confirmation email, not a separate
-              Calendar invite from us. Microsoft Teams is not set up
-              automatically; say so in Notes if you need Teams.
-            </p>
+            {!service.requiresPayment ? (
+              <p className="mt-4 text-xs leading-5 text-gray-500">
+                No payment on this step.
+              </p>
+            ) : null}
 
             {/* Honeypot — hidden from users */}
             <div
@@ -763,28 +774,17 @@ export default function BookingDialog({
                 ) : null}
               </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Phone{' '}
-                  <span className="font-normal text-gray-500">(optional)</span>
-                </label>
-                <input
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  value={formatInternationalPhoneDisplay(phone)}
-                  onChange={(e) =>
-                    setPhone(phoneDigits(e.target.value, E164_MAX_DIGITS))
-                  }
-                  className={`${inputClass}${showErr('phone') ? inputErrorClass : ''}`}
-                  placeholder="(555) 123-4567"
-                />
-                {showErr('phone') ? (
-                  <p className="mt-1.5 text-sm text-red-600">
-                    {fieldMessage('phone')}
-                  </p>
-                ) : null}
-              </div>
+              <PhoneInputField
+                id={phoneFieldId}
+                label="Phone"
+                optional
+                value={phone || undefined}
+                onChange={(v) => setPhone(v ?? '')}
+                onBlur={() => markTouched('phone')}
+                showError={showErr('phone')}
+                error={fieldMessage('phone')}
+                helperText="Used only for booking-related communication."
+              />
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-gray-800">
@@ -893,10 +893,45 @@ export default function BookingDialog({
                 ) : null}
               </div>
 
-              <div className="md:col-span-2 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-gray-800">
-                <span className="font-semibold text-sky-900">Google Meet</span>{' '}
-                — your confirmation includes the join link. (Server setup for Meet
-                is documented separately for administrators.)
+              <div className="md:col-span-2 space-y-3 rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-4">
+                <p className="text-sm font-semibold text-gray-900">
+                  Preferred meeting platform
+                </p>
+                <div className="space-y-2">
+                  {MEETING_PLATFORM_OPTIONS.map((opt) => (
+                    <label
+                      key={opt.id}
+                      className={`flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-sm transition ${
+                        meetingPlatform === opt.id
+                          ? 'border-black bg-white ring-1 ring-black/10'
+                          : 'border-gray-200 bg-white hover:border-gray-300'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="meetingPlatform"
+                        value={opt.id}
+                        checked={meetingPlatform === opt.id}
+                        onChange={() => {
+                          setMeetingPlatform(opt.id);
+                          markTouched('meetingPlatform');
+                        }}
+                        className="h-4 w-4 shrink-0 border-gray-300 text-black focus:ring-black"
+                      />
+                      <span className="text-gray-800">{opt.label}</span>
+                    </label>
+                  ))}
+                </div>
+                <p className="text-xs leading-5 text-gray-500">
+                  {service.requiresPayment
+                    ? `Meeting link will be sent from ${BOOKING_MEETING_FROM_EMAIL} after payment confirmation.`
+                    : `Meeting details will be sent from ${BOOKING_MEETING_FROM_EMAIL} after we confirm your request.`}
+                </p>
+                {showErr('meetingPlatform') ? (
+                  <p className="text-sm text-red-600">
+                    {fieldMessage('meetingPlatform')}
+                  </p>
+                ) : null}
               </div>
 
               <div className="md:col-span-2">

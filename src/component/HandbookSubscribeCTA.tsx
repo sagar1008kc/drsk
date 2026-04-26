@@ -2,12 +2,11 @@
 
 import { FormEvent, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import {
-  HANDBOOK_DOWNLOAD_FILENAME,
-  HANDBOOK_PUBLIC_PATH,
-} from '@/lib/handbook-public';
-
 type Variant = 'light' | 'dark';
+
+const DEFAULT_FULL_HEADING = 'Subscribe for updates';
+const DEFAULT_FULL_DESCRIPTION =
+  'Occasional emails from SK Creation with links to resources, services, and announcements.';
 
 /** Comfortable tap target + vertical padding; min width so fields don’t feel squeezed in grids */
 const emailFieldClass =
@@ -37,12 +36,21 @@ export type HandbookSubscribeCTAProps = {
   minimal?: boolean;
   /** With `minimal`: no card/title — parent supplies heading (e.g. in a grid card). */
   embedded?: boolean;
+  /** Full variant only: overrides default heading (e.g. home page Resources). */
+  heading?: string;
+  /** Full variant only: overrides default description. */
+  description?: string;
+  /** Full variant + light: omit default top margin (e.g. nested under Resources). */
+  flushTop?: boolean;
 };
 
 export default function HandbookSubscribeCTA({
   variant = 'light',
   minimal = false,
   embedded = false,
+  heading,
+  description,
+  flushTop = false,
 }: HandbookSubscribeCTAProps) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -183,13 +191,19 @@ export default function HandbookSubscribeCTA({
   }
 
   const isDark = variant === 'dark';
+  const fullHeading = heading ?? DEFAULT_FULL_HEADING;
+  const fullDescription = description ?? DEFAULT_FULL_DESCRIPTION;
+
+  const lightShell =
+    (flushTop ? '' : 'mt-8 ') +
+    'rounded-2xl border border-violet-200/90 bg-gradient-to-b from-violet-50/80 to-white/90 p-5 shadow-sm sm:p-6';
 
   return (
     <div
       className={
         isDark
           ? 'rounded-2xl border border-[#C9A962]/30 bg-zinc-900/90 p-5 shadow-[0_0_40px_rgba(201,169,98,0.08)] ring-1 ring-zinc-800/80 sm:p-7'
-          : 'mt-8 rounded-2xl border border-violet-200/90 bg-gradient-to-b from-violet-50/80 to-white/90 p-5 shadow-sm sm:p-6'
+          : lightShell
       }
     >
       <h3
@@ -199,7 +213,7 @@ export default function HandbookSubscribeCTA({
             : 'text-base font-semibold text-zinc-900'
         }
       >
-        Get the handbook in your inbox
+        {fullHeading}
       </h3>
       <p
         className={
@@ -208,8 +222,7 @@ export default function HandbookSubscribeCTA({
             : 'mt-2 text-sm leading-relaxed text-zinc-600'
         }
       >
-        Subscribe to get updates on new handbooks, practical resources, and new releases
-        from SK Creation.
+        {fullDescription}
       </p>
       <form
         onSubmit={onSubmit}

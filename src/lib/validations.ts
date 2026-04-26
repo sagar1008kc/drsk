@@ -12,6 +12,7 @@ import {
   isValidTimeForChicagoDate,
 } from '@/lib/availability';
 import { isValidOptionalInternationalPhone } from '@/lib/phone';
+import { isMeetingPlatformId, type MeetingPlatformId } from '@/lib/meetingPlatform';
 
 export type CreateBookingPayload = {
   serviceType: string;
@@ -22,6 +23,7 @@ export type CreateBookingPayload = {
   preferredDate: string;
   preferredTime: string;
   timezone: string;
+  meetingPlatform: MeetingPlatformId;
   notes?: string;
   consent: boolean;
   company?: string;
@@ -78,6 +80,8 @@ export function validateCreateBookingPayload(
     typeof b.sessionFocusOther === 'string' ? b.sessionFocusOther.trim() : '';
   const cohortEventId =
     typeof b.cohortEventId === 'string' ? b.cohortEventId.trim() : '';
+  const meetingPlatformRaw =
+    typeof b.meetingPlatform === 'string' ? b.meetingPlatform.trim() : '';
 
   const errors: FieldErrors = {};
 
@@ -176,6 +180,10 @@ export function validateCreateBookingPayload(
       errors.preferredDate = 'Date must match the selected cohort.';
     }
   }
+  if (!meetingPlatformRaw || !isMeetingPlatformId(meetingPlatformRaw)) {
+    errors.meetingPlatform = 'Choose your preferred meeting platform.';
+  }
+
   if (!consent) {
     const paidFlow = serviceConfig?.requiresPayment ?? true;
     errors.consent = paidFlow
@@ -209,6 +217,7 @@ export function validateCreateBookingPayload(
       preferredDate,
       preferredTime,
       timezone,
+      meetingPlatform: meetingPlatformRaw as MeetingPlatformId,
       notes: notes || undefined,
       consent: true,
       attendeeCount,

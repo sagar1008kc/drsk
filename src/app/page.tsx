@@ -217,13 +217,13 @@ export default function Home() {
               whileHover={{ y: -4, scale: 1.01 }}
               className="flex h-full min-h-0 flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm lg:p-7"
             >
-              <p className="text-xs font-semibold uppercase tracking-wider text-orange-700">
+              <p className="text-xs font-semibold uppercase tracking-wider text-blue-700">
                 Free
               </p>
               <h3 className="mt-2 text-lg font-bold text-zinc-900 lg:text-xl">
                 Motivation Powerpack eBook
               </h3>
-              <p className="mt-1 text-xs font-medium uppercase tracking-wide text-orange-800/80">
+              <p className="mt-1 text-xs font-medium uppercase tracking-wide text-blue-800/80">
                 Motivation and action prompts · quick reset guide
               </p>
               <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-600 lg:text-[15px] lg:leading-7">
@@ -234,26 +234,42 @@ export default function Home() {
                 <a
                   href={MOTIVATIONAL_EBOOK_PUBLIC_PATH}
                   download={MOTIVATIONAL_EBOOK_DOWNLOAD_FILENAME}
-                  className={`${ctaBaseClass} w-full bg-orange-500 text-white hover:bg-orange-600`}
+                  className={`${ctaBaseClass} w-full bg-blue-600 text-white hover:bg-blue-700`}
                 >
                   Download motivation ebook
                 </a>
               </div>
             </motion.div>
           </div>
+
+          <div className="mx-auto mt-12 max-w-2xl border-t border-zinc-200 pt-10">
+            <HandbookSubscribeCTA
+              variant="light"
+              flushTop
+              heading="Subscribe for email updates"
+              description="Get a short welcome message from SK Creation with links to free resources, services, and your member login. We do not attach PDFs to email—the handbook and other downloads stay on this site."
+            />
+          </div>
         </div>
       </section>
 
-      <section className="border-t border-zinc-200 bg-white py-14">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-violet-700 sm:text-sm">
+      <section className="relative overflow-hidden border-t border-zinc-800 bg-zinc-950 py-14">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(139,92,246,0.22),transparent_50%),radial-gradient(circle_at_85%_75%,rgba(99,102,241,0.12),transparent_45%)]" />
+          <div className="absolute -top-16 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-violet-600/20 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-48 w-48 rounded-full bg-indigo-600/15 blur-3xl" />
+          <div className="absolute bottom-10 right-10 h-40 w-40 rounded-full bg-violet-500/10 blur-2xl" />
+        </div>
+
+        <div className="relative mx-auto max-w-6xl px-4">
+          <h2 className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-[#C9A962] sm:text-sm">
             Collaborations & clients
           </h2>
-          <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-zinc-600 sm:mt-3 sm:text-base">
+          <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-zinc-400 sm:mt-3 sm:text-base">
             Supporting individuals and small businesses through practical guidance, digital
             solutions, and meaningful results.
           </p>
-          <div className="relative left-1/2 mt-6 w-screen -translate-x-1/2 overflow-hidden bg-zinc-50/70 sm:mt-8">
+          <div className="relative left-1/2 mt-6 w-screen -translate-x-1/2 overflow-hidden sm:mt-8">
             <motion.div
               className="flex w-max gap-4 p-4 sm:gap-6 sm:p-6"
               animate={{ x: ['-50%', '0%'] }}
@@ -262,7 +278,7 @@ export default function Home() {
               {[...customerSlides, ...customerSlides].map((src, idx) => (
                 <article
                   key={`${src}-${idx}`}
-                  className="w-[280px] shrink-0 overflow-hidden rounded-xl bg-white/90 sm:w-[360px]"
+                  className="w-[280px] shrink-0 overflow-hidden rounded-xl bg-zinc-900 ring-1 ring-zinc-800 sm:w-[360px]"
                 >
                   <Image
                     src={src}
@@ -318,7 +334,7 @@ export default function Home() {
                 <p className="mt-3 text-sm text-zinc-600">1:1 private session or Group Session</p>
               </div>
               <Link
-                href="/service"
+                href="/services"
                 className={`${ctaBaseClass} mt-5 border border-violet-300 bg-violet-600 text-white shadow-sm hover:bg-violet-700`}
               >
                 Book a session
@@ -356,7 +372,7 @@ export default function Home() {
               <div>
                 <h4 className="mt-2 text-xl font-bold text-zinc-900">Know about Dr. SK</h4>
                 <p className="mt-2 text-sm text-zinc-600">
-                  USAII Certified AI scientist, Software Engineering background, education list, and
+                  USAII Certified AI scientist, Software Engineering background, Educator, and
                   Mental Health Advocate (MHFA Certified).
                 </p>
               </div>
@@ -371,23 +387,33 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="books" className="border-t border-zinc-200 bg-white py-16">
-        <div className="mx-auto max-w-6xl px-4">
+      <section
+        id="books"
+        className="relative overflow-hidden border-t border-zinc-800 bg-zinc-950 py-16"
+      >
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(139,92,246,0.22),transparent_50%),radial-gradient(circle_at_85%_75%,rgba(99,102,241,0.12),transparent_45%)]" />
+          <div className="absolute -top-16 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-violet-600/20 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-48 w-48 rounded-full bg-indigo-600/15 blur-3xl" />
+          <div className="absolute bottom-10 right-10 h-40 w-40 rounded-full bg-violet-500/10 blur-2xl" />
+        </div>
+
+        <div className="relative mx-auto max-w-6xl px-4">
           <div className="text-center">
-            <span className="inline-flex items-center rounded-full bg-zinc-100 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-zinc-700">
+            <span className="inline-flex items-center rounded-full border border-zinc-700 bg-zinc-900 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-[#C9A962]">
               Featured books
             </span>
-            <h2 className="mt-3 text-2xl font-bold tracking-tight text-zinc-900 md:text-3xl">
+            <h2 className="mt-3 text-2xl font-bold tracking-tight text-white md:text-3xl">
               Read the right book for your next breakthrough
             </h2>
-            <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-zinc-700 md:text-base">
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-zinc-400 md:text-base">
               Two focused paths: one for AI and future readiness, one for emotional balance in a
               changing world.
             </p>
           </div>
 
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
-            <article className="flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+            <article className="flex h-full flex-col rounded-2xl border border-zinc-700 bg-white p-5 shadow-sm">
               <a
                 href="https://www.amazon.com/author/sagar2025"
                 target="_blank"
@@ -414,13 +440,13 @@ export default function Home() {
                 href="https://www.amazon.com/author/sagar2025"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`${ctaBaseClass} mt-5 bg-indigo-600 text-white hover:bg-indigo-700`}
+                className={`${ctaBaseClass} mt-5 w-fit self-start bg-indigo-600 text-white hover:bg-indigo-700`}
               >
                 Read AI books
               </a>
             </article>
 
-            <article className="flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+            <article className="flex h-full flex-col rounded-2xl border border-zinc-700 bg-white p-5 shadow-sm">
               <a
                 href="https://www.amazon.com/author/drsk1"
                 target="_blank"
@@ -447,7 +473,7 @@ export default function Home() {
                 href="https://www.amazon.com/author/drsk1"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`${ctaBaseClass} mt-5 bg-amber-500 text-white hover:bg-amber-600`}
+                className={`${ctaBaseClass} mt-5 w-fit self-start bg-amber-500 text-white hover:bg-amber-600`}
               >
                 Read emotional wellness books
               </a>
@@ -459,28 +485,34 @@ export default function Home() {
       {/* Contact Section */}
       <section
         id="contact"
-        className="relative overflow-hidden border-t border-[#D6DBF2] bg-[#F2F4FD] py-16 md:py-20"
+        className="relative overflow-hidden border-t border-zinc-800 bg-zinc-950 py-16 md:py-20"
       >
-          <div className="pointer-events-none absolute inset-0">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.92),transparent_48%),radial-gradient(circle_at_80%_30%,rgba(255,255,255,0.7),transparent_42%),radial-gradient(#ffffff_1px,transparent_1px)] [background-size:auto,auto,20px_20px]" />
-            <div className="absolute -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-white/70 blur-3xl" />
-            <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-white/50 blur-3xl" />
-          </div>
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(139,92,246,0.22),transparent_50%),radial-gradient(circle_at_85%_75%,rgba(99,102,241,0.12),transparent_45%)]" />
+          <div className="absolute -top-16 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-violet-600/20 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-48 w-48 rounded-full bg-indigo-600/15 blur-3xl" />
+          <div className="absolute bottom-10 right-10 h-40 w-40 rounded-full bg-violet-500/10 blur-2xl" />
+        </div>
 
-          <div className="relative mx-auto max-w-6xl px-4">
-            <div className="text-center">
-              <span className="inline-flex items-center rounded-full bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-zinc-700">
-                Contact
-              </span>
-              <h2 className="mt-4 text-3xl font-bold text-zinc-900 md:text-4xl">
-                Get In Touch
-              </h2>
-              <p className="mt-3 text-base text-zinc-700">
+        <div className="relative mx-auto max-w-6xl px-4">
+          <div className="text-center">
+            <span className="inline-flex items-center rounded-full border border-zinc-700 bg-zinc-900/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-zinc-300">
+              Contact
+            </span>
+            <h2 className="mt-4 text-3xl font-bold text-white md:text-4xl">
+              Get In Touch
+            </h2>
+            <p className="mt-3 text-base text-zinc-400">
+              <a
+                href="mailto:info@skcreation.org"
+                className="text-violet-300 underline-offset-4 transition hover:text-violet-200 hover:underline"
+              >
                 info@skcreation.org
-              </p>
-              <ContactForm />
-            </div>
+              </a>
+            </p>
+            <ContactForm appearance="dark" />
           </div>
+        </div>
       </section>
     </main>
   );

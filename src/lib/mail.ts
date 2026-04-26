@@ -5,7 +5,10 @@ import {
   buildCustomerConfirmationEmail,
 } from '@/lib/emails/bookingEmails';
 import { buildWebsiteQuoteCustomerConfirmationEmail } from '@/lib/emails/contactEmails';
-import { buildHandbookThankYouEmail } from '@/lib/emails/subscribeEmails';
+import {
+  buildHandbookThankYouEmail,
+  buildHandbookSubscribeAdminEmail,
+} from '@/lib/emails/subscribeEmails';
 import type { BookingRow } from '@/types/booking';
 
 let resendSingleton: Resend | null = null;
@@ -41,6 +44,20 @@ function defaultFromAddress(): string | null {
   );
 }
 
+/** Plain email from "Name <email>" or raw address */
+function extractPlainEmail(fromRaw: string): string {
+  const trimmed = fromRaw.trim();
+  const m = trimmed.match(/<([^>]+)>/);
+  return (m ? m[1] : trimmed).trim();
+}
+
+/** Display name subscribers see: SK Creation <verified-from-address> */
+export function skCreationFromHeader(): string | null {
+  const base = defaultFromAddress();
+  if (!base) return null;
+  return `SK Creation <${extractPlainEmail(base)}>`;
+}
+
 export function getNotificationInboxEmail(): string {
   return process.env.NOTIFICATION_TO_EMAIL || DEFAULT_NOTIFICATION_EMAIL;
 }
@@ -50,11 +67,13 @@ export function getNotificationInboxEmail(): string {
  */
 export async function sendHtmlEmail(opts: {
   to: string | string[];
+  /** Full RFC From, e.g. `SK Creation <info@skcreation.org>`. Defaults to env inbox / MAIL_FROM. */
+  from?: string;
   replyTo?: string;
   subject: string;
   html: string;
 }): Promise<boolean> {
-  const from = defaultFromAddress();
+  const from = opts.from ?? defaultFromAddress();
   if (!from) {
     console.error('[mail] No MAIL_FROM / ZOHO_MAIL_USER / RESEND_FROM_EMAIL set.');
     return false;
@@ -64,7 +83,6 @@ export async function sendHtmlEmail(opts: {
   if (zoho) {
     try {
       await zoho.sendMail({
-        // Keep sender header plain to avoid exposing personal display names.
         from,
         to: opts.to,
         replyTo: opts.replyTo,
@@ -134,8 +152,30 @@ export async function sendHandbookThankYouEmail(
   const { subject, html } = buildHandbookThankYouEmail({
     siteOrigin: siteOriginForEmails(),
   });
+  const from = skCreationFromHeader();
   return sendHtmlEmail({
     to: customerEmail,
+    from: from || undefined,
+    replyTo: getNotificationInboxEmail(),
+    subject,
+    html,
+  });
+}
+
+/** Notify inbox when a new row is stored (skips if subscriber address is the same as inbox). */
+export async function sendHandbookSubscribeAdminNotification(
+  subscriberEmail: string
+): Promise<boolean> {
+  const inbox = getNotificationInboxEmail().trim().toLowerCase();
+  const sub = subscriberEmail.trim().toLowerCase();
+  if (sub && inbox && sub === inbox) {
+    return true;
+  }
+  const { subject, html } = buildHandbookSubscribeAdminEmail({
+    subscriberEmail,
+  });
+  return sendHtmlEmail({
+    to: getNotificationInboxEmail(),
     subject,
     html,
   });

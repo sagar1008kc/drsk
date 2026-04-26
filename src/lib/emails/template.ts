@@ -14,6 +14,8 @@ type EmailTemplateInput = {
   subtitle: string;
   sections: EmailSection[];
   reference?: string;
+  /** Overrides default “Dr. SK / Founder, SK Creation” footer sign-off */
+  footerSignoff?: { name: string; title: string };
 };
 
 export function escapeHtml(input: string): string {
@@ -58,6 +60,9 @@ export function buildEmailTemplate(input: EmailTemplateInput): string {
     ? `<p style="margin:10px 0 0 0;color:#94a3b8;font-size:12px;line-height:18px;">${escapeHtml(input.reference)}</p>`
     : '';
 
+  const signoffName = input.footerSignoff?.name ?? 'Dr. SK';
+  const signoffTitle = input.footerSignoff?.title ?? 'Founder, SK Creation';
+
   return `
   <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f5f7fa;margin:0;padding:24px 12px;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
     <tr>
@@ -80,8 +85,8 @@ export function buildEmailTemplate(input: EmailTemplateInput): string {
           <tr>
             <td style="padding:0 28px 28px 28px;">
               <div style="border-top:1px solid #e2e8f0;padding-top:16px;">
-                <p style="margin:0;color:#0f172a;font-size:14px;line-height:22px;font-weight:700;">Dr. SK</p>
-                <p style="margin:2px 0 10px 0;color:#475569;font-size:13px;line-height:20px;">Founder, SK Creation</p>
+                <p style="margin:0;color:#0f172a;font-size:14px;line-height:22px;font-weight:700;">${escapeHtml(signoffName)}</p>
+                <p style="margin:2px 0 10px 0;color:#475569;font-size:13px;line-height:20px;">${escapeHtml(signoffTitle)}</p>
                 <p style="margin:0 0 4px 0;color:#334155;font-size:13px;line-height:20px;">
                   &#127760; <a href="https://www.skcreation.org" style="color:#2563eb;text-decoration:none;">www.skcreation.org</a>
                 </p>

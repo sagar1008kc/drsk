@@ -8,9 +8,6 @@ export const SERVICE_IDS = [
 
 export type ServiceTypeId = (typeof SERVICE_IDS)[number];
 
-/** All sessions use Google Meet after confirmation (webhook creates Meet on your calendar). */
-export const STANDARD_MEETING_PLATFORM = 'Google Meet' as const;
-
 export type GroupPricing = {
   perPersonCents: number;
   min: number;

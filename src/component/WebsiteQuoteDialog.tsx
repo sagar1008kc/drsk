@@ -4,12 +4,9 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { toast } from 'sonner';
-import {
-  E164_MAX_DIGITS,
-  formatInternationalPhoneDisplay,
-  isValidOptionalInternationalPhone,
-  phoneDigits,
-} from '@/lib/phone';
+import { isValidPhoneNumber } from 'react-phone-number-input';
+import { phonePayloadFromInternational } from '@/lib/phone';
+import PhoneInputField from '@/component/PhoneInputField';
 
 type WebsiteQuoteDialogProps = {
   visible: boolean;
@@ -17,21 +14,29 @@ type WebsiteQuoteDialogProps = {
 };
 
 type QuoteServiceType =
-  | 'AI Integration'
-  | 'Digital solutions'
-  | 'Hosting'
-  | 'Maintenance'
+  | 'AI Integration Solutions'
+  | 'Website Development'
+  | 'Workflow Automation'
+  | 'Digital Productivity Consulting'
+  | 'Small Business Tech Solutions'
+  | 'Custom Solution Request'
   | 'Other';
 
 type FieldErrors = Record<string, string>;
 
 const SERVICE_OPTIONS: QuoteServiceType[] = [
-  'AI Integration',
-  'Digital solutions',
-  'Hosting',
-  'Maintenance',
+  'AI Integration Solutions',
+  'Website Development',
+  'Workflow Automation',
+  'Digital Productivity Consulting',
+  'Small Business Tech Solutions',
+  'Custom Solution Request',
   'Other',
 ];
+
+const SERVICE_TYPE_HIGHLIGHTS = SERVICE_OPTIONS.filter(
+  (o): o is Exclude<QuoteServiceType, 'Other'> => o !== 'Other'
+);
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
@@ -44,6 +49,7 @@ export default function WebsiteQuoteDialog({
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const companyFieldId = useId();
+  const phoneFieldId = useId();
   const [mounted, setMounted] = useState(false);
 
   const [fullName, setFullName] = useState('');
@@ -116,10 +122,9 @@ export default function WebsiteQuoteDialog({
     if (!email.trim()) errors.email = 'Email is required.';
     else if (!isValidEmail(email)) errors.email = 'Enter a valid email address.';
 
-    const phoneDigitsOnly = phoneDigits(phone, E164_MAX_DIGITS);
-    if (!isValidOptionalInternationalPhone(phoneDigitsOnly)) {
+    if (phone && !isValidPhoneNumber(phone)) {
       errors.phone =
-        'If provided, use 8–15 digits with country code (e.g. 1 for US/Canada). Max 15 digits.';
+        'If provided, enter a valid international phone number.';
     }
 
     if (!serviceType) {
@@ -156,8 +161,8 @@ export default function WebsiteQuoteDialog({
   const showError = (key: string) => Boolean((touched[key] || touched._submit) && validation[key]);
 
   const inputClass =
-    'w-full rounded-xl border border-zinc-300 bg-zinc-900/50 px-4 py-3 text-white shadow-sm outline-none transition focus:border-violet-400 focus:ring-2 focus:ring-violet-500/20';
-  const inputErrorClass = ' border-red-400 focus:border-red-400 focus:ring-red-500/25';
+    'w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-black shadow-sm outline-none transition focus:border-black focus:ring-2 focus:ring-black/10';
+  const inputErrorClass = ' border-red-400 focus:border-red-500 focus:ring-red-200';
 
   const handleSubmit = async () => {
     setTouched((prev) => ({ ...prev, _submit: true }));
@@ -178,7 +183,7 @@ export default function WebsiteQuoteDialog({
           type: 'website_quote',
           name: fullName.trim(),
           email: email.trim(),
-          phone: phoneDigits(phone, E164_MAX_DIGITS),
+          phone: phonePayloadFromInternational(phone),
           serviceType,
           otherServiceType:
             serviceType === 'Other' ? otherServiceType.trim() : undefined,
@@ -210,7 +215,10 @@ export default function WebsiteQuoteDialog({
   if (!mounted || !visible) return null;
 
   const modal = (
-    <div className="fixed inset-0 z-[1150] flex items-center justify-center p-4 sm:p-6">
+    <div
+      className="fixed inset-0 z-[1150] flex items-center justify-center p-4 sm:p-6"
+      role="presentation"
+    >
       <button
         type="button"
         aria-label="Close website quote dialog"
@@ -223,24 +231,24 @@ export default function WebsiteQuoteDialog({
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        className="relative z-[1] max-h-[min(92vh,920px)] w-full max-w-[720px] overflow-y-auto rounded-3xl border border-white/15 bg-[#11121A] text-white shadow-2xl outline-none"
+        className="relative z-[1] max-h-[min(92vh,880px)] w-full max-w-[720px] overflow-y-auto rounded-[24px] border border-white/10 bg-white text-black shadow-2xl outline-none"
       >
-        <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-white/10 bg-[#11121A]/95 px-5 py-4 backdrop-blur-sm md:px-6">
+        <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-gray-100 bg-white/95 px-5 py-4 backdrop-blur-sm md:px-6">
           <div className="min-w-0 pr-2">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-200">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
               Digital solutions
             </div>
             <h2 id={titleId} className="mt-2 text-xl font-bold md:text-2xl">
               Request a quote
             </h2>
-            <p className="mt-2 text-sm leading-6 text-zinc-300">
+            <p className="mt-2 text-sm leading-6 text-gray-600">
               Share your project scope and we will reply with a tailored quote.
             </p>
           </div>
           <button
             type="button"
             onClick={handleHide}
-            className="shrink-0 rounded-full border border-white/15 bg-white/5 p-2 text-zinc-300 transition hover:border-white/30 hover:text-white"
+            className="shrink-0 rounded-full border border-gray-200 bg-white p-2 text-gray-600 transition hover:bg-gray-50 hover:text-black"
             aria-label="Close"
           >
             <svg
@@ -264,25 +272,25 @@ export default function WebsiteQuoteDialog({
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-2xl border border-emerald-300/20 bg-emerald-500/10 p-6"
+              className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6"
             >
-              <h3 className="text-lg font-semibold text-emerald-200">
+              <h3 className="text-lg font-semibold text-emerald-900">
                 Quote Request Sent
               </h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-200">
+              <p className="mt-2 text-sm leading-6 text-gray-700">
                 Thank you. We received your details and will follow up shortly at{' '}
-                <span className="font-semibold text-white">{email}</span>.
+                <span className="font-semibold text-gray-900">{email}</span>.
               </p>
               <button
                 type="button"
                 onClick={handleHide}
-                className="mt-5 inline-flex min-h-[44px] items-center justify-center rounded-full border border-emerald-200/50 bg-emerald-300/10 px-6 py-2.5 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-300/20"
+                className="mt-5 inline-flex min-h-[44px] items-center justify-center rounded-full border border-gray-200 bg-white px-6 py-2.5 text-sm font-semibold text-gray-800 transition hover:bg-gray-50"
               >
                 Close
               </button>
             </motion.div>
           ) : (
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 md:p-6">
+            <div className="relative rounded-2xl border border-gray-200 bg-gray-50 p-5 md:p-6">
               <div
                 className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
                 aria-hidden="true"
@@ -301,8 +309,8 @@ export default function WebsiteQuoteDialog({
 
               <div className="grid gap-5 md:grid-cols-2">
                 <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-semibold text-zinc-100">
-                    Full Name <span className="text-red-400">*</span>
+                  <label className="mb-2 block text-sm font-semibold text-gray-800">
+                    Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -314,13 +322,13 @@ export default function WebsiteQuoteDialog({
                     className={`${inputClass}${showError('fullName') ? inputErrorClass : ''}`}
                   />
                   {showError('fullName') ? (
-                    <p className="mt-1.5 text-sm text-red-300">{validation.fullName}</p>
+                    <p className="mt-1.5 text-sm text-red-600">{validation.fullName}</p>
                   ) : null}
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-semibold text-zinc-100">
-                    Email <span className="text-red-400">*</span>
+                  <label className="mb-2 block text-sm font-semibold text-gray-800">
+                    Email <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -331,45 +339,38 @@ export default function WebsiteQuoteDialog({
                     placeholder="you@example.com"
                     className={`${inputClass}${showError('email') ? inputErrorClass : ''}`}
                   />
-                  <p className="mt-1.5 text-xs leading-relaxed text-zinc-400">
+                  <p className="mt-1.5 text-xs leading-relaxed text-gray-500">
                     Provide a valid email address — we use it for replies and
                     confirmations.
                   </p>
                   {showError('email') ? (
-                    <p className="mt-1.5 text-sm text-red-300">{validation.email}</p>
+                    <p className="mt-1.5 text-sm text-red-600">{validation.email}</p>
                   ) : null}
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-semibold text-zinc-100">
-                    Phone number <span className="font-normal text-zinc-400">(optional)</span>
-                  </label>
-                  <p className="mb-3 text-xs text-zinc-400">
-                    Optional — digits only with country code, 8–15 digits (standard E.164
-                    limit). Omit the + sign.
-                  </p>
-                  <input
-                    type="tel"
-                    inputMode="tel"
-                    autoComplete="tel"
-                    value={formatInternationalPhoneDisplay(phone)}
+                  <PhoneInputField
+                    id={phoneFieldId}
+                    label="Phone number"
+                    optional
+                    value={phone || undefined}
+                    onChange={(v) => setPhone(v ?? '')}
                     onBlur={() => markTouched('phone')}
-                    onChange={(e) =>
-                      setPhone(phoneDigits(e.target.value, E164_MAX_DIGITS))
-                    }
-                    placeholder="e.g. 12025551234"
-                    aria-label="Phone number with country code"
-                    className={`${inputClass}${showError('phone') ? inputErrorClass : ''}`}
+                    showError={showError('phone')}
+                    error={validation.phone}
+                    helperText="Optional. Include country code. Used only for quote-related communication."
                   />
-                  {showError('phone') ? (
-                    <p className="mt-1.5 text-sm text-red-300">{validation.phone}</p>
-                  ) : null}
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-semibold text-zinc-100">
-                    Service Type <span className="text-red-400">*</span>
+                  <label className="mb-2 block text-sm font-semibold text-gray-800">
+                    Service Type <span className="text-red-500">*</span>
                   </label>
+                  <ul className="mb-3 space-y-1 text-xs leading-snug text-gray-600 sm:columns-2 sm:gap-x-6">
+                    {SERVICE_TYPE_HIGHLIGHTS.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
                   <select
                     value={serviceType}
                     onBlur={() => markTouched('serviceType')}
@@ -384,7 +385,7 @@ export default function WebsiteQuoteDialog({
                     ))}
                   </select>
                   {showError('serviceType') ? (
-                    <p className="mt-1.5 text-sm text-red-300">{validation.serviceType}</p>
+                    <p className="mt-1.5 text-sm text-red-600">{validation.serviceType}</p>
                   ) : null}
                 </div>
 
@@ -397,8 +398,8 @@ export default function WebsiteQuoteDialog({
                       exit={{ opacity: 0, height: 0 }}
                       className="overflow-hidden md:col-span-2"
                     >
-                      <label className="mb-2 block text-sm font-semibold text-zinc-100">
-                        Please specify <span className="text-red-400">*</span>
+                      <label className="mb-2 block text-sm font-semibold text-gray-800">
+                        Please specify <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -409,7 +410,7 @@ export default function WebsiteQuoteDialog({
                         className={`${inputClass}${showError('otherServiceType') ? inputErrorClass : ''}`}
                       />
                       {showError('otherServiceType') ? (
-                        <p className="mt-1.5 text-sm text-red-300">
+                        <p className="mt-1.5 text-sm text-red-600">
                           {validation.otherServiceType}
                         </p>
                       ) : null}
@@ -418,8 +419,8 @@ export default function WebsiteQuoteDialog({
                 </AnimatePresence>
 
                 <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-semibold text-zinc-100">
-                    Project Details <span className="text-red-400">*</span>
+                  <label className="mb-2 block text-sm font-semibold text-gray-800">
+                    Project Details <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     rows={5}
@@ -431,11 +432,11 @@ export default function WebsiteQuoteDialog({
                     className={`${inputClass} resize-none${showError('projectDetails') ? inputErrorClass : ''}`}
                   />
                   <div className="mt-1.5 flex items-center justify-between">
-                    <p className="text-xs text-violet-200">Quotes start from $199</p>
-                    <p className="text-xs text-zinc-400">{projectDetails.length}/1000</p>
+                    <p className="text-xs font-medium text-gray-700">Quotes start from $199</p>
+                    <p className="text-xs text-gray-500">{projectDetails.length}/1000</p>
                   </div>
                   {showError('projectDetails') ? (
-                    <p className="mt-1.5 text-sm text-red-300">
+                    <p className="mt-1.5 text-sm text-red-600">
                       {validation.projectDetails}
                     </p>
                   ) : null}
@@ -445,11 +446,11 @@ export default function WebsiteQuoteDialog({
           )}
 
           {!submitted ? (
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-5 md:p-6">
+            <div className="rounded-3xl border border-black/10 bg-white p-5 shadow-sm md:p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-white">Submit request</h3>
-                  <p className="mt-1 text-sm text-zinc-300">
+                  <h3 className="text-lg font-bold text-gray-900">Submit request</h3>
+                  <p className="mt-1 text-sm text-gray-600">
                     We will review your project and reply by email.
                   </p>
                 </div>
@@ -457,18 +458,18 @@ export default function WebsiteQuoteDialog({
                   type="button"
                   disabled={!canSubmit || submitting}
                   onClick={() => void handleSubmit()}
-                  className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border border-violet-300/50 bg-violet-500 px-7 py-3 text-sm font-semibold text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:border-zinc-600 disabled:bg-zinc-700 disabled:text-zinc-400 sm:w-auto"
+                  className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border-2 border-black bg-black px-8 py-3 text-sm font-semibold text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:border-gray-300 disabled:bg-gray-200 disabled:text-gray-500 sm:w-auto"
                 >
                   {submitting ? 'Sending…' : 'Send for Quote'}
                 </button>
               </div>
               {!canSubmit && !submitting ? (
-                <p className="mt-3 text-sm text-zinc-400">
+                <p className="mt-3 text-sm text-gray-500">
                   Complete all required fields to send your quote request.
                 </p>
               ) : null}
               {submitError ? (
-                <div className="mt-4 rounded-2xl border border-red-300/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                   {submitError}
                 </div>
               ) : null}

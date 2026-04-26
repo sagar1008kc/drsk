@@ -5,6 +5,7 @@ import {
   updateBookingMeeting,
 } from '@/lib/booking';
 import { createGoogleMeetEventForBooking } from '@/lib/googleCalendar';
+import { prefersGoogleMeetAutoLink } from '@/lib/meetingPlatform';
 import {
   sendAdminBookingNotification,
   sendCustomerBookingConfirmation,
@@ -31,6 +32,7 @@ export async function fulfillBookingMeetAndEmails(bookingId: string): Promise<vo
 
   if (
     shouldAutoCreateGoogleMeet() &&
+    prefersGoogleMeetAutoLink(current.meeting_preference) &&
     !current.meeting_url &&
     current.preferred_date &&
     current.preferred_time

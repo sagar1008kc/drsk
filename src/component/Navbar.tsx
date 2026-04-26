@@ -89,7 +89,7 @@ export default function Navbar() {
               priority
               className="h-11 w-auto shrink-0 object-contain object-left sm:h-12 md:h-14"
             />
-            <span className="text-xs font-semibold tracking-wide text-zinc-200 md:hidden">
+            <span className="text-xs font-semibold tracking-wide text-zinc-200 sm:text-sm">
               SK Creation
             </span>
           </div>

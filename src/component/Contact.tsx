@@ -18,6 +18,8 @@ type StatusState = {
 
 type ContactFormProps = {
   onClose?: () => void;
+  /** Dark card + fields for use on black page sections */
+  appearance?: 'light' | 'dark';
 };
 
 const MESSAGE_LIMIT = 1000;
@@ -25,7 +27,13 @@ const MESSAGE_LIMIT = 1000;
 const fieldClass =
   'min-h-[48px] w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-400 outline-none transition focus:border-violet-300 focus:ring-2 focus:ring-violet-200';
 
-export default function ContactForm({ onClose }: ContactFormProps) {
+const fieldClassDark =
+  'min-h-[48px] w-full rounded-2xl border border-zinc-400 bg-zinc-950 px-4 py-3 text-base text-zinc-100 placeholder:text-zinc-500 outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30';
+
+export default function ContactForm({
+  onClose,
+  appearance = 'light',
+}: ContactFormProps) {
   const [form, setForm] = useState<FormState>({
     name: '',
     email: '',
@@ -126,6 +134,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
   if (showConfirmation) {
     return (
       <ContactConfirmation
+        appearance={appearance}
         onClose={() => {
           setShowConfirmation(false);
           setForm({
@@ -141,30 +150,60 @@ export default function ContactForm({ onClose }: ContactFormProps) {
 
   const messageLength = form.message.length;
   const isNearLimit = messageLength >= 900;
+  const isDark = appearance === 'dark';
+  const field = isDark ? fieldClassDark : fieldClass;
+  const labelClass = isDark
+    ? 'mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-400'
+    : 'mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-500';
 
   return (
     <div className="flex min-h-0 w-full justify-center px-1 py-6 sm:px-2 sm:py-8">
       <div className="relative w-full max-w-lg">
         <div
-          className="pointer-events-none absolute -inset-px rounded-[1.35rem] bg-gradient-to-br from-violet-300/60 via-sky-200/50 to-transparent opacity-80 blur-sm"
+          className={
+            isDark
+              ? 'pointer-events-none absolute -inset-px rounded-[1.35rem] bg-gradient-to-br from-violet-500/25 via-violet-600/15 to-transparent opacity-90 blur-sm'
+              : 'pointer-events-none absolute -inset-px rounded-[1.35rem] bg-gradient-to-br from-violet-300/60 via-sky-200/50 to-transparent opacity-80 blur-sm'
+          }
           aria-hidden
         />
-        <div className="relative overflow-hidden rounded-[1.25rem] border border-zinc-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.12)] ring-1 ring-white/80">
-          <div className="border-b border-zinc-100 bg-gradient-to-r from-violet-50 via-white to-sky-50 px-5 py-6 sm:px-8 sm:py-8">
-            <h2 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
+        <div
+          className={
+            isDark
+              ? 'relative overflow-hidden rounded-[1.25rem] border border-zinc-400 bg-zinc-900 shadow-[0_20px_60px_rgba(0,0,0,0.45)] ring-1 ring-zinc-400/30'
+              : 'relative overflow-hidden rounded-[1.25rem] border border-zinc-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.12)] ring-1 ring-white/80'
+          }
+        >
+          <div
+            className={
+              isDark
+                ? 'border-b border-zinc-400 bg-zinc-950/90 px-5 py-6 sm:px-8 sm:py-8'
+                : 'border-b border-zinc-100 bg-gradient-to-r from-violet-50 via-white to-sky-50 px-5 py-6 sm:px-8 sm:py-8'
+            }
+          >
+            <h2
+              className={
+                isDark
+                  ? 'mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl'
+                  : 'mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl'
+              }
+            >
               Send a message
             </h2>
-            <p className="mt-2 max-w-md text-sm leading-relaxed text-zinc-600">
+            <p
+              className={
+                isDark
+                  ? 'mt-2 max-w-md text-sm leading-relaxed text-zinc-400'
+                  : 'mt-2 max-w-md text-sm leading-relaxed text-zinc-600'
+              }
+            >
               We usually reply within 1–2 business days.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5 px-5 pb-8 pt-6 sm:px-8">
             <div>
-              <label
-                htmlFor="name"
-                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-500"
-              >
+              <label htmlFor="name" className={labelClass}>
                 Name
               </label>
               <input
@@ -175,15 +214,12 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 value={form.name}
                 onChange={handleChange}
                 placeholder="Your name"
-                className={fieldClass}
+                className={field}
               />
             </div>
 
             <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-500"
-              >
+              <label htmlFor="email" className={labelClass}>
                 Email
               </label>
               <input
@@ -195,19 +231,22 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 onChange={handleChange}
                 placeholder="you@example.com"
                 inputMode="email"
-                className={fieldClass}
+                className={field}
               />
-              <p className="mt-1.5 text-xs leading-relaxed text-zinc-500">
+              <p
+                className={
+                  isDark
+                    ? 'mt-1.5 text-xs leading-relaxed text-zinc-500'
+                    : 'mt-1.5 text-xs leading-relaxed text-zinc-500'
+                }
+              >
                 Provide a valid email address — we use it for replies and
                 confirmations.
               </p>
             </div>
 
             <div>
-              <label
-                htmlFor="message"
-                className="mb-2 block text-xs font-semibold uppercase tracking-wide text-zinc-500"
-              >
+              <label htmlFor="message" className={labelClass}>
                 Message
               </label>
               <textarea
@@ -218,11 +257,17 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 value={form.message}
                 onChange={handleChange}
                 placeholder="What would you like to share?"
-                className={`${fieldClass} min-h-[140px] resize-y sm:min-h-[160px]`}
+                className={`${field} min-h-[140px] resize-y sm:min-h-[160px]`}
               />
               <div
                 className={`mt-2 text-right text-xs ${
-                  isNearLimit ? 'text-amber-600' : 'text-zinc-500'
+                  isNearLimit
+                    ? isDark
+                      ? 'text-amber-400'
+                      : 'text-amber-600'
+                    : isDark
+                      ? 'text-zinc-500'
+                      : 'text-zinc-500'
                 }`}
               >
                 {messageLength}/{MESSAGE_LIMIT}
@@ -245,7 +290,11 @@ export default function ContactForm({ onClose }: ContactFormProps) {
             {status.type === 'error' && status.message ? (
               <div
                 role="alert"
-                className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                className={
+                  isDark
+                    ? 'rounded-2xl border border-red-900/60 bg-red-950/50 px-4 py-3 text-sm text-red-200'
+                    : 'rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700'
+                }
               >
                 {status.message}
               </div>
