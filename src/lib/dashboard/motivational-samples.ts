@@ -1,3 +1,5 @@
+import { HANDBOOK_PUBLIC_PATH } from '@/lib/handbook-public';
+
 /** Static sample PDFs under /public/samples — swap files or add rows as the library grows. */
 
 export type MotivationalSampleCategory =
@@ -34,7 +36,7 @@ export const motivationalSamples: MotivationalSample[] = [
     title: 'The Mind Matters Handbook',
     description:
       'A full free guide — mind, habits, and practical steps. Download below or get it by email when you subscribe.',
-    href: '/samples/the_mind_matters_handbook_by_drsk.pdf',
+    href: HANDBOOK_PUBLIC_PATH,
     fileName: 'The-Mind-Matters-Handbook-by-Dr-SK.pdf',
     category: 'mindfulness',
   },

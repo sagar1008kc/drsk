@@ -69,10 +69,10 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[1000] border-b border-violet-400/25 bg-zinc-950/95 shadow-[0_4px_30px_rgba(0,0,0,0.4)] backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-1 sm:gap-3 sm:px-4 sm:py-1">
         <Link
           href="/"
-          className="flex min-w-0 max-w-[min(100%,12rem)] shrink-0 flex-col gap-0.5 sm:max-w-none"
+          className="flex min-w-0 max-w-[min(100%,16rem)] shrink-0 flex-col gap-0.5 sm:max-w-none"
           aria-label="Dr. SK — home"
         >
           <Image
@@ -81,15 +81,12 @@ export default function Navbar() {
             width={200}
             height={200}
             priority
-            className="h-8 w-auto max-w-[10.5rem] shrink-0 object-contain object-left sm:h-9 sm:max-w-none md:h-10"
+            className="h-11 w-auto shrink-0 object-contain object-left sm:h-12 md:h-14"
           />
-          <span className="hidden truncate text-[11px] leading-tight text-zinc-500 sm:block sm:text-xs">
-            Author · Technologist
-          </span>
         </Link>
 
         <nav
-          className="no-scrollbar flex min-w-0 max-w-[calc(100%-5.5rem)] items-center justify-end gap-1 overflow-x-auto scroll-smooth sm:max-w-none sm:gap-1.5 sm:pl-2 md:gap-2"
+          className="no-scrollbar flex min-w-0 max-w-[calc(100%-9rem)] items-center justify-end gap-1 overflow-x-auto scroll-smooth sm:max-w-none sm:gap-1.5 sm:pl-2 md:gap-2"
           aria-label="Main"
         >
           <Link href="/services" className={navButtonClass(isActive('/services'))}>
