@@ -17,8 +17,10 @@ const purpleActive =
 const purpleIdle =
   'border-white/15 text-zinc-200 hover:border-violet-300/60 hover:bg-violet-500/20 hover:text-white';
 
-function navButtonClass(active: boolean) {
-  return `inline-flex h-8 shrink-0 items-center whitespace-nowrap rounded-full border px-2.5 py-0 text-[11px] font-semibold transition sm:px-3.5 sm:py-0 sm:text-sm ${
+function navButtonClass(active: boolean, mobile = false) {
+  const height = mobile ? 'h-9' : 'h-8';
+  const width = mobile ? 'w-full justify-center' : '';
+  return `inline-flex ${height} shrink-0 items-center whitespace-nowrap rounded-full border px-3.5 py-0 text-sm font-medium transition ${width} ${
     active ? purpleActive : purpleIdle
   }`;
 }
@@ -73,26 +75,31 @@ export default function Navbar() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[1000] border-b border-violet-300/30 bg-[#0d9488] shadow-[0_8px_28px_rgba(13,148,136,0.35)] backdrop-blur-md">
-      <div className="mx-auto flex h-10 max-w-6xl items-center justify-between gap-2 px-3 py-0 sm:gap-3 sm:px-4 sm:py-0">
+    <header className="fixed top-0 left-0 right-0 z-[1000] border-b border-white/10 bg-[#0d9488] shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_4px_24px_rgba(0,0,0,0.12)]">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link
           href="/"
-          className="flex min-w-0 max-w-[min(100%,16rem)] shrink-0 flex-col gap-0.5 sm:max-w-none"
-          aria-label="Dr. SK — home"
+          className="flex min-w-0 flex-1 items-center gap-2.5 sm:flex-none sm:gap-3"
+          aria-label="Dr. SK — SK Creation home"
         >
-          <div className="flex h-full items-center gap-2">
-            <Image
-              src="/logo.svg"
-              alt=""
-              width={300}
-              height={300}
-              priority
-              className="h-10 w-auto max-h-full shrink-0 object-contain object-left"
-            />
-          </div>
+          <Image
+            src="/logo.svg"
+            alt=""
+            width={300}
+            height={300}
+            priority
+            className="h-9 w-auto shrink-0 object-contain object-left sm:h-10"
+          />
+          <span
+            className="hidden h-5 w-px shrink-0 bg-white/30 sm:block"
+            aria-hidden
+          />
+          <span className="truncate text-lg font-bold leading-none tracking-tight text-white subpixel-antialiased sm:text-xl">
+            SK Creation
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-1.5 md:flex" aria-label="Main">
+        <nav className="hidden shrink-0 items-center gap-2 md:flex" aria-label="Main">
           <Link href="/about" className={navButtonClass(isActive('/about'))}>
             About
           </Link>
@@ -103,7 +110,7 @@ export default function Navbar() {
             Project
           </Link>
           {checkingSession ? (
-            <span className="inline-flex h-8 shrink-0 items-center rounded-full border border-white/10 bg-white/5 px-2 py-0 text-[11px] font-bold text-zinc-400 sm:px-4 sm:py-0 sm:text-sm">
+            <span className="inline-flex h-8 shrink-0 items-center rounded-full border border-white/10 bg-white/5 px-3.5 py-0 text-sm font-medium text-zinc-400">
               …
             </span>
           ) : user ? (
@@ -118,7 +125,7 @@ export default function Navbar() {
                 type="button"
                 onClick={handleLogout}
                 disabled={loggingOut}
-                className="inline-flex h-8 shrink-0 items-center whitespace-nowrap rounded-full border border-white/15 px-2 py-0 text-[11px] font-semibold text-zinc-200 transition hover:border-violet-300/60 hover:bg-violet-500/20 hover:text-white disabled:cursor-not-allowed disabled:opacity-50 sm:px-3 sm:py-0 sm:text-sm"
+                className="inline-flex h-8 shrink-0 items-center whitespace-nowrap rounded-full border border-white/15 px-3.5 py-0 text-sm font-medium text-zinc-200 transition hover:border-violet-300/60 hover:bg-violet-500/20 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {loggingOut ? '…' : 'Logout'}
               </button>
@@ -136,7 +143,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setMobileOpen((v) => !v)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/20 text-zinc-200 transition hover:bg-white/10 md:hidden"
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/15 text-zinc-100 transition hover:bg-white/10 md:hidden"
           aria-label="Toggle menu"
           aria-expanded={mobileOpen}
           aria-controls="mobile-main-menu"
@@ -151,37 +158,37 @@ export default function Navbar() {
       </div>
 
       {mobileOpen ? (
-        <div id="mobile-main-menu" className="border-t border-violet-300/25 bg-[#0d9488] px-3 pb-3 pt-2 md:hidden">
-          <nav className="flex flex-col gap-2" aria-label="Mobile main">
-            <Link href="/about" className={navButtonClass(isActive('/about'))}>
+        <div id="mobile-main-menu" className="border-t border-violet-300/25 bg-[#0d9488] px-4 pb-4 pt-3 md:hidden">
+          <nav className="flex flex-col gap-2.5" aria-label="Mobile main">
+            <Link href="/about" className={navButtonClass(isActive('/about'), true)}>
               About
             </Link>
-            <Link href="/services" className={navButtonClass(isActive('/services'))}>
+            <Link href="/services" className={navButtonClass(isActive('/services'), true)}>
               Services
             </Link>
-            <Link href="/project" className={navButtonClass(isActive('/project'))}>
+            <Link href="/project" className={navButtonClass(isActive('/project'), true)}>
               Project
             </Link>
             {checkingSession ? (
-              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-zinc-400">
+              <span className="inline-flex h-10 w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 text-sm font-medium text-zinc-400">
                 Loading...
               </span>
             ) : user ? (
               <>
-                <Link href="/dashboard" className={navButtonClass(isActive('/dashboard'))}>
+                <Link href="/dashboard" className={navButtonClass(isActive('/dashboard'), true)}>
                   Dashboard
                 </Link>
                 <button
                   type="button"
                   onClick={handleLogout}
                   disabled={loggingOut}
-                  className="rounded-full border border-white/15 px-3 py-2 text-left text-xs font-semibold text-zinc-200 transition hover:border-violet-300/60 hover:bg-violet-500/20 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex h-10 w-full items-center justify-center rounded-full border border-white/15 px-4 text-sm font-medium text-zinc-200 transition hover:border-violet-300/60 hover:bg-violet-500/20 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {loggingOut ? 'Logging out...' : 'Logout'}
                 </button>
               </>
             ) : (
-              <Link href="/login" className={navButtonClass(isActive('/login'))}>
+              <Link href="/login" className={navButtonClass(isActive('/login'), true)}>
                 Login
               </Link>
             )}

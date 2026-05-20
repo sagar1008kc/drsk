@@ -124,7 +124,7 @@ export default function RootLayout({
         <Providers />
         <Navbar />
 
-        <div className="pt-14 sm:pt-[4.5rem] md:pt-[4.75rem]">{children}</div>
+        <div className="pt-14">{children}</div>
         {/* Footer */}
         <footer className="relative overflow-hidden border-t border-violet-300/30 bg-[linear-gradient(160deg,rgba(7,7,10,1)_0%,rgba(18,11,31,1)_45%,rgba(39,17,63,1)_100%)] px-4 pb-10 pt-10 text-center text-sm text-zinc-300">
           <div className="relative mx-auto mb-7 max-w-3xl text-left">
