@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { FEATURED_BOOKS } from '@/lib/featured-books';
 
 type SessionUser = {
   id: string;
@@ -12,26 +13,55 @@ type SessionUser = {
   username: string | null;
 };
 
-const purpleActive =
-  'border-violet-400 bg-violet-500 text-white shadow-[0_0_20px_rgba(139,92,246,0.35)]';
-const purpleIdle =
-  'border-white/15 text-zinc-200 hover:border-violet-300/60 hover:bg-violet-500/20 hover:text-white';
+const linkActive =
+  'text-white bg-violet-500/25 border-violet-400/50';
+const linkIdle =
+  'text-zinc-300 border-transparent hover:border-violet-400/30 hover:bg-violet-500/10 hover:text-white';
 
-function navButtonClass(active: boolean, mobile = false) {
-  const height = mobile ? 'h-9' : 'h-8';
-  const width = mobile ? 'w-full justify-center' : '';
-  return `inline-flex ${height} shrink-0 items-center whitespace-nowrap rounded-full border px-3.5 py-0 text-sm font-medium transition ${width} ${
-    active ? purpleActive : purpleIdle
+function navClass(active: boolean, mobile = false) {
+  const size = mobile ? 'min-h-[44px] w-full justify-center text-sm' : 'h-9 px-3.5 text-sm';
+  return `inline-flex items-center whitespace-nowrap rounded-full border font-medium transition ${size} ${
+    active ? linkActive : linkIdle
   }`;
+}
+
+function ExternalIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 12 12" fill="none" aria-hidden>
+      <path
+        d="M4 2h6v6M10 2 5 7M7 5H2v5"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function BookNavLink({ book, mobile = false }: { book: (typeof FEATURED_BOOKS)[number]; mobile?: boolean }) {
+  return (
+    <a
+      href={book.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`${navClass(false, mobile)} gap-1.5`}
+    >
+      {book.shortTitle}
+      <ExternalIcon className={mobile ? 'h-3.5 w-3.5 shrink-0 opacity-80' : 'h-3 w-3 shrink-0 opacity-70'} />
+    </a>
+  );
 }
 
 export default function Navbar() {
   const pathname = usePathname();
-  const isActive = (href: string) => pathname === href;
   const [user, setUser] = useState<SessionUser | null>(null);
   const [checkingSession, setCheckingSession] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
 
   useEffect(() => {
     let mounted = true;
@@ -40,17 +70,11 @@ export default function Navbar() {
       try {
         const response = await fetch('/api/auth/me', { cache: 'no-store' });
         const result = (await response.json()) as { user?: SessionUser | null };
-        if (mounted) {
-          setUser(result.user || null);
-        }
+        if (mounted) setUser(result.user || null);
       } catch {
-        if (mounted) {
-          setUser(null);
-        }
+        if (mounted) setUser(null);
       } finally {
-        if (mounted) {
-          setCheckingSession(false);
-        }
+        if (mounted) setCheckingSession(false);
       }
     }
 
@@ -74,81 +98,81 @@ export default function Navbar() {
     }
   }
 
-  return (
-    <header className="fixed top-0 left-0 right-0 z-[1000] border-b border-white/10 bg-[#0d9488] shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_4px_24px_rgba(0,0,0,0.12)]">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link
-          href="/"
-          className="flex min-w-0 flex-1 items-center gap-2.5 sm:flex-none sm:gap-3"
-          aria-label="Dr. SK — SK Creation home"
+  const navLinks = (
+    <>
+      <Link href="/services" className={navClass(isActive('/services'))}>
+        Services
+      </Link>
+      <Link href="/project" className={navClass(isActive('/project'))}>
+        Project
+      </Link>
+      {FEATURED_BOOKS.map((book) => (
+        <BookNavLink key={book.id} book={book} />
+      ))}
+      <Link href="/about" className={navClass(isActive('/about'))}>
+        About
+      </Link>
+    </>
+  );
+
+  function AuthControl({ mobile = false }: { mobile?: boolean }) {
+    if (checkingSession) {
+      return (
+        <span
+          className={`inline-flex items-center text-zinc-500 ${mobile ? 'min-h-[44px] w-full justify-center text-sm' : 'h-9 px-3 text-sm'}`}
         >
-          <Image
-            src="/logo.svg"
-            alt=""
-            width={300}
-            height={300}
-            priority
-            className="h-9 w-auto shrink-0 object-contain object-left sm:h-10"
-          />
-          <span
-            className="hidden h-5 w-px shrink-0 bg-white/30 sm:block"
-            aria-hidden
-          />
-          <span className="truncate text-lg font-bold leading-none tracking-tight text-white subpixel-antialiased sm:text-xl">
-            SK Creation
+          …
+        </span>
+      );
+    }
+    if (user) {
+      return (
+        <button
+          type="button"
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className={`${navClass(false, mobile)} disabled:opacity-50`}
+        >
+          {loggingOut ? '…' : 'Logout'}
+        </button>
+      );
+    }
+    return (
+      <Link href="/login" className={navClass(isActive('/login'), mobile)}>
+        Login
+      </Link>
+    );
+  }
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-[1000] border-b border-white/10 bg-[#020205]/90 backdrop-blur-md">
+      <div className="mx-auto flex h-[3.75rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+        <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="SK Creation home">
+          <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full ring-2 ring-violet-400/40">
+            <Image
+              src="/logo.png"
+              alt=""
+              width={80}
+              height={80}
+              priority
+              className="h-full w-full object-cover"
+            />
           </span>
+          <span className="hidden font-bold text-white sm:inline">SK Creation</span>
         </Link>
 
-        <nav className="hidden shrink-0 items-center gap-2 md:flex" aria-label="Main">
-          <Link href="/about" className={navButtonClass(isActive('/about'))}>
-            About
-          </Link>
-          <Link href="/services" className={navButtonClass(isActive('/services'))}>
-            Services
-          </Link>
-          <Link href="/project" className={navButtonClass(isActive('/project'))}>
-            Project
-          </Link>
-          {checkingSession ? (
-            <span className="inline-flex h-8 shrink-0 items-center rounded-full border border-white/10 bg-white/5 px-3.5 py-0 text-sm font-medium text-zinc-400">
-              …
-            </span>
-          ) : user ? (
-            <>
-              <Link
-                href="/dashboard"
-                className={navButtonClass(isActive('/dashboard'))}
-              >
-                Dashboard
-              </Link>
-              <button
-                type="button"
-                onClick={handleLogout}
-                disabled={loggingOut}
-                className="inline-flex h-8 shrink-0 items-center whitespace-nowrap rounded-full border border-white/15 px-3.5 py-0 text-sm font-medium text-zinc-200 transition hover:border-violet-300/60 hover:bg-violet-500/20 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {loggingOut ? '…' : 'Logout'}
-              </button>
-            </>
-          ) : (
-            <Link
-              href="/login"
-              className={navButtonClass(isActive('/login'))}
-            >
-              Login
-            </Link>
-          )}
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
+          {navLinks}
+          <AuthControl />
         </nav>
 
         <button
           type="button"
           onClick={() => setMobileOpen((v) => !v)}
-          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/15 text-zinc-100 transition hover:bg-white/10 md:hidden"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-zinc-200 md:hidden"
           aria-label="Toggle menu"
           aria-expanded={mobileOpen}
-          aria-controls="mobile-main-menu"
         >
-          <span className="sr-only">Menu</span>
           <span className="flex flex-col gap-1.5" aria-hidden>
             <span className="h-0.5 w-5 rounded-full bg-current" />
             <span className="h-0.5 w-5 rounded-full bg-current" />
@@ -158,42 +182,24 @@ export default function Navbar() {
       </div>
 
       {mobileOpen ? (
-        <div id="mobile-main-menu" className="border-t border-violet-300/25 bg-[#0d9488] px-4 pb-4 pt-3 md:hidden">
-          <nav className="flex flex-col gap-2.5" aria-label="Mobile main">
-            <Link href="/about" className={navButtonClass(isActive('/about'), true)}>
-              About
-            </Link>
-            <Link href="/services" className={navButtonClass(isActive('/services'), true)}>
-              Services
-            </Link>
-            <Link href="/project" className={navButtonClass(isActive('/project'), true)}>
-              Project
-            </Link>
-            {checkingSession ? (
-              <span className="inline-flex h-10 w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 text-sm font-medium text-zinc-400">
-                Loading...
-              </span>
-            ) : user ? (
-              <>
-                <Link href="/dashboard" className={navButtonClass(isActive('/dashboard'), true)}>
-                  Dashboard
-                </Link>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  disabled={loggingOut}
-                  className="inline-flex h-10 w-full items-center justify-center rounded-full border border-white/15 px-4 text-sm font-medium text-zinc-200 transition hover:border-violet-300/60 hover:bg-violet-500/20 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {loggingOut ? 'Logging out...' : 'Logout'}
-                </button>
-              </>
-            ) : (
-              <Link href="/login" className={navButtonClass(isActive('/login'), true)}>
-                Login
-              </Link>
-            )}
-          </nav>
-        </div>
+        <nav
+          className="flex flex-col gap-2 border-t border-white/10 px-4 py-4 md:hidden"
+          aria-label="Mobile"
+        >
+          <Link href="/services" className={navClass(isActive('/services'), true)}>
+            Services
+          </Link>
+          <Link href="/project" className={navClass(isActive('/project'), true)}>
+            Project
+          </Link>
+          {FEATURED_BOOKS.map((book) => (
+            <BookNavLink key={book.id} book={book} mobile />
+          ))}
+          <Link href="/about" className={navClass(isActive('/about'), true)}>
+            About
+          </Link>
+          <AuthControl mobile />
+        </nav>
       ) : null}
     </header>
   );

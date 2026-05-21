@@ -6,6 +6,7 @@ import './globals.css';
 import BotpressWebchat from '@/component/BotpressWebchat';
 import HandbookSubscribeCTA from '@/component/HandbookSubscribeCTA';
 import Navbar from '@/component/Navbar';
+import PromoBannerSlot from '@/component/PromoBannerSlot';
 import Providers from '@/component/Providers';
 const inter = Inter({
   subsets: ['latin'],
@@ -120,11 +121,14 @@ export default function RootLayout({
       lang="en"
       className={`${inter.className} ${playfair.variable} scroll-smooth`}
     >
-      <body className={`${inter.className} bg-[#F3F4FA] text-zinc-900 antialiased`}>
+      <body className={`${inter.className} bg-[#020205] text-zinc-100 antialiased`}>
         <Providers />
         <Navbar />
 
-        <div className="pt-14">{children}</div>
+        <div className="pt-[3.75rem]">
+          <PromoBannerSlot />
+          {children}
+        </div>
         {/* Footer */}
         <footer className="relative overflow-hidden border-t border-violet-300/30 bg-[linear-gradient(160deg,rgba(7,7,10,1)_0%,rgba(18,11,31,1)_45%,rgba(39,17,63,1)_100%)] px-4 pb-10 pt-10 text-center text-sm text-zinc-300">
           <div className="relative mx-auto mb-7 max-w-3xl text-left">

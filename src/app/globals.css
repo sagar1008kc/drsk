@@ -43,6 +43,13 @@ a {
   }
 }
 
+/* Layered carousel / crossfade images — reduces slide flicker */
+.drsk-fade-layer {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
 /* Home hero: staggered slide-in (plain CSS — always runs; Tailwind animate-* was unreliable in dev). */
 @keyframes drsk-hero-enter {
   from {
@@ -100,6 +107,22 @@ a {
     transform: translate3d(-1%, 2%, 0);
     opacity: 0.38;
   }
+}
+
+@keyframes drsk-star-twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+.drsk-hero-star {
+  animation: drsk-star-twinkle 3s ease-in-out infinite;
 }
 
 .drsk-hero-glow {
