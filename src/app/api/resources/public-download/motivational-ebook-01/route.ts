@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { requireRouteUser } from '@/lib/auth/require-route-user';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
 export const runtime = 'nodejs';
@@ -8,7 +9,11 @@ const STORAGE_KEY =
   process.env.NEXT_PUBLIC_FREE_SAMPLE_PDF_STORAGE_KEY || 'ebook/motivational_ebook_01.pdf';
 const FILENAME = 'motivational_ebook_01.pdf';
 
+/** Member-only download — requires login (used from /dashboard). */
 export async function GET() {
+  const { response } = await requireRouteUser();
+  if (response) return response;
+
   try {
     const admin = getSupabaseAdmin();
 

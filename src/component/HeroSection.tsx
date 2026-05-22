@@ -3,13 +3,8 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import HeroFeaturedBooks from '@/component/home/HeroFeaturedBooks';
-
-const trustItems = [
-  'USAII Certified AI Scientist',
-  'MHFA Advocate',
-  'Digital Solutions',
-  'Mental Wellness',
-];
+import AiHeroDiagram from '@/component/shared/AiHeroDiagram';
+import { PROFILE_TAGS } from '@/lib/profile-tags';
 
 function ArrowRightIcon({ className }: { className?: string }) {
   return (
@@ -46,11 +41,14 @@ export default function HeroSection() {
   return (
     <section className="relative -mt-[3.75rem] flex min-h-[100dvh] flex-col overflow-hidden border-b border-white/5 bg-[#020205] pt-[3.75rem] text-white">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_75%_40%,rgba(139,92,246,0.2),transparent_55%),radial-gradient(ellipse_50%_40%_at_15%_60%,rgba(99,102,241,0.1),transparent_50%)]" />
+        <div className="absolute inset-0 opacity-[0.5]">
+          <AiHeroDiagram theme="dark" />
+        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_40%,rgba(139,92,246,0.18),transparent_55%),radial-gradient(ellipse_70%_50%_at_85%_60%,rgba(99,102,241,0.12),transparent_50%),radial-gradient(ellipse_70%_50%_at_75%_40%,rgba(139,92,246,0.2),transparent_55%)]" />
         <div className="dot-pattern-dark absolute inset-0 opacity-25" />
       </div>
 
-      <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
         <div className="grid min-h-0 flex-1 grid-cols-1 items-stretch gap-8 lg:grid-cols-2 lg:gap-10 xl:gap-14">
           {/* Left — books */}
           <div className="order-2 flex h-full min-h-0 lg:order-1 lg:pr-2">
@@ -59,8 +57,7 @@ export default function HeroSection() {
 
           {/* Right — copy & CTAs (full AI starry background, no inner card) */}
           <div className="relative order-1 flex h-full min-h-[min(420px,50vh)] overflow-hidden lg:order-2 lg:min-h-0">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_80%_at_70%_30%,rgba(139,92,246,0.28),transparent_55%),radial-gradient(ellipse_60%_50%_at_20%_80%,rgba(99,102,241,0.18),transparent_50%),linear-gradient(145deg,rgba(76,29,149,0.12)_0%,transparent_40%,rgba(49,46,129,0.1)_100%)]" />
-            <div className="dot-pattern-dark pointer-events-none absolute inset-0 opacity-[0.35]" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_80%_at_70%_30%,rgba(139,92,246,0.22),transparent_55%),linear-gradient(145deg,rgba(76,29,149,0.1)_0%,transparent_45%)]" />
             <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-violet-600/25 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-20 -left-12 h-64 w-64 rounded-full bg-indigo-600/20 blur-3xl" />
             {heroStars.map((star, i) => (
@@ -106,12 +103,12 @@ export default function HeroSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, delay: 0.18 }}
-                className="flex flex-wrap gap-3 sm:gap-4"
+                className="flex flex-wrap gap-3 sm:gap-4 xl:flex-nowrap xl:gap-3"
               >
-                {['AI', 'Digital Solutions', 'Mental Wellness'].map((tag) => (
+                {PROFILE_TAGS.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full border border-violet-400/25 bg-violet-500/10 px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-violet-100 sm:px-5 sm:py-3 sm:text-sm"
+                    className="shrink-0 whitespace-nowrap rounded-full border border-violet-400/25 bg-violet-500/10 px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-violet-100 sm:px-5 sm:py-3 sm:text-sm lg:px-3.5 lg:text-[0.7rem] xl:px-4 xl:text-xs"
                   >
                     {tag}
                   </span>
@@ -150,7 +147,7 @@ export default function HeroSection() {
           className="mt-auto shrink-0 border-t border-white/10 pt-5 pb-3 sm:pt-6"
         >
           <div className="grid grid-cols-2 gap-x-4 gap-y-2.5 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-10">
-            {trustItems.map((name) => (
+            {PROFILE_TAGS.map((name) => (
               <span
                 key={name}
                 className="text-center text-xs font-semibold tracking-wide text-zinc-500 sm:text-left sm:text-sm"

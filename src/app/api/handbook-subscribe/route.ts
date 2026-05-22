@@ -67,8 +67,8 @@ export async function POST(req: Request) {
     const emailOk = await sendHandbookThankYouEmail(email);
     if (!emailOk) {
       const errMsg = isSupabaseConfigured()
-        ? 'We saved your address but the thank-you email could not be sent. We’ll try to reach you, or use the direct download on the page.'
-        : 'The thank-you email could not be sent. Check that mail (e.g. Resend or Zoho) is configured, or use the direct download on the page.';
+        ? 'We saved your address but the thank-you email could not be sent. Sign in to your dashboard to access downloads.'
+        : 'The thank-you email could not be sent. Check that mail is configured, or sign in at /login to open your dashboard.';
       return NextResponse.json({ error: errMsg }, { status: 500 });
     }
 

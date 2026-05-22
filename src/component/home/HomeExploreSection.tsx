@@ -50,8 +50,8 @@ const exploreCards = [
   },
   {
     title: 'Know about Dr. SK',
-    subtitle: 'Author · Technologist · Educator',
-    body: 'USAII Certified AI scientist, Software Engineering background, Educator, and Mental Health Advocate (MHFA Certified).',
+    subtitle: 'Software Engineer · AI Integration',
+    body: 'Fortune 500 software engineer — enterprise AI integration, production systems, USAII Certified AI Scientist, MHFA Certified.',
     href: '/about',
     cta: 'More about Dr. SK',
     primary: false,

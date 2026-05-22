@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Script from 'next/script';
 import './globals.css';
 import BotpressWebchat from '@/component/BotpressWebchat';
-import HandbookSubscribeCTA from '@/component/HandbookSubscribeCTA';
 import Navbar from '@/component/Navbar';
 import PromoBannerSlot from '@/component/PromoBannerSlot';
 import Providers from '@/component/Providers';
@@ -131,9 +130,6 @@ export default function RootLayout({
         </div>
         {/* Footer */}
         <footer className="relative overflow-hidden border-t border-violet-300/30 bg-[linear-gradient(160deg,rgba(7,7,10,1)_0%,rgba(18,11,31,1)_45%,rgba(39,17,63,1)_100%)] px-4 pb-10 pt-10 text-center text-sm text-zinc-300">
-          <div className="relative mx-auto mb-7 max-w-3xl text-left">
-            <HandbookSubscribeCTA variant="dark" />
-          </div>
           <div className="relative left-1/2 h-16 w-screen -translate-x-1/2 overflow-hidden text-white/10">
             <svg
               viewBox="0 0 1200 120"

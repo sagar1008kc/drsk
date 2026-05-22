@@ -4,7 +4,6 @@ import HeroSection from '@/component/HeroSection';
 import HomeCollaborationsSection from '@/component/home/HomeCollaborationsSection';
 import HomeContactSection from '@/component/home/HomeContactSection';
 import HomeExploreSection from '@/component/home/HomeExploreSection';
-import HomeResourcesSection from '@/component/home/HomeResourcesSection';
 import { homeBg } from '@/component/home/styles';
 
 export default function Home() {
@@ -12,7 +11,6 @@ export default function Home() {
     <main className={`min-h-screen ${homeBg}`}>
       <h1 className="sr-only">AI resources, books, and customer services — SK Creation</h1>
       <HeroSection />
-      <HomeResourcesSection />
       <HomeCollaborationsSection />
       <HomeExploreSection />
       <HomeContactSection />

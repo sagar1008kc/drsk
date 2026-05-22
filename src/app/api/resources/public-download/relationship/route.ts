@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { requireRouteUser } from '@/lib/auth/require-route-user';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
 export const runtime = 'nodejs';
@@ -7,12 +8,11 @@ const BUCKET = process.env.SUPABASE_PREMIUM_DOWNLOADS_BUCKET || 'premium-downloa
 const STORAGE_KEY = 'books/relationship.pdf';
 const FILENAME = 'When-Relationship-Hurt-and-Heal.pdf';
 
-/**
- * Public endpoint — no authentication required.
- * Generates a short-lived signed URL server-side and streams the file response
- * so the signed token is not exposed in the browser URL.
- */
+/** Member-only download — requires login (used from /dashboard). */
 export async function GET() {
+  const { response } = await requireRouteUser();
+  if (response) return response;
+
   try {
     const admin = getSupabaseAdmin();
 

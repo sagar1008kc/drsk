@@ -3,6 +3,7 @@ import { stat } from 'fs/promises';
 import path from 'path';
 import { Readable } from 'stream';
 import { NextResponse } from 'next/server';
+import { requireRouteUser } from '@/lib/auth/require-route-user';
 import { HANDBOOK_DOWNLOAD_FILENAME } from '@/lib/handbook-public';
 
 export const runtime = 'nodejs';
@@ -17,7 +18,11 @@ const HANDBOOK_ON_DISK = path.join(
   'The_Mind_Matters_Handbook_by_DrSK.pdf'
 );
 
+/** Member-only handbook PDF — requires login (used from /dashboard). */
 export async function GET() {
+  const { response } = await requireRouteUser();
+  if (response) return response;
+
   const externalUrl = process.env.HANDBOOK_PUBLIC_URL?.trim();
 
   if (externalUrl) {

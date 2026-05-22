@@ -60,8 +60,10 @@ export default function Navbar() {
   const [loggingOut, setLoggingOut] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isActive = (href: string) =>
-    pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -100,6 +102,9 @@ export default function Navbar() {
 
   const navLinks = (
     <>
+      <Link href="/" className={navClass(isActive('/'))}>
+        Home
+      </Link>
       <Link href="/services" className={navClass(isActive('/services'))}>
         Services
       </Link>
@@ -127,14 +132,19 @@ export default function Navbar() {
     }
     if (user) {
       return (
-        <button
-          type="button"
-          onClick={handleLogout}
-          disabled={loggingOut}
-          className={`${navClass(false, mobile)} disabled:opacity-50`}
-        >
-          {loggingOut ? '…' : 'Logout'}
-        </button>
+        <>
+          <Link href="/dashboard" className={navClass(isActive('/dashboard'), mobile)}>
+            Resources
+          </Link>
+          <button
+            type="button"
+            onClick={handleLogout}
+            disabled={loggingOut}
+            className={`${navClass(false, mobile)} disabled:opacity-50`}
+          >
+            {loggingOut ? '…' : 'Logout'}
+          </button>
+        </>
       );
     }
     return (
@@ -186,6 +196,9 @@ export default function Navbar() {
           className="flex flex-col gap-2 border-t border-white/10 px-4 py-4 md:hidden"
           aria-label="Mobile"
         >
+          <Link href="/" className={navClass(isActive('/'), true)}>
+            Home
+          </Link>
           <Link href="/services" className={navClass(isActive('/services'), true)}>
             Services
           </Link>

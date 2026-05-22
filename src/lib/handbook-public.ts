@@ -1,5 +1,5 @@
 /**
- * Canonical handbook download endpoint used by the UI.
+ * Handbook download API — member-only (requires login). Used from /dashboard.
  * Route supports production hosting via HANDBOOK_PUBLIC_URL and local fallback.
  */
 export const HANDBOOK_PUBLIC_PATH = '/api/handbook/download';

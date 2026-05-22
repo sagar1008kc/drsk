@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import DashboardHeader from '@/component/DashboardHeader';
 import DashboardQuickStats from '@/component/DashboardQuickStats';
 import EmptyState from '@/component/EmptyState';
+import HandbookSubscribeCTA from '@/component/HandbookSubscribeCTA';
 import MotivationalSampleLibrary from '@/component/MotivationalSampleLibrary';
 import PremiumPdfPurchaseCard from '@/component/PremiumPdfPurchaseCard';
 import ProfileSummaryCard from '@/component/ProfileSummaryCard';
@@ -18,6 +19,10 @@ import {
   ensureFreeSamplePdfResource,
 } from '@/lib/resources/premium-resource';
 import { motivationalSamples } from '@/lib/dashboard/motivational-samples';
+import {
+  HANDBOOK_DOWNLOAD_FILENAME,
+  HANDBOOK_PUBLIC_PATH,
+} from '@/lib/handbook-public';
 import { ensureMotivationalCatalogResources } from '@/lib/resources/motivational-ebooks';
 
 type DashboardPageProps = {
@@ -113,6 +118,16 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               ctaLabel="Buy now • $5.99"
             />
 
+            <div id="member-handbook">
+              <FreeDownloadCard
+                title="The Mind Matters Handbook"
+                description="A practical story-style guide to stress, overthinking, and emotional patterns — free for signed-in members."
+                coverImage="/eb.png"
+                downloadHref={HANDBOOK_PUBLIC_PATH}
+                fileName={HANDBOOK_DOWNLOAD_FILENAME}
+              />
+            </div>
+
             <div id="member-free">
               <FreeDownloadCard
                 title="When Relationship Hurt & Heal"
@@ -159,6 +174,13 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 message="Browse the sample library above — when you buy a premium PDF or we assign materials to your account, secure download cards appear in this section."
               />
             )}
+
+            <HandbookSubscribeCTA
+              variant="light"
+              flushTop
+              heading="Email updates"
+              description="Optional: get occasional SK Creation emails when new member resources or sessions are available."
+            />
 
             {/* Book a Session CTA */}
             <section className="overflow-hidden rounded-2xl border border-indigo-200/80 bg-gradient-to-br from-indigo-50 via-white to-violet-50/90 p-6 shadow-md sm:p-8">

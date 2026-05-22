@@ -8,15 +8,16 @@ export function buildHandbookThankYouEmail(input: { siteOrigin: string }): {
   html: string;
 } {
   const subject = "You're subscribed — SK Creation updates";
-  const resourcesUrl = `${input.siteOrigin}/#resources`;
+  const dashboardUrl = `${input.siteOrigin}/dashboard`;
   const servicesUrl = `${input.siteOrigin}/services`;
   const contactUrl = `${input.siteOrigin}/#contact`;
   const loginUrl = `${input.siteOrigin}/login`;
 
   const linksSection = `
       <p style="margin:0 0 12px 0;color:#111827;font-size:14px;line-height:22px;">
-        <strong>Free resources</strong> (including the handbook PDF)<br />
-        <a href="${escapeHtml(resourcesUrl)}" style="color:#2563eb;text-decoration:none;">${escapeHtml(resourcesUrl)}</a>
+        <strong>Member resources</strong> (sign in required)<br />
+        <a href="${escapeHtml(loginUrl)}" style="color:#2563eb;text-decoration:none;">${escapeHtml(loginUrl)}</a>
+        — then open <a href="${escapeHtml(dashboardUrl)}" style="color:#2563eb;text-decoration:none;">${escapeHtml(dashboardUrl)}</a>
       </p>
       <p style="margin:0 0 12px 0;color:#111827;font-size:14px;line-height:22px;">
         <strong>Services</strong> (sessions, programs &amp; more)<br />
