@@ -23,17 +23,19 @@ export default function HeroFeaturedBooks() {
           href={book.href}
           target="_blank"
           rel="noopener noreferrer"
-          className={`group flex min-h-[200px] flex-1 basis-0 overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a12]/80 shadow-lg ring-1 transition hover:-translate-y-0.5 sm:min-h-[220px] lg:min-h-[240px] ${accentRing[book.accent]}`}
+          className={`group flex min-h-0 flex-1 basis-0 items-center overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a12]/80 shadow-lg ring-1 transition hover:-translate-y-0.5 ${accentRing[book.accent]}`}
         >
-          <div className="relative w-[44%] min-w-[120px] shrink-0 self-stretch overflow-hidden sm:min-w-[140px]">
-            <Image
-              src={book.image}
-              alt={book.alt}
-              fill
-              className="object-cover object-center transition duration-300 group-hover:scale-[1.03]"
-              sizes="(max-width: 1024px) 44vw, 260px"
-              priority={index === 0}
-            />
+          <div className="relative shrink-0 self-center py-2 pl-2 sm:py-2.5 sm:pl-2.5 lg:py-3 lg:pl-3">
+            <div className="relative aspect-[2/3] w-[5.75rem] sm:w-[6.75rem] md:w-[7.5rem] lg:w-[8.25rem]">
+              <Image
+                src={book.image}
+                alt={book.alt}
+                fill
+                className="object-contain object-center transition duration-300 group-hover:scale-[1.02]"
+                sizes="(max-width: 640px) 92px, (max-width: 1024px) 108px, 132px"
+                priority={index === 0}
+              />
+            </div>
           </div>
           <div className="flex min-w-0 flex-1 flex-col justify-center p-4 sm:p-5 lg:p-6">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 sm:text-xs">

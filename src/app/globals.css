@@ -184,6 +184,50 @@ a {
   display: none;
 }
 
+/* Live product showcase — animated ring + shine */
+@keyframes drsk-showcase-ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.drsk-showcase-ring {
+  background: conic-gradient(
+    from 0deg,
+    rgba(139, 92, 246, 0.7),
+    rgba(34, 211, 238, 0.5),
+    rgba(244, 114, 182, 0.6),
+    rgba(139, 92, 246, 0.7)
+  );
+  animation: drsk-showcase-ring-spin 5s linear infinite;
+  border-radius: 1.35rem;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: 2px;
+}
+
+@keyframes drsk-card-shine-sweep {
+  0% {
+    transform: translateX(-120%) skewX(-12deg);
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateX(220%) skewX(-12deg);
+    opacity: 0;
+  }
+}
+
+.group:hover .drsk-card-shine,
+.group:focus-within .drsk-card-shine {
+  opacity: 1;
+  animation: drsk-card-shine-sweep 1.1s ease-out;
+}
+
 /* Card hover lift */
 .card-lift {
   transition: transform 0.2s ease, box-shadow 0.2s ease;

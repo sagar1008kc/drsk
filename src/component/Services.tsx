@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import type { Service } from '@/lib/services';
 import { SESSION_SERVICES } from '@/lib/services';
 import { BOOKING_MEETING_FROM_EMAIL } from '@/lib/meetingPlatform';
-import Link from 'next/link';
+import ServicesHeroSection from '@/component/services/ServicesHeroSection';
+import AiHeroDiagram from '@/component/shared/AiHeroDiagram';
 
 const BookingDialog = dynamic(() => import('@/component/BookingDialog'), {
   ssr: false,
@@ -30,15 +31,35 @@ type ServiceCardProps = {
   subtitle: string;
   bullets: string[];
   price: string;
-  /** e.g. strikethrough list price */
   compareAtPrice?: string;
   cta: string;
   onClick: () => void;
   eyebrow: string;
+  accent: 'violet' | 'indigo' | 'emerald' | 'amber';
 };
 
-const cardShell =
-  'group relative flex h-full flex-col overflow-hidden rounded-2xl border border-stone-200/90 bg-gradient-to-b from-white to-[#F9F6F0] p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:shadow-stone-900/10 sm:rounded-2xl sm:p-7 md:p-8';
+const accentStyles = {
+  violet: {
+    eyebrow: 'bg-violet-100 text-violet-800',
+    bullet: 'bg-violet-500',
+    border: 'border-violet-200/80 hover:border-violet-300',
+  },
+  indigo: {
+    eyebrow: 'bg-indigo-100 text-indigo-800',
+    bullet: 'bg-indigo-500',
+    border: 'border-indigo-200/80 hover:border-indigo-300',
+  },
+  emerald: {
+    eyebrow: 'bg-emerald-100 text-emerald-800',
+    bullet: 'bg-emerald-500',
+    border: 'border-emerald-200/80 hover:border-emerald-300',
+  },
+  amber: {
+    eyebrow: 'bg-amber-100 text-amber-900',
+    bullet: 'bg-amber-500',
+    border: 'border-amber-200/80 hover:border-amber-300',
+  },
+};
 
 function ServiceCard({
   title,
@@ -49,53 +70,50 @@ function ServiceCard({
   cta,
   onClick,
   eyebrow,
+  accent,
 }: ServiceCardProps) {
+  const style = accentStyles[accent];
+
   return (
     <motion.article
       variants={fadeUp}
       transition={{ duration: 0.4 }}
-      className={cardShell}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5 hover:shadow-md sm:p-6 ${style.border}`}
     >
       <div className="flex flex-1 flex-col">
-        <span className="inline-flex w-fit max-w-full items-center rounded-full bg-amber-50/80 px-3 py-1 text-[10px] font-semibold uppercase leading-tight tracking-[0.12em] text-amber-950/80 sm:text-xs sm:tracking-[0.14em]">
+        <span
+          className={`inline-flex w-fit max-w-full rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wide sm:text-xs ${style.eyebrow}`}
+        >
           {eyebrow}
         </span>
 
-        <h3 className="mt-3 text-xl font-bold tracking-tight text-stone-900 sm:mt-4 sm:text-2xl">
-          {title}
-        </h3>
+        <h3 className="mt-3 text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">{title}</h3>
 
-        <p className="mt-2 text-sm leading-relaxed text-stone-600 sm:mt-3 sm:text-base">
-          {subtitle}
-        </p>
+        <p className="mt-2 text-sm leading-relaxed text-zinc-600 sm:text-base">{subtitle}</p>
 
-        <ul className="mt-5 space-y-2.5 sm:mt-6 sm:space-y-3">
+        <ul className="mt-5 space-y-2 sm:mt-6">
           {bullets.map((item) => (
             <li
               key={item}
-              className="flex items-start gap-2.5 text-sm leading-6 text-stone-700 sm:gap-3 sm:leading-7"
+              className="flex items-start gap-2.5 text-sm leading-relaxed text-zinc-700"
             >
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-600/70 sm:mt-2" />
+              <span className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${style.bullet}`} />
               <span>{item}</span>
             </li>
           ))}
         </ul>
 
-        <div className="mt-auto flex w-full flex-col gap-4 border-t border-stone-200/80 pt-6 sm:pt-8">
-          <div>
-            {compareAtPrice ? (
-              <p className="text-base font-medium text-stone-400 line-through sm:text-lg">
-                {compareAtPrice}
-              </p>
-            ) : null}
-            <p className="text-lg font-bold text-stone-900 sm:text-xl md:text-2xl">
-              {price}
+        <div className="mt-auto flex w-full flex-col gap-3 border-t border-zinc-200/90 pt-5 sm:pt-6">
+          {compareAtPrice ? (
+            <p className="text-sm font-medium text-zinc-400 line-through sm:text-base">
+              {compareAtPrice}
             </p>
-          </div>
+          ) : null}
+          <p className="text-lg font-bold text-zinc-900 sm:text-xl">{price}</p>
           <button
             type="button"
             onClick={onClick}
-            className="mx-auto flex min-h-[48px] w-full min-w-0 max-w-xs items-center justify-center rounded-xl border border-stone-800 bg-stone-900 px-4 py-3 text-center text-sm font-semibold tracking-wide text-[#FDF9F0] transition hover:bg-stone-800 sm:min-h-[50px] sm:rounded-2xl sm:px-5"
+            className="flex min-h-[48px] w-full items-center justify-center rounded-xl bg-zinc-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-violet-700"
           >
             {cta}
           </button>
@@ -134,58 +152,59 @@ export default function Services() {
 
   return (
     <>
-      <main className="min-h-screen bg-[#0a0a0b] pb-12 text-zinc-100 sm:pb-16">
-        <section id="services" className="relative border-b border-[#C9A962]/10 pb-8 pt-2 sm:pb-10 sm:pt-4 md:py-12">
-          <div className="pointer-events-none absolute inset-0 opacity-40 [mask-image:linear-gradient(180deg,white,transparent_85%)]">
-            <div
-              className="h-full w-full"
-              style={{
-                backgroundImage: 'radial-gradient(circle, rgba(201, 169, 98, 0.1) 1px, transparent 1px)',
-                backgroundSize: '28px 28px',
-              }}
-            />
+      <main className="min-h-screen bg-white text-zinc-900">
+        <ServicesHeroSection />
+
+        <section
+          id="services"
+          className="relative scroll-mt-20 overflow-hidden border-t border-zinc-200/80 bg-[#FAFAFA] py-12 sm:py-16 lg:py-20"
+        >
+          <div className="pointer-events-none absolute inset-0 opacity-[0.35]">
+            <AiHeroDiagram theme="light" />
           </div>
-          <div className="relative mx-auto max-w-6xl px-3 sm:px-4">
+          <div className="dot-pattern pointer-events-none absolute inset-0 opacity-30" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(139,92,246,0.08),transparent_55%)]" />
+
+          <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.12 }}
               variants={fadeUp}
               transition={{ duration: 0.5 }}
-              className="mb-8 text-center sm:mb-12"
+              className="mx-auto max-w-2xl text-center"
             >
-              <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
-                <span className="relative inline-block">
-                  Services
-                  <span
-                    className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-[#5c4a22] via-[#D4B96A] to-[#5c4a22]"
-                    aria-hidden
-                  />
-                </span>
-              </h1>
-              <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:mt-6 sm:text-base md:text-lg">
-                Book virtual sessions, request digital solutions, or apply for
-                complimentary nonprofit support — clear pricing and a simple booking
-                flow for each option.
+              <span className="inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-violet-700 sm:text-xs">
+                Book &amp; build
+              </span>
+              <h2 className="mt-3 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
+                Choose your path
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-600 sm:text-base">
+                Virtual sessions, digital project quotes, group cohorts, and nonprofit support.
               </p>
             </motion.div>
 
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.08 }}
+              viewport={{ once: true, amount: 0.06 }}
               variants={{
                 hidden: {},
-                visible: {
-                  transition: { staggerChildren: 0.1 },
-                },
+                visible: { transition: { staggerChildren: 0.08 } },
               }}
-              className="grid items-stretch gap-4 sm:gap-6 md:grid-cols-2"
+              className="relative mt-10 grid items-stretch gap-5 sm:mt-12 sm:gap-6 md:grid-cols-2"
             >
+              <div
+                className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-violet-200 via-indigo-200 to-transparent md:block"
+                aria-hidden
+              />
+
               <ServiceCard
+                accent="violet"
                 title="Virtual Session"
-                eyebrow="Virtual Session · 1:1"
-                subtitle="Private one-on-one (1:1) session for:"
+                eyebrow="Agentic AI · 1:1 session"
+                subtitle="Private one-on-one session for career, brand, wellness awareness, publishing, and more."
                 bullets={[
                   'Career development and strategy',
                   'Personal brand guidance',
@@ -202,9 +221,10 @@ export default function Services() {
               />
 
               <ServiceCard
+                accent="indigo"
                 title="Digital solutions"
-                eyebrow="Digital solutions"
-                subtitle="Websites, integrations, hosting, and ongoing support — request a tailored quote for your project."
+                eyebrow="Digital solutions · quote"
+                subtitle="Websites, integrations, hosting, and ongoing support — request a tailored quote."
                 bullets={[
                   'Website design and development',
                   'Hosting setup and deployment',
@@ -217,8 +237,9 @@ export default function Services() {
               />
 
               <ServiceCard
+                accent="emerald"
                 title="Group session"
-                eyebrow="Scheduled cohorts"
+                eyebrow="Mental health · cohort"
                 subtitle="Small-group sessions on fixed dates with set topics. Pick your date when you register."
                 bullets={
                   scheduledGroupSession?.bullets ?? [
@@ -236,9 +257,10 @@ export default function Services() {
               />
 
               <ServiceCard
+                accent="amber"
                 title="Volunteering"
-                eyebrow="Nonprofits & communities"
-                subtitle="Complimentary sessions for registered nonprofits, schools, and volunteer-led community work when capacity allows."
+                eyebrow="Community · nonprofit"
+                subtitle="Complimentary sessions for registered nonprofits, schools, and volunteer-led work when capacity allows."
                 bullets={[
                   'No payment — mission-driven contexts',
                   'Educational and supportive focus',
@@ -253,40 +275,37 @@ export default function Services() {
               />
             </motion.div>
 
-            <p className="mt-4 text-center text-xs text-zinc-500 sm:text-sm">
-              Note: Sessions are available in English, Nepali, or Hindi.
+            <p className="relative mt-6 text-center text-xs text-zinc-500 sm:text-sm">
+              Sessions available in English, Nepali, or Hindi.
             </p>
 
+            <div className="relative mx-auto mt-10 max-w-xl rounded-2xl border border-violet-200 bg-white px-5 py-6 text-center shadow-sm sm:mt-12">
+              <p className="text-sm font-medium text-zinc-800 sm:text-base">
+                Want to level up AI skills or emotional balance?
+              </p>
+              <Link
+                href="https://www.amazon.com/author/drsk1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center justify-center rounded-full bg-violet-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-700"
+              >
+                View books on Amazon
+              </Link>
+            </div>
+
+            <p className="relative mt-8 text-center text-sm text-zinc-500">
+              Similar work on{' '}
+              <Link href="/project" className="font-semibold text-violet-700 hover:underline">
+                projects
+              </Link>{' '}
+              or{' '}
+              <Link href="/#contact" className="font-semibold text-violet-700 hover:underline">
+                contact us
+              </Link>
+              .
+            </p>
           </div>
         </section>
-        <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-[#C9A962]/25 bg-zinc-900/60 px-4 py-5 text-center ring-1 ring-zinc-800/80 sm:mt-12">
-          <p className="text-sm font-medium text-zinc-200 md:text-base">
-            Want to level up AI skills or emotional balance?
-          </p>
-          <Link
-            href="/books"
-            className="mt-3 inline-flex items-center justify-center rounded-full border border-[#8B7535] bg-gradient-to-b from-[#D4B96A] to-[#8E7235] px-5 py-2.5 text-sm font-bold text-zinc-950 shadow-md transition hover:brightness-110"
-          >
-            Read Books
-          </Link>
-        </div>
-        <p className="mt-6 px-1 text-center text-sm leading-relaxed text-zinc-500 sm:mt-8">
-          Interested in something similar?{' '}
-          <Link
-            href="/project"
-            className="font-semibold text-[#C9A962] underline-offset-4 hover:text-white hover:underline"
-          >
-            View projects
-          </Link>{' '}
-          or{' '}
-          <Link
-            href="/#contact"
-            className="font-semibold text-[#C9A962] underline-offset-4 hover:text-white hover:underline"
-          >
-            Get in touch
-          </Link>
-          .
-        </p>
       </main>
 
       <BookingDialog
@@ -298,7 +317,6 @@ export default function Services() {
         visible={quoteDialogVisible}
         onHide={() => setQuoteDialogVisible(false)}
       />
-      
     </>
   );
 }
