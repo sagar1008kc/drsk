@@ -17,6 +17,8 @@ const config: Config = {
           'ui-serif',
           'serif',
         ],
+        gugi: ['var(--font-gugi)', 'cursive'],
+        rubik80s: ['var(--font-rubik-80s-fade)', 'sans-serif'],
       },
       animation: {
         'gradient-x': 'gradient-x 15s ease infinite',

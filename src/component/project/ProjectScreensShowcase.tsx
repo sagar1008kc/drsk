@@ -19,15 +19,15 @@ export default function ProjectScreensShowcase() {
         viewport={{ once: true, amount: 0.15 }}
         variants={fadeUp}
         transition={{ duration: 0.5 }}
-        className="w-full rounded-2xl border border-white/10 bg-zinc-900/50 px-5 py-5 sm:rounded-3xl sm:px-8 sm:py-6"
+        className="w-full rounded-2xl border border-violet-200 bg-white px-5 py-5 shadow-sm sm:rounded-3xl sm:px-8 sm:py-6"
       >
-        <span className="inline-flex rounded-full border border-violet-500/30 bg-violet-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-violet-200 sm:text-xs">
+        <span className="inline-flex rounded-full border border-violet-200 bg-violet-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-violet-700 sm:text-xs">
           {INTERFACE_SHOWCASE.tag}
         </span>
-        <h3 className="mt-3 text-xl font-bold tracking-tight text-white sm:text-2xl lg:text-3xl">
+        <h3 className="mt-3 text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl lg:text-3xl">
           {INTERFACE_SHOWCASE.title}
         </h3>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-400 sm:text-base">
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-600 sm:text-base">
           {INTERFACE_SHOWCASE.description}
         </p>
       </motion.div>
@@ -42,34 +42,34 @@ export default function ProjectScreensShowcase() {
             viewport={{ once: true, amount: 0.1 }}
             variants={fadeUp}
             transition={{ duration: 0.45, delay: i * 0.06 }}
-            className={`flex w-full min-w-0 flex-col overflow-hidden rounded-2xl border bg-zinc-900/70 shadow-lg sm:rounded-3xl ${style.border} ${style.glow}`}
+            className={`flex w-full min-w-0 flex-col overflow-hidden rounded-2xl border bg-white shadow-lg sm:rounded-3xl ${style.border} ${style.glow}`}
           >
-            <figcaption className="w-full border-b border-zinc-800/80 px-5 py-4 sm:px-6 sm:py-5">
+            <figcaption className="w-full border-b border-violet-100 px-5 py-4 sm:px-6 sm:py-5">
               <span
                 className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ring-1 ${style.tag}`}
               >
                 {item.tag}
               </span>
-              <p className="mt-3 text-lg font-bold text-white sm:text-xl">{item.title}</p>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-400">{item.description}</p>
+              <p className="mt-3 text-lg font-bold text-zinc-900 sm:text-xl">{item.title}</p>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-600">{item.description}</p>
               <dl className="mt-4 flex flex-wrap gap-6">
                 {item.meta.map((m) => (
                   <div key={m.label}>
                     <dt className="text-[10px] font-medium uppercase tracking-wider text-zinc-500">
                       {m.label}
                     </dt>
-                    <dd className="mt-0.5 text-sm font-medium text-zinc-200">{m.value}</dd>
+                    <dd className="mt-0.5 text-sm font-medium text-zinc-800">{m.value}</dd>
                   </div>
                 ))}
               </dl>
             </figcaption>
-            <div className="w-full bg-zinc-950/80 p-3 sm:p-4 lg:p-5">
+            <div className="w-full bg-zinc-50 p-3 sm:p-4 lg:p-5">
               <Image
                 src={item.image}
                 alt={`${item.title} screenshot`}
                 width={1920}
                 height={1080}
-                className="mx-auto h-auto w-full max-w-full rounded-lg object-contain ring-1 ring-white/5 sm:rounded-xl"
+                className="mx-auto h-auto w-full max-w-full rounded-lg object-contain ring-1 ring-violet-100 sm:rounded-xl"
                 sizes="100vw"
                 priority={i === 0}
               />

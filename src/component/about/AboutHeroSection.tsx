@@ -9,7 +9,7 @@ import {
   PROFILE_HERO_RING,
 } from '@/lib/profile-hero';
 import { PROFILE_TAGS } from '@/lib/profile-tags';
-import { badgeClass, container, gradientText } from '@/component/about/styles';
+import { aboutPadX, badgeClass, container, gradientText } from '@/component/about/styles';
 import AiHeroDiagram from '@/component/shared/AiHeroDiagram';
 
 function HeroVisual() {
@@ -57,7 +57,7 @@ export default function AboutHeroSection() {
       <div className="dot-pattern pointer-events-none absolute inset-0 opacity-30" />
 
       <div
-        className={`${container} relative flex w-full max-w-7xl flex-1 flex-col justify-center py-10 sm:py-12 lg:py-14`}
+        className={`${container} ${aboutPadX} relative flex w-full max-w-7xl flex-1 flex-col justify-center py-10 sm:py-12 lg:py-14`}
       >
         <div className="grid flex-1 items-center gap-10 lg:grid-cols-2 lg:gap-14 xl:gap-20">
           <motion.div

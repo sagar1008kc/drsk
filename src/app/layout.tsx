@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Playfair_Display } from 'next/font/google';
+import { Gugi, Inter, Playfair_Display, Rubik_80s_Fade } from 'next/font/google';
 import Link from 'next/link';
 import Script from 'next/script';
 import './globals.css';
@@ -20,10 +20,24 @@ const playfair = Playfair_Display({
   variable: '--font-playfair',
 });
 
+const gugi = Gugi({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-gugi',
+});
+
+const rubik80sFade = Rubik_80s_Fade({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-rubik-80s-fade',
+});
+
 const siteUrl = 'https://www.skcreation.org';
-const seoTitle = 'Dr. SK | Author and Technologist';
+const seoTitle = 'Dr. SK | AI Engineer';
 const seoDescription =
-  'Official website of Dr. SK (also known as Dr SK and Dr. SK Author) - author, technologist, and founder of SK Creation.';
+  'Official website of Dr. SK (also known as Dr SK and Dr. SK Author) - author, AI engineer, and founder of SK Creation.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -45,7 +59,7 @@ export const metadata: Metadata = {
     'Dr. SK official website',
     'Sagar Khatri',
     'SK Creation',
-    'Author and technologist',
+    'AI Engineer',
   ],
   authors: [{ name: 'Dr. SK' }],
   creator: 'Dr. SK',
@@ -98,7 +112,7 @@ export default function RootLayout({
     alternateName: ['Dr SK', 'Dr. SK Author', 'Sagar Khatri'],
     url: siteUrl,
     image: `${siteUrl}/drsk.png`,
-    jobTitle: 'Author and Technologist',
+    jobTitle: 'AI Engineer',
     sameAs: [
       'https://www.amazon.com/author/drsk1',
       'https://www.amazon.com/author/sagar2025',
@@ -120,9 +134,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.className} ${playfair.variable} scroll-smooth`}
+      className={`${inter.className} ${playfair.variable} ${gugi.variable} ${rubik80sFade.variable} scroll-smooth`}
     >
-      <body className={`${inter.className} bg-[#020205] text-zinc-100 antialiased`}>
+      <body className={`${inter.className} bg-[#F8F7FF] text-zinc-900 antialiased`}>
         <Providers />
         <Navbar />
 

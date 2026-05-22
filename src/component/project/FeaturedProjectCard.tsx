@@ -41,11 +41,11 @@ export default function FeaturedProjectCard({ project, index }: Props) {
 
   const content = (
     <article
-      className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-zinc-900/70 backdrop-blur-sm transition duration-300 hover:-translate-y-1 sm:rounded-3xl ${style.border} ${style.glow}`}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-white/95 backdrop-blur-sm transition duration-300 hover:-translate-y-1 sm:rounded-3xl ${style.border} ${style.glow}`}
     >
       <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${style.gradient}`} />
       <div
-        className={`relative flex items-center justify-between gap-3 border-b border-white/10 bg-gradient-to-r px-4 py-3 sm:px-5 ${style.preview}`}
+        className={`relative flex items-center justify-between gap-3 border-b border-violet-100 bg-gradient-to-r px-4 py-3 sm:px-5 ${style.preview}`}
       >
         <div className="flex min-w-0 items-center gap-2">
           <span className="flex gap-1" aria-hidden>
@@ -53,12 +53,12 @@ export default function FeaturedProjectCard({ project, index }: Props) {
             <span className="h-2.5 w-2.5 rounded-full bg-amber-500/80" />
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
           </span>
-          <span className="truncate font-mono text-xs text-zinc-400 sm:text-sm">
+          <span className="truncate font-mono text-xs text-zinc-500 sm:text-sm">
             {project.domain}
           </span>
         </div>
         {project.external ? (
-          <ExternalLinkIcon className="h-4 w-4 shrink-0 text-zinc-500 transition group-hover:text-white" />
+          <ExternalLinkIcon className="h-4 w-4 shrink-0 text-zinc-400 transition group-hover:text-violet-700" />
         ) : null}
       </div>
 
@@ -68,10 +68,10 @@ export default function FeaturedProjectCard({ project, index }: Props) {
         >
           {project.tag}
         </span>
-        <h3 className="mt-3 text-xl font-bold tracking-tight text-white sm:text-2xl">
+        <h3 className="mt-3 text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">
           {project.title}
         </h3>
-        <p className="mt-2 text-sm leading-relaxed text-zinc-400 sm:text-base">
+        <p className="mt-2 text-sm leading-relaxed text-zinc-600 sm:text-base">
           {project.description}
         </p>
 
@@ -79,7 +79,7 @@ export default function FeaturedProjectCard({ project, index }: Props) {
           {project.highlights.map((item) => (
             <li
               key={item}
-              className="flex items-start gap-2 text-sm leading-relaxed text-zinc-300"
+              className="flex items-start gap-2 text-sm leading-relaxed text-zinc-700"
             >
               <span className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${style.dot}`} />
               <span>{item}</span>
@@ -87,13 +87,13 @@ export default function FeaturedProjectCard({ project, index }: Props) {
           ))}
         </ul>
 
-        <dl className="mt-5 flex flex-wrap gap-4 border-t border-white/10 pt-5 sm:mt-6">
+        <dl className="mt-5 flex flex-wrap gap-4 border-t border-violet-100 pt-5 sm:mt-6">
           {project.meta.map((m) => (
             <div key={m.label}>
               <dt className="text-[10px] font-medium uppercase tracking-wider text-zinc-500">
                 {m.label}
               </dt>
-              <dd className="mt-0.5 text-sm font-medium text-zinc-200">{m.value}</dd>
+              <dd className="mt-0.5 text-sm font-medium text-zinc-800">{m.value}</dd>
             </div>
           ))}
         </dl>

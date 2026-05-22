@@ -124,6 +124,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 title="The Mind Matters Handbook"
                 description="A practical story-style guide to stress, overthinking, and emotional patterns — free for signed-in members."
                 coverImage="/eb.png"
+                transparentCover
                 downloadHref={HANDBOOK_PUBLIC_PATH}
                 fileName={HANDBOOK_DOWNLOAD_FILENAME}
               />

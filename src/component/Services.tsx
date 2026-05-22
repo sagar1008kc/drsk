@@ -152,12 +152,12 @@ export default function Services() {
 
   return (
     <>
-      <main className="min-h-screen bg-white text-zinc-900">
+      <main className="min-h-screen bg-[#F8F7FF] text-zinc-900">
         <ServicesHeroSection />
 
         <section
           id="services"
-          className="relative scroll-mt-20 overflow-hidden border-t border-zinc-200/80 bg-[#FAFAFA] py-12 sm:py-16 lg:py-20"
+          className="relative scroll-mt-20 overflow-hidden border-t border-violet-200/60 bg-white py-12 sm:py-16 lg:py-20"
         >
           <div className="pointer-events-none absolute inset-0 opacity-[0.35]">
             <AiHeroDiagram theme="light" />

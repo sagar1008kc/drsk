@@ -17,14 +17,14 @@ export default function HomeContactSection() {
             Questions about services, projects, or resources? Send a message or email{' '}
             <a
               href="mailto:info@skcreation.org"
-              className="font-medium text-violet-300 underline-offset-4 transition hover:text-violet-200 hover:underline"
+              className="font-medium text-violet-700 underline-offset-4 transition hover:text-violet-600 hover:underline"
             >
               info@skcreation.org
             </a>
           </p>
         </div>
         <div className="mx-auto mt-8 max-w-xl sm:mt-10">
-          <ContactForm appearance="dark" />
+          <ContactForm appearance="light" />
         </div>
       </div>
     </SectionShell>

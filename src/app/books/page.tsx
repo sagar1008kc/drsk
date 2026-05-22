@@ -28,14 +28,14 @@ export default function BooksPage() {
               href="https://www.amazon.com/author/drsk1"
               target="_blank"
               rel="noopener noreferrer"
-              className="block overflow-hidden rounded-xl border border-zinc-100 bg-zinc-50 transition hover:shadow-md"
+              className="block overflow-hidden rounded-xl border border-zinc-100 bg-transparent transition hover:shadow-md"
             >
               <Image
                 src="/eb.png"
                 alt="Emotional wellness books collection"
                 width={1200}
                 height={800}
-                className="h-auto w-full object-cover"
+                className="h-auto w-full object-contain"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </a>

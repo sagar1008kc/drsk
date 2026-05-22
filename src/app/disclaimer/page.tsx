@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 
 export default function DisclaimerPage() {
   return (
-    <main className="min-h-screen bg-[#0A0B12] px-4 pb-20 pt-0 text-white">
+    <main className="min-h-screen bg-[#F8F7FF] px-5 pb-20 pt-0 text-zinc-900 sm:px-8">
       <div className="mx-auto max-w-3xl">
         <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-          <Link href="/" className="text-violet-400 hover:text-violet-300">
+          <Link href="/" className="text-violet-700 hover:text-violet-600">
             Home
           </Link>
           <span className="mx-2 text-zinc-600">/</span>

@@ -9,6 +9,8 @@ type FreeDownloadCardProps = {
   coverImage: string;
   downloadHref: string;
   fileName?: string;
+  /** Cover PNG has transparency — omit solid backdrop behind the image */
+  transparentCover?: boolean;
 };
 
 export default function FreeDownloadCard({
@@ -17,6 +19,7 @@ export default function FreeDownloadCard({
   coverImage,
   downloadHref,
   fileName,
+  transparentCover = false,
 }: FreeDownloadCardProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -38,7 +41,13 @@ export default function FreeDownloadCard({
     <section className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white shadow-xl shadow-zinc-900/[0.06]">
       <div className="flex flex-col sm:flex-row">
         <div className="flex justify-center px-4 pb-2 pt-6 sm:contents">
-          <div className="relative aspect-square w-full max-w-[240px] shrink-0 overflow-hidden rounded-2xl bg-[#F8F7F4] shadow-sm ring-1 ring-zinc-200/50 sm:aspect-auto sm:h-[min(340px,52vh)] sm:w-[260px] sm:max-w-none sm:rounded-none sm:shadow-none sm:ring-0">
+          <div
+            className={`relative aspect-square w-full max-w-[240px] shrink-0 overflow-hidden rounded-2xl sm:aspect-auto sm:h-[min(340px,52vh)] sm:w-[260px] sm:max-w-none sm:rounded-none sm:shadow-none sm:ring-0 ${
+              transparentCover
+                ? 'bg-transparent'
+                : 'bg-[#F8F7F4] shadow-sm ring-1 ring-zinc-200/50'
+            }`}
+          >
             <Image
               src={coverImage}
               alt={title}

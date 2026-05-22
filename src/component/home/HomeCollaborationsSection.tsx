@@ -15,27 +15,27 @@ const accentStyles: Record<
   { tag: string; quote: string; star: string; bar: string }
 > = {
   rose: {
-    tag: 'border-rose-500/30 bg-rose-500/10 text-rose-300',
-    quote: 'text-rose-200/90',
-    star: 'text-rose-400',
+    tag: 'border-rose-200 bg-rose-50 text-rose-800',
+    quote: 'text-rose-600',
+    star: 'text-rose-500',
     bar: 'bg-rose-500',
   },
   amber: {
-    tag: 'border-amber-500/30 bg-amber-500/10 text-amber-200',
-    quote: 'text-amber-200/90',
-    star: 'text-amber-400',
+    tag: 'border-amber-200 bg-amber-50 text-amber-900',
+    quote: 'text-amber-700',
+    star: 'text-amber-500',
     bar: 'bg-amber-500',
   },
   sky: {
-    tag: 'border-sky-500/30 bg-sky-500/10 text-sky-300',
-    quote: 'text-sky-200/90',
-    star: 'text-sky-400',
+    tag: 'border-sky-200 bg-sky-50 text-sky-800',
+    quote: 'text-sky-600',
+    star: 'text-sky-500',
     bar: 'bg-sky-500',
   },
   emerald: {
-    tag: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
-    quote: 'text-emerald-200/90',
-    star: 'text-emerald-400',
+    tag: 'border-emerald-200 bg-emerald-50 text-emerald-800',
+    quote: 'text-emerald-600',
+    star: 'text-emerald-500',
     bar: 'bg-emerald-500',
   },
 };
@@ -122,7 +122,7 @@ function ClientTestimonialCard({
 
   return (
     <article
-      className={`flex h-full w-full flex-col overflow-hidden rounded-xl border border-white/10 bg-[#14141a] ${className}`}
+      className={`flex h-full w-full flex-col overflow-hidden rounded-xl border border-violet-200/80 bg-white shadow-[0_8px_28px_rgba(139,92,246,0.08)] ${className}`}
     >
       <div className={`h-1 shrink-0 ${style.bar}`} aria-hidden />
 
@@ -133,7 +133,7 @@ function ClientTestimonialCard({
           {story.field}
         </span>
 
-        <blockquote className="flex-1 text-sm leading-relaxed text-zinc-200 lg:text-sm lg:leading-relaxed">
+        <blockquote className="flex-1 text-sm leading-relaxed text-zinc-700 lg:text-sm lg:leading-relaxed">
           <span className={`mr-0.5 text-lg leading-none ${style.quote}`} aria-hidden>
             “
           </span>
@@ -143,9 +143,9 @@ function ClientTestimonialCard({
           </span>
         </blockquote>
 
-        <div className="border-t border-white/5 pt-2 text-center lg:pt-4">
+        <div className="border-t border-violet-100 pt-2 text-center lg:pt-4">
           <StarRow className={style.star} />
-          <p className="mt-1.5 text-sm font-semibold text-white lg:mt-2 lg:text-base">{story.author}</p>
+          <p className="mt-1.5 text-sm font-semibold text-zinc-900 lg:mt-2 lg:text-base">{story.author}</p>
           <p className="mt-0.5 text-xs leading-snug text-zinc-500">
             {story.role} · {story.context}
           </p>
@@ -171,7 +171,7 @@ function CarouselArrow({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className={`flex shrink-0 items-center justify-center rounded-full border border-white/15 bg-[#1a1a22] text-zinc-300 transition hover:border-violet-400/40 hover:bg-violet-500/15 hover:text-white ${
+      className={`flex shrink-0 items-center justify-center rounded-full border border-violet-200 bg-white text-zinc-600 shadow-sm transition hover:border-violet-300 hover:bg-violet-50 hover:text-violet-800 ${
         compact ? 'h-10 w-10 text-base' : 'h-11 w-11 text-lg lg:h-12 lg:w-12'
       }`}
     >
@@ -241,7 +241,7 @@ export default function HomeCollaborationsSection() {
         >
           <span
             className={`block rounded-full transition-all duration-300 ${
-              index === pos ? 'h-2 w-7 bg-violet-400' : 'h-2 w-2 bg-zinc-600'
+              index === pos ? 'h-2 w-7 bg-violet-500' : 'h-2 w-2 bg-violet-200'
             }`}
           />
         </button>

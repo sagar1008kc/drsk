@@ -84,13 +84,13 @@ export default function HomeExploreSection() {
               transition={{ duration: 0.4, delay: card.delay }}
               className={glassCard}
             >
-              <h3 className="text-xl font-bold text-white">{card.title}</h3>
-              <p className="mt-2 text-sm font-medium text-violet-200/90">{card.subtitle}</p>
-              <p className="mt-3 text-sm leading-relaxed text-zinc-400">{card.body}</p>
+              <h3 className="text-xl font-bold text-zinc-900">{card.title}</h3>
+              <p className="mt-2 text-sm font-medium text-violet-700">{card.subtitle}</p>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-600">{card.body}</p>
               {'items' in card && card.items ? (
                 <>
-                  <p className="mt-4 text-sm font-semibold text-zinc-200">{card.listLabel}</p>
-                  <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-zinc-400">
+                  <p className="mt-4 text-sm font-semibold text-zinc-800">{card.listLabel}</p>
+                  <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-zinc-600">
                     {card.items.map((item) => (
                       <li key={item}>{item}</li>
                     ))}

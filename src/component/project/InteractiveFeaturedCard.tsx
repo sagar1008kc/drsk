@@ -48,7 +48,7 @@ export default function InteractiveFeaturedCard({ project, index }: Props) {
   const { rotateX, rotateY, glareX, glareY, onPointerMove, onPointerLeave } =
     usePointerTilt(11);
 
-  const glareBackground = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.14), transparent 55%)`;
+  const glareBackground = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(139,92,246,0.12), transparent 55%)`;
 
   const href = project.href;
   const linkProps = project.external
@@ -80,7 +80,7 @@ export default function InteractiveFeaturedCard({ project, index }: Props) {
 
         <Link
           {...linkProps}
-          className={`relative flex w-full flex-col overflow-hidden rounded-2xl border bg-zinc-900/80 shadow-xl backdrop-blur-md transition-shadow duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 sm:rounded-3xl ${style.border} ${style.glow}`}
+          className={`relative flex w-full flex-col overflow-hidden rounded-2xl border bg-white shadow-xl backdrop-blur-md transition-shadow duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 sm:rounded-3xl ${style.border} ${style.glow}`}
         >
           <motion.div
             className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -89,7 +89,7 @@ export default function InteractiveFeaturedCard({ project, index }: Props) {
           <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${style.gradient}`} />
 
           <div
-            className={`relative z-20 flex items-center justify-between gap-3 border-b border-white/10 bg-gradient-to-r px-4 py-2.5 sm:px-5 ${style.preview}`}
+            className={`relative z-20 flex items-center justify-between gap-3 border-b border-violet-100 bg-gradient-to-r px-4 py-2.5 sm:px-5 ${style.preview}`}
           >
             <div className="flex min-w-0 items-center gap-2">
               <span className="flex gap-1" aria-hidden>
@@ -102,7 +102,7 @@ export default function InteractiveFeaturedCard({ project, index }: Props) {
               </span>
             </div>
             <motion.span
-              className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-emerald-300/90"
+              className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-emerald-700"
               animate={{ opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
@@ -119,16 +119,16 @@ export default function InteractiveFeaturedCard({ project, index }: Props) {
               <ProjectDemoPreview projectId={project.id} accent={project.accent} layout="wide" />
             </div>
 
-            <div className="relative flex min-w-0 flex-1 flex-col p-5 sm:p-6 md:border-l md:border-white/10 md:py-6 lg:p-8">
+            <div className="relative flex min-w-0 flex-1 flex-col p-5 sm:p-6 md:border-l md:border-violet-100 md:py-6 lg:p-8">
             <span
               className={`inline-flex w-fit rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ring-1 sm:text-xs ${style.tag}`}
             >
               {project.tag}
             </span>
-            <h3 className="mt-3 text-xl font-bold tracking-tight text-white sm:text-2xl">
+            <h3 className="mt-3 text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">
               {project.title}
             </h3>
-            <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-zinc-400 sm:text-base sm:line-clamp-none">
+            <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-zinc-600 sm:text-base sm:line-clamp-none">
               {project.description}
             </p>
 
@@ -145,7 +145,7 @@ export default function InteractiveFeaturedCard({ project, index }: Props) {
                 <motion.li
                   key={item}
                   variants={listItemVariants}
-                  className="flex items-start gap-2 text-sm leading-relaxed text-zinc-300"
+                  className="flex items-start gap-2 text-sm leading-relaxed text-zinc-700"
                 >
                   <span className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${style.dot}`} />
                   <span>{item}</span>
@@ -153,13 +153,13 @@ export default function InteractiveFeaturedCard({ project, index }: Props) {
               ))}
             </motion.ul>
 
-            <dl className="mt-5 flex flex-wrap gap-4 border-t border-white/10 pt-5">
+            <dl className="mt-5 flex flex-wrap gap-4 border-t border-violet-100 pt-5">
               {project.meta.map((m) => (
                 <div key={m.label}>
                   <dt className="text-[10px] font-medium uppercase tracking-wider text-zinc-500">
                     {m.label}
                   </dt>
-                  <dd className="mt-0.5 text-sm font-medium text-zinc-200">{m.value}</dd>
+                  <dd className="mt-0.5 text-sm font-medium text-zinc-800">{m.value}</dd>
                 </div>
               ))}
             </dl>

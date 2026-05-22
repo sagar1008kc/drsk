@@ -4,18 +4,13 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
 
-const accentRing: Record<string, string> = {
-  indigo: 'ring-indigo-400/35 hover:ring-indigo-400/60',
-  amber: 'ring-amber-400/35 hover:ring-amber-400/60',
-};
-
 export default function HeroFeaturedBooks() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, delay: 0.1 }}
-      className="flex h-full min-h-[380px] w-full flex-col gap-4 sm:min-h-[420px] sm:gap-5 lg:min-h-0 lg:gap-6"
+      className="flex h-full min-h-0 w-full flex-col justify-center gap-4 py-1 sm:gap-5 lg:gap-6 lg:py-2"
     >
       {FEATURED_BOOKS.map((book, index) => (
         <a
@@ -23,31 +18,36 @@ export default function HeroFeaturedBooks() {
           href={book.href}
           target="_blank"
           rel="noopener noreferrer"
-          className={`group flex min-h-0 flex-1 basis-0 items-center overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a12]/80 shadow-lg ring-1 transition hover:-translate-y-0.5 ${accentRing[book.accent]}`}
+          className="group grid min-h-0 flex-1 grid-cols-[minmax(7rem,38%)_1fr] items-center gap-3 sm:grid-cols-[minmax(8.25rem,40%)_1fr] sm:gap-4 md:grid-cols-[minmax(9rem,42%)_1fr] lg:grid-cols-[minmax(9.5rem,44%)_1fr] lg:gap-4 xl:grid-cols-[minmax(10.5rem,46%)_1fr]"
         >
-          <div className="relative shrink-0 self-center py-2 pl-2 sm:py-2.5 sm:pl-2.5 lg:py-3 lg:pl-3">
-            <div className="relative aspect-[2/3] w-[5.75rem] sm:w-[6.75rem] md:w-[7.5rem] lg:w-[8.25rem]">
+          <div className="relative w-full max-w-[10.5rem] justify-self-start sm:max-w-[11.5rem] md:max-w-[12.5rem] lg:max-w-[14rem] xl:max-w-[15.5rem] 2xl:max-w-[17rem]">
+            <div
+              className={`relative aspect-[2/3] w-full ${
+                book.transparentImage ? 'bg-transparent' : ''
+              }`}
+            >
               <Image
                 src={book.image}
                 alt={book.alt}
                 fill
                 className="object-contain object-center transition duration-300 group-hover:scale-[1.02]"
-                sizes="(max-width: 640px) 92px, (max-width: 1024px) 108px, 132px"
+                sizes="(max-width: 640px) 38vw, (max-width: 1024px) 42vw, 220px"
                 priority={index === 0}
               />
             </div>
           </div>
-          <div className="flex min-w-0 flex-1 flex-col justify-center p-4 sm:p-5 lg:p-6">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 sm:text-xs">
+
+          <div className="flex min-w-0 flex-col justify-center gap-1 sm:gap-1.5">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-violet-600 sm:text-xs">
               {book.shortTitle}
             </span>
-            <p className="mt-2 text-sm font-bold leading-snug text-white sm:text-[15px]">
+            <p className="text-sm font-bold leading-snug text-zinc-900 sm:text-[0.95rem] md:text-base lg:text-[1.05rem] lg:leading-snug">
               {book.title}
             </p>
-            <p className="mt-2 text-xs leading-relaxed text-zinc-400 sm:text-sm sm:leading-relaxed">
+            <p className="line-clamp-3 text-xs leading-relaxed text-zinc-600 sm:line-clamp-4 sm:text-sm sm:leading-relaxed lg:line-clamp-5">
               {book.body}
             </p>
-            <p className="mt-3 text-xs font-semibold text-violet-300/90 group-hover:text-violet-200 sm:text-sm">
+            <p className="text-xs font-semibold text-violet-700 underline-offset-2 transition group-hover:text-violet-600 group-hover:underline sm:text-sm">
               {book.cta} →
             </p>
           </div>

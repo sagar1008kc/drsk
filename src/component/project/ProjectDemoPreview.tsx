@@ -165,8 +165,8 @@ export default function ProjectDemoPreview({ projectId, accent, layout = 'stack'
     <div
       className={`relative w-full overflow-hidden border-white/10 ${
         isWide
-          ? 'h-[148px] border-b md:h-full md:min-h-[220px] md:border-b-0 lg:min-h-[240px]'
-          : 'h-[148px] border-b sm:h-[160px]'
+          ? 'h-[148px] border-b border-violet-100 md:h-full md:min-h-[220px] md:border-b-0 lg:min-h-[240px]'
+          : 'h-[148px] border-b border-violet-100 sm:h-[160px]'
       }`}
     >
       <motion.div

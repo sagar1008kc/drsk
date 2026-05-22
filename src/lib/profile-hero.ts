@@ -11,4 +11,4 @@ export const PROFILE_HERO_BODY =
 export const PROFILE_HERO_BODY_SECOND =
   'Also an Author of practical AI and mental wellness books, and a Mental Health Advocate (MHFA-Certified)—bringing clarity, resilience, and human-centered perspective to high-performance teams.';
 
-export const PROFILE_HERO_RING = 'Software · AI · Integration';
+export const PROFILE_HERO_RING = 'DR. SK';

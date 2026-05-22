@@ -8,6 +8,8 @@ export type FeaturedBook = {
   href: string;
   cta: string;
   accent: 'indigo' | 'amber';
+  /** PNG has transparency — do not place on a solid cover background */
+  transparentImage?: boolean;
 };
 
 export const FEATURED_BOOKS: FeaturedBook[] = [
@@ -32,5 +34,6 @@ export const FEATURED_BOOKS: FeaturedBook[] = [
     href: 'https://www.amazon.com/author/drsk1',
     cta: 'View on Amazon',
     accent: 'amber',
+    transparentImage: true,
   },
 ];

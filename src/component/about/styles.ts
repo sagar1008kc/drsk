@@ -2,7 +2,10 @@
 
 export const aboutBg = 'bg-[#F8F7FF] text-zinc-900';
 
-export const sectionPad = 'px-4 py-12 sm:px-6 sm:py-14 md:py-16 lg:py-20';
+/** Horizontal inset for all About sections — scales up on larger screens */
+export const aboutPadX = 'px-5 sm:px-8 md:px-10 lg:px-12 xl:px-14';
+
+export const sectionPad = `${aboutPadX} py-12 sm:py-14 md:py-16 lg:py-20`;
 
 export const container = 'relative mx-auto w-full max-w-6xl';
 
