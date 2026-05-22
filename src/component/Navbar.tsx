@@ -134,7 +134,7 @@ export default function Navbar() {
       return (
         <>
           <Link href="/dashboard" className={navClass(isActive('/dashboard'), mobile)}>
-            Resources
+            Dashboard
           </Link>
           <button
             type="button"

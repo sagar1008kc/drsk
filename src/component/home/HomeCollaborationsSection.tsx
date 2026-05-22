@@ -1,70 +1,217 @@
 'use client';
 
-import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import SectionShell from './SectionShell';
-import { badgeClass, container, sectionDesc, sectionTitle } from './styles';
+import { badgeClass, container, gradientText, sectionTitle } from './styles';
 
-const customerSlides = ['/customer1.png', '/customer2.png', '/customer3.png', '/customer4.png'];
+const AUTO_MS = 5000;
+const VISIBLE_LG = 3;
 
-function CarouselCell({
-  slideOffset,
-  activeSlide,
-  altIndex,
+type Accent = 'rose' | 'amber' | 'sky' | 'emerald';
+
+const accentStyles: Record<
+  Accent,
+  { tag: string; quote: string; star: string; bar: string }
+> = {
+  rose: {
+    tag: 'border-rose-500/30 bg-rose-500/10 text-rose-300',
+    quote: 'text-rose-200/90',
+    star: 'text-rose-400',
+    bar: 'bg-rose-500',
+  },
+  amber: {
+    tag: 'border-amber-500/30 bg-amber-500/10 text-amber-200',
+    quote: 'text-amber-200/90',
+    star: 'text-amber-400',
+    bar: 'bg-amber-500',
+  },
+  sky: {
+    tag: 'border-sky-500/30 bg-sky-500/10 text-sky-300',
+    quote: 'text-sky-200/90',
+    star: 'text-sky-400',
+    bar: 'bg-sky-500',
+  },
+  emerald: {
+    tag: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
+    quote: 'text-emerald-200/90',
+    star: 'text-emerald-400',
+    bar: 'bg-emerald-500',
+  },
+};
+
+const clientStories = [
+  {
+    id: 'ai-integration',
+    accent: 'rose' as Accent,
+    field: 'Small business · AI integration',
+    quote:
+      'We were losing leads after hours and repeating the same answers every day. After Dr. SK wired an assistant into our site and booking flow, responses got faster and our team finally had one place to see what customers actually asked for.',
+    author: 'Maria R.',
+    role: 'Owner',
+    context: 'Local wellness studio',
+  },
+  {
+    id: 'digital-services',
+    accent: 'amber' as Accent,
+    field: 'Digital services',
+    quote:
+      'Our old site looked fine but did not convert. The rebuild was mobile-first, clearer, and connected to the tools we already used. Within weeks we had better form completion and fewer “how do I book?” messages.',
+    author: 'James T.',
+    role: 'Founder',
+    context: 'Boutique consulting firm',
+  },
+  {
+    id: 'publishing',
+    accent: 'sky' as Accent,
+    field: 'Book writing & publishing',
+    quote:
+      'Dr. SK helped shape a story-led manuscript on AI stress and daily balance — clear chapters, real examples, and a path to publish without drowning in jargon. Readers tell us it reads like a conversation.',
+    author: 'Priya K.',
+    role: 'Co-author & editor',
+    context: 'Independent professional network',
+  },
+  {
+    id: 'wellness-sessions',
+    accent: 'emerald' as Accent,
+    field: 'Mental health awareness · sessions',
+    quote:
+      'The session was story-based and grounded — not preachy. People left with language for stress and overthinking, and a few colleagues finally reached out for support. It shifted the room in a way slides never did.',
+    author: 'Alex M.',
+    role: 'People & culture lead',
+    context: 'Mid-size technology team',
+  },
+] as const;
+
+const DESKTOP_PAGE_COUNT = clientStories.length - VISIBLE_LG + 1;
+
+function useIsLgUp() {
+  const [isLg, setIsLg] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const update = () => setIsLg(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  return isLg;
+}
+
+function StarRow({ className }: { className: string }) {
+  return (
+    <div className={`flex justify-center gap-0.5 ${className}`} aria-hidden>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg key={i} className="h-3 w-3 fill-current" viewBox="0 0 20 20">
+          <path d="M10 1.5l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7L10 1.5z" />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+function ClientTestimonialCard({
+  story,
+  className = '',
 }: {
-  slideOffset: number;
-  activeSlide: number;
-  altIndex: number;
+  story: (typeof clientStories)[number];
+  className?: string;
 }) {
-  const activeIndex = (activeSlide + slideOffset) % customerSlides.length;
+  const style = accentStyles[story.accent];
 
   return (
-    <article className="relative min-h-[320px] overflow-hidden rounded-xl bg-[#0a0a12] ring-1 ring-white/10 sm:min-h-[380px] md:min-h-[480px] md:max-h-[520px]">
-      {customerSlides.map((src, index) => {
-        const isActive = index === activeIndex;
-        return (
-          <Image
-            key={src}
-            src={src}
-            alt={`Collaboration highlight ${altIndex + 1}`}
-            fill
-            priority={index < 2}
-            className={`drsk-fade-layer object-cover object-center transition-opacity duration-500 ease-in-out motion-reduce:transition-none ${
-              isActive ? 'z-10 opacity-100' : 'z-0 opacity-0'
-            }`}
-            sizes="(max-width: 767px) 100vw, 50vw"
-          />
-        );
-      })}
+    <article
+      className={`flex h-full w-full flex-col overflow-hidden rounded-xl border border-white/10 bg-[#14141a] ${className}`}
+    >
+      <div className={`h-1 shrink-0 ${style.bar}`} aria-hidden />
+
+      <div className="flex flex-1 flex-col gap-2 p-2 lg:gap-3 lg:p-6">
+        <span
+          className={`inline-flex w-fit max-w-full rounded-full border px-2 py-0.5 text-[0.625rem] font-semibold uppercase leading-tight tracking-wide lg:px-3 lg:py-1 lg:text-[0.6875rem] ${style.tag}`}
+        >
+          {story.field}
+        </span>
+
+        <blockquote className="flex-1 text-sm leading-relaxed text-zinc-200 lg:text-sm lg:leading-relaxed">
+          <span className={`mr-0.5 text-lg leading-none ${style.quote}`} aria-hidden>
+            “
+          </span>
+          {story.quote}
+          <span className={`ml-0.5 text-lg leading-none ${style.quote}`} aria-hidden>
+            ”
+          </span>
+        </blockquote>
+
+        <div className="border-t border-white/5 pt-2 text-center lg:pt-4">
+          <StarRow className={style.star} />
+          <p className="mt-1.5 text-sm font-semibold text-white lg:mt-2 lg:text-base">{story.author}</p>
+          <p className="mt-0.5 text-xs leading-snug text-zinc-500">
+            {story.role} · {story.context}
+          </p>
+        </div>
+      </div>
     </article>
   );
 }
 
+function CarouselArrow({
+  direction,
+  onClick,
+  label,
+  compact = false,
+}: {
+  direction: 'prev' | 'next';
+  onClick: () => void;
+  label: string;
+  compact?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={`flex shrink-0 items-center justify-center rounded-full border border-white/15 bg-[#1a1a22] text-zinc-300 transition hover:border-violet-400/40 hover:bg-violet-500/15 hover:text-white ${
+        compact ? 'h-10 w-10 text-base' : 'h-11 w-11 text-lg lg:h-12 lg:w-12'
+      }`}
+    >
+      <span aria-hidden>{direction === 'prev' ? '←' : '→'}</span>
+    </button>
+  );
+}
+
 export default function HomeCollaborationsSection() {
-  const [activeSlide, setActiveSlide] = useState(0);
+  const isLg = useIsLgUp();
+  const [pos, setPos] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const touchStartX = useRef(0);
 
-  const totalPages = customerSlides.length;
+  const pageCount = isLg ? DESKTOP_PAGE_COUNT : clientStories.length;
+  const desktopStart = Math.min(pos, clientStories.length - VISIBLE_LG);
+  const visibleDesktop = clientStories.slice(desktopStart, desktopStart + VISIBLE_LG);
+  const mobileStory = clientStories[pos];
 
-  const goToSlide = useCallback((index: number) => {
-    setActiveSlide((index + customerSlides.length) % customerSlides.length);
-  }, []);
+  const goTo = useCallback(
+    (index: number) => {
+      setPos((index + pageCount) % pageCount);
+    },
+    [pageCount]
+  );
 
-  useEffect(() => {
-    customerSlides.forEach((src) => {
-      const img = new window.Image();
-      img.src = src;
-    });
-  }, []);
+  const goNext = useCallback(() => goTo(pos + 1), [goTo, pos]);
+  const goPrev = useCallback(() => goTo(pos - 1), [goTo, pos]);
 
   useEffect(() => {
     if (isPaused) return;
     const timer = window.setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % customerSlides.length);
-    }, 6000);
+      setPos((p) => (p + 1) % pageCount);
+    }, AUTO_MS);
     return () => window.clearInterval(timer);
-  }, [isPaused]);
+  }, [isPaused, pageCount]);
+
+  useEffect(() => {
+    if (pos >= pageCount) setPos(0);
+  }, [pageCount, pos]);
 
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0]?.clientX ?? 0;
@@ -73,89 +220,110 @@ export default function HomeCollaborationsSection() {
   function handleTouchEnd(e: React.TouchEvent) {
     const endX = e.changedTouches[0]?.clientX ?? 0;
     const diff = touchStartX.current - endX;
-    if (diff > 48) goToSlide(activeSlide + 1);
-    else if (diff < -48) goToSlide(activeSlide - 1);
+    if (diff > 48) goNext();
+    else if (diff < -48) goPrev();
   }
 
+  const dotButtons = (
+    <div className="flex items-center justify-center gap-1.5">
+      {Array.from({ length: pageCount }).map((_, index) => (
+        <button
+          key={index}
+          type="button"
+          aria-label={
+            isLg
+              ? `Client stories slide ${index + 1} of ${pageCount}`
+              : `${clientStories[index].field} — story ${index + 1}`
+          }
+          aria-current={index === pos ? 'true' : undefined}
+          onClick={() => goTo(index)}
+          className="min-h-[44px] min-w-[36px] rounded-full p-2"
+        >
+          <span
+            className={`block rounded-full transition-all duration-300 ${
+              index === pos ? 'h-2 w-7 bg-violet-400' : 'h-2 w-2 bg-zinc-600'
+            }`}
+          />
+        </button>
+      ))}
+    </div>
+  );
+
   return (
-    <SectionShell ariaLabelledBy="collab-heading">
+    <SectionShell ariaLabelledBy="collab-heading" className="!overflow-visible">
       <div className={container}>
         <div className="mx-auto max-w-2xl text-center">
-          <span className={badgeClass}>Collaborations</span>
+          <span className={badgeClass}>Clients & collaborations</span>
           <h2 id="collab-heading" className={`${sectionTitle} mt-3`}>
-            Collaborations & clients
+            What <span className={gradientText}>clients say</span>
           </h2>
-          <p className={sectionDesc}>
-            Supporting individuals and small businesses through practical guidance, digital
-            solutions, and meaningful results.
-          </p>
         </div>
+      </div>
 
-        <div
-          className="mx-auto mt-8 max-w-5xl sm:mt-10"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
-          <div
-            className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#12121a]/60 p-3 sm:p-5"
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-          >
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
-              <CarouselCell
-                slideOffset={0}
-                activeSlide={activeSlide}
-                altIndex={activeSlide % customerSlides.length}
-              />
-              <div className="hidden md:block">
-                <CarouselCell
-                  slideOffset={1}
-                  activeSlide={activeSlide}
-                  altIndex={(activeSlide + 1) % customerSlides.length}
-                />
-              </div>
-            </div>
+      <div
+        className="relative mt-8 w-full sm:mt-10"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Desktop: arrows flanking 3 full-width cards */}
+        <div className="mx-auto hidden w-full items-center gap-4 px-4 lg:flex lg:px-6 xl:gap-5">
+          <CarouselArrow direction="prev" onClick={goPrev} label="Previous client stories" />
 
-            <button
-              type="button"
-              onClick={() => goToSlide(activeSlide - 1)}
-              aria-label="Previous highlight"
-              className="absolute left-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#020205]/90 text-lg text-zinc-200 transition active:scale-95 sm:left-3"
-            >
-              <span aria-hidden>←</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => goToSlide(activeSlide + 1)}
-              aria-label="Next highlight"
-              className="absolute right-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-[#020205]/90 text-lg text-zinc-200 transition active:scale-95 sm:right-3"
-            >
-              <span aria-hidden>→</span>
-            </button>
-          </div>
-
-          <div className="mt-4 flex items-center justify-center gap-2">
-            {Array.from({ length: totalPages }).map((_, index) => (
-              <button
-                key={`dot-${index}`}
-                type="button"
-                aria-label={`Go to slide ${index + 1}`}
-                aria-current={index === activeSlide ? 'true' : undefined}
-                onClick={() => goToSlide(index)}
-                className="min-h-[44px] min-w-[44px] rounded-full p-2 transition"
+          <div className="min-w-0 flex-1">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={desktopStart}
+                initial={{ opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -12 }}
+                transition={{ duration: 0.3 }}
+                className="grid grid-cols-3 gap-3 lg:gap-4"
               >
-                <span
-                  className={`block rounded-full transition-all duration-300 ${
-                    index === activeSlide ? 'h-2.5 w-8 bg-violet-400' : 'h-2.5 w-2.5 bg-zinc-600'
-                  }`}
-                />
-              </button>
-            ))}
+                {visibleDesktop.map((s) => (
+                  <ClientTestimonialCard key={s.id} story={s} />
+                ))}
+              </motion.div>
+            </AnimatePresence>
           </div>
-          <p className="mt-2 text-center text-xs text-zinc-500 sm:hidden">
-            Swipe left or right to browse
-          </p>
+
+          <CarouselArrow direction="next" onClick={goNext} label="Next client stories" />
         </div>
+
+        {/* Mobile: full-width card, controls underneath */}
+        <div className="px-4 lg:hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={mobileStory.id}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.28 }}
+              className="w-full"
+            >
+              <ClientTestimonialCard story={mobileStory} />
+            </motion.div>
+          </AnimatePresence>
+
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <CarouselArrow
+              direction="prev"
+              onClick={goPrev}
+              label="Previous client story"
+              compact
+            />
+            {dotButtons}
+            <CarouselArrow
+              direction="next"
+              onClick={goNext}
+              label="Next client story"
+              compact
+            />
+          </div>
+        </div>
+
+        <div className={`${container} mt-4 hidden lg:block`}>{dotButtons}</div>
       </div>
     </SectionShell>
   );

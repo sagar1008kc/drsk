@@ -2,7 +2,7 @@
 
 import { FormEvent, useRef, useState } from 'react';
 import { toast } from 'sonner';
-type Variant = 'light' | 'dark';
+type Variant = 'light' | 'dark' | 'home';
 
 const DEFAULT_FULL_HEADING = 'Subscribe for updates';
 const DEFAULT_FULL_DESCRIPTION =
@@ -191,6 +191,7 @@ export default function HandbookSubscribeCTA({
   }
 
   const isDark = variant === 'dark';
+  const isHome = variant === 'home';
   const fullHeading = heading ?? DEFAULT_FULL_HEADING;
   const fullDescription = description ?? DEFAULT_FULL_DESCRIPTION;
 
@@ -198,32 +199,40 @@ export default function HandbookSubscribeCTA({
     (flushTop ? '' : 'mt-8 ') +
     'rounded-2xl border border-violet-200/90 bg-gradient-to-b from-violet-50/80 to-white/90 p-5 shadow-sm sm:p-6';
 
+  const shellClass = isHome
+    ? 'rounded-2xl border border-violet-500/25 bg-[#12121a]/90 p-5 shadow-[0_8px_32px_rgba(139,92,246,0.12)] sm:p-6'
+    : isDark
+      ? 'rounded-2xl border border-[#C9A962]/30 bg-zinc-900/90 p-5 shadow-[0_0_40px_rgba(201,169,98,0.08)] ring-1 ring-zinc-800/80 sm:p-7'
+      : lightShell;
+
+  const headingClass = isHome
+    ? 'text-lg font-semibold text-violet-200'
+    : isDark
+      ? 'text-lg font-semibold text-[#E8D5A3]'
+      : 'text-base font-semibold text-zinc-900';
+
+  const descClass = isHome
+    ? 'mt-2 text-sm leading-relaxed text-zinc-400'
+    : isDark
+      ? 'mt-2 text-sm leading-relaxed text-zinc-400'
+      : 'mt-2 text-sm leading-relaxed text-zinc-600';
+
+  const inputClass = isHome
+    ? 'box-border w-full min-h-[3rem] min-w-[min(100%,18rem)] flex-1 rounded-xl border border-white/15 bg-[#0a0a10] px-4 py-3.5 text-base text-zinc-100 outline-none transition placeholder:text-zinc-500 focus:border-violet-400/50 focus:ring-2 focus:ring-violet-500/25'
+    : isDark
+      ? emailFieldDarkClass
+      : emailFieldLightOnWhiteClass;
+
+  const buttonClass = isHome
+    ? subscribeButtonVioletClass
+    : isDark
+      ? subscribeButtonDarkClass
+      : subscribeButtonVioletClass;
+
   return (
-    <div
-      className={
-        isDark
-          ? 'rounded-2xl border border-[#C9A962]/30 bg-zinc-900/90 p-5 shadow-[0_0_40px_rgba(201,169,98,0.08)] ring-1 ring-zinc-800/80 sm:p-7'
-          : lightShell
-      }
-    >
-      <h3
-        className={
-          isDark
-            ? 'text-lg font-semibold text-[#E8D5A3]'
-            : 'text-base font-semibold text-zinc-900'
-        }
-      >
-        {fullHeading}
-      </h3>
-      <p
-        className={
-          isDark
-            ? 'mt-2 text-sm leading-relaxed text-zinc-400'
-            : 'mt-2 text-sm leading-relaxed text-zinc-600'
-        }
-      >
-        {fullDescription}
-      </p>
+    <div className={shellClass}>
+      <h3 className={headingClass}>{fullHeading}</h3>
+      <p className={descClass}>{fullDescription}</p>
       <form
         onSubmit={onSubmit}
         className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-stretch sm:gap-3"
@@ -240,7 +249,7 @@ export default function HandbookSubscribeCTA({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@email.com"
-          className={isDark ? emailFieldDarkClass : emailFieldLightOnWhiteClass}
+          className={inputClass}
         />
         <input
           ref={companyRef}
@@ -254,7 +263,7 @@ export default function HandbookSubscribeCTA({
         <button
           type="submit"
           disabled={loading}
-          className={isDark ? subscribeButtonDarkClass : subscribeButtonVioletClass}
+          className={buttonClass}
         >
           {loading ? 'Sending…' : 'Subscribe'}
         </button>

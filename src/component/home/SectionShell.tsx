@@ -18,7 +18,7 @@ export default function SectionShell({
     <section
       id={id}
       aria-labelledby={ariaLabelledBy}
-      className={`relative overflow-hidden scroll-mt-20 ${sectionBorder} ${sectionPad} ${className}`}
+      className={`relative scroll-mt-20 ${sectionBorder} ${sectionPad} overflow-hidden ${className}`}
     >
       <div className={glowBg} />
       <div className="dot-pattern-dark pointer-events-none absolute inset-0 opacity-25" />

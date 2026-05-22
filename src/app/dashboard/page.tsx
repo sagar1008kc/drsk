@@ -24,6 +24,7 @@ import {
   HANDBOOK_PUBLIC_PATH,
 } from '@/lib/handbook-public';
 import { ensureMotivationalCatalogResources } from '@/lib/resources/motivational-ebooks';
+import { SUBSCRIBE_DESCRIPTION, SUBSCRIBE_HEADING } from '@/lib/subscribe-copy';
 
 type DashboardPageProps = {
   searchParams?: {
@@ -178,8 +179,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <HandbookSubscribeCTA
               variant="light"
               flushTop
-              heading="Email updates"
-              description="Optional: get occasional SK Creation emails when new member resources or sessions are available."
+              heading={SUBSCRIBE_HEADING}
+              description={SUBSCRIBE_DESCRIPTION}
             />
 
             {/* Book a Session CTA */}

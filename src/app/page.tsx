@@ -11,8 +11,8 @@ export default function Home() {
     <main className={`min-h-screen ${homeBg}`}>
       <h1 className="sr-only">AI resources, books, and customer services — SK Creation</h1>
       <HeroSection />
-      <HomeCollaborationsSection />
       <HomeExploreSection />
+      <HomeCollaborationsSection />
       <HomeContactSection />
     </main>
   );
