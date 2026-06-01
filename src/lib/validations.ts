@@ -11,6 +11,7 @@ import {
   isKnownPreferredTime,
   isValidTimeForChicagoDate,
 } from '@/lib/availability';
+import { isEmail } from '@/lib/auth/validation';
 import { isValidOptionalInternationalPhone } from '@/lib/phone';
 import { isMeetingPlatformId, type MeetingPlatformId } from '@/lib/meetingPlatform';
 
@@ -37,8 +38,6 @@ export type CreateBookingPayload = {
 };
 
 export type FieldErrors = Record<string, string>;
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function validateCreateBookingPayload(
   raw: unknown
@@ -118,7 +117,7 @@ export function validateCreateBookingPayload(
   }
   if (!email) {
     errors.email = 'Email is required.';
-  } else if (!EMAIL_RE.test(email)) {
+  } else if (!isEmail(email)) {
     errors.email = 'Please enter a valid email address.';
   }
   if (!language || !ALLOWED_LANGUAGES.includes(language as (typeof ALLOWED_LANGUAGES)[number])) {
@@ -230,7 +229,9 @@ export function validateCreateBookingPayload(
 
 export function validateCheckoutPayload(
   raw: unknown
-): { ok: true; bookingId: string } | { ok: false; error: string } {
+):
+  | { ok: true; bookingId: string; bookingToken: string }
+  | { ok: false; error: string } {
   if (!raw || typeof raw !== 'object') {
     return { ok: false, error: 'Invalid request body.' };
   }
@@ -238,5 +239,12 @@ export function validateCheckoutPayload(
   if (typeof bookingId !== 'string' || !/^[0-9a-f-]{36}$/i.test(bookingId)) {
     return { ok: false, error: 'Invalid booking id.' };
   }
-  return { ok: true, bookingId };
+  const bookingToken = (raw as { bookingToken?: unknown }).bookingToken;
+  if (
+    typeof bookingToken !== 'string' ||
+    !/^[a-f0-9]{64}$/i.test(bookingToken)
+  ) {
+    return { ok: false, error: 'Invalid booking token.' };
+  }
+  return { ok: true, bookingId, bookingToken };
 }

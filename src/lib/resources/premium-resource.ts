@@ -3,7 +3,7 @@ import { getSupabaseAdmin } from '@/lib/supabase';
 const defaultPriceCents = 599;
 
 export const premiumPdfConfig = {
-  slug: process.env.NEXT_PUBLIC_PREMIUM_PDF_SLUG || 'emotional-balance',
+  slug: process.env.NEXT_PUBLIC_PREMIUM_PDF_SLUG || 'stop-overthinking-premium',
   title:
     process.env.NEXT_PUBLIC_PREMIUM_PDF_TITLE ||
     'How to stop overthinking and find inner peace',

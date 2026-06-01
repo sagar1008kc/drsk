@@ -39,7 +39,7 @@ const heroStars = [
 
 export default function HeroSection() {
   return (
-    <section className="relative -mt-[3.75rem] flex min-h-[100dvh] flex-col overflow-hidden border-b border-violet-200/60 bg-gradient-to-br from-[#F8F7FF] via-white to-indigo-50/90 pt-[3.75rem] text-zinc-900">
+    <section className="relative flex min-h-[100dvh] flex-col overflow-hidden border-b border-violet-200/60 bg-gradient-to-br from-[#F8F7FF] via-white to-indigo-50/90 text-zinc-900">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 opacity-[0.55]">
           <AiHeroDiagram theme="light" />
@@ -94,7 +94,7 @@ export default function HeroSection() {
                 transition={{ duration: 0.55, delay: 0.1 }}
                 className="max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8 md:text-xl md:leading-9"
               >
-                Practical AI integration, 1:1 sessions, digital solutions, and wellness-oriented
+                AI-Native Full-Stack Engineering, 1:1 sessions, digital solutions, and wellness-oriented
                 frameworks designed to improve performance, increase income potential, and support
                 sustainable growth.
               </motion.p>

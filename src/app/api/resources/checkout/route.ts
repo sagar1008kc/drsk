@@ -6,6 +6,8 @@ import {
   type MotivationalEbook,
 } from '@/lib/resources/motivational-ebooks-catalog';
 import { ensurePaidEbookResourceBySlug } from '@/lib/resources/motivational-ebooks';
+import { rateLimitResponse } from '@/lib/http/rate-limit-response';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { userHasResourceAccess } from '@/lib/resources/premium-resource';
 
 export const runtime = 'nodejs';
@@ -23,6 +25,13 @@ export async function POST(req: Request) {
   try {
     const body = (await req.json().catch(() => ({}))) as { slug?: string };
     const slug = String(body?.slug || '').trim();
+    const ip = getClientIp(req);
+    const rate = checkRateLimit({
+      key: `resources:checkout:${ip}:${slug || 'invalid'}`,
+      limit: 10,
+      windowMs: 60 * 60 * 1000,
+    });
+    if (!rate.allowed) return rateLimitResponse(rate.retryAfterSeconds);
     const selected = getSelectedEbook(slug);
 
     if (!selected) {

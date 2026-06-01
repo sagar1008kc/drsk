@@ -70,7 +70,6 @@ export default function PremiumPdfPurchaseCard({
               fill
               sizes="(max-width: 640px) 240px, 260px"
               className="object-contain object-center"
-              priority
             />
           </div>
         </div>

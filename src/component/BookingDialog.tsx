@@ -27,10 +27,17 @@ import {
 import { phonePayloadFromInternational } from '@/lib/phone';
 import PhoneInputField from '@/component/PhoneInputField';
 import {
+  useBodyScrollLock,
+  useClientMounted,
+  useEscapeKey,
+  useInitialDialogFocus,
+} from '@/component/shared/modal-hooks';
+import {
   BOOKING_MEETING_FROM_EMAIL,
   MEETING_PLATFORM_OPTIONS,
   type MeetingPlatformId,
 } from '@/lib/meetingPlatform';
+import { isEmail } from '@/lib/auth/validation';
 
 type BookingDialogProps = {
   visible: boolean;
@@ -48,10 +55,6 @@ function formatDateForInput(date: Date | null) {
   return `${year}-${month}-${day}`;
 }
 
-function isValidEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-}
-
 export default function BookingDialog({
   visible,
   service,
@@ -61,7 +64,7 @@ export default function BookingDialog({
   const companyFieldId = useId();
   const phoneFieldId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useClientMounted();
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -83,22 +86,20 @@ export default function BookingDialog({
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState('');
   const [serverFieldErrors, setServerFieldErrors] = useState<FieldErrors>({});
+  const serviceId = service?.id;
+  const groupPricingMin = service?.groupPricing?.min;
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (!visible || !groupPricingMin) return;
+    setAttendeeCount(groupPricingMin);
+  }, [visible, serviceId, groupPricingMin]);
 
   useEffect(() => {
-    if (!visible || !service?.groupPricing) return;
-    setAttendeeCount(service.groupPricing.min);
-  }, [visible, service?.id]);
-
-  useEffect(() => {
-    if (!visible || !service) return;
+    if (!visible || !serviceId) return;
     setSessionFocus('');
     setSessionFocusOther('');
     setCohortEventId('');
-  }, [visible, service?.id]);
+  }, [visible, serviceId]);
 
   useEffect(() => {
     if (!cohortEventId) return;
@@ -162,29 +163,9 @@ export default function BookingDialog({
     onHide();
   }, [onHide, resetForm]);
 
-  useEffect(() => {
-    if (!visible) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [visible]);
-
-  useEffect(() => {
-    if (!visible) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleHide();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [visible, handleHide]);
-
-  useEffect(() => {
-    if (!visible) return;
-    const t = window.setTimeout(() => panelRef.current?.focus(), 0);
-    return () => window.clearTimeout(t);
-  }, [visible]);
+  useBodyScrollLock(visible);
+  useEscapeKey(visible, handleHide);
+  useInitialDialogFocus(visible, panelRef);
 
   const validation: FieldErrors = useMemo(() => {
     const errors: FieldErrors = {};
@@ -192,7 +173,7 @@ export default function BookingDialog({
       errors.fullName = 'Please enter your full name.';
     }
     if (!email.trim()) errors.email = 'Email is required.';
-    else if (!isValidEmail(email)) errors.email = 'Enter a valid email address.';
+    else if (!isEmail(email.trim())) errors.email = 'Enter a valid email address.';
     if (!language) errors.language = 'Select a language.';
 
     const cohortPending =
@@ -354,6 +335,7 @@ export default function BookingDialog({
 
       const createData = (await createRes.json()) as {
         bookingId?: string;
+        bookingToken?: string;
         flow?: 'checkout' | 'complimentary';
         errors?: FieldErrors;
         error?: string;
@@ -380,7 +362,8 @@ export default function BookingDialog({
       }
 
       const bookingId = createData.bookingId;
-      if (!bookingId) {
+      const bookingToken = createData.bookingToken;
+      if (!bookingId || !bookingToken) {
         throw new Error('Missing booking reference.');
       }
 
@@ -388,7 +371,7 @@ export default function BookingDialog({
         const confirmRes = await fetch('/api/booking/confirm-complimentary', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ bookingId }),
+          body: JSON.stringify({ bookingId, bookingToken }),
         });
         const confirmData = (await confirmRes.json()) as {
           ok?: boolean;
@@ -406,7 +389,7 @@ export default function BookingDialog({
       const checkoutRes = await fetch('/api/booking/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bookingId }),
+        body: JSON.stringify({ bookingId, bookingToken }),
       });
 
       const checkoutData = (await checkoutRes.json()) as {

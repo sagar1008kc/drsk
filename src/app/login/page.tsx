@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import LoginPageClient from '@/app/login/page.client';
+import { safeInternalRedirectPath } from '@/lib/auth/redirect';
 import { getAuthenticatedUser } from '@/lib/dashboard/data';
 
 type LoginPageProps = {
   searchParams?: {
     next?: string;
     error?: string;
+    reset?: string;
   };
 };
 
@@ -25,15 +27,16 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     redirect('/dashboard');
   }
 
-  const nextPath =
-    searchParams?.next && searchParams.next.startsWith('/')
-      ? searchParams.next
-      : '/dashboard';
+  const nextPath = safeInternalRedirectPath(searchParams?.next);
 
   return (
     <main className="min-h-[calc(100vh-7rem)] bg-[#F8F7F4] px-4 py-10 sm:py-16">
       <div className="mx-auto flex max-w-5xl items-center justify-center">
-        <LoginPageClient nextPath={nextPath} oauthError={searchParams?.error} />
+        <LoginPageClient
+          nextPath={nextPath}
+          oauthError={searchParams?.error}
+          resetNotice={searchParams?.reset === 'sent'}
+        />
       </div>
     </main>
   );

@@ -5,19 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
+import { useSessionUser } from '@/component/navbar/useSessionUser';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
-
-type SessionUser = {
-  id: string;
-  email: string | null;
-  fullName: string | null;
-  username: string | null;
-};
 
 const PRIMARY_NAV = [
   { href: '/', label: 'Home' },
   { href: '/services', label: 'Services' },
   { href: '/project', label: 'Project' },
+  { href: '/books', label: 'Books' },
   { href: '/about', label: 'About' },
 ] as const;
 
@@ -132,8 +127,7 @@ function MobileNavLink({
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [user, setUser] = useState<SessionUser | null>(null);
-  const [checkingSession, setCheckingSession] = useState(true);
+  const { user, checkingSession } = useSessionUser();
   const [loggingOut, setLoggingOut] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const scrolled = useScrolled();
@@ -145,27 +139,6 @@ export default function Navbar() {
     },
     [pathname]
   );
-
-  useEffect(() => {
-    let mounted = true;
-
-    async function loadSession() {
-      try {
-        const response = await fetch('/api/auth/me', { cache: 'no-store' });
-        const result = (await response.json()) as { user?: SessionUser | null };
-        if (mounted) setUser(result.user || null);
-      } catch {
-        if (mounted) setUser(null);
-      } finally {
-        if (mounted) setCheckingSession(false);
-      }
-    }
-
-    loadSession();
-    return () => {
-      mounted = false;
-    };
-  }, []);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -296,6 +269,7 @@ export default function Navbar() {
                 alt=""
                 width={80}
                 height={80}
+                sizes="40px"
                 priority
                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
               />

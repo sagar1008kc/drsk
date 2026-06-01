@@ -27,6 +27,10 @@ export function escapeHtml(input: string): string {
     .replace(/'/g, '&#039;');
 }
 
+export function sanitizeEmailHeader(input: string): string {
+  return input.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 function renderDetails(details: EmailDetailItem[]): string {
   return details
     .map(

@@ -7,6 +7,8 @@ import {
   premiumPdfConfig,
   userHasResourceAccess,
 } from '@/lib/resources/premium-resource';
+import { rateLimitResponse } from '@/lib/http/rate-limit-response';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 
 export const runtime = 'nodejs';
 
@@ -15,8 +17,16 @@ function siteBaseUrl(): string {
   return raw.replace(/\/$/, '');
 }
 
-export async function POST() {
+export async function POST(req: Request) {
   try {
+    const ip = getClientIp(req);
+    const rate = checkRateLimit({
+      key: `resources:premium-checkout:${ip}`,
+      limit: 10,
+      windowMs: 60 * 60 * 1000,
+    });
+    if (!rate.allowed) return rateLimitResponse(rate.retryAfterSeconds);
+
     const supabase = createRouteHandlerSupabaseClient();
     const {
       data: { user },

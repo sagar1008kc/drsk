@@ -5,6 +5,9 @@ import {
   getServiceTitleForBooking,
   updateBookingStripeSession,
 } from '@/lib/booking';
+import { isValidBookingActionToken } from '@/lib/bookingActionToken';
+import { rateLimitResponse } from '@/lib/http/rate-limit-response';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { validateCheckoutPayload } from '@/lib/validations';
 
 export const runtime = 'nodejs';
@@ -18,6 +21,13 @@ export async function POST(req: Request) {
   try {
     const json = await req.json();
     const parsed = validateCheckoutPayload(json);
+    const ip = getClientIp(req);
+    const rate = checkRateLimit({
+      key: `booking:checkout:${ip}:${parsed.ok ? parsed.bookingId : 'invalid'}`,
+      limit: 10,
+      windowMs: 60 * 60 * 1000,
+    });
+    if (!rate.allowed) return rateLimitResponse(rate.retryAfterSeconds);
     if (!parsed.ok) {
       return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
@@ -25,6 +35,16 @@ export async function POST(req: Request) {
     const booking = await getBookingById(parsed.bookingId);
     if (!booking) {
       return NextResponse.json({ error: 'Booking not found.' }, { status: 404 });
+    }
+
+    if (
+      !isValidBookingActionToken(
+        booking.id,
+        booking.customer_email,
+        parsed.bookingToken
+      )
+    ) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     if (booking.price_cents <= 0) {

@@ -50,8 +50,8 @@ const exploreCards = [
   },
   {
     title: 'Know about Dr. SK',
-    subtitle: 'Software Engineer · AI Integration',
-    body: 'Fortune 500 software engineer — enterprise AI integration, production systems, USAII Certified AI Scientist, MHFA Certified.',
+    subtitle: 'AI-Native Engineer · Agentic Systems Builder',
+    body: 'Fortune 500 engineer building enterprise AI agents, RAG pipelines, and LLM-powered platforms at scale — USAII Certified AI Scientist, MHFA Certified.',
     href: '/about',
     cta: 'More about Dr. SK',
     primary: false,

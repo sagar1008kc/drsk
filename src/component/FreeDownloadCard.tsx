@@ -54,7 +54,6 @@ export default function FreeDownloadCard({
               fill
               className="object-contain object-center"
               sizes="(max-width: 640px) 240px, 260px"
-              priority
             />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/35 to-transparent sm:hidden" />
           </div>

@@ -1,6 +1,24 @@
 'use client';
 
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+} from 'react';
+import {
+  isEmail,
+  validatePasswordStrength,
+  validateUsername,
+} from '@/lib/auth/validation';
+import { safeInternalRedirectPath } from '@/lib/auth/redirect';
+import {
+  useBodyScrollLock,
+  useEscapeKey,
+  useInitialDialogFocus,
+} from '@/component/shared/modal-hooks';
 
 type SignupModalProps = {
   open: boolean;
@@ -25,6 +43,7 @@ const initialState: SignupFormState = {
 };
 
 export default function SignupModal({ open, onClose, nextPath }: SignupModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState<SignupFormState>(initialState);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -39,18 +58,25 @@ export default function SignupModal({ open, onClose, nextPath }: SignupModalProp
     }
   }, [open]);
 
+  const closeModal = useCallback(() => {
+    onClose();
+  }, [onClose]);
+
+  useBodyScrollLock(open);
+  useEscapeKey(open, closeModal);
+  useInitialDialogFocus(open, panelRef);
+
   const inlineErrors = useMemo(() => {
     const errors: Partial<Record<keyof SignupFormState, string>> = {};
-    if (form.username && !/^[a-zA-Z0-9._-]{3,30}$/.test(form.username)) {
-      errors.username =
-        'Use 3-30 chars with letters, numbers, dot, underscore, or hyphen.';
-    }
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    const usernameError = form.username ? validateUsername(form.username) : null;
+    if (usernameError) errors.username = usernameError;
+    if (form.email && !isEmail(form.email.trim())) {
       errors.email = 'Enter a valid email address.';
     }
-    if (form.password && form.password.length < 8) {
-      errors.password = 'Minimum 8 characters.';
-    }
+    const passwordError = form.password
+      ? validatePasswordStrength(form.password)
+      : null;
+    if (passwordError) errors.password = passwordError;
     if (form.confirmPassword && form.password !== form.confirmPassword) {
       errors.confirmPassword = 'Passwords do not match.';
     }
@@ -83,7 +109,7 @@ export default function SignupModal({ open, onClose, nextPath }: SignupModalProp
       }
 
       if (result.autoLoggedIn) {
-        window.location.href = nextPath || '/dashboard';
+        window.location.href = safeInternalRedirectPath(nextPath);
         return;
       }
 
@@ -100,12 +126,22 @@ export default function SignupModal({ open, onClose, nextPath }: SignupModalProp
 
   return (
     <div
-      className="fixed inset-0 z-[1200] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[1200] flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"
       aria-label="Create account"
     >
-      <div className="w-full max-w-lg rounded-3xl border border-zinc-200 bg-white p-6 shadow-2xl sm:p-8">
+      <button
+        type="button"
+        aria-label="Close create account dialog"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        onClick={closeModal}
+      />
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        className="relative w-full max-w-lg rounded-3xl border border-zinc-200 bg-white p-6 shadow-2xl outline-none sm:p-8"
+      >
         <div className="mb-6 flex items-start justify-between gap-3">
           <div>
             <h2 className="text-xl font-semibold text-zinc-900">Create account</h2>
@@ -115,7 +151,8 @@ export default function SignupModal({ open, onClose, nextPath }: SignupModalProp
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={closeModal}
+            aria-label="Close create account dialog"
             className="rounded-lg border border-zinc-200 px-3 py-1.5 text-sm text-zinc-600 transition hover:bg-zinc-50"
           >
             Close

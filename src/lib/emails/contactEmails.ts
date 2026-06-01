@@ -1,4 +1,8 @@
-import { buildEmailTemplate, escapeHtml } from '@/lib/emails/template';
+import {
+  buildEmailTemplate,
+  escapeHtml,
+  sanitizeEmailHeader,
+} from '@/lib/emails/template';
 
 /** Public site URLs for customer-facing transactional emails */
 const CUSTOMER_PORTAL_LOGIN_URL = 'https://www.skcreation.org/login';
@@ -22,8 +26,8 @@ export function buildContactNotificationEmail(input: ContactEmailInput): {
   const isWebsiteQuote = input.requestType === 'website_quote';
 
   const subject = isWebsiteQuote
-    ? `New Digital solutions quote request from ${input.name}`
-    : `New Contact Form Message from ${input.name}`;
+    ? sanitizeEmailHeader(`New Digital solutions quote request from ${input.name}`)
+    : sanitizeEmailHeader(`New Contact Form Message from ${input.name}`);
 
   const details = isWebsiteQuote
     ? [

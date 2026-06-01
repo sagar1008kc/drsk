@@ -1,4 +1,8 @@
-import { buildEmailTemplate, escapeHtml } from '@/lib/emails/template';
+import {
+  buildEmailTemplate,
+  escapeHtml,
+  sanitizeEmailHeader,
+} from '@/lib/emails/template';
 
 /**
  * @param siteOrigin e.g. https://www.skcreation.org — no trailing slash
@@ -61,7 +65,7 @@ export function buildHandbookSubscribeAdminEmail(input: { subscriberEmail: strin
   subject: string;
   html: string;
 } {
-  const subject = `New subscriber: ${input.subscriberEmail}`;
+  const subject = sanitizeEmailHeader(`New subscriber: ${input.subscriberEmail}`);
   const html = buildEmailTemplate({
     title: 'New handbook subscriber',
     subtitle: 'Saved to Supabase table handbook_subscribers.',

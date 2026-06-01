@@ -15,15 +15,11 @@ import {
   getProfile,
 } from '@/lib/dashboard/data';
 import { getFirstName } from '@/lib/auth/validation';
-import {
-  ensureFreeSamplePdfResource,
-} from '@/lib/resources/premium-resource';
 import { motivationalSamples } from '@/lib/dashboard/motivational-samples';
 import {
   HANDBOOK_DOWNLOAD_FILENAME,
   HANDBOOK_PUBLIC_PATH,
 } from '@/lib/handbook-public';
-import { ensureMotivationalCatalogResources } from '@/lib/resources/motivational-ebooks';
 import { SUBSCRIBE_DESCRIPTION, SUBSCRIBE_HEADING } from '@/lib/subscribe-copy';
 
 type DashboardPageProps = {
@@ -44,9 +40,6 @@ export const metadata: Metadata = {
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const user = await getAuthenticatedUser();
   if (!user) redirect('/login');
-
-  await ensureFreeSamplePdfResource().catch(() => null);
-  await ensureMotivationalCatalogResources().catch(() => null);
 
   const [profile, resources] = await Promise.all([
     getProfile(user.id),
@@ -87,8 +80,14 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
             {searchParams?.purchase === 'success' ? (
               <div className="rounded-2xl border border-emerald-200/90 bg-emerald-50/90 px-4 py-3 text-sm text-emerald-800 shadow-sm">
-                Payment successful. Your secure PDF access will appear shortly — refresh if the
-                download doesn&apos;t show yet.
+                Payment successful. Your secure PDF access will appear shortly.{' '}
+                <a
+                  href="/dashboard"
+                  className="font-semibold underline underline-offset-2"
+                >
+                  Refresh your library
+                </a>{' '}
+                if the download doesn&apos;t show yet.
               </div>
             ) : null}
             {searchParams?.purchase === 'cancel' ? (

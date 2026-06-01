@@ -5,10 +5,13 @@ import { useMemo, useState, type FormEvent } from 'react';
 import AuthCard from '@/component/AuthCard';
 import SignupModal from '@/component/SignupModal';
 import SocialLoginButtons from '@/component/SocialLoginButtons';
+import { isEmail } from '@/lib/auth/validation';
+import { safeInternalRedirectPath } from '@/lib/auth/redirect';
 
 type LoginPageClientProps = {
   nextPath: string;
   oauthError?: string;
+  resetNotice?: boolean;
 };
 
 const oauthErrorMap: Record<string, string> = {
@@ -22,10 +25,15 @@ const oauthErrorMap: Record<string, string> = {
 export default function LoginPageClient({
   nextPath,
   oauthError,
+  resetNotice,
 }: LoginPageClientProps) {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetMessage, setResetMessage] = useState(
+    resetNotice ? 'Check your email for the password reset link.' : ''
+  );
   const [error, setError] = useState('');
   const [showSignup, setShowSignup] = useState(false);
 
@@ -52,11 +60,45 @@ export default function LoginPageClient({
         return;
       }
 
-      window.location.href = nextPath;
+      window.location.href = safeInternalRedirectPath(nextPath);
     } catch {
       setError('Unable to login right now.');
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function requestPasswordReset() {
+    setError('');
+    setResetMessage('');
+    const email = identifier.trim().toLowerCase();
+    if (!isEmail(email)) {
+      setError('Enter your account email first, then request a reset link.');
+      return;
+    }
+
+    setResetLoading(true);
+    try {
+      const response = await fetch('/api/auth/password-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const result = (await response.json().catch(() => ({}))) as {
+        error?: string;
+        message?: string;
+      };
+      if (!response.ok) {
+        setError(result.error || 'Unable to send reset link.');
+        return;
+      }
+      setResetMessage(
+        result.message || 'If an account exists, a password reset link will be sent.'
+      );
+    } catch {
+      setError('Unable to send reset link right now.');
+    } finally {
+      setResetLoading(false);
     }
   }
 
@@ -99,9 +141,11 @@ export default function LoginPageClient({
           <div className="flex items-center justify-between">
             <button
               type="button"
+              onClick={requestPasswordReset}
+              disabled={resetLoading}
               className="text-xs font-medium text-zinc-500 underline-offset-2 hover:text-zinc-700 hover:underline"
             >
-              Forgot password?
+              {resetLoading ? 'Sending reset link...' : 'Forgot password?'}
             </button>
           </div>
 
@@ -114,6 +158,12 @@ export default function LoginPageClient({
           {error ? (
             <p className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
               {error}
+            </p>
+          ) : null}
+
+          {resetMessage ? (
+            <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+              {resetMessage}
             </p>
           ) : null}
 

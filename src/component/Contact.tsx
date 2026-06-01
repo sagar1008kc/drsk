@@ -2,7 +2,8 @@
 
 import { FormEvent, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import ContactConfirmation from '@/component/BookingConfirmation';
+import ContactConfirmation from '@/component/ContactConfirmation';
+import { isEmail } from '@/lib/auth/validation';
 
 type FormState = {
   name: string;
@@ -64,7 +65,7 @@ export default function ContactForm({
   };
 
   const isEmailValid = useMemo(() => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim());
+    return isEmail(form.email.trim());
   }, [form.email]);
 
   const isFormReady = useMemo(() => {

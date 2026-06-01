@@ -6,6 +6,8 @@ import {
   validatePasswordStrength,
   validateUsername,
 } from '@/lib/auth/validation';
+import { rateLimitResponse } from '@/lib/http/rate-limit-response';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 
 export const runtime = 'nodejs';
 
@@ -25,6 +27,13 @@ export async function POST(req: Request) {
     const email = body.email?.trim().toLowerCase() || '';
     const password = body.password || '';
     const confirmPassword = body.confirmPassword || '';
+    const ip = getClientIp(req);
+    const rate = checkRateLimit({
+      key: `auth:signup:${ip}:${email || 'unknown'}`,
+      limit: 5,
+      windowMs: 60 * 60 * 1000,
+    });
+    if (!rate.allowed) return rateLimitResponse(rate.retryAfterSeconds);
 
     if (!fullName || !username || !email || !password || !confirmPassword) {
       return NextResponse.json(

@@ -4,7 +4,10 @@ import path from 'path';
 import { Readable } from 'stream';
 import { NextResponse } from 'next/server';
 import { requireRouteUser } from '@/lib/auth/require-route-user';
-import { HANDBOOK_DOWNLOAD_FILENAME } from '@/lib/handbook-public';
+import {
+  HANDBOOK_DOWNLOAD_FILENAME,
+  HANDBOOK_LOCAL_FALLBACK_PATH,
+} from '@/lib/handbook-public';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -14,8 +17,7 @@ export const maxDuration = 300;
 const HANDBOOK_ON_DISK = path.join(
   process.cwd(),
   'public',
-  'samples',
-  'The_Mind_Matters_Handbook_by_DrSK.pdf'
+  ...HANDBOOK_LOCAL_FALLBACK_PATH.replace(/^\//, '').split('/')
 );
 
 /** Member-only handbook PDF — requires login (used from /dashboard). */
@@ -29,7 +31,7 @@ export async function GET() {
     return NextResponse.redirect(externalUrl, {
       status: 302,
       headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=300',
+        'Cache-Control': 'private, no-store, max-age=0',
       },
     });
   }
@@ -37,7 +39,13 @@ export async function GET() {
   try {
     const s = await stat(HANDBOOK_ON_DISK);
     if (!s.isFile()) {
-      return NextResponse.json({ error: 'Handbook not available' }, { status: 404 });
+      return NextResponse.json(
+        {
+          error:
+            'Handbook file is not configured. Set HANDBOOK_PUBLIC_URL or add the local fallback PDF.',
+        },
+        { status: 503 }
+      );
     }
 
     const nodeStream = createReadStream(HANDBOOK_ON_DISK);
@@ -49,10 +57,16 @@ export async function GET() {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${HANDBOOK_DOWNLOAD_FILENAME}"`,
         'Content-Length': String(s.size),
-        'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+        'Cache-Control': 'private, no-store, max-age=0',
       },
     });
   } catch {
-    return NextResponse.json({ error: 'Handbook not available' }, { status: 404 });
+    return NextResponse.json(
+      {
+        error:
+          'Handbook file is not configured. Set HANDBOOK_PUBLIC_URL or add the local fallback PDF.',
+      },
+      { status: 503 }
+    );
   }
 }

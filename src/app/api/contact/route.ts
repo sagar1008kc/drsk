@@ -5,7 +5,10 @@ import {
   sendWebsiteQuoteCustomerConfirmation,
 } from '@/lib/mail';
 import { buildContactNotificationEmail } from '@/lib/emails/contactEmails';
+import { isEmail } from '@/lib/auth/validation';
+import { rateLimitResponse } from '@/lib/http/rate-limit-response';
 import { isValidOptionalInternationalPhone } from '@/lib/phone';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 
 type ContactRequestBody = {
   name?: string;
@@ -34,6 +37,13 @@ export async function POST(req: Request) {
     const projectDetails = body.projectDetails?.trim() || '';
     const message = body.message?.trim() || '';
     const company = body.company?.trim() || '';
+    const ip = getClientIp(req);
+    const rate = checkRateLimit({
+      key: `contact:${ip}:${email.toLowerCase() || 'unknown'}`,
+      limit: 6,
+      windowMs: 60 * 60 * 1000,
+    });
+    if (!rate.allowed) return rateLimitResponse(rate.retryAfterSeconds);
 
     if (company) {
       return NextResponse.json(
@@ -49,8 +59,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!isEmail(email)) {
       return NextResponse.json(
         { error: 'Please enter a valid email address.' },
         { status: 400 }

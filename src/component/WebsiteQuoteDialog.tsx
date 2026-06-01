@@ -1,12 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useId, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { toast } from 'sonner';
 import { isValidPhoneNumber } from 'react-phone-number-input';
+import { isEmail } from '@/lib/auth/validation';
 import { phonePayloadFromInternational } from '@/lib/phone';
 import PhoneInputField from '@/component/PhoneInputField';
+import {
+  useBodyScrollLock,
+  useClientMounted,
+  useEscapeKey,
+  useInitialDialogFocus,
+} from '@/component/shared/modal-hooks';
 
 type WebsiteQuoteDialogProps = {
   visible: boolean;
@@ -38,10 +45,6 @@ const SERVICE_TYPE_HIGHLIGHTS = SERVICE_OPTIONS.filter(
   (o): o is Exclude<QuoteServiceType, 'Other'> => o !== 'Other'
 );
 
-function isValidEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-}
-
 export default function WebsiteQuoteDialog({
   visible,
   onHide,
@@ -50,7 +53,7 @@ export default function WebsiteQuoteDialog({
   const panelRef = useRef<HTMLDivElement>(null);
   const companyFieldId = useId();
   const phoneFieldId = useId();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useClientMounted();
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -64,10 +67,6 @@ export default function WebsiteQuoteDialog({
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [submitted, setSubmitted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const resetForm = useCallback(() => {
     setFullName('');
@@ -88,29 +87,9 @@ export default function WebsiteQuoteDialog({
     onHide();
   }, [onHide, resetForm]);
 
-  useEffect(() => {
-    if (!visible) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [visible]);
-
-  useEffect(() => {
-    if (!visible) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleHide();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [visible, handleHide]);
-
-  useEffect(() => {
-    if (!visible) return;
-    const t = window.setTimeout(() => panelRef.current?.focus(), 0);
-    return () => window.clearTimeout(t);
-  }, [visible]);
+  useBodyScrollLock(visible);
+  useEscapeKey(visible, handleHide);
+  useInitialDialogFocus(visible, panelRef);
 
   const validation: FieldErrors = useMemo(() => {
     const errors: FieldErrors = {};
@@ -120,7 +99,7 @@ export default function WebsiteQuoteDialog({
     }
 
     if (!email.trim()) errors.email = 'Email is required.';
-    else if (!isValidEmail(email)) errors.email = 'Enter a valid email address.';
+    else if (!isEmail(email.trim())) errors.email = 'Enter a valid email address.';
 
     if (phone && !isValidPhoneNumber(phone)) {
       errors.phone =

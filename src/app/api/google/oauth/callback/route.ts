@@ -58,7 +58,12 @@ export async function GET(req: Request) {
 
     return new NextResponse(html, {
       status: 200,
-      headers: { 'content-type': 'text/html; charset=utf-8' },
+      headers: {
+        'content-type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-store',
+        'Referrer-Policy': 'no-referrer',
+        'X-Robots-Tag': 'noindex, nofollow',
+      },
     });
   } catch (e) {
     console.error('[google oauth callback]', e);

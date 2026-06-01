@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { createRouteHandlerSupabaseClient } from '@/lib/supabase/route-auth';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import { isEmail } from '@/lib/auth/validation';
+import { rateLimitResponse } from '@/lib/http/rate-limit-response';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 
 export const runtime = 'nodejs';
 
@@ -15,6 +17,13 @@ export async function POST(req: Request) {
     const body = (await req.json()) as LoginPayload;
     const identifier = body.identifier?.trim() || '';
     const password = body.password || '';
+    const ip = getClientIp(req);
+    const rate = checkRateLimit({
+      key: `auth:login:${ip}:${identifier.toLowerCase() || 'unknown'}`,
+      limit: 8,
+      windowMs: 15 * 60 * 1000,
+    });
+    if (!rate.allowed) return rateLimitResponse(rate.retryAfterSeconds);
 
     if (!identifier || !password) {
       return NextResponse.json(

@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
+import { isEmail } from '@/lib/auth/validation';
 import { isSupabaseConfigured, getSupabaseAdmin } from '@/lib/supabase';
+import { rateLimitResponse } from '@/lib/http/rate-limit-response';
 import { sendHandbookThankYouEmail, sendHandbookSubscribeAdminNotification } from '@/lib/mail';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 
 export const runtime = 'nodejs';
 
@@ -18,6 +21,13 @@ export async function POST(req: Request) {
     }
 
     const email = body.email?.trim().toLowerCase() || '';
+    const ip = getClientIp(req);
+    const rate = checkRateLimit({
+      key: `handbook-subscribe:${ip}:${email || 'unknown'}`,
+      limit: 5,
+      windowMs: 60 * 60 * 1000,
+    });
+    if (!rate.allowed) return rateLimitResponse(rate.retryAfterSeconds);
     if (!email) {
       return NextResponse.json(
         { error: 'Please enter your email address.' },
@@ -25,8 +35,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!isEmail(email)) {
       return NextResponse.json(
         { error: 'Please enter a valid email address.' },
         { status: 400 }

@@ -5,7 +5,10 @@ import {
   getServiceByType,
   totalCentsForBooking,
 } from '@/lib/services';
+import { createBookingActionToken } from '@/lib/bookingActionToken';
 import { insertBooking } from '@/lib/booking';
+import { rateLimitResponse } from '@/lib/http/rate-limit-response';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { validateCreateBookingPayload } from '@/lib/validations';
 import { isSupabaseConfigured } from '@/lib/supabase';
 
@@ -25,6 +28,13 @@ export async function POST(req: Request) {
   try {
     const json = await req.json();
     const parsed = validateCreateBookingPayload(json);
+    const ip = getClientIp(req);
+    const rate = checkRateLimit({
+      key: `booking:create:${ip}`,
+      limit: 8,
+      windowMs: 60 * 60 * 1000,
+    });
+    if (!rate.allowed) return rateLimitResponse(rate.retryAfterSeconds);
 
     if (!parsed.ok) {
       if (parsed.honeypot) {
@@ -95,6 +105,7 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           bookingId: id,
+          bookingToken: createBookingActionToken(id, data.email),
           flow: service.requiresPayment ? 'checkout' : 'complimentary',
         },
         { status: 201 }

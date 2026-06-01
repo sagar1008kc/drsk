@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import AboutHeroSection from '@/component/about/AboutHeroSection';
+import AiEngineeringSection from '@/component/home/AiEngineeringSection';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
 import {
   aboutBg,
@@ -98,6 +99,7 @@ export default function AboutPageContent() {
   return (
     <main className={`min-h-screen ${aboutBg}`}>
       <AboutHeroSection />
+      <AiEngineeringSection />
 
       <AboutSection altBg>
         <div className="mx-auto max-w-2xl text-center">
