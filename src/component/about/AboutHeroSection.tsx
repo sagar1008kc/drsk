@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
   PROFILE_HERO_BODY,
-  PROFILE_HERO_BODY_SECOND,
   PROFILE_HERO_HEADLINE,
   PROFILE_HERO_RING,
 } from '@/lib/profile-hero';
@@ -68,14 +67,16 @@ export default function AboutHeroSection() {
           >
             <span className={badgeClass}>About Dr. SK</span>
             <h1 className="mt-5 text-3xl font-bold leading-[1.2] tracking-tight text-zinc-900 sm:text-4xl md:text-5xl lg:text-[3.25rem]">
-              {PROFILE_HERO_HEADLINE.prefix}{' '}
               <span className={gradientText}>{PROFILE_HERO_HEADLINE.highlight}</span>
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg sm:leading-8">
               {PROFILE_HERO_BODY}
             </p>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg sm:leading-8">
-              {PROFILE_HERO_BODY_SECOND}
+              <span className="mr-2 inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-violet-700">
+                Strategic Leader
+              </span>
+              Strategic leader with a Doctorate in Business Administration, specializing in Information Systems and Enterprise Resource Management — with earlier leadership roles supervising 100+ schools in Nepal&apos;s education sector. Also an Author of practical AI and mental wellness books, and a Mental Health Advocate (MHFA-Certified), bringing clarity, resilience, and a human-centered perspective to high-performance teams.
             </p>
             <div className="mt-8 flex flex-wrap gap-2.5 sm:gap-3 xl:flex-nowrap xl:gap-3">
               {PROFILE_TAGS.map((tag) => (

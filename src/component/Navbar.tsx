@@ -243,9 +243,6 @@ export default function Navbar() {
           : 'border-b border-white/10 bg-[#020205]/75'
       } backdrop-blur-xl backdrop-saturate-150`}
     >
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px overflow-hidden">
-        <div className="drsk-nav-scan h-full w-1/2 bg-gradient-to-r from-transparent via-violet-400/70 to-transparent" />
-      </div>
 
       <div
         className={`relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 transition-[height] duration-300 sm:px-6 ${

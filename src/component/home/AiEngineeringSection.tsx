@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 const focusTags = [
   'Agentic AI',
   'RAG',
+  "MCP",
   'LLM-Powered Apps',
   'Automation',
   'Tool Integration',

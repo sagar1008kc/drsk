@@ -26,9 +26,6 @@ export default function AiHeroDiagram({ theme = 'light' }: AiHeroDiagramProps) {
     </radialGradient>
   );
 
-  const boxStroke = isDark ? 'rgba(196,181,253,0.35)' : '#c4b5fd';
-  const boxFill = isDark ? 'rgba(139,92,246,0.12)' : 'rgba(237,233,254,0.25)';
-  const boxOpacity = isDark ? 0.65 : 0.5;
   const lineOpacity = isDark ? 0.85 : 0.7;
   const arrowFill = isDark ? '#a78bfa' : '#8b5cf6';
   const arrowOpacity = isDark ? 0.35 : 0.25;
@@ -70,18 +67,6 @@ export default function AiHeroDiagram({ theme = 'light' }: AiHeroDiagramProps) {
         <path d="M720 140 L860 580 L1040 520" />
       </g>
 
-      <g stroke={boxStroke} strokeWidth="1" fill={boxFill} opacity={boxOpacity}>
-        <rect x="90" y="160" width="140" height="56" rx="8" />
-        <rect x="350" y="120" width="160" height="56" rx="8" />
-        <rect x="620" y="100" width="150" height="56" rx="8" />
-        <rect x="880" y="130" width="140" height="56" rx="8" />
-        <rect x="180" y="340" width="150" height="56" rx="8" />
-        <rect x="480" y="300" width="170" height="56" rx="8" />
-        <rect x="780" y="320" width="150" height="56" rx="8" />
-        <rect x="280" y="520" width="160" height="56" rx="8" />
-        <rect x="600" y="480" width="180" height="56" rx="8" />
-        <rect x="920" y="460" width="140" height="56" rx="8" />
-      </g>
 
       <g filter={`url(#${id}-ai-glow)`}>
         {[

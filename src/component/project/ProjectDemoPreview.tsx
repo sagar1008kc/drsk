@@ -79,11 +79,19 @@ function PilotDemo({ gradId }: { gradId: string }) {
   );
 }
 
+const sparkPoints = [18, 28, 22, 35, 30, 42, 38, 52, 46, 60];
+
 function AuctionDemo() {
-  const rows = 4;
+  const rows = 3;
+
+  const polyline = sparkPoints
+    .map((y, i) => `${(i / (sparkPoints.length - 1)) * 80 + 4},${62 - y * 0.55}`)
+    .join(' ');
+
   return (
-    <div className="flex h-full flex-col justify-center gap-1.5 px-3 py-3">
-      <div className="mb-1 flex gap-2 px-1">
+    <div className="flex h-full flex-col justify-center gap-1 px-3 py-2.5">
+      {/* Column headers */}
+      <div className="mb-0.5 flex gap-2 px-1">
         {['Address', 'Sale date', 'Amount'].map((col, i) => (
           <motion.span
             key={col}
@@ -96,28 +104,124 @@ function AuctionDemo() {
           </motion.span>
         ))}
       </div>
+
+      {/* Data rows */}
       {Array.from({ length: rows }).map((_, i) => (
         <motion.div
           key={i}
           className="flex gap-2 rounded-md border border-emerald-500/15 bg-emerald-950/40 px-2 py-1.5"
           initial={{ opacity: 0, x: -12 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.15 + i * 0.12, duration: 0.45 }}
+          transition={{ delay: 0.12 + i * 0.1, duration: 0.4 }}
         >
           <span className="h-2 flex-[2] rounded bg-emerald-400/50" />
           <span className="h-2 flex-1 rounded bg-white/20" />
           <span className="h-2 flex-1 rounded bg-emerald-300/40" />
         </motion.div>
       ))}
+
+      {/* AI analysis panel */}
       <motion.div
-        className="mt-1 h-0.5 w-full overflow-hidden rounded-full bg-white/5"
-        aria-hidden
+        className="mt-1.5 flex items-center gap-2.5 rounded-lg border border-emerald-400/20 bg-emerald-950/60 px-2.5 py-2"
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.4 }}
       >
-        <motion.div
-          className="h-full w-1/3 rounded-full bg-emerald-400"
-          animate={{ x: ['-100%', '320%'] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        {/* Pulse scan ring */}
+        <div className="relative flex h-7 w-7 shrink-0 items-center justify-center">
+          <motion.span
+            className="absolute h-7 w-7 rounded-full border border-emerald-400/40"
+            animate={{ scale: [1, 1.5, 1], opacity: [0.6, 0, 0.6] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
+          />
+          <motion.span
+            className="absolute h-5 w-5 rounded-full border border-emerald-400/60"
+            animate={{ scale: [1, 1.35, 1], opacity: [0.8, 0.1, 0.8] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay: 0.3 }}
+          />
+          <span className="relative flex h-3 w-3 items-center justify-center rounded-full bg-emerald-400/90">
+            <motion.span
+              className="h-1.5 w-1.5 rounded-full bg-emerald-200"
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1.2, repeat: Infinity }}
+            />
+          </span>
+        </div>
+
+        {/* Sparkline */}
+        <div className="flex-1">
+          <div className="mb-1 flex items-center justify-between">
+            <motion.span
+              className="text-[9px] font-semibold uppercase tracking-wider text-emerald-300/90"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 1.8, repeat: Infinity }}
+            >
+              AI Trend
+            </motion.span>
+            <motion.span
+              className="text-[10px] font-bold text-emerald-300"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9 }}
+            >
+              +12.4%
+            </motion.span>
+          </div>
+          <svg viewBox="0 0 88 32" className="h-5 w-full overflow-visible" aria-hidden>
+            <defs>
+              <linearGradient id="spark-fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#34d399" stopOpacity="0.35" />
+                <stop offset="100%" stopColor="#34d399" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="spark-line" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#6ee7b7" />
+                <stop offset="100%" stopColor="#34d399" />
+              </linearGradient>
+            </defs>
+            <motion.polygon
+              points={`4,32 ${polyline} 84,32`}
+              fill="url(#spark-fill)"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7, duration: 0.5 }}
+            />
+            <motion.polyline
+              points={polyline}
+              fill="none"
+              stroke="url(#spark-line)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ delay: 0.65, duration: 1, ease: 'easeOut' }}
+            />
+            <motion.circle
+              cx={sparkPoints.length > 0 ? (((sparkPoints.length - 1) / (sparkPoints.length - 1)) * 80 + 4) : 84}
+              cy={62 - sparkPoints[sparkPoints.length - 1] * 0.55}
+              r="2"
+              fill="#34d399"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: [1, 1.4, 1], opacity: 1 }}
+              transition={{ delay: 1.6, duration: 1, repeat: Infinity }}
+            />
+          </svg>
+        </div>
+
+        {/* Confidence score */}
+        <div className="flex shrink-0 flex-col items-center gap-0.5">
+          <motion.span
+            className="text-[13px] font-bold leading-none text-emerald-300"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+          >
+            94%
+          </motion.span>
+          <span className="text-[8px] font-medium uppercase tracking-wide text-emerald-400/60">
+            conf.
+          </span>
+        </div>
       </motion.div>
     </div>
   );

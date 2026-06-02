@@ -1,5 +1,7 @@
 export const PROFILE_TAGS = [
-  'Software AI Engineer',
+  'AI Forward Deployed Engineer',
+  'AI-Native Software Engineer',
+  'Strategic Leader',
   'USAII Certified AI Scientist',
   'Mental Health Advocate (MHFA-Certified)',
 ] as const;
