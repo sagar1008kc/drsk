@@ -13,7 +13,7 @@ const PRIMARY_NAV = [
   { href: '/services', label: 'Services' },
   { href: '/project', label: 'Project' },
   { href: '/books', label: 'Books' },
-  { href: '/about', label: 'About' },
+  { href: '/portfolio', label: 'Portfolio' },
 ] as const;
 
 function ExternalIcon({ className }: { className?: string }) {

@@ -52,7 +52,7 @@ const exploreCards = [
     title: 'Know about Dr. SK',
     subtitle: 'AI-Native Engineer · Agentic Systems Builder',
     body: 'Fortune 500 engineer building enterprise AI agents, RAG pipelines, and LLM-powered platforms at scale — USAII Certified AI Scientist, MHFA Certified.',
-    href: '/about',
+    href: '/portfolio',
     cta: 'More about Dr. SK',
     primary: false,
     delay: 0.16,

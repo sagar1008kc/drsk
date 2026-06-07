@@ -7,6 +7,15 @@ const scriptSrc =
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  async redirects() {
+    return [
+      {
+        source: '/about',
+        destination: '/portfolio',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     const securityHeaders = [
       {
