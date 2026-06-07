@@ -1,50 +1,14 @@
 'use client';
 
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
   PROFILE_HERO_BODY,
   PROFILE_HERO_HEADLINE,
-  PROFILE_HERO_RING,
 } from '@/lib/profile-hero';
 import { PROFILE_TAGS } from '@/lib/profile-tags';
 import { aboutPadX, badgeClass, container, gradientText } from '@/component/about/styles';
 import AiHeroDiagram from '@/component/shared/AiHeroDiagram';
-
-function HeroVisual() {
-  return (
-    <div className="relative mx-auto flex w-full max-w-[min(360px,70vw)] flex-col items-center lg:mx-0 lg:max-w-[400px]">
-      <div className="relative flex aspect-square w-full items-center justify-center">
-        <div className="pointer-events-none absolute inset-0 rounded-full bg-violet-400/25 blur-3xl" />
-        <div className="pointer-events-none absolute inset-[6%] rounded-full border border-violet-300/60 bg-gradient-to-br from-violet-100/80 to-indigo-50/80" />
-        <div className="relative z-10 h-[78%] w-[78%] overflow-hidden rounded-full border-2 border-violet-300/70 bg-white shadow-[0_12px_48px_rgba(139,92,246,0.3)] ring-4 ring-white/80">
-          <Image
-            src="/drsk.png"
-            alt="Dr. SK"
-            fill
-            priority
-            className="object-cover object-top"
-            sizes="(max-width: 1024px) 70vw, 400px"
-          />
-        </div>
-        {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-          <span
-            key={i}
-            className="pointer-events-none absolute h-2 w-2 rounded-full bg-violet-400/80 shadow-[0_0_8px_rgba(139,92,246,0.6)]"
-            style={{
-              top: `${8 + (i % 4) * 22}%`,
-              left: `${6 + Math.floor(i / 2) * 28}%`,
-            }}
-            aria-hidden
-          />
-        ))}
-      </div>
-      <p className="mt-5 text-center text-xs font-semibold uppercase tracking-[0.2em] text-violet-600 sm:text-sm">
-        {PROFILE_HERO_RING}
-      </p>
-    </div>
-  );
-}
+import ExpertProfileCard from '@/component/shared/ExpertProfileCard';
 
 export default function AboutHeroSection() {
   return (
@@ -59,6 +23,15 @@ export default function AboutHeroSection() {
         className={`${container} ${aboutPadX} relative flex w-full max-w-7xl flex-1 flex-col justify-center py-10 sm:py-12 lg:py-14`}
       >
         <div className="grid flex-1 items-center gap-10 lg:grid-cols-2 lg:gap-14 xl:gap-20">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.12 }}
+            className="relative z-10 flex items-center justify-center lg:justify-start"
+          >
+            <ExpertProfileCard />
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -78,27 +51,26 @@ export default function AboutHeroSection() {
               </span>
               Strategic leader with a Doctorate in Business Administration, specializing in Information Systems and Enterprise Resource Management — with earlier leadership roles supervising 100+ schools in Nepal&apos;s education sector. Also an Author of practical AI and mental wellness books, and a Mental Health Advocate (MHFA-Certified), bringing clarity, resilience, and a human-centered perspective to high-performance teams.
             </p>
-            <div className="mt-8 flex flex-wrap gap-2.5 sm:gap-3 xl:flex-nowrap xl:gap-3">
-              {PROFILE_TAGS.map((tag) => (
-                <span
-                  key={tag}
-                  className="shrink-0 whitespace-nowrap rounded-full border border-violet-200/90 bg-white/80 px-3.5 py-2 text-xs font-semibold text-violet-800 shadow-sm backdrop-blur-sm sm:px-4 lg:px-3 lg:text-[0.8125rem] xl:px-4 xl:text-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.12 }}
-            className="relative z-10 flex items-center justify-center lg:justify-end"
-          >
-            <HeroVisual />
           </motion.div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="relative z-10 mt-auto w-full pt-6 sm:pt-8 lg:pt-10"
+        >
+          <div className="flex w-full flex-wrap items-center justify-center gap-2 sm:gap-2.5 lg:gap-3 xl:flex-nowrap xl:justify-between xl:gap-2">
+            {PROFILE_TAGS.map((tag) => (
+              <span
+                key={tag}
+                className="max-w-full shrink-0 rounded-full border border-violet-200/90 bg-white/80 px-2.5 py-1.5 text-center text-[10px] font-semibold leading-snug text-violet-800 shadow-sm backdrop-blur-sm sm:px-3 sm:py-2 sm:text-[11px] lg:px-3 lg:py-1.5 lg:text-xs xl:flex-1 xl:whitespace-nowrap xl:px-2 xl:text-[11px] 2xl:px-3 2xl:text-xs"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

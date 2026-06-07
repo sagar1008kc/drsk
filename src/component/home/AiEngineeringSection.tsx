@@ -12,7 +12,7 @@ const focusTags = [
   'Enterprise Agents',
   'Intelligent Workflows',
   'Retrieval Systems',
-  'Full-Stack Platforms',
+  'Multi-Agentic Systems',
   'Secure Architecture',
   'Human-Centered AI',
 ];
@@ -81,8 +81,8 @@ const pillars = [
   },
   {
     label: '04',
-    title: 'Secure Full-Stack Platforms',
-    desc: 'Modern, scalable digital platforms built on Next.js, TypeScript, and cloud infrastructure with security-first architecture.',
+    title: 'Multi-Agent AI Platform',
+    desc: 'Designed a multi-agent AI platform using LangChain and LangGraph to coordinate specialized agents, integrate enterprise tools, retrieve contextual knowledge, manage workflow state, and support human-in-the-loop decision-making for reliable automation.',
   },
 ];
 
