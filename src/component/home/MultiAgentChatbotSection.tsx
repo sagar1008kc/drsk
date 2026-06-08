@@ -285,7 +285,7 @@ export default function MultiAgentChatbotSection() {
       id: '1',
       role: 'system',
       content:
-        'Welcome to the SK Creation Platform Multi-Agent Hub. How can I assist you today? You can ask about career coaching, Texas real estate auctions, kids books/games, or booking a 1:1 session.',
+        'How can I help you today? I can assist with career coaching, Texas real estate auctions, kids’ books and games, or 1:1 session booking.',
       agentId: 'router',
     },
   ]);
