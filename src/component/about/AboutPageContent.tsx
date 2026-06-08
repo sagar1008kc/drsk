@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import AboutHeroSection from '@/component/about/AboutHeroSection';
 import AiEngineeringSection from '@/component/home/AiEngineeringSection';
+import PortfolioLiveProjectsSection from '@/component/portfolio/PortfolioLiveProjectsSection';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
 import {
   aboutBg,
@@ -151,6 +152,7 @@ export default function AboutPageContent() {
     <main className={`min-h-screen ${aboutBg}`}>
       <AboutHeroSection />
       <AiEngineeringSection />
+      <PortfolioLiveProjectsSection />
 
       {/* ── Official Links ── */}
       <AboutSection altBg>
