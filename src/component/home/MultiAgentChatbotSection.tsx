@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, FormEvent } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -9,121 +9,69 @@ import {
   User,
   GitMerge,
   BrainCircuit,
-  Briefcase,
-  Home,
-  ToyBrick,
-  CalendarCheck,
-  Database,
   CheckCircle2,
   Sparkles,
   Loader2,
   ExternalLink,
+  MessageSquare,
+  Layers,
+  Network,
+  Activity,
+  Terminal,
   type LucideIcon,
 } from 'lucide-react';
+import {
+  PARENT_AGENTS,
+  FALLBACK_REPLY,
+  FLOW_DELAYS,
+  FLOW_STEP_MESSAGES,
+  ROUTING_STAGES,
+  SUGGESTIONS,
+  SUB_AGENT_ICONS,
+  WELCOME_MESSAGE,
+  buildAgentReply,
+  buildTechnicalFlowEvent,
+  getParentAgent,
+  getRoutingStageStatus,
+  resolveAgent,
+  type FlowStep,
+  type ParentAgentId,
+  type RouteResult,
+  type RoutingStageId,
+  type SubAgentId,
+} from '@/lib/multi-agent-hub';
+
+type AgentCta = { text: string; url: string };
 
 type Message = {
   id: string;
   role: 'user' | 'agent' | 'system';
   content: string;
-  agentId?: AgentType;
-  cta?: { text: string; url: string };
+  parentAgent?: ParentAgentId;
+  subAgent?: SubAgentId;
+  subAgentName?: string;
+  ctas?: AgentCta[];
   isFallback?: boolean;
 };
 
-type AgentType = 'router' | 'career' | 'realestate' | 'kids' | 'services' | null;
-type FlowStep = 'idle' | 'analyzing' | 'routing' | 'retrieving' | 'generating' | 'complete';
-
-type AgentKnowledge = {
-  id: Exclude<AgentType, 'router' | null>;
-  name: string;
-  icon: LucideIcon;
-  color: string;
-  bgColor: string;
-  borderColor: string;
-  platform: string;
-  keywords: string[];
-  responses: string[];
-  cta: { text: string; url: string };
+type FlowEvent = {
+  id: string;
+  step: FlowStep;
+  time: string;
+  layer: string;
+  action: string;
+  detail: string;
 };
 
-const AGENT_KNOWLEDGE: Record<Exclude<AgentType, 'router' | null>, AgentKnowledge> = {
-  career: {
-    id: 'career',
-    name: 'Career & Interview Agent',
-    icon: Briefcase,
-    color: 'text-blue-400',
-    bgColor: 'bg-blue-500/20',
-    borderColor: 'border-blue-500/50',
-    platform: 'PilotMyCareer.com',
-    keywords: ['career', 'interview', 'job', 'resume', 'pilot my career'],
-    responses: [
-      "I've accessed the PilotMyCareer database. For interview preparation, I recommend structuring your answers using the STAR method. Would you like me to pull up specific behavioral questions from our guide?",
-      'Based on your career goals, I can provide a custom interview prep checklist from PilotMyCareer.com. Are you preparing for a technical or leadership role?',
-    ],
-    cta: { text: 'Visit PilotMyCareer', url: 'https://www.pilotmycareer.com/' },
-  },
-  realestate: {
-    id: 'realestate',
-    name: 'Real Estate Analyst',
-    icon: Home,
-    color: 'text-emerald-400',
-    bgColor: 'bg-emerald-500/20',
-    borderColor: 'border-emerald-500/50',
-    platform: 'GetAuctionList.com',
-    keywords: ['auction', 'foreclosure', 'texas', 'house', 'real estate'],
-    responses: [
-      "I've connected to GetAuctionList.com. Currently, there are multiple active foreclosure listings in the Texas region. Would you like me to filter these by specific counties like Travis or Harris?",
-      "Retrieving Texas foreclosure data... I can guide you through the auction process. It's important to have proof of funds ready. Should I fetch the latest auction schedule?",
-    ],
-    cta: { text: 'View Texas Foreclosures', url: 'https://getauctionlist.com/' },
-  },
-  kids: {
-    id: 'kids',
-    name: 'Aviana Guide',
-    icon: ToyBrick,
-    color: 'text-purple-400',
-    bgColor: 'bg-purple-500/20',
-    borderColor: 'border-purple-500/50',
-    platform: 'Aviana.com',
-    keywords: ['kids', 'game', 'aviana', 'children', 'kids book'],
-    responses: [
-      "Navigating to Aviana.com! I found several interactive kids' books and educational games. Are you looking for a specific age group or learning topic?",
-      "I've pulled up the latest interactive games and stories from Aviana. They are great for cognitive development! Would you like a link to our most popular children's book?",
-    ],
-    cta: { text: 'Explore Aviana Catalog', url: 'https://www.avianaa.com/' },
-  },
-  services: {
-    id: 'services',
-    name: 'SK Concierge',
-    icon: CalendarCheck,
-    color: 'text-amber-400',
-    bgColor: 'bg-amber-500/20',
-    borderColor: 'border-amber-500/50',
-    platform: 'SK Creation Platform',
-    keywords: ['book', 'session', '1:1', 'service', 'help', 'human', 'sk creation'],
-    responses: [
-      'I can certainly help you with that. For deeper guidance, I highly recommend booking a 1:1 session through our SK Creation Services page. Would you like me to check available calendar slots?',
-      "I've retrieved our shared book links and service offerings. If you'd like a personalized deep-dive, I can route you to human-in-the-loop support or help you book a 1:1 session right now.",
-    ],
-    cta: { text: 'Book 1:1 Session', url: '/services' },
-  },
-};
+const ACTIVE_STEPS = new Set<FlowStep>([
+  'ingesting', 'classifying', 'routing', 'delegating', 'retrieving', 'synthesizing', 'delivering',
+]);
 
-const FALLBACK_REPLY =
-  "I don't have an agent to work for this. Try something from the suggestions below.";
-
-function resolveAgent(text: string): keyof typeof AGENT_KNOWLEDGE | null {
-  const lowerText = text.toLowerCase();
-
-  if (AGENT_KNOWLEDGE.career.keywords.some((k) => lowerText.includes(k))) return 'career';
-  if (AGENT_KNOWLEDGE.realestate.keywords.some((k) => lowerText.includes(k))) return 'realestate';
-  if (AGENT_KNOWLEDGE.services.keywords.some((k) => lowerText.includes(k))) return 'services';
-  if (AGENT_KNOWLEDGE.kids.keywords.some((k) => lowerText.includes(k))) return 'kids';
-
-  return null;
+function formatTime() {
+  return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
-const ThreeBackground = () => {
+const ThreeBackground = ({ isLive }: { isLive: boolean }) => {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -131,71 +79,69 @@ const ThreeBackground = () => {
     if (!container) return;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0xf8f7ff, 0.035);
+    scene.fog = new THREE.FogExp2(0xf8f7ff, 0.028);
 
-    const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-    camera.position.z = 15;
+    const camera = new THREE.PerspectiveCamera(70, 1, 0.1, 1000);
+    camera.position.z = 14;
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    const particleCount = 180;
+    const particleCount = 200;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     const velocities: { x: number; y: number; z: number }[] = [];
-
     const palette = [
       new THREE.Color(0x8b5cf6),
       new THREE.Color(0x6366f1),
       new THREE.Color(0x06b6d4),
-      new THREE.Color(0xa855f7),
+      new THREE.Color(0xf43f5e),
       new THREE.Color(0x4f46e5),
     ];
 
     for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 40;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 40;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
-
-      const color = palette[Math.floor(Math.random() * palette.length)];
-      colors[i * 3] = color.r;
-      colors[i * 3 + 1] = color.g;
-      colors[i * 3 + 2] = color.b;
-
+      positions[i * 3] = (Math.random() - 0.5) * 45;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 45;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 22;
+      const c = palette[Math.floor(Math.random() * palette.length)];
+      colors[i * 3] = c.r;
+      colors[i * 3 + 1] = c.g;
+      colors[i * 3 + 2] = c.b;
       velocities.push({
-        x: (Math.random() - 0.5) * 0.02,
-        y: (Math.random() - 0.5) * 0.02,
-        z: (Math.random() - 0.5) * 0.02,
+        x: (Math.random() - 0.5) * 0.022,
+        y: (Math.random() - 0.5) * 0.022,
+        z: (Math.random() - 0.5) * 0.014,
       });
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    const material = new THREE.PointsMaterial({
-      size: 0.18,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.85,
-      blending: THREE.NormalBlending,
-      sizeAttenuation: true,
-    });
-
-    const particles = new THREE.Points(geometry, material);
+    const particles = new THREE.Points(
+      geometry,
+      new THREE.PointsMaterial({
+        size: 0.16,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.88,
+        blending: THREE.NormalBlending,
+      })
+    );
     scene.add(particles);
 
-    const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x8b5cf6,
-      transparent: true,
-      opacity: 0.18,
-      blending: THREE.NormalBlending,
-    });
-
-    const lineGeometry = new THREE.BufferGeometry();
-    const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+    const lines = new THREE.LineSegments(
+      new THREE.BufferGeometry(),
+      new THREE.LineBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.14 })
+    );
     scene.add(lines);
+
+    const knot = new THREE.Mesh(
+      new THREE.TorusKnotGeometry(2.8, 0.55, 100, 16),
+      new THREE.MeshBasicMaterial({ color: 0x8b5cf6, wireframe: true, transparent: true, opacity: 0.07 })
+    );
+    scene.add(knot);
 
     const resize = () => {
       const { clientWidth, clientHeight } = container;
@@ -203,80 +149,61 @@ const ThreeBackground = () => {
       camera.updateProjectionMatrix();
       renderer.setSize(clientWidth, clientHeight);
     };
-
     resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(container);
 
-    let animationFrameId = 0;
+    let frameId = 0;
     const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
-
-      const posArray = particles.geometry.attributes.position.array as Float32Array;
+      frameId = requestAnimationFrame(animate);
+      const speed = isLive ? 2.2 : 1;
+      const pos = particles.geometry.attributes.position.array as Float32Array;
 
       for (let i = 0; i < particleCount; i++) {
-        posArray[i * 3] += velocities[i].x;
-        posArray[i * 3 + 1] += velocities[i].y;
-        posArray[i * 3 + 2] += velocities[i].z;
-
-        if (Math.abs(posArray[i * 3]) > 20) velocities[i].x *= -1;
-        if (Math.abs(posArray[i * 3 + 1]) > 20) velocities[i].y *= -1;
-        if (Math.abs(posArray[i * 3 + 2]) > 10) velocities[i].z *= -1;
+        pos[i * 3] += velocities[i].x * speed;
+        pos[i * 3 + 1] += velocities[i].y * speed;
+        pos[i * 3 + 2] += velocities[i].z * speed;
+        if (Math.abs(pos[i * 3]) > 22) velocities[i].x *= -1;
+        if (Math.abs(pos[i * 3 + 1]) > 22) velocities[i].y *= -1;
+        if (Math.abs(pos[i * 3 + 2]) > 11) velocities[i].z *= -1;
       }
       particles.geometry.attributes.position.needsUpdate = true;
 
-      const linePositions: number[] = [];
+      const linePos: number[] = [];
       for (let i = 0; i < particleCount; i++) {
         for (let j = i + 1; j < particleCount; j++) {
-          const dx = posArray[i * 3] - posArray[j * 3];
-          const dy = posArray[i * 3 + 1] - posArray[j * 3 + 1];
-          const dz = posArray[i * 3 + 2] - posArray[j * 3 + 2];
-          const distSq = dx * dx + dy * dy + dz * dz;
-
-          if (distSq < 15) {
-            linePositions.push(
-              posArray[i * 3],
-              posArray[i * 3 + 1],
-              posArray[i * 3 + 2],
-              posArray[j * 3],
-              posArray[j * 3 + 1],
-              posArray[j * 3 + 2]
-            );
+          const dx = pos[i * 3] - pos[j * 3];
+          const dy = pos[i * 3 + 1] - pos[j * 3 + 1];
+          const dz = pos[i * 3 + 2] - pos[j * 3 + 2];
+          if (dx * dx + dy * dy + dz * dz < 14) {
+            linePos.push(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2], pos[j * 3], pos[j * 3 + 1], pos[j * 3 + 2]);
           }
         }
       }
-      lines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+      lines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePos, 3));
 
-      scene.rotation.y += 0.0012;
-      scene.rotation.x += 0.0006;
-
+      knot.rotation.x += 0.002 * speed;
+      knot.rotation.y += 0.003 * speed;
+      scene.rotation.y += 0.0008 * speed;
       renderer.render(scene, camera);
     };
-
     animate();
 
-    const resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(container);
-
     return () => {
-      resizeObserver.disconnect();
-      cancelAnimationFrame(animationFrameId);
-      if (renderer.domElement.parentNode === container) {
-        container.removeChild(renderer.domElement);
-      }
+      ro.disconnect();
+      cancelAnimationFrame(frameId);
+      if (renderer.domElement.parentNode === container) container.removeChild(renderer.domElement);
       geometry.dispose();
-      material.dispose();
-      lineGeometry.dispose();
-      lineMaterial.dispose();
+      particles.material.dispose();
+      lines.geometry.dispose();
+      lines.material.dispose();
+      knot.geometry.dispose();
+      (knot.material as THREE.Material).dispose();
       renderer.dispose();
     };
-  }, []);
+  }, [isLive]);
 
-  return (
-    <div
-      ref={mountRef}
-      className="absolute inset-0 z-0 pointer-events-none opacity-90"
-      aria-hidden
-    />
-  );
+  return <div ref={mountRef} className="absolute inset-0 z-0 pointer-events-none opacity-95" aria-hidden />;
 };
 
 export default function MultiAgentChatbotSection() {
@@ -284,107 +211,122 @@ export default function MultiAgentChatbotSection() {
     {
       id: '1',
       role: 'system',
-      content:
-        'How can I help you today? I can assist with career coaching, Texas real estate auctions, kids’ books and games, or 1:1 session booking.',
-      agentId: 'router',
+      content: WELCOME_MESSAGE,
+      parentAgent: undefined,
     },
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [flowStep, setFlowStep] = useState<FlowStep>('idle');
-  const [activeAgent, setActiveAgent] = useState<AgentType>(null);
-
+  const [activeParent, setActiveParent] = useState<ParentAgentId | 'router' | null>(null);
+  const [activeSub, setActiveSub] = useState<SubAgentId | null>(null);
+  const [routeResult, setRouteResult] = useState<RouteResult | null>(null);
+  const [flowEvents, setFlowEvents] = useState<FlowEvent[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const isLive = ACTIVE_STEPS.has(flowStep) || flowStep === 'complete';
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, [messages, isTyping]);
 
+  const pushEvent = (step: FlowStep, ctx: Parameters<typeof buildTechnicalFlowEvent>[1] = {}) => {
+    const trace = buildTechnicalFlowEvent(step, ctx);
+    setFlowEvents((prev) =>
+      [
+        {
+          id: `${Date.now()}-${step}-${Math.random().toString(36).slice(2, 6)}`,
+          step,
+          time: formatTime(),
+          ...trace,
+        },
+        ...prev,
+      ].slice(0, 12)
+    );
+  };
+
+  const runStep = async (
+    step: FlowStep,
+    ctx: Parameters<typeof buildTechnicalFlowEvent>[1] = {}
+  ) => {
+    setFlowStep(step);
+    pushEvent(step, ctx);
+    await new Promise((r) => setTimeout(r, FLOW_DELAYS[step as keyof typeof FLOW_DELAYS] ?? 300));
+  };
+
   const processMessage = async (text: string) => {
     if (!text.trim() || isTyping) return;
 
-    const newUserMsg: Message = { id: Date.now().toString(), role: 'user', content: text };
-    setMessages((prev) => [...prev, newUserMsg]);
+    setMessages((prev) => [...prev, { id: Date.now().toString(), role: 'user', content: text }]);
     setInput('');
     setIsTyping(true);
-    setFlowStep('analyzing');
-    setActiveAgent('router');
+    setActiveParent('router');
+    setActiveSub(null);
+    setRouteResult(null);
+    setFlowEvents([]);
 
-    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+    const traceCtx = { query: text };
 
-    await delay(1200);
-    setFlowStep('routing');
+    await runStep('ingesting', traceCtx);
+    await runStep('classifying', traceCtx);
 
-    const selectedAgent = resolveAgent(text);
-
-    if (!selectedAgent) {
-      await delay(800);
-      setFlowStep('generating');
-      await delay(1000);
-
+    const route = resolveAgent(text);
+    if (!route) {
+      await runStep('routing', { ...traceCtx, fallback: true });
+      await runStep('synthesizing', { ...traceCtx, fallback: true });
+      await runStep('delivering', { ...traceCtx, fallback: true });
       setMessages((prev) => [
         ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          role: 'agent',
-          content: FALLBACK_REPLY,
-          agentId: 'router',
-          isFallback: true,
-        },
+        { id: (Date.now() + 1).toString(), role: 'agent', content: FALLBACK_REPLY, isFallback: true },
       ]);
       setFlowStep('complete');
       setIsTyping(false);
-
-      await delay(2000);
+      await new Promise((r) => setTimeout(r, 1400));
       setFlowStep('idle');
-      setActiveAgent(null);
+      setActiveParent(null);
       return;
     }
 
-    await delay(800);
-    setActiveAgent(selectedAgent);
-    setFlowStep('retrieving');
+    setRouteResult(route);
+    const routedCtx = { ...traceCtx, route };
+    await runStep('routing', routedCtx);
+    await runStep('delegating', routedCtx);
+    setActiveParent(route.parent);
+    setActiveSub(route.subAgent);
 
-    await delay(1500);
-    setFlowStep('generating');
+    await runStep('retrieving', routedCtx);
 
-    await delay(1000);
+    const reply = buildAgentReply(route);
+    const hubMode = reply.content === PARENT_AGENTS[route.parent].hubResponse;
 
-    const agentData = AGENT_KNOWLEDGE[selectedAgent];
-    const randomResponse = agentData.responses[Math.floor(Math.random() * agentData.responses.length)];
+    await runStep('synthesizing', {
+      ...routedCtx,
+      hubMode,
+      ctaCount: reply.ctas.length,
+    });
+    await runStep('delivering', { ...routedCtx, ctaCount: reply.ctas.length });
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: (Date.now() + 1).toString(),
+        role: 'agent',
+        content: reply.content,
+        parentAgent: route.parent,
+        subAgent: route.subAgent,
+        subAgentName: route.subAgentName,
+        ctas: reply.ctas,
+      },
+    ]);
 
-    const newAgentMsg: Message = {
-      id: (Date.now() + 1).toString(),
-      role: 'agent',
-      content: randomResponse,
-      agentId: selectedAgent,
-      cta: agentData.cta,
-    };
-
-    setMessages((prev) => [...prev, newAgentMsg]);
     setFlowStep('complete');
     setIsTyping(false);
-
-    await delay(2000);
+    await new Promise((r) => setTimeout(r, 1600));
     setFlowStep('idle');
-    setActiveAgent(null);
+    setActiveParent(null);
+    setActiveSub(null);
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    processMessage(input);
-  };
-
-  const suggestions = [
-    'I need interview prep tips.',
-    'Show me Texas foreclosures.',
-    'Looking for kids games.',
-    'Book a 1:1 session.',
-  ];
-
-  const showSuggestions =
-    !isTyping &&
-    (messages.length < 3 || messages.some((m) => m.isFallback));
+  const showSuggestions = !isTyping && (messages.length < 3 || messages.some((m) => m.isFallback));
 
   return (
     <section
@@ -392,163 +334,93 @@ export default function MultiAgentChatbotSection() {
       aria-labelledby="multi-agent-platform-heading"
       className="relative -mt-[3.75rem] min-h-[100dvh] w-full bg-gradient-to-br from-[#F8F7FF] via-white to-indigo-50/90 pt-[3.75rem] text-zinc-900 font-sans overflow-hidden scroll-mt-[3.75rem]"
     >
-      <h2 id="multi-agent-platform-heading" className="sr-only">
-        SK Creation Multi-Agent Hub
-      </h2>
-
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_40%,rgba(139,92,246,0.08),transparent_55%),radial-gradient(ellipse_70%_50%_at_85%_60%,rgba(99,102,241,0.06),transparent_50%)]" />
-      <ThreeBackground />
+      <h2 id="multi-agent-platform-heading" className="sr-only">SK Creation Multi-Agent Hub</h2>
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_40%,rgba(139,92,246,0.1),transparent_55%),radial-gradient(ellipse_70%_50%_at_85%_60%,rgba(99,102,241,0.07),transparent_50%)]" />
+      <ThreeBackground isLive={isLive} />
 
       <div className="relative z-10 mx-auto flex h-[calc(100dvh-3.75rem)] max-w-7xl flex-col gap-4 px-4 py-4 md:flex-row md:gap-6 md:py-6">
-        <div className="hidden min-h-0 w-full flex-col gap-4 md:flex md:w-1/3 md:flex-1">
-          <div className="flex h-full min-h-0 flex-col rounded-2xl border border-violet-200/80 bg-white/85 p-6 shadow-[0_8px_32px_rgba(139,92,246,0.12)] backdrop-blur-xl">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="p-2 bg-violet-100 rounded-lg border border-violet-200">
-                <BrainCircuit className="w-6 h-6 text-violet-600" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600">
-                  Agentic Orchestration Layer
-                </h3>
-                <p className="text-xs text-zinc-500">Live Agentic Flow</p>
-              </div>
-            </div>
-
-            <div className="flex-1 relative flex flex-col gap-6 pt-4">
-              <FlowCard
-                icon={User}
-                title="User Input"
-                isActive={flowStep !== 'idle'}
-                status={flowStep === 'idle' ? 'waiting' : 'done'}
-              />
-
-              <div className="absolute left-6 top-14 bottom-14 w-0.5 bg-violet-100 -z-10" />
-              <motion.div
-                className="absolute left-6 top-14 w-0.5 bg-gradient-to-b from-violet-500 to-indigo-500 -z-10"
-                initial={{ height: 0 }}
-                animate={{ height: flowStep !== 'idle' ? '100%' : 0 }}
-                transition={{ duration: 0.5 }}
-              />
-
-              <FlowCard
-                icon={GitMerge}
-                title="Router Agent (Hub)"
-                desc="Analyzing Intent & Semantic Search"
-                isActive={activeAgent === 'router'}
-                status={
-                  flowStep === 'analyzing'
-                    ? 'active'
-                    : flowStep !== 'idle'
-                      ? 'done'
-                      : 'waiting'
-                }
-                isPulsing={flowStep === 'analyzing'}
-              />
-
-              <div className="relative pl-8">
-                <div className="absolute left-0 top-1/2 w-8 h-0.5 bg-violet-100 -z-10" />
-                <motion.div
-                  className="absolute left-0 top-1/2 h-0.5 bg-indigo-500 -z-10"
-                  initial={{ width: 0 }}
-                  animate={{
-                    width: ['routing', 'retrieving', 'generating', 'complete'].includes(flowStep)
-                      ? 32
-                      : 0,
-                  }}
-                />
-
-                <div className="bg-violet-50/80 border border-violet-200/60 rounded-xl p-4">
-                  <p className="text-xs text-zinc-500 mb-3 uppercase tracking-wider font-semibold">
-                    Specialized Workforce
-                  </p>
-                  <div className="flex flex-col gap-2">
-                    {Object.values(AGENT_KNOWLEDGE).map((agent) => (
-                      <AgentBadge key={agent.id} agent={agent} isActive={activeAgent === agent.id} />
-                    ))}
-                  </div>
+        {/* Routing flow — top to bottom */}
+        <div className="hidden min-h-0 md:flex md:w-[40%] md:min-w-[300px] lg:w-[36%]">
+          <div className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-violet-200/80 bg-white/92 shadow-[0_12px_40px_rgba(139,92,246,0.14)] backdrop-blur-xl">
+            <div className="border-b border-violet-100 bg-gradient-to-r from-violet-50 to-indigo-50 px-4 py-3.5">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600/10 ring-1 ring-violet-200">
+                  <Network className="h-4 w-4 text-violet-600" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-zinc-900">Agentic Orchestration Layer</h3>
+                  <p className="text-[11px] text-zinc-500">From your query to the right reply</p>
                 </div>
               </div>
-
-              <FlowCard
-                icon={Database}
-                title="Enterprise RAG"
-                desc="Querying Databases & APIs"
-                isActive={flowStep === 'retrieving'}
-                status={
-                  flowStep === 'retrieving'
-                    ? 'active'
-                    : ['generating', 'complete'].includes(flowStep)
-                      ? 'done'
-                      : 'waiting'
-                }
-                isPulsing={flowStep === 'retrieving'}
-              />
-
-              <FlowCard
-                icon={Bot}
-                title="Synthesize Output"
-                isActive={flowStep === 'generating' || flowStep === 'complete'}
-                status={
-                  flowStep === 'generating' ? 'active' : flowStep === 'complete' ? 'done' : 'waiting'
-                }
-                isPulsing={flowStep === 'generating'}
-              />
             </div>
 
-            <div className="mt-auto pt-6 border-t border-violet-100 flex items-center justify-between text-xs text-zinc-500">
-              <span className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Systems Operational
-              </span>
-              <span>SK Creation Platform v2.0</span>
+            <div className="flex flex-1 min-h-0 flex-col overflow-hidden">
+              <div className="shrink-0 overflow-y-auto p-4 pb-2 hub-scroll">
+                <RagFlowStrip flowStep={flowStep} isLive={isLive} />
+                <OrchestrationDiagram
+                  flowStep={flowStep}
+                  isLive={isLive}
+                  activeParent={activeParent}
+                  activeSub={activeSub}
+                  routeResult={routeResult}
+                />
+              </div>
+
+              <OrchestrationTracePanel events={flowEvents} isLive={isLive} flowStep={flowStep} />
+            </div>
+
+            <div className="border-t border-violet-100 px-4 py-2 text-[10px] text-zinc-400">
+              Demo · routes to real pages on this site
             </div>
           </div>
         </div>
 
-        <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-violet-200/80 bg-white/90 shadow-[0_8px_32px_rgba(139,92,246,0.12)] backdrop-blur-xl md:w-2/3 md:flex-[2]">
-          <div className="bg-gradient-to-r from-violet-50 to-indigo-50 border-b border-violet-200/60 p-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="w-10 h-10 bg-gradient-to-tr from-violet-600 to-indigo-600 rounded-full flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
-                </div>
-                <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
+        {/* Chat */}
+        <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-violet-200/80 bg-white/92 shadow-[0_12px_40px_rgba(139,92,246,0.14)] backdrop-blur-xl">
+          <div className="bg-gradient-to-r from-violet-50 to-indigo-50 border-b border-violet-200/60 p-4 flex items-center gap-3">
+            <div className="relative shrink-0">
+              <div className="w-10 h-10 bg-gradient-to-tr from-violet-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg shadow-violet-500/25">
+                <Sparkles className="w-5 h-5 text-white" />
               </div>
-              <div>
-                <p className="font-semibold text-lg text-zinc-900">SK Multi-Agent</p>
-                <p className="text-xs text-zinc-500">Multi-agent orchestration demo</p>
-              </div>
+              <motion.span
+                className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-emerald-500"
+                animate={{ scale: isLive ? [1, 1.2, 1] : 1 }}
+                transition={{ duration: 1.5, repeat: isLive ? Infinity : 0 }}
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+                <p className="font-semibold text-lg text-zinc-900">Site guide</p>
+                <p className="text-xs text-zinc-500 truncate">
+                  {flowStep !== 'idle' && flowStep !== 'complete'
+                    ? FLOW_STEP_MESSAGES[flowStep as keyof typeof FLOW_STEP_MESSAGES] ?? 'Working on it…'
+                    : 'Ask me where to go on this site'}
+                </p>
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-5 custom-scrollbar">
             <AnimatePresence initial={false}>
               {messages.map((msg) => (
                 <MessageBubble key={msg.id} message={msg} />
               ))}
-
               {isTyping && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex items-start gap-3"
-                >
+                <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full bg-violet-100 border border-violet-200 flex items-center justify-center shrink-0">
                     <Loader2 className="w-4 h-4 text-violet-600 animate-spin" />
                   </div>
-                  <div className="bg-white border border-violet-200/80 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2 shadow-sm">
-                    <span
-                      className="w-2 h-2 bg-violet-400 rounded-full animate-bounce"
-                      style={{ animationDelay: '0ms' }}
-                    />
-                    <span
-                      className="w-2 h-2 bg-violet-400 rounded-full animate-bounce"
-                      style={{ animationDelay: '150ms' }}
-                    />
-                    <span
-                      className="w-2 h-2 bg-violet-400 rounded-full animate-bounce"
-                      style={{ animationDelay: '300ms' }}
-                    />
+                  <div className="bg-white border border-violet-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm min-w-[200px]">
+                    <p className="text-[11px] font-semibold text-violet-700 mb-2">
+                      {flowStep !== 'idle' && flowStep !== 'complete'
+                        ? FLOW_STEP_MESSAGES[flowStep as keyof typeof FLOW_STEP_MESSAGES]
+                        : 'One moment…'}
+                    </p>
+                    <div className="h-1.5 w-full rounded-full bg-violet-100 overflow-hidden">
+                      <motion.div
+                        className="h-full bg-gradient-to-r from-violet-500 to-indigo-500"
+                        animate={{ width: ['10%', '85%', '100%'] }}
+                        transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
+                      />
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -556,35 +428,34 @@ export default function MultiAgentChatbotSection() {
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-4 bg-white/90 border-t border-violet-200/60 backdrop-blur-md">
+          <div className="p-4 border-t border-violet-200/60 bg-white/95">
             {showSuggestions && (
               <div className="flex flex-wrap gap-2 mb-4">
-                {suggestions.map((suggestion, idx) => (
+                {SUGGESTIONS.map((s) => (
                   <button
-                    key={idx}
+                    key={s}
                     type="button"
-                    onClick={() => processMessage(suggestion)}
-                    className="text-xs px-3 py-1.5 bg-violet-50 hover:bg-violet-100 text-violet-800 hover:text-violet-900 border border-violet-200 hover:border-violet-300 rounded-full transition-colors"
+                    onClick={() => processMessage(s)}
+                    className="text-xs px-3 py-2 rounded-full border border-violet-200 bg-violet-50 text-violet-800 hover:bg-violet-100 hover:border-violet-300 transition-colors"
                   >
-                    {suggestion}
+                    {s}
                   </button>
                 ))}
               </div>
             )}
-
-            <form onSubmit={handleSubmit} className="relative">
+            <form onSubmit={(e) => { e.preventDefault(); processMessage(input); }} className="relative">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about careers, auctions, kids games, or book a session..."
-                className="w-full bg-white border-2 border-violet-200 rounded-xl pl-4 pr-12 py-4 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 transition-all placeholder:text-zinc-400"
+                placeholder="Ask about projects, Dr. SK, books, or articles…"
+                className="w-full bg-white border-2 border-violet-200 rounded-xl pl-4 pr-12 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 placeholder:text-zinc-400"
                 disabled={isTyping}
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isTyping}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-violet-600 hover:bg-violet-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-violet-600 hover:bg-violet-500 text-white rounded-lg disabled:opacity-50 transition-colors shadow-md shadow-violet-500/20"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -593,161 +464,416 @@ export default function MultiAgentChatbotSection() {
         </div>
       </div>
 
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #c4b5fd;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #a78bfa;
-        }
-      `,
-        }}
-      />
+      <style dangerouslySetInnerHTML={{ __html: `
+        .custom-scrollbar::-webkit-scrollbar, .hub-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb, .hub-scroll::-webkit-scrollbar-thumb { background: #c4b5fd; border-radius: 8px; }
+      `}} />
     </section>
   );
 }
 
-type FlowStatus = 'waiting' | 'active' | 'done';
+const LAYER_STYLES: Record<string, string> = {
+  Ingestion: 'bg-slate-100 text-slate-700 ring-slate-200',
+  Intent: 'bg-indigo-50 text-indigo-700 ring-indigo-200',
+  Router: 'bg-violet-50 text-violet-700 ring-violet-200',
+  Orchestration: 'bg-cyan-50 text-cyan-700 ring-cyan-200',
+  Retrieval: 'bg-amber-50 text-amber-700 ring-amber-200',
+  Generation: 'bg-rose-50 text-rose-700 ring-rose-200',
+  Delivery: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+  Observability: 'bg-zinc-100 text-zinc-600 ring-zinc-200',
+  System: 'bg-zinc-50 text-zinc-500 ring-zinc-200',
+};
 
-function FlowCard({
-  icon: Icon,
-  title,
-  desc,
-  isActive,
-  status,
-  isPulsing,
+function OrchestrationTracePanel({
+  events,
+  isLive,
+  flowStep,
 }: {
-  icon: LucideIcon;
-  title: string;
-  desc?: string;
-  isActive: boolean;
-  status: FlowStatus;
-  isPulsing?: boolean;
+  events: FlowEvent[];
+  isLive: boolean;
+  flowStep: FlowStep;
 }) {
   return (
-    <div
-      className={`relative flex items-center gap-4 p-3 rounded-xl transition-all duration-500 ${
-        isActive
-          ? 'bg-violet-50 border border-violet-300/50 shadow-[0_0_15px_rgba(139,92,246,0.12)]'
-          : 'opacity-60'
-      }`}
-    >
-      <div
-        className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border relative z-10 bg-white ${
-          status === 'done'
-            ? 'border-emerald-500 text-emerald-600'
-            : status === 'active'
-              ? 'border-violet-500 text-violet-600'
-              : 'border-violet-200 text-zinc-400'
-        }`}
-      >
-        {status === 'done' ? <CheckCircle2 className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
-        {isPulsing && (
-          <span className="absolute inset-0 rounded-full border border-violet-400 animate-ping opacity-75" />
-        )}
+    <div className="mx-4 mb-4 mt-1 flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-violet-200/70 bg-[#0f1117]/[0.03]">
+      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-violet-100/80 bg-gradient-to-r from-violet-50/90 to-indigo-50/60 px-3 py-2.5">
+        <div className="flex items-center gap-2">
+          <Terminal className="h-3.5 w-3.5 text-violet-600" aria-hidden />
+          <p className="text-[11px] font-bold tracking-wide text-zinc-800">Orchestration trace</p>
+        </div>
+        <span
+          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider ${
+            isLive ? 'bg-emerald-500/10 text-emerald-700 ring-1 ring-emerald-200' : 'bg-zinc-100 text-zinc-500 ring-1 ring-zinc-200'
+          }`}
+        >
+          <Activity className={`h-2.5 w-2.5 ${isLive ? 'animate-pulse' : ''}`} aria-hidden />
+          {isLive ? flowStep : 'idle'}
+        </span>
       </div>
-      <div>
-        <h4 className={`font-medium text-sm ${isActive ? 'text-zinc-900' : 'text-zinc-500'}`}>{title}</h4>
-        {desc && <p className="text-xs text-zinc-400 mt-0.5">{desc}</p>}
+
+      <div className="flex-1 min-h-0 overflow-y-auto hub-scroll px-3 py-2.5">
+        {events.length === 0 ? (
+          <div className="flex h-full min-h-[120px] flex-col items-center justify-center gap-2 text-center px-4">
+            <Terminal className="h-5 w-5 text-violet-300" aria-hidden />
+            <p className="text-[11px] font-medium text-zinc-500">No trace events yet</p>
+            <p className="text-[10px] leading-relaxed text-zinc-400 max-w-[220px]">
+              Send a query to emit ingestion → routing → delegation → retrieval → generation → delivery spans.
+            </p>
+          </div>
+        ) : (
+          <ul className="space-y-2">
+            {events.map((ev) => (
+              <li
+                key={ev.id}
+                className="rounded-lg border border-violet-100/80 bg-white/90 px-2.5 py-2 shadow-sm"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-1.5 min-w-0">
+                    <span className="font-mono text-[9px] text-zinc-400 shrink-0">{ev.time}</span>
+                    <span
+                      className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ring-1 ${
+                        LAYER_STYLES[ev.layer] ?? LAYER_STYLES.System
+                      }`}
+                    >
+                      {ev.layer}
+                    </span>
+                  </div>
+                </div>
+                <p className="mt-1 font-mono text-[10px] font-semibold text-violet-700 leading-snug">
+                  {ev.action}
+                </p>
+                <p className="mt-0.5 text-[10px] leading-relaxed text-zinc-600">{ev.detail}</p>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
 }
 
-function AgentBadge({ agent, isActive }: { agent: AgentKnowledge; isActive: boolean }) {
-  const Icon = agent.icon;
+const RAG_PIPELINE = ['Query', 'Retrieval', 'Reranking', 'Generation', 'Response'] as const;
+
+function getRagStepIndex(flowStep: FlowStep): number {
+  if (flowStep === 'idle') return -1;
+  if (flowStep === 'ingesting' || flowStep === 'classifying') return 0;
+  if (flowStep === 'routing' || flowStep === 'retrieving') return 1;
+  if (flowStep === 'delegating') return 2;
+  if (flowStep === 'synthesizing') return 3;
+  return 4;
+}
+
+function RagFlowStrip({ flowStep, isLive }: { flowStep: FlowStep; isLive: boolean }) {
+  const activeIdx = getRagStepIndex(flowStep);
+
+  return (
+    <div className="rounded-xl border border-violet-200/60 bg-gradient-to-b from-violet-50/80 to-white px-3 py-3">
+      <div className="flex items-center justify-between gap-2 mb-2.5">
+        <p className="text-[11px] font-semibold text-zinc-700">Multi-agentic flow</p>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 ring-1 ring-emerald-200/80">
+          <motion.span
+            className="h-1.5 w-1.5 rounded-full bg-emerald-500"
+            animate={{ opacity: isLive ? [1, 0.35, 1] : 0.5 }}
+            transition={{ duration: 1.4, repeat: isLive ? Infinity : 0 }}
+          />
+          live
+        </span>
+      </div>
+      <div className="flex flex-wrap items-center gap-x-1 gap-y-1.5">
+        {RAG_PIPELINE.map((step, i) => {
+          const isActive = activeIdx === i;
+          const isDone = activeIdx > i;
+          return (
+            <React.Fragment key={step}>
+              {i > 0 && <span className="text-[10px] text-violet-300">→</span>}
+              <span
+                className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold transition-colors ${
+                  isActive
+                    ? 'bg-violet-600 text-white shadow-sm shadow-violet-500/30'
+                    : isDone
+                      ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/70'
+                      : 'bg-white text-zinc-400 ring-1 ring-violet-100'
+                }`}
+              >
+                {step}
+              </span>
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+const STAGE_ICONS: Record<RoutingStageId, LucideIcon> = {
+  orchestrator: BrainCircuit,
+  route: GitMerge,
+  main: Layers,
+  sub: MessageSquare,
+  response: CheckCircle2,
+};
+
+const STAGE_THEMES: Record<
+  RoutingStageId,
+  { text: string; border: string; bg: string; iconBorder: string; iconGlow: string; lineVia: string }
+> = {
+  orchestrator: {
+    text: 'text-violet-600',
+    border: 'border-violet-200/80',
+    bg: 'bg-violet-50/70',
+    iconBorder: 'border-violet-300',
+    iconGlow: 'shadow-[0_0_16px_rgba(139,92,246,0.35)]',
+    lineVia: 'via-violet-500',
+  },
+  route: {
+    text: 'text-indigo-600',
+    border: 'border-indigo-200/80',
+    bg: 'bg-indigo-50/70',
+    iconBorder: 'border-indigo-300',
+    iconGlow: 'shadow-[0_0_16px_rgba(99,102,241,0.35)]',
+    lineVia: 'via-indigo-500',
+  },
+  main: {
+    text: 'text-cyan-600',
+    border: 'border-cyan-200/80',
+    bg: 'bg-cyan-50/70',
+    iconBorder: 'border-cyan-300',
+    iconGlow: 'shadow-[0_0_16px_rgba(6,182,212,0.35)]',
+    lineVia: 'via-cyan-500',
+  },
+  sub: {
+    text: 'text-amber-600',
+    border: 'border-amber-200/80',
+    bg: 'bg-amber-50/70',
+    iconBorder: 'border-amber-300',
+    iconGlow: 'shadow-[0_0_16px_rgba(245,158,11,0.35)]',
+    lineVia: 'via-amber-500',
+  },
+  response: {
+    text: 'text-emerald-600',
+    border: 'border-emerald-200/80',
+    bg: 'bg-emerald-50/70',
+    iconBorder: 'border-emerald-300',
+    iconGlow: 'shadow-[0_0_16px_rgba(16,185,129,0.35)]',
+    lineVia: 'via-emerald-500',
+  },
+};
+
+const FLOW_LINE_COLORS = [
+  'via-violet-500',
+  'via-indigo-500',
+  'via-cyan-400',
+  'via-amber-400',
+  'via-emerald-500',
+  'via-rose-400',
+] as const;
+
+function OrchestrationDiagram({
+  flowStep,
+  isLive,
+  activeParent,
+  activeSub,
+  routeResult,
+}: {
+  flowStep: FlowStep;
+  isLive: boolean;
+  activeParent: ParentAgentId | 'router' | null;
+  activeSub: SubAgentId | null;
+  routeResult: RouteResult | null;
+}) {
+  return (
+    <div className="relative mt-4">
+      <div className="absolute left-[22px] top-4 bottom-4 w-[2px] rounded-full bg-violet-100/90" />
+      <div className="pointer-events-none absolute left-[22px] top-4 bottom-4 w-[2px] overflow-hidden rounded-full">
+        {FLOW_LINE_COLORS.map((via, i) => (
+          <div
+            key={via}
+            className={`animate-agentic-flow-line absolute h-[26%] w-full bg-gradient-to-b from-transparent ${via} to-transparent ${
+              isLive ? 'opacity-90' : 'opacity-35'
+            }`}
+            style={{
+              animationDelay: `${i * 0.85}s`,
+              animationDuration: isLive ? '3.2s' : '5.5s',
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="space-y-0">
+        {ROUTING_STAGES.map((stage) => (
+          <OrchestrationStageCard
+            key={stage.id}
+            stageId={stage.id}
+            label={stage.label}
+            desc={stage.desc}
+            flowStep={flowStep}
+            activeParent={activeParent}
+            activeSub={activeSub}
+            routeResult={routeResult}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function OrchestrationStageCard({
+  stageId,
+  label,
+  desc,
+  flowStep,
+  activeParent,
+  activeSub,
+  routeResult,
+}: {
+  stageId: RoutingStageId;
+  label: string;
+  desc: string;
+  flowStep: FlowStep;
+  activeParent: ParentAgentId | 'router' | null;
+  activeSub: SubAgentId | null;
+  routeResult: RouteResult | null;
+}) {
+  const status = getRoutingStageStatus(stageId, flowStep);
+  const theme = STAGE_THEMES[stageId];
+  const Icon = STAGE_ICONS[stageId];
+
+  let detail: string | null = null;
+  if (status === 'done' || status === 'active') {
+    if (stageId === 'main' && activeParent && activeParent !== 'router') {
+      detail = getParentAgent(activeParent).name;
+    }
+    if (stageId === 'sub' && routeResult) {
+      detail = routeResult.subAgentName;
+    }
+    if (stageId === 'response' && status === 'done') {
+      detail = 'Reply sent';
+    }
+  }
+
   return (
     <div
-      className={`flex items-center gap-3 p-2 rounded-lg transition-all duration-300 ${
-        isActive
-          ? `${agent.bgColor} border ${agent.borderColor} ${agent.color} shadow-lg scale-105`
-          : 'hover:bg-violet-50 text-zinc-600 border border-transparent'
+      className={`group relative flex gap-3 pb-4 last:pb-0 transition-opacity duration-300 ${
+        status === 'waiting' ? 'opacity-50' : 'opacity-100'
       }`}
     >
-      <Icon className={`w-4 h-4 ${isActive ? '' : 'text-zinc-400'}`} />
-      <div className="flex-1">
-        <p className="text-xs font-semibold">{agent.name}</p>
+      <div className="relative z-10 mt-1.5 shrink-0">
+        <div
+          className={`relative flex h-11 w-11 items-center justify-center rounded-full border-2 bg-white transition-all duration-500 ${theme.iconBorder} ${theme.text} ${
+            status === 'active' ? theme.iconGlow : ''
+          } ${status === 'done' ? 'border-emerald-400 bg-emerald-50/80' : ''}`}
+        >
+          <Icon className="h-[18px] w-[18px]" aria-hidden />
+          {status === 'active' && (
+            <span className={`absolute inset-0 rounded-full border-2 ${theme.iconBorder} animate-ping opacity-40`} />
+          )}
+          {status === 'done' && (
+            <span className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-white ring-2 ring-white">
+              <CheckCircle2 className="h-2.5 w-2.5" aria-hidden />
+            </span>
+          )}
+        </div>
       </div>
-      {isActive && (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="w-2 h-2 rounded-full bg-current animate-pulse"
-        />
-      )}
+
+      <div
+        className={`min-w-0 flex-1 rounded-xl border backdrop-blur-sm transition-all duration-500 ${theme.border} ${
+          status === 'active' ? `${theme.bg} shadow-sm ${theme.iconGlow}` : 'bg-white/80'
+        } ${status === 'done' ? 'border-emerald-200/80 bg-emerald-50/40' : ''}`}
+      >
+        <div className="px-3 py-2.5">
+          <p className={`text-[11px] font-bold tracking-wide uppercase ${theme.text}`}>{label}</p>
+          <p className="mt-0.5 text-[11px] leading-snug text-zinc-500">{desc}</p>
+          {detail && (
+            <p
+              className={`mt-1.5 text-[11px] font-semibold ${
+                status === 'active' ? theme.text : 'text-emerald-700'
+              }`}
+            >
+              {detail}
+            </p>
+          )}
+          {stageId === 'main' && status !== 'waiting' && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {(Object.keys(PARENT_AGENTS) as ParentAgentId[]).map((id) => {
+                const a = PARENT_AGENTS[id];
+                const hit = activeParent === id;
+                return (
+                  <span
+                    key={id}
+                    className={`rounded-md px-1.5 py-0.5 text-[9px] font-semibold transition-colors ${
+                      hit ? `${a.bgColor} ${a.color} ring-1 ${a.borderColor}` : 'bg-zinc-50 text-zinc-400'
+                    }`}
+                  >
+                    {a.shortName}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+          {stageId === 'sub' && activeParent && activeParent !== 'router' && status !== 'waiting' && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {getParentAgent(activeParent).subAgents.map((sub) => (
+                <span
+                  key={sub.id}
+                  className={`rounded-md px-1.5 py-0.5 text-[9px] font-semibold transition-colors ${
+                    activeSub === sub.id ? 'bg-violet-600 text-white' : 'bg-zinc-50 text-zinc-400'
+                  }`}
+                >
+                  {sub.name}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
 function MessageBubble({ message }: { message: Message }) {
   const isUser = message.role === 'user';
-
-  let agentTheme: AgentKnowledge | null = null;
-  if (message.agentId && message.agentId !== 'router') {
-    agentTheme = AGENT_KNOWLEDGE[message.agentId as keyof typeof AGENT_KNOWLEDGE];
-  }
-
-  const AgentIcon = agentTheme?.icon;
+  const parent = message.parentAgent ? getParentAgent(message.parentAgent) : null;
+  const SubIcon = message.subAgent ? SUB_AGENT_ICONS[message.subAgent] : null;
+  const ParentIcon = parent?.icon;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      className={`flex items-start gap-3 w-full ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`flex items-start gap-3 ${isUser ? 'flex-row-reverse' : ''}`}
     >
-      <div
-        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border ${
-          isUser
-            ? 'bg-violet-600 border-violet-500 text-white'
-            : agentTheme
-              ? `${agentTheme.bgColor} ${agentTheme.borderColor} ${agentTheme.color}`
-              : 'bg-violet-100 border-violet-200 text-violet-600'
-        }`}
-      >
-        {isUser ? (
-          <User className="w-4 h-4" />
-        ) : AgentIcon ? (
-          <AgentIcon className="w-4 h-4" />
-        ) : (
-          <Bot className="w-4 h-4" />
-        )}
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border ${
+        isUser ? 'bg-violet-600 border-violet-500 text-white'
+          : parent ? `${parent.bgColor} ${parent.borderColor} ${parent.color}`
+          : 'bg-violet-100 border-violet-200 text-violet-600'
+      }`}>
+        {isUser ? <User className="w-4 h-4" /> : SubIcon ? <SubIcon className="w-4 h-4" /> : ParentIcon ? <ParentIcon className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
       </div>
-
-      <div className={`flex flex-col max-w-[80%] ${isUser ? 'items-end' : 'items-start'}`}>
-        {!isUser && agentTheme && (
-          <span
-            className={`text-[10px] mb-1 font-medium ${agentTheme.color} uppercase tracking-wider`}
-          >
-            {agentTheme.platform}
+      <div className={`flex flex-col max-w-[88%] ${isUser ? 'items-end' : 'items-start'}`}>
+        {!isUser && parent && (
+          <span className={`text-[10px] mb-1 font-medium ${parent.color}`}>
+            {parent.name}
+            {message.subAgentName && <span className="text-zinc-400"> · {message.subAgentName}</span>}
           </span>
         )}
-        <div
-          className={`px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
-            isUser
-              ? 'bg-violet-600 text-white rounded-tr-sm'
-              : 'bg-white border border-violet-200/80 text-zinc-800 rounded-tl-sm'
-          }`}
-        >
+        <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${
+          isUser ? 'bg-violet-600 text-white rounded-tr-sm' : 'bg-white border border-violet-200/80 text-zinc-800 rounded-tl-sm'
+        }`}>
           {message.content}
-          {!isUser && message.cta && agentTheme && (
-            <a
-              href={message.cta.url}
-              target={message.cta.url.startsWith('/') ? undefined : '_blank'}
-              rel={message.cta.url.startsWith('/') ? undefined : 'noopener noreferrer'}
-              className={`mt-3 inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5 group ${agentTheme.bgColor} ${agentTheme.borderColor} ${agentTheme.color} hover:brightness-125`}
-            >
-              {message.cta.text}
-              <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </a>
+          {!isUser && message.ctas && message.ctas.length > 0 && parent && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {message.ctas.map((cta) => (
+                <a
+                  key={cta.url + cta.text}
+                  href={cta.url}
+                  target={cta.url.startsWith('/') ? undefined : '_blank'}
+                  rel={cta.url.startsWith('/') ? undefined : 'noopener noreferrer'}
+                  className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition hover:-translate-y-0.5 ${parent.bgColor} ${parent.borderColor} ${parent.color}`}
+                >
+                  {cta.text}
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              ))}
+            </div>
           )}
         </div>
       </div>
