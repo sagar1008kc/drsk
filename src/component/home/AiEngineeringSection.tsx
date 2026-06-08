@@ -279,13 +279,7 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
           className="mt-12 text-center text-sm leading-relaxed text-zinc-500 sm:text-base"
         >
           Focused on{' '}
-          <span className="text-violet-400">agentic AI</span>,{' '}
-          <span className="text-violet-400">RAG</span>,{' '}
-          <span className="text-violet-400">LLM-powered applications</span>,{' '}
-          <span className="text-violet-400">automation</span>,{' '}
-          <span className="text-violet-400">tool integration</span>,{' '}
-          <span className="text-violet-400">secure frontend architecture</span>, and{' '}
-          <span className="text-violet-400">human-centered digital solutions</span>.
+          <span className="text-violet-400">design, build, and deploy production-ready AI solutions that transform business challenges into scalable, secure, and human-centered outcomes—specializing in agentic AI, multi-agent systems, RAG, LLM-powered applications, automation, and tool integration.</span>,{' '}
         </motion.p>
       </div>
     </section>
