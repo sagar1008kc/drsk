@@ -24,8 +24,13 @@ const config: Config = {
         'gradient-xy': 'gradient-xy 15s ease infinite',
         /** Hero intro: slide in from the left (keyframes in theme.keyframes['hero-slide-in']). */
         'hero-slide-in': 'hero-slide-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'agentic-flow-line': 'agentic-flow-line 4s linear infinite',
       },
       keyframes: {
+        'agentic-flow-line': {
+          '0%': { top: '-20%' },
+          '100%': { top: '120%' },
+        },
         'hero-slide-in': {
           '0%': {
             opacity: '0',

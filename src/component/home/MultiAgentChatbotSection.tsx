@@ -131,25 +131,39 @@ const ThreeBackground = () => {
     if (!container) return;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x0f172a, 0.05);
+    scene.fog = new THREE.FogExp2(0xf8f7ff, 0.035);
 
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     camera.position.z = 15;
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    const particleCount = 150;
+    const particleCount = 180;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
     const velocities: { x: number; y: number; z: number }[] = [];
 
-    for (let i = 0; i < particleCount * 3; i += 3) {
-      positions[i] = (Math.random() - 0.5) * 40;
-      positions[i + 1] = (Math.random() - 0.5) * 40;
-      positions[i + 2] = (Math.random() - 0.5) * 20;
+    const palette = [
+      new THREE.Color(0x8b5cf6),
+      new THREE.Color(0x6366f1),
+      new THREE.Color(0x06b6d4),
+      new THREE.Color(0xa855f7),
+      new THREE.Color(0x4f46e5),
+    ];
+
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 40;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 40;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
+
+      const color = palette[Math.floor(Math.random() * palette.length)];
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
+
       velocities.push({
         x: (Math.random() - 0.5) * 0.02,
         y: (Math.random() - 0.5) * 0.02,
@@ -158,28 +172,39 @@ const ThreeBackground = () => {
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
-      size: 0.15,
-      color: 0x00ffcc,
+      size: 0.18,
+      vertexColors: true,
       transparent: true,
-      opacity: 0.8,
-      blending: THREE.AdditiveBlending,
+      opacity: 0.85,
+      blending: THREE.NormalBlending,
+      sizeAttenuation: true,
     });
 
     const particles = new THREE.Points(geometry, material);
     scene.add(particles);
 
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x00ffcc,
+      color: 0x8b5cf6,
       transparent: true,
-      opacity: 0.1,
-      blending: THREE.AdditiveBlending,
+      opacity: 0.18,
+      blending: THREE.NormalBlending,
     });
 
     const lineGeometry = new THREE.BufferGeometry();
     const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
     scene.add(lines);
+
+    const resize = () => {
+      const { clientWidth, clientHeight } = container;
+      camera.aspect = clientWidth / clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(clientWidth, clientHeight);
+    };
+
+    resize();
 
     let animationFrameId = 0;
     const animate = () => {
@@ -220,23 +245,19 @@ const ThreeBackground = () => {
       }
       lines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
 
-      scene.rotation.y += 0.001;
-      scene.rotation.x += 0.0005;
+      scene.rotation.y += 0.0012;
+      scene.rotation.x += 0.0006;
 
       renderer.render(scene, camera);
     };
 
     animate();
 
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    window.addEventListener('resize', handleResize);
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(container);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
       cancelAnimationFrame(animationFrameId);
       if (renderer.domElement.parentNode === container) {
         container.removeChild(renderer.domElement);
@@ -252,7 +273,7 @@ const ThreeBackground = () => {
   return (
     <div
       ref={mountRef}
-      className="absolute inset-0 z-0 pointer-events-none opacity-60 mix-blend-screen"
+      className="absolute inset-0 z-0 pointer-events-none opacity-90"
       aria-hidden
     />
   );
@@ -369,26 +390,27 @@ export default function MultiAgentChatbotSection() {
     <section
       id="multi-agent-platform"
       aria-labelledby="multi-agent-platform-heading"
-      className="relative -mt-[3.75rem] min-h-[100dvh] w-full bg-[#050B14] pt-[3.75rem] text-white font-sans overflow-hidden scroll-mt-[3.75rem]"
+      className="relative -mt-[3.75rem] min-h-[100dvh] w-full bg-gradient-to-br from-[#F8F7FF] via-white to-indigo-50/90 pt-[3.75rem] text-zinc-900 font-sans overflow-hidden scroll-mt-[3.75rem]"
     >
       <h2 id="multi-agent-platform-heading" className="sr-only">
         SK Creation Multi-Agent Hub
       </h2>
 
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_40%,rgba(139,92,246,0.08),transparent_55%),radial-gradient(ellipse_70%_50%_at_85%_60%,rgba(99,102,241,0.06),transparent_50%)]" />
       <ThreeBackground />
 
       <div className="relative z-10 mx-auto flex h-[calc(100dvh-3.75rem)] max-w-7xl flex-col gap-4 px-4 py-4 md:flex-row md:gap-6 md:py-6">
         <div className="hidden min-h-0 w-full flex-col gap-4 md:flex md:w-1/3 md:flex-1">
-          <div className="flex h-full min-h-0 flex-col rounded-2xl border border-slate-700/50 bg-slate-900/60 p-6 shadow-2xl backdrop-blur-xl">
+          <div className="flex h-full min-h-0 flex-col rounded-2xl border border-violet-200/80 bg-white/85 p-6 shadow-[0_8px_32px_rgba(139,92,246,0.12)] backdrop-blur-xl">
             <div className="flex items-center gap-3 mb-8">
-              <div className="p-2 bg-indigo-500/20 rounded-lg border border-indigo-500/30">
-                <BrainCircuit className="w-6 h-6 text-indigo-400" />
+              <div className="p-2 bg-violet-100 rounded-lg border border-violet-200">
+                <BrainCircuit className="w-6 h-6 text-violet-600" />
               </div>
               <div>
-                <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+                <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600">
                   Agentic Orchestration Layer
                 </h3>
-                <p className="text-xs text-slate-400">Live Agentic Flow</p>
+                <p className="text-xs text-zinc-500">Live Agentic Flow</p>
               </div>
             </div>
 
@@ -400,9 +422,9 @@ export default function MultiAgentChatbotSection() {
                 status={flowStep === 'idle' ? 'waiting' : 'done'}
               />
 
-              <div className="absolute left-6 top-14 bottom-14 w-0.5 bg-slate-800 -z-10" />
+              <div className="absolute left-6 top-14 bottom-14 w-0.5 bg-violet-100 -z-10" />
               <motion.div
-                className="absolute left-6 top-14 w-0.5 bg-gradient-to-b from-indigo-500 to-cyan-500 -z-10"
+                className="absolute left-6 top-14 w-0.5 bg-gradient-to-b from-violet-500 to-indigo-500 -z-10"
                 initial={{ height: 0 }}
                 animate={{ height: flowStep !== 'idle' ? '100%' : 0 }}
                 transition={{ duration: 0.5 }}
@@ -424,9 +446,9 @@ export default function MultiAgentChatbotSection() {
               />
 
               <div className="relative pl-8">
-                <div className="absolute left-0 top-1/2 w-8 h-0.5 bg-slate-800 -z-10" />
+                <div className="absolute left-0 top-1/2 w-8 h-0.5 bg-violet-100 -z-10" />
                 <motion.div
-                  className="absolute left-0 top-1/2 h-0.5 bg-cyan-500 -z-10"
+                  className="absolute left-0 top-1/2 h-0.5 bg-indigo-500 -z-10"
                   initial={{ width: 0 }}
                   animate={{
                     width: ['routing', 'retrieving', 'generating', 'complete'].includes(flowStep)
@@ -435,8 +457,8 @@ export default function MultiAgentChatbotSection() {
                   }}
                 />
 
-                <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-4">
-                  <p className="text-xs text-slate-400 mb-3 uppercase tracking-wider font-semibold">
+                <div className="bg-violet-50/80 border border-violet-200/60 rounded-xl p-4">
+                  <p className="text-xs text-zinc-500 mb-3 uppercase tracking-wider font-semibold">
                     Specialized Workforce
                   </p>
                   <div className="flex flex-col gap-2">
@@ -473,7 +495,7 @@ export default function MultiAgentChatbotSection() {
               />
             </div>
 
-            <div className="mt-auto pt-6 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500">
+            <div className="mt-auto pt-6 border-t border-violet-100 flex items-center justify-between text-xs text-zinc-500">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 Systems Operational
@@ -483,18 +505,18 @@ export default function MultiAgentChatbotSection() {
           </div>
         </div>
 
-        <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900/60 shadow-2xl backdrop-blur-xl md:w-2/3 md:flex-[2]">
-          <div className="bg-slate-800/50 border-b border-slate-700/50 p-4 flex items-center justify-between">
+        <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-violet-200/80 bg-white/90 shadow-[0_8px_32px_rgba(139,92,246,0.12)] backdrop-blur-xl md:w-2/3 md:flex-[2]">
+          <div className="bg-gradient-to-r from-violet-50 to-indigo-50 border-b border-violet-200/60 p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-10 h-10 bg-gradient-to-tr from-indigo-500 to-cyan-500 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-tr from-violet-600 to-indigo-600 rounded-full flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
-                <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-slate-900 rounded-full" />
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
               </div>
               <div>
-                <p className="font-semibold text-lg">SK Multi-Agent</p>
-                <p className="text-xs text-slate-400">Powered by LangGraph</p>
+                <p className="font-semibold text-lg text-zinc-900">SK Multi-Agent</p>
+                <p className="text-xs text-zinc-500">Multi-agent orchestration demo</p>
               </div>
             </div>
           </div>
@@ -511,20 +533,20 @@ export default function MultiAgentChatbotSection() {
                   animate={{ opacity: 1, y: 0 }}
                   className="flex items-start gap-3"
                 >
-                  <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0">
-                    <Loader2 className="w-4 h-4 text-cyan-400 animate-spin" />
+                  <div className="w-8 h-8 rounded-full bg-violet-100 border border-violet-200 flex items-center justify-center shrink-0">
+                    <Loader2 className="w-4 h-4 text-violet-600 animate-spin" />
                   </div>
-                  <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2">
+                  <div className="bg-white border border-violet-200/80 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2 shadow-sm">
                     <span
-                      className="w-2 h-2 bg-slate-500 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-violet-400 rounded-full animate-bounce"
                       style={{ animationDelay: '0ms' }}
                     />
                     <span
-                      className="w-2 h-2 bg-slate-500 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-violet-400 rounded-full animate-bounce"
                       style={{ animationDelay: '150ms' }}
                     />
                     <span
-                      className="w-2 h-2 bg-slate-500 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-violet-400 rounded-full animate-bounce"
                       style={{ animationDelay: '300ms' }}
                     />
                   </div>
@@ -534,7 +556,7 @@ export default function MultiAgentChatbotSection() {
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-4 bg-slate-900/80 border-t border-slate-700/50 backdrop-blur-md">
+          <div className="p-4 bg-white/90 border-t border-violet-200/60 backdrop-blur-md">
             {showSuggestions && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {suggestions.map((suggestion, idx) => (
@@ -542,7 +564,7 @@ export default function MultiAgentChatbotSection() {
                     key={idx}
                     type="button"
                     onClick={() => processMessage(suggestion)}
-                    className="text-xs px-3 py-1.5 bg-slate-800 hover:bg-indigo-500/20 text-slate-300 hover:text-indigo-300 border border-slate-700 hover:border-indigo-500/30 rounded-full transition-colors"
+                    className="text-xs px-3 py-1.5 bg-violet-50 hover:bg-violet-100 text-violet-800 hover:text-violet-900 border border-violet-200 hover:border-violet-300 rounded-full transition-colors"
                   >
                     {suggestion}
                   </button>
@@ -556,13 +578,13 @@ export default function MultiAgentChatbotSection() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask about careers, auctions, kids games, or book a session..."
-                className="w-full bg-slate-950/50 border-2 border-white rounded-xl pl-4 pr-12 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all placeholder:text-slate-500"
+                className="w-full bg-white border-2 border-violet-200 rounded-xl pl-4 pr-12 py-4 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 transition-all placeholder:text-zinc-400"
                 disabled={isTyping}
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isTyping}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-violet-600 hover:bg-violet-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -581,11 +603,11 @@ export default function MultiAgentChatbotSection() {
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #334155;
+          background: #c4b5fd;
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #475569;
+          background: #a78bfa;
         }
       `,
         }}
@@ -615,27 +637,27 @@ function FlowCard({
     <div
       className={`relative flex items-center gap-4 p-3 rounded-xl transition-all duration-500 ${
         isActive
-          ? 'bg-slate-800/80 border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+          ? 'bg-violet-50 border border-violet-300/50 shadow-[0_0_15px_rgba(139,92,246,0.12)]'
           : 'opacity-60'
       }`}
     >
       <div
-        className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border relative z-10 bg-slate-900 ${
+        className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border relative z-10 bg-white ${
           status === 'done'
-            ? 'border-emerald-500 text-emerald-400'
+            ? 'border-emerald-500 text-emerald-600'
             : status === 'active'
-              ? 'border-cyan-500 text-cyan-400'
-              : 'border-slate-700 text-slate-500'
+              ? 'border-violet-500 text-violet-600'
+              : 'border-violet-200 text-zinc-400'
         }`}
       >
         {status === 'done' ? <CheckCircle2 className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
         {isPulsing && (
-          <span className="absolute inset-0 rounded-full border border-cyan-400 animate-ping opacity-75" />
+          <span className="absolute inset-0 rounded-full border border-violet-400 animate-ping opacity-75" />
         )}
       </div>
       <div>
-        <h4 className={`font-medium text-sm ${isActive ? 'text-white' : 'text-slate-400'}`}>{title}</h4>
-        {desc && <p className="text-xs text-slate-500 mt-0.5">{desc}</p>}
+        <h4 className={`font-medium text-sm ${isActive ? 'text-zinc-900' : 'text-zinc-500'}`}>{title}</h4>
+        {desc && <p className="text-xs text-zinc-400 mt-0.5">{desc}</p>}
       </div>
     </div>
   );
@@ -648,13 +670,12 @@ function AgentBadge({ agent, isActive }: { agent: AgentKnowledge; isActive: bool
       className={`flex items-center gap-3 p-2 rounded-lg transition-all duration-300 ${
         isActive
           ? `${agent.bgColor} border ${agent.borderColor} ${agent.color} shadow-lg scale-105`
-          : 'hover:bg-slate-800 text-slate-400 border border-transparent'
+          : 'hover:bg-violet-50 text-zinc-600 border border-transparent'
       }`}
     >
-      <Icon className={`w-4 h-4 ${isActive ? '' : 'text-slate-500'}`} />
+      <Icon className={`w-4 h-4 ${isActive ? '' : 'text-zinc-400'}`} />
       <div className="flex-1">
         <p className="text-xs font-semibold">{agent.name}</p>
-        <p className="text-[10px] opacity-70">{agent.platform}</p>
       </div>
       {isActive && (
         <motion.div
@@ -686,10 +707,10 @@ function MessageBubble({ message }: { message: Message }) {
       <div
         className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border ${
           isUser
-            ? 'bg-indigo-600 border-indigo-500 text-white'
+            ? 'bg-violet-600 border-violet-500 text-white'
             : agentTheme
               ? `${agentTheme.bgColor} ${agentTheme.borderColor} ${agentTheme.color}`
-              : 'bg-slate-800 border-slate-700 text-cyan-400'
+              : 'bg-violet-100 border-violet-200 text-violet-600'
         }`}
       >
         {isUser ? (
@@ -712,8 +733,8 @@ function MessageBubble({ message }: { message: Message }) {
         <div
           className={`px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
             isUser
-              ? 'bg-indigo-600 text-white rounded-tr-sm'
-              : 'bg-slate-800/80 border border-slate-700/50 text-slate-200 rounded-tl-sm'
+              ? 'bg-violet-600 text-white rounded-tr-sm'
+              : 'bg-white border border-violet-200/80 text-zinc-800 rounded-tl-sm'
           }`}
         >
           {message.content}

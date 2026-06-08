@@ -14,6 +14,33 @@ function ZapIcon({ className }: { className?: string }) {
   );
 }
 
+/** Push pin flush on the wall — head on surface, shaft toward viewer. */
+function WallThumbtack() {
+  return (
+    <div className="relative flex h-[36px] w-[36px] items-center justify-center" aria-hidden>
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background:
+            'radial-gradient(circle at 34% 30%, #fecaca 0%, #f87171 22%, #ef4444 48%, #b91c1c 78%, #7f1d1d 100%)',
+          boxShadow:
+            'inset 2px 3px 5px rgba(255,255,255,0.55), inset -3px -4px 7px rgba(80,0,0,0.45), 0 2px 6px rgba(0,0,0,0.15)',
+        }}
+      />
+      <div className="absolute left-[24%] top-[19%] h-[6px] w-[8px] -rotate-[28deg] rounded-full bg-white/50 blur-[0.5px]" />
+      <div
+        className="relative z-10 h-[11px] w-[11px] rounded-full"
+        style={{
+          background:
+            'radial-gradient(circle at 38% 32%, #ffffff 0%, #e4e4e7 28%, #a1a1aa 58%, #52525b 88%)',
+          boxShadow:
+            '0 0 0 1px rgba(63,63,70,0.35), inset 0 1px 2px rgba(255,255,255,0.95), 0 4px 8px rgba(0,0,0,0.3)',
+        }}
+      />
+    </div>
+  );
+}
+
 export default function ExpertProfileCard() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotate, setRotate] = useState({ x: 0, y: 0 });
@@ -49,9 +76,9 @@ export default function ExpertProfileCard() {
     <div className="relative flex flex-col items-center justify-center py-6 sm:py-8">
       <style>{`
         @keyframes expert-card-swing {
-          0% { transform: rotate(3deg); }
-          50% { transform: rotate(-3deg); }
-          100% { transform: rotate(3deg); }
+          0% { transform: rotate(2.5deg); }
+          50% { transform: rotate(-2.5deg); }
+          100% { transform: rotate(2.5deg); }
         }
         @keyframes expert-barcode-wave {
           0%, 100% { background-color: #27272a; box-shadow: none; }
@@ -60,7 +87,7 @@ export default function ExpertProfileCard() {
           60% { background-color: #1811e5; box-shadow: 0 0 8px #1811e5; }
         }
         .expert-card-swing {
-          animation: expert-card-swing 6s ease-in-out infinite;
+          animation: expert-card-swing 5.5s ease-in-out infinite;
           transform-origin: top center;
         }
         .expert-barcode-bar {
@@ -75,16 +102,16 @@ export default function ExpertProfileCard() {
         }
       `}</style>
 
-      <div className="expert-card-swing relative flex flex-col items-center">
-        <div className="flex flex-col items-center">
-          <div className="relative z-20 h-4 w-4 shrink-0 rounded-full border-2 border-zinc-300 bg-zinc-100 shadow-xl" />
-          <div className="relative z-10 -mt-1 h-24 w-0.5 shrink-0 bg-zinc-400 sm:h-32" />
-          <div className="relative z-20 -mt-0.5 flex h-4 w-16 shrink-0 items-center justify-center rounded-t-lg border border-zinc-300 bg-zinc-200 shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
-            <div className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-zinc-400" aria-hidden />
-            <div className="relative h-2 w-2 rounded-full bg-zinc-400" />
-            <div className="absolute ml-4 h-2 w-2 rounded-full bg-zinc-400" />
-          </div>
+      <div className="relative flex w-[min(360px,92vw)] flex-col items-center">
+        <div className="relative z-30 flex justify-center">
+          <WallThumbtack />
         </div>
+
+        <div className="expert-card-swing relative z-20 flex flex-col items-center">
+          <div
+            className="h-24 w-[2px] rounded-full bg-gradient-to-b from-zinc-500 to-zinc-300 sm:h-28"
+            aria-hidden
+          />
 
         <div
           ref={cardRef}
@@ -184,6 +211,7 @@ export default function ExpertProfileCard() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
