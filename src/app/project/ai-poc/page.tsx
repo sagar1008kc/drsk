@@ -304,7 +304,7 @@ export default function AiPocPage() {
               Explore services
             </Link>
             <Link
-              href="/#contact"
+              href="/contact"
               className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-5 py-2 text-sm font-semibold text-zinc-200 transition hover:bg-white/10 hover:text-zinc-900"
             >
               Contact for pilot

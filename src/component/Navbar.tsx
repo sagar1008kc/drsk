@@ -1,11 +1,9 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
-import { useSessionUser } from '@/component/navbar/useSessionUser';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
 
 const PRIMARY_NAV = [
@@ -55,19 +53,12 @@ function DesktopNavLink({
   return (
     <Link
       href={href}
-      className="group relative inline-flex h-9 items-center px-3.5 text-sm font-medium text-zinc-300 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020205]"
+      className="group relative inline-flex h-9 items-center px-3.5 text-sm font-bold text-[#000000] transition-colors hover:text-[#000000] focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
     >
       {active ? (
-        <motion.span
-          layoutId="nav-active-pill"
-          className="absolute inset-0 rounded-full border border-violet-400/45 bg-gradient-to-r from-violet-500/25 via-indigo-500/15 to-violet-500/20 shadow-[0_0_20px_rgba(139,92,246,0.25)]"
-          transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-        />
+        <span className="absolute inset-0 rounded-full border border-black/10 bg-black/[0.06] shadow-sm" />
       ) : null}
       <span className="relative z-10">{label}</span>
-      {!active ? (
-        <span className="pointer-events-none absolute bottom-1 left-1/2 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-violet-400/80 to-transparent transition-all duration-300 group-hover:w-[70%]" />
-      ) : null}
     </Link>
   );
 }
@@ -78,7 +69,7 @@ function DesktopBookLink({ book }: { book: (typeof FEATURED_BOOKS)[number] }) {
       href={book.href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative inline-flex h-9 items-center gap-1.5 rounded-full border border-transparent px-3 text-sm font-medium text-zinc-400 transition hover:border-white/10 hover:bg-white/5 hover:text-zinc-100"
+      className="group relative inline-flex h-9 items-center gap-1.5 rounded-full border border-transparent px-3 text-sm font-bold text-[#000000] transition hover:border-black/10 hover:bg-black/[0.04]"
     >
       <span>{book.shortTitle}</span>
       <ExternalIcon className="h-3 w-3 shrink-0 opacity-60 transition group-hover:opacity-100" />
@@ -90,45 +81,37 @@ function MobileNavLink({
   href,
   label,
   active,
-  index,
   onNavigate,
 }: {
   href: string;
   label: string;
   active: boolean;
-  index: number;
   onNavigate?: () => void;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -16 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 0.05 + index * 0.04, duration: 0.35 }}
-    >
+    <div>
       <Link
         href={href}
         onClick={onNavigate}
-        className={`flex min-h-[48px] w-full items-center justify-between rounded-xl border px-4 text-sm font-medium transition ${
+        className={`flex min-h-[48px] w-full items-center justify-between rounded-xl border px-4 text-sm font-bold transition ${
           active
-            ? 'border-violet-400/50 bg-violet-500/15 text-white shadow-[inset_0_0_24px_rgba(139,92,246,0.12)]'
-            : 'border-white/8 bg-white/[0.03] text-zinc-300 hover:border-violet-400/25 hover:bg-violet-500/10 hover:text-white'
+            ? 'border-black/15 bg-white text-[#000000] shadow-sm'
+            : 'border-black/10 bg-white/90 text-[#000000] hover:border-black/20 hover:bg-white'
         }`}
       >
         <span>{label}</span>
         {active ? (
-          <span className="h-2 w-2 rounded-full bg-violet-400 shadow-[0_0_8px_rgba(139,92,246,0.8)]" />
+          <span className="h-2 w-2 rounded-full bg-[#000000]" />
         ) : (
-          <span className="text-xs text-zinc-600">→</span>
+          <span className="text-xs text-black/40">→</span>
         )}
       </Link>
-    </motion.div>
+    </div>
   );
 }
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { user, checkingSession } = useSessionUser();
-  const [loggingOut, setLoggingOut] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const scrolled = useScrolled();
 
@@ -151,134 +134,34 @@ export default function Navbar() {
     };
   }, [mobileOpen]);
 
-  async function handleLogout() {
-    if (loggingOut) return;
-    setLoggingOut(true);
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' });
-    } finally {
-      window.location.href = '/login';
-    }
-  }
-
-  function AuthControl({ mobile = false }: { mobile?: boolean }) {
-    if (checkingSession) {
-      return (
-        <span
-          className={`inline-flex items-center gap-2 text-zinc-500 ${
-            mobile ? 'min-h-[48px] w-full justify-center text-sm' : 'h-9 px-3 text-sm'
-          }`}
-        >
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-400/60" />
-          Syncing…
-        </span>
-      );
-    }
-    if (user) {
-      return (
-        <>
-          <Link
-            href="/dashboard"
-            className={
-              mobile
-                ? `flex min-h-[48px] w-full items-center justify-center rounded-xl border px-4 text-sm font-medium transition ${
-                    isActive('/dashboard')
-                      ? 'border-violet-400/50 bg-violet-500/15 text-white'
-                      : 'border-cyan-400/30 bg-cyan-500/10 text-cyan-100 hover:bg-cyan-500/20'
-                  }`
-                : `relative inline-flex h-9 items-center gap-2 rounded-full border px-3.5 text-sm font-medium transition ${
-                    isActive('/dashboard')
-                      ? 'border-cyan-400/45 bg-cyan-500/15 text-cyan-100'
-                      : 'border-transparent text-zinc-300 hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-100'
-                  }`
-            }
-          >
-            {!mobile && isActive('/dashboard') ? (
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.8)]" />
-            ) : null}
-            Dashboard
-          </Link>
-          <button
-            type="button"
-            onClick={handleLogout}
-            disabled={loggingOut}
-            className={
-              mobile
-                ? 'flex min-h-[48px] w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-medium text-zinc-300 transition hover:border-rose-400/30 hover:bg-rose-500/10 hover:text-rose-100 disabled:opacity-50'
-                : 'inline-flex h-9 items-center rounded-full border border-transparent px-3.5 text-sm font-medium text-zinc-400 transition hover:border-rose-400/25 hover:bg-rose-500/10 hover:text-rose-200 disabled:opacity-50'
-            }
-          >
-            {loggingOut ? '…' : 'Logout'}
-          </button>
-        </>
-      );
-    }
-    return (
-      <Link
-        href="/login"
-        className={
-          mobile
-            ? `flex min-h-[48px] w-full items-center justify-center rounded-xl border px-4 text-sm font-semibold transition ${
-                isActive('/login')
-                  ? 'border-violet-400/50 bg-violet-600 text-white'
-                  : 'border-violet-400/40 bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-[0_0_24px_rgba(139,92,246,0.35)] hover:brightness-110'
-              }`
-            : `inline-flex h-9 items-center rounded-full border px-4 text-sm font-semibold transition ${
-                isActive('/login')
-                  ? 'border-violet-400/60 bg-violet-600/90 text-white shadow-[0_0_16px_rgba(139,92,246,0.4)]'
-                  : 'border-violet-400/35 bg-violet-600/80 text-white hover:border-violet-300/50 hover:bg-violet-500 hover:shadow-[0_0_20px_rgba(139,92,246,0.35)]'
-              }`
-        }
-      >
-        Login
-      </Link>
-    );
-  }
-
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-[1000] transition-[background,box-shadow,border-color] duration-500 ${
-        scrolled
-          ? 'border-b border-violet-500/15 bg-[#020205]/95 shadow-[0_8px_32px_rgba(0,0,0,0.45),0_0_1px_rgba(139,92,246,0.2)_inset]'
-          : 'border-b border-white/10 bg-[#020205]/75'
-      } backdrop-blur-xl backdrop-saturate-150`}
+      className={`fixed top-0 left-0 right-0 z-[1000] border-b bg-[#0d9488] ${
+        scrolled ? 'border-emerald-400/30 shadow-md' : 'border-white/15'
+      }`}
     >
-
-      <div
-        className={`relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 transition-[height] duration-300 sm:px-6 ${
-          scrolled ? 'h-[3.5rem]' : 'h-[3.75rem]'
-        }`}
-      >
+      <div className="relative mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-3 sm:px-4">
         <Link
           href="/"
-          className="group relative flex shrink-0 items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020205] rounded-lg"
+          className="relative z-10 flex min-w-0 shrink items-center gap-1.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d9488]"
           aria-label="SK Creation home"
         >
-          <span className="relative flex h-10 w-10 shrink-0 items-center justify-center">
-            <span
-              className="drsk-nav-logo-ring pointer-events-none absolute -inset-0.5 rounded-full opacity-70 transition-opacity group-hover:opacity-100"
-              aria-hidden
+          <span className="box-border flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-violet-300 bg-[#0d9488]">
+            <img
+              src="/sk_logo.svg"
+              alt=""
+              width={48}
+              height={48}
+              className="h-full w-full object-contain"
             />
-            <span className="drsk-nav-logo-glow pointer-events-none absolute inset-0 rounded-full bg-violet-500/25 blur-md" aria-hidden />
-            <span className="relative flex h-10 w-10 overflow-hidden rounded-full ring-2 ring-violet-400/50 transition group-hover:ring-violet-300/70">
-              <Image
-                src="/logo.png"
-                alt=""
-                width={80}
-                height={80}
-                sizes="40px"
-                priority
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-              />
-            </span>
           </span>
-          <span className="font-gugi bg-gradient-to-r from-violet-200 via-white to-indigo-200 bg-clip-text text-[1.05rem] leading-none tracking-wide text-transparent sm:text-[1.2rem]">
+          <span className="truncate font-gugi text-[1rem] font-bold leading-none tracking-wide text-white sm:text-[1.125rem]">
             SK CREATION
           </span>
         </Link>
 
         <nav
-          className="hidden items-center gap-0.5 rounded-full border border-white/[0.06] bg-white/[0.03] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:flex"
+          className="relative z-10 hidden items-center gap-0.5 rounded-full border border-black/10 bg-white/95 p-1 shadow-sm md:flex"
           aria-label="Main"
         >
           {PRIMARY_NAV.map((item) => (
@@ -289,18 +172,16 @@ export default function Navbar() {
               active={isActive(item.href)}
             />
           ))}
-          <span className="mx-0.5 h-5 w-px bg-white/10" aria-hidden />
+          <span className="mx-0.5 h-5 w-px bg-black/15" aria-hidden />
           {FEATURED_BOOKS.map((book) => (
             <DesktopBookLink key={book.id} book={book} />
           ))}
-          <span className="mx-0.5 h-5 w-px bg-white/10" aria-hidden />
-          <AuthControl />
         </nav>
 
         <button
           type="button"
           onClick={() => setMobileOpen((v) => !v)}
-          className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] text-zinc-200 transition hover:border-violet-400/35 hover:bg-violet-500/10 md:hidden"
+          className="relative z-10 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-black/10 bg-white/95 text-[#000000] hover:bg-white md:hidden"
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileOpen}
         >
@@ -333,7 +214,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 top-[3.5rem] z-[999] bg-[#020205]/80 backdrop-blur-md md:hidden"
+              className="fixed inset-0 top-14 z-[999] bg-[#0d9488]/70 backdrop-blur-md md:hidden"
               aria-label="Close menu"
               onClick={() => setMobileOpen(false)}
             />
@@ -342,52 +223,37 @@ export default function Navbar() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="relative z-[1001] overflow-hidden border-t border-violet-500/20 md:hidden"
+              className="relative z-[1001] overflow-hidden border-t border-emerald-300/25 bg-[#0d9488] md:hidden"
               aria-label="Mobile"
             >
-              <div className="drsk-nav-grid pointer-events-none absolute inset-0 opacity-60" />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-violet-600/10 via-transparent to-transparent" />
-              <div className="relative flex flex-col gap-2 px-4 py-4">
-                <p className="mb-1 px-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-400/80">
+              <div className="relative flex flex-col gap-2 px-3 py-3">
+                <p className="mb-1 px-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#000000]">
                   Navigation
                 </p>
-                {PRIMARY_NAV.map((item, i) => (
+                {PRIMARY_NAV.map((item) => (
                   <MobileNavLink
                     key={item.href}
                     href={item.href}
                     label={item.label}
                     active={isActive(item.href)}
-                    index={i}
                     onNavigate={() => setMobileOpen(false)}
                   />
                 ))}
-                <p className="mb-1 mt-3 px-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">
+                <p className="mb-1 mt-3 px-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#000000]">
                   Books
                 </p>
-                {FEATURED_BOOKS.map((book, i) => (
-                  <motion.div
+                {FEATURED_BOOKS.map((book) => (
+                  <a
                     key={book.id}
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.22 + i * 0.04, duration: 0.35 }}
+                    href={book.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-h-[48px] w-full items-center justify-between rounded-xl border border-black/10 bg-white/90 px-4 text-sm font-bold text-[#000000] hover:border-black/20 hover:bg-white"
                   >
-                    <a
-                      href={book.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex min-h-[48px] w-full items-center justify-between rounded-xl border border-white/8 bg-white/[0.03] px-4 text-sm font-medium text-zinc-300 transition hover:border-violet-400/25 hover:bg-violet-500/10 hover:text-white"
-                    >
-                      {book.shortTitle}
-                      <ExternalIcon className="h-3.5 w-3.5 opacity-70" />
-                    </a>
-                  </motion.div>
+                    {book.shortTitle}
+                    <ExternalIcon className="h-3.5 w-3.5 opacity-70" />
+                  </a>
                 ))}
-                <p className="mb-1 mt-3 px-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">
-                  Account
-                </p>
-                <div className="flex flex-col gap-2">
-                  <AuthControl mobile />
-                </div>
               </div>
             </motion.nav>
           </>

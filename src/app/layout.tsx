@@ -140,7 +140,7 @@ export default function RootLayout({
         <Providers />
         <Navbar />
 
-        <div className="pt-[3.75rem]">
+        <div className="pt-14">
           <PromoBannerSlot />
           {children}
         </div>

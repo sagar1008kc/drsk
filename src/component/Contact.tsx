@@ -3,7 +3,7 @@
 import { FormEvent, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import ContactConfirmation from '@/component/ContactConfirmation';
-import { isEmail } from '@/lib/auth/validation';
+import { isEmail } from '@/lib/email';
 
 type FormState = {
   name: string;

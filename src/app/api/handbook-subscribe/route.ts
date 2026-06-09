@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { isEmail } from '@/lib/auth/validation';
+import { isEmail } from '@/lib/email';
 import { isSupabaseConfigured, getSupabaseAdmin } from '@/lib/supabase';
 import { rateLimitResponse } from '@/lib/http/rate-limit-response';
 import { sendHandbookThankYouEmail, sendHandbookSubscribeAdminNotification } from '@/lib/mail';
@@ -76,8 +76,8 @@ export async function POST(req: Request) {
     const emailOk = await sendHandbookThankYouEmail(email);
     if (!emailOk) {
       const errMsg = isSupabaseConfigured()
-        ? 'We saved your address but the thank-you email could not be sent. Sign in to your dashboard to access downloads.'
-        : 'The thank-you email could not be sent. Check that mail is configured, or sign in at /login to open your dashboard.';
+        ? 'We saved your address but the thank-you email could not be sent. Please try again or contact us at info@skcreation.org.'
+        : 'The thank-you email could not be sent. Check that mail is configured, or contact us at info@skcreation.org.';
       return NextResponse.json({ error: errMsg }, { status: 500 });
     }
 

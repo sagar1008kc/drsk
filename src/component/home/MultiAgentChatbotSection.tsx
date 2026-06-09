@@ -1,14 +1,12 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Send,
   Bot,
   User,
   GitMerge,
-  BrainCircuit,
   CheckCircle2,
   Sparkles,
   Loader2,
@@ -18,6 +16,9 @@ import {
   Network,
   Activity,
   Terminal,
+  Shield,
+  ShieldCheck,
+  UserCircle,
   type LucideIcon,
 } from 'lucide-react';
 import {
@@ -70,141 +71,6 @@ const ACTIVE_STEPS = new Set<FlowStep>([
 function formatTime() {
   return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
-
-const ThreeBackground = ({ isLive }: { isLive: boolean }) => {
-  const mountRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const container = mountRef.current;
-    if (!container) return;
-
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0xf8f7ff, 0.028);
-
-    const camera = new THREE.PerspectiveCamera(70, 1, 0.1, 1000);
-    camera.position.z = 14;
-
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    container.appendChild(renderer.domElement);
-
-    const particleCount = 200;
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
-    const velocities: { x: number; y: number; z: number }[] = [];
-    const palette = [
-      new THREE.Color(0x8b5cf6),
-      new THREE.Color(0x6366f1),
-      new THREE.Color(0x06b6d4),
-      new THREE.Color(0xf43f5e),
-      new THREE.Color(0x4f46e5),
-    ];
-
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 45;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 45;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 22;
-      const c = palette[Math.floor(Math.random() * palette.length)];
-      colors[i * 3] = c.r;
-      colors[i * 3 + 1] = c.g;
-      colors[i * 3 + 2] = c.b;
-      velocities.push({
-        x: (Math.random() - 0.5) * 0.022,
-        y: (Math.random() - 0.5) * 0.022,
-        z: (Math.random() - 0.5) * 0.014,
-      });
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-    const particles = new THREE.Points(
-      geometry,
-      new THREE.PointsMaterial({
-        size: 0.16,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.88,
-        blending: THREE.NormalBlending,
-      })
-    );
-    scene.add(particles);
-
-    const lines = new THREE.LineSegments(
-      new THREE.BufferGeometry(),
-      new THREE.LineBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.14 })
-    );
-    scene.add(lines);
-
-    const knot = new THREE.Mesh(
-      new THREE.TorusKnotGeometry(2.8, 0.55, 100, 16),
-      new THREE.MeshBasicMaterial({ color: 0x8b5cf6, wireframe: true, transparent: true, opacity: 0.07 })
-    );
-    scene.add(knot);
-
-    const resize = () => {
-      const { clientWidth, clientHeight } = container;
-      camera.aspect = clientWidth / clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(clientWidth, clientHeight);
-    };
-    resize();
-    const ro = new ResizeObserver(resize);
-    ro.observe(container);
-
-    let frameId = 0;
-    const animate = () => {
-      frameId = requestAnimationFrame(animate);
-      const speed = isLive ? 2.2 : 1;
-      const pos = particles.geometry.attributes.position.array as Float32Array;
-
-      for (let i = 0; i < particleCount; i++) {
-        pos[i * 3] += velocities[i].x * speed;
-        pos[i * 3 + 1] += velocities[i].y * speed;
-        pos[i * 3 + 2] += velocities[i].z * speed;
-        if (Math.abs(pos[i * 3]) > 22) velocities[i].x *= -1;
-        if (Math.abs(pos[i * 3 + 1]) > 22) velocities[i].y *= -1;
-        if (Math.abs(pos[i * 3 + 2]) > 11) velocities[i].z *= -1;
-      }
-      particles.geometry.attributes.position.needsUpdate = true;
-
-      const linePos: number[] = [];
-      for (let i = 0; i < particleCount; i++) {
-        for (let j = i + 1; j < particleCount; j++) {
-          const dx = pos[i * 3] - pos[j * 3];
-          const dy = pos[i * 3 + 1] - pos[j * 3 + 1];
-          const dz = pos[i * 3 + 2] - pos[j * 3 + 2];
-          if (dx * dx + dy * dy + dz * dz < 14) {
-            linePos.push(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2], pos[j * 3], pos[j * 3 + 1], pos[j * 3 + 2]);
-          }
-        }
-      }
-      lines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePos, 3));
-
-      knot.rotation.x += 0.002 * speed;
-      knot.rotation.y += 0.003 * speed;
-      scene.rotation.y += 0.0008 * speed;
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    return () => {
-      ro.disconnect();
-      cancelAnimationFrame(frameId);
-      if (renderer.domElement.parentNode === container) container.removeChild(renderer.domElement);
-      geometry.dispose();
-      particles.material.dispose();
-      lines.geometry.dispose();
-      lines.material.dispose();
-      knot.geometry.dispose();
-      (knot.material as THREE.Material).dispose();
-      renderer.dispose();
-    };
-  }, [isLive]);
-
-  return <div ref={mountRef} className="absolute inset-0 z-0 pointer-events-none opacity-95" aria-hidden />;
-};
 
 export default function MultiAgentChatbotSection() {
   const [messages, setMessages] = useState<Message[]>([
@@ -336,7 +202,6 @@ export default function MultiAgentChatbotSection() {
     >
       <h2 id="multi-agent-platform-heading" className="sr-only">SK Creation Multi-Agent Hub</h2>
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_40%,rgba(139,92,246,0.1),transparent_55%),radial-gradient(ellipse_70%_50%_at_85%_60%,rgba(99,102,241,0.07),transparent_50%)]" />
-      <ThreeBackground isLive={isLive} />
 
       <div className="relative z-10 mx-auto flex h-[calc(100dvh-3.75rem)] max-w-7xl flex-col gap-4 px-4 py-4 md:flex-row md:gap-6 md:py-6">
         {/* Routing flow — top to bottom */}
@@ -349,7 +214,7 @@ export default function MultiAgentChatbotSection() {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-zinc-900">Agentic Orchestration Layer</h3>
-                  <p className="text-[11px] text-zinc-500">From your query to the right reply</p>
+                  <p className="text-[11px] text-zinc-500">Chat → Identity → Safety → Supervisor → Specialist → Guardrails → Response</p>
                 </div>
               </div>
             </div>
@@ -473,13 +338,13 @@ export default function MultiAgentChatbotSection() {
 }
 
 const LAYER_STYLES: Record<string, string> = {
-  Ingestion: 'bg-slate-100 text-slate-700 ring-slate-200',
-  Intent: 'bg-indigo-50 text-indigo-700 ring-indigo-200',
-  Router: 'bg-violet-50 text-violet-700 ring-violet-200',
-  Orchestration: 'bg-cyan-50 text-cyan-700 ring-cyan-200',
-  Retrieval: 'bg-amber-50 text-amber-700 ring-amber-200',
-  Generation: 'bg-rose-50 text-rose-700 ring-rose-200',
-  Delivery: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+  'Chat Experience': 'bg-slate-100 text-slate-700 ring-slate-200',
+  Identity: 'bg-indigo-50 text-indigo-700 ring-indigo-200',
+  'Input Safety': 'bg-violet-50 text-violet-700 ring-violet-200',
+  Supervisor: 'bg-cyan-50 text-cyan-700 ring-cyan-200',
+  'Specialized Agent': 'bg-amber-50 text-amber-700 ring-amber-200',
+  Guardrails: 'bg-rose-50 text-rose-700 ring-rose-200',
+  'User Response': 'bg-emerald-50 text-emerald-700 ring-emerald-200',
   Observability: 'bg-zinc-100 text-zinc-600 ring-zinc-200',
   System: 'bg-zinc-50 text-zinc-500 ring-zinc-200',
 };
@@ -516,7 +381,7 @@ function OrchestrationTracePanel({
             <Terminal className="h-5 w-5 text-violet-300" aria-hidden />
             <p className="text-[11px] font-medium text-zinc-500">No trace events yet</p>
             <p className="text-[10px] leading-relaxed text-zinc-400 max-w-[220px]">
-              Send a query to emit ingestion → routing → delegation → retrieval → generation → delivery spans.
+              Send a query to trace chat → identity → PII safety → supervisor → specialist → guardrails → response.
             </p>
           </div>
         ) : (
@@ -551,15 +416,25 @@ function OrchestrationTracePanel({
   );
 }
 
-const RAG_PIPELINE = ['Query', 'Retrieval', 'Reranking', 'Generation', 'Response'] as const;
+const RAG_PIPELINE = [
+  'Chat',
+  'Identity',
+  'PII Safety',
+  'Supervisor',
+  'Specialist',
+  'Guardrails',
+  'Response',
+] as const;
 
 function getRagStepIndex(flowStep: FlowStep): number {
   if (flowStep === 'idle') return -1;
-  if (flowStep === 'ingesting' || flowStep === 'classifying') return 0;
-  if (flowStep === 'routing' || flowStep === 'retrieving') return 1;
-  if (flowStep === 'delegating') return 2;
-  if (flowStep === 'synthesizing') return 3;
-  return 4;
+  if (flowStep === 'ingesting') return 0;
+  if (flowStep === 'classifying') return 1;
+  if (flowStep === 'routing') return 2;
+  if (flowStep === 'delegating') return 3;
+  if (flowStep === 'retrieving') return 4;
+  if (flowStep === 'synthesizing') return 5;
+  return 6;
 }
 
 function RagFlowStrip({ flowStep, isLive }: { flowStep: FlowStep; isLive: boolean }) {
@@ -568,7 +443,7 @@ function RagFlowStrip({ flowStep, isLive }: { flowStep: FlowStep; isLive: boolea
   return (
     <div className="rounded-xl border border-violet-200/60 bg-gradient-to-b from-violet-50/80 to-white px-3 py-3">
       <div className="flex items-center justify-between gap-2 mb-2.5">
-        <p className="text-[11px] font-semibold text-zinc-700">Multi-agentic flow</p>
+        <p className="text-[11px] font-semibold text-zinc-700">Agentic pipeline</p>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 ring-1 ring-emerald-200/80">
           <motion.span
             className="h-1.5 w-1.5 rounded-full bg-emerald-500"
@@ -605,10 +480,12 @@ function RagFlowStrip({ flowStep, isLive }: { flowStep: FlowStep; isLive: boolea
 }
 
 const STAGE_ICONS: Record<RoutingStageId, LucideIcon> = {
-  orchestrator: BrainCircuit,
-  route: GitMerge,
-  main: Layers,
-  sub: MessageSquare,
+  chat: MessageSquare,
+  identity: UserCircle,
+  safety_input: Shield,
+  supervisor: GitMerge,
+  specialized: Layers,
+  safety_output: ShieldCheck,
   response: CheckCircle2,
 };
 
@@ -616,7 +493,7 @@ const STAGE_THEMES: Record<
   RoutingStageId,
   { text: string; border: string; bg: string; iconBorder: string; iconGlow: string; lineVia: string }
 > = {
-  orchestrator: {
+  chat: {
     text: 'text-violet-600',
     border: 'border-violet-200/80',
     bg: 'bg-violet-50/70',
@@ -624,7 +501,7 @@ const STAGE_THEMES: Record<
     iconGlow: 'shadow-[0_0_16px_rgba(139,92,246,0.35)]',
     lineVia: 'via-violet-500',
   },
-  route: {
+  identity: {
     text: 'text-indigo-600',
     border: 'border-indigo-200/80',
     bg: 'bg-indigo-50/70',
@@ -632,7 +509,15 @@ const STAGE_THEMES: Record<
     iconGlow: 'shadow-[0_0_16px_rgba(99,102,241,0.35)]',
     lineVia: 'via-indigo-500',
   },
-  main: {
+  safety_input: {
+    text: 'text-fuchsia-600',
+    border: 'border-fuchsia-200/80',
+    bg: 'bg-fuchsia-50/70',
+    iconBorder: 'border-fuchsia-300',
+    iconGlow: 'shadow-[0_0_16px_rgba(217,70,239,0.3)]',
+    lineVia: 'via-fuchsia-500',
+  },
+  supervisor: {
     text: 'text-cyan-600',
     border: 'border-cyan-200/80',
     bg: 'bg-cyan-50/70',
@@ -640,13 +525,21 @@ const STAGE_THEMES: Record<
     iconGlow: 'shadow-[0_0_16px_rgba(6,182,212,0.35)]',
     lineVia: 'via-cyan-500',
   },
-  sub: {
+  specialized: {
     text: 'text-amber-600',
     border: 'border-amber-200/80',
     bg: 'bg-amber-50/70',
     iconBorder: 'border-amber-300',
     iconGlow: 'shadow-[0_0_16px_rgba(245,158,11,0.35)]',
     lineVia: 'via-amber-500',
+  },
+  safety_output: {
+    text: 'text-rose-600',
+    border: 'border-rose-200/80',
+    bg: 'bg-rose-50/70',
+    iconBorder: 'border-rose-300',
+    iconGlow: 'shadow-[0_0_16px_rgba(244,63,94,0.3)]',
+    lineVia: 'via-rose-500',
   },
   response: {
     text: 'text-emerald-600',
@@ -661,10 +554,11 @@ const STAGE_THEMES: Record<
 const FLOW_LINE_COLORS = [
   'via-violet-500',
   'via-indigo-500',
+  'via-fuchsia-500',
   'via-cyan-400',
   'via-amber-400',
-  'via-emerald-500',
   'via-rose-400',
+  'via-emerald-500',
 ] as const;
 
 function OrchestrationDiagram({
@@ -739,11 +633,14 @@ function OrchestrationStageCard({
 
   let detail: string | null = null;
   if (status === 'done' || status === 'active') {
-    if (stageId === 'main' && activeParent && activeParent !== 'router') {
-      detail = getParentAgent(activeParent).name;
+    if (stageId === 'supervisor' && routeResult) {
+      detail = getParentAgent(routeResult.parent).name;
     }
-    if (stageId === 'sub' && routeResult) {
-      detail = routeResult.subAgentName;
+    if (stageId === 'specialized' && routeResult) {
+      detail = `${getParentAgent(routeResult.parent).shortName} → ${routeResult.subAgentName}`;
+    }
+    if (stageId === 'safety_output' && status === 'active') {
+      detail = 'Policy check running';
     }
     if (stageId === 'response' && status === 'done') {
       detail = 'Reply sent';
@@ -791,37 +688,39 @@ function OrchestrationStageCard({
               {detail}
             </p>
           )}
-          {stageId === 'main' && status !== 'waiting' && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {(Object.keys(PARENT_AGENTS) as ParentAgentId[]).map((id) => {
-                const a = PARENT_AGENTS[id];
-                const hit = activeParent === id;
-                return (
-                  <span
-                    key={id}
-                    className={`rounded-md px-1.5 py-0.5 text-[9px] font-semibold transition-colors ${
-                      hit ? `${a.bgColor} ${a.color} ring-1 ${a.borderColor}` : 'bg-zinc-50 text-zinc-400'
-                    }`}
-                  >
-                    {a.shortName}
-                  </span>
-                );
-              })}
-            </div>
-          )}
-          {stageId === 'sub' && activeParent && activeParent !== 'router' && status !== 'waiting' && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {getParentAgent(activeParent).subAgents.map((sub) => (
-                <span
-                  key={sub.id}
-                  className={`rounded-md px-1.5 py-0.5 text-[9px] font-semibold transition-colors ${
-                    activeSub === sub.id ? 'bg-violet-600 text-white' : 'bg-zinc-50 text-zinc-400'
-                  }`}
-                >
-                  {sub.name}
-                </span>
-              ))}
-            </div>
+          {stageId === 'specialized' && status !== 'waiting' && (
+            <>
+              <div className="mt-2 flex flex-wrap gap-1">
+                {(Object.keys(PARENT_AGENTS) as ParentAgentId[]).map((id) => {
+                  const a = PARENT_AGENTS[id];
+                  const hit = activeParent === id || routeResult?.parent === id;
+                  return (
+                    <span
+                      key={id}
+                      className={`rounded-md px-1.5 py-0.5 text-[9px] font-semibold transition-colors ${
+                        hit ? `${a.bgColor} ${a.color} ring-1 ${a.borderColor}` : 'bg-zinc-50 text-zinc-400'
+                      }`}
+                    >
+                      {a.shortName}
+                    </span>
+                  );
+                })}
+              </div>
+              {activeParent && activeParent !== 'router' && (
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {getParentAgent(activeParent).subAgents.map((sub) => (
+                    <span
+                      key={sub.id}
+                      className={`rounded-md px-1.5 py-0.5 text-[9px] font-semibold transition-colors ${
+                        activeSub === sub.id ? 'bg-violet-600 text-white' : 'bg-zinc-50 text-zinc-400'
+                      }`}
+                    >
+                      {sub.name}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

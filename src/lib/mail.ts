@@ -1,15 +1,10 @@
 import nodemailer from 'nodemailer';
 import { Resend } from 'resend';
-import {
-  buildAdminBookingEmail,
-  buildCustomerConfirmationEmail,
-} from '@/lib/emails/bookingEmails';
 import { buildWebsiteQuoteCustomerConfirmationEmail } from '@/lib/emails/contactEmails';
 import {
   buildHandbookThankYouEmail,
   buildHandbookSubscribeAdminEmail,
 } from '@/lib/emails/subscribeEmails';
-import type { BookingRow } from '@/types/booking';
 
 let resendSingleton: Resend | null = null;
 const DEFAULT_NOTIFICATION_EMAIL = 'info@skcreation.org';
@@ -115,26 +110,6 @@ export async function sendHtmlEmail(opts: {
   return false;
 }
 
-export async function sendAdminBookingNotification(
-  booking: BookingRow
-): Promise<boolean> {
-  const to = getNotificationInboxEmail();
-  if (!to) {
-    console.error(
-      '[mail] Missing notification inbox email (NOTIFICATION_TO_EMAIL).'
-    );
-    return false;
-  }
-
-  const { subject, html } = buildAdminBookingEmail(booking);
-  return sendHtmlEmail({
-    to,
-    replyTo: booking.customer_email,
-    subject,
-    html,
-  });
-}
-
 function siteOriginForEmails(): string {
   const vercel = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`.replace(/\/$/, '')
@@ -143,9 +118,6 @@ function siteOriginForEmails(): string {
   return raw.replace(/\/$/, '');
 }
 
-/**
- * Post–handbook-subscribe thank-you: PDF link, services, contact, login.
- */
 export async function sendHandbookThankYouEmail(
   customerEmail: string
 ): Promise<boolean> {
@@ -201,24 +173,6 @@ export async function sendWebsiteQuoteCustomerConfirmation(input: {
 
   return sendHtmlEmail({
     to: input.customerEmail,
-    subject,
-    html,
-  });
-}
-
-export async function sendCustomerBookingConfirmation(
-  booking: BookingRow
-): Promise<boolean> {
-  const customer = booking.customer_email.trim().toLowerCase();
-  const inbox = getNotificationInboxEmail().trim().toLowerCase();
-  if (customer && inbox && customer === inbox) {
-    // Avoid duplicate internal notifications when customer and admin inbox are same.
-    return true;
-  }
-
-  const { subject, html } = buildCustomerConfirmationEmail(booking);
-  return sendHtmlEmail({
-    to: booking.customer_email,
     subject,
     html,
   });

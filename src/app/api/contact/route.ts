@@ -5,7 +5,7 @@ import {
   sendWebsiteQuoteCustomerConfirmation,
 } from '@/lib/mail';
 import { buildContactNotificationEmail } from '@/lib/emails/contactEmails';
-import { isEmail } from '@/lib/auth/validation';
+import { isEmail } from '@/lib/email';
 import { rateLimitResponse } from '@/lib/http/rate-limit-response';
 import { isValidOptionalInternationalPhone } from '@/lib/phone';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';

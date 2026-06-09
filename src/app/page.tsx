@@ -1,3 +1,4 @@
+import HashScrollOnLoad from '@/component/home/HashScrollOnLoad';
 import HeroSection from '@/component/HeroSection';
 import SpaceForGrowth from '@/component/about/SpaceForGrowth';
 import HomeCollaborationsSection from '@/component/home/HomeCollaborationsSection';
@@ -10,6 +11,7 @@ import { homeBg } from '@/component/home/styles';
 export default function Home() {
   return (
     <main className={`min-h-screen ${homeBg}`}>
+      <HashScrollOnLoad />
       <h1 className="sr-only">AI resources, books, and customer services — SK Creation</h1>
       <MultiAgentChatbotSection />
       <AgenticWorkflowSystemDesign />

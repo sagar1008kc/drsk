@@ -1,11 +1,12 @@
 'use client';
 
-import { useCallback, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { SERVICE_QUOTE_OPTIONS, type ServiceQuoteType } from '@/lib/service-areas';
 import { AnimatePresence, motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { toast } from 'sonner';
 import { isValidPhoneNumber } from 'react-phone-number-input';
-import { isEmail } from '@/lib/auth/validation';
+import { isEmail } from '@/lib/email';
 import { phonePayloadFromInternational } from '@/lib/phone';
 import PhoneInputField from '@/component/PhoneInputField';
 import {
@@ -18,36 +19,17 @@ import {
 type WebsiteQuoteDialogProps = {
   visible: boolean;
   onHide: () => void;
+  initialService?: ServiceQuoteType | '';
 };
-
-type QuoteServiceType =
-  | 'AI Integration Solutions'
-  | 'Website Development'
-  | 'Workflow Automation'
-  | 'Digital Productivity Consulting'
-  | 'Small Business Tech Solutions'
-  | 'Custom Solution Request'
-  | 'Other';
 
 type FieldErrors = Record<string, string>;
 
-const SERVICE_OPTIONS: QuoteServiceType[] = [
-  'AI Integration Solutions',
-  'Website Development',
-  'Workflow Automation',
-  'Digital Productivity Consulting',
-  'Small Business Tech Solutions',
-  'Custom Solution Request',
-  'Other',
-];
-
-const SERVICE_TYPE_HIGHLIGHTS = SERVICE_OPTIONS.filter(
-  (o): o is Exclude<QuoteServiceType, 'Other'> => o !== 'Other'
-);
+const CORE_SERVICES = SERVICE_QUOTE_OPTIONS.filter((o) => o !== 'Other');
 
 export default function WebsiteQuoteDialog({
   visible,
   onHide,
+  initialService = '',
 }: WebsiteQuoteDialogProps) {
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -58,7 +40,7 @@ export default function WebsiteQuoteDialog({
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [serviceType, setServiceType] = useState<QuoteServiceType | ''>('');
+  const [serviceType, setServiceType] = useState<ServiceQuoteType | ''>('');
   const [otherServiceType, setOtherServiceType] = useState('');
   const [projectDetails, setProjectDetails] = useState('');
   const [company, setCompany] = useState('');
@@ -90,6 +72,12 @@ export default function WebsiteQuoteDialog({
   useBodyScrollLock(visible);
   useEscapeKey(visible, handleHide);
   useInitialDialogFocus(visible, panelRef);
+
+  useEffect(() => {
+    if (visible) {
+      setServiceType(initialService || '');
+    }
+  }, [visible, initialService]);
 
   const validation: FieldErrors = useMemo(() => {
     const errors: FieldErrors = {};
@@ -215,13 +203,13 @@ export default function WebsiteQuoteDialog({
         <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-gray-100 bg-white/95 px-5 py-4 backdrop-blur-sm md:px-6">
           <div className="min-w-0 pr-2">
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-              Digital solutions
+              SK Creation services
             </div>
             <h2 id={titleId} className="mt-2 text-xl font-bold md:text-2xl">
               Request a quote
             </h2>
             <p className="mt-2 text-sm leading-6 text-gray-600">
-              Share your project scope and we will reply with a tailored quote.
+              Select a service area and share your goals — we&apos;ll reply with tailored next steps.
             </p>
           </div>
           <button
@@ -343,25 +331,24 @@ export default function WebsiteQuoteDialog({
 
                 <div className="md:col-span-2">
                   <label className="mb-2 block text-sm font-semibold text-gray-800">
-                    Service Type <span className="text-red-500">*</span>
+                    Service <span className="text-red-500">*</span>
                   </label>
-                  <ul className="mb-3 space-y-1 text-xs leading-snug text-gray-600 sm:columns-2 sm:gap-x-6">
-                    {SERVICE_TYPE_HIGHLIGHTS.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
+                  <p className="mb-3 text-xs leading-relaxed text-gray-600">
+                    Virtual Session · Digital Solutions · Group Session · Volunteering
+                  </p>
                   <select
                     value={serviceType}
                     onBlur={() => markTouched('serviceType')}
-                    onChange={(e) => setServiceType(e.target.value as QuoteServiceType)}
+                    onChange={(e) => setServiceType(e.target.value as ServiceQuoteType)}
                     className={`${inputClass}${showError('serviceType') ? inputErrorClass : ''}`}
                   >
-                    <option value="">Select service type</option>
-                    {SERVICE_OPTIONS.map((option) => (
+                    <option value="">Select a service</option>
+                    {CORE_SERVICES.map((option) => (
                       <option key={option} value={option}>
                         {option}
                       </option>
                     ))}
+                    <option value="Other">Other</option>
                   </select>
                   {showError('serviceType') ? (
                     <p className="mt-1.5 text-sm text-red-600">{validation.serviceType}</p>
@@ -399,7 +386,7 @@ export default function WebsiteQuoteDialog({
 
                 <div className="md:col-span-2">
                   <label className="mb-2 block text-sm font-semibold text-gray-800">
-                    Project Details <span className="text-red-500">*</span>
+                    Details <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     rows={5}
@@ -407,11 +394,13 @@ export default function WebsiteQuoteDialog({
                     value={projectDetails}
                     onBlur={() => markTouched('projectDetails')}
                     onChange={(e) => setProjectDetails(e.target.value)}
-                    placeholder="Describe goals, timeline, required pages/features, and any references."
+                    placeholder="Share goals, timeline, session focus, project scope, or nonprofit context."
                     className={`${inputClass} resize-none${showError('projectDetails') ? inputErrorClass : ''}`}
                   />
                   <div className="mt-1.5 flex items-center justify-between">
-                    <p className="text-xs font-medium text-gray-700">Quotes start from $199</p>
+                    <p className="text-xs font-medium text-gray-700">
+                      We reply by email with tailored pricing or next steps
+                    </p>
                     <p className="text-xs text-gray-500">{projectDetails.length}/1000</p>
                   </div>
                   {showError('projectDetails') ? (

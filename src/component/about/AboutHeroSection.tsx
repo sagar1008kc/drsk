@@ -9,10 +9,12 @@ import { PROFILE_TAGS } from '@/lib/profile-tags';
 import { aboutPadX, badgeClass, container, gradientText } from '@/component/about/styles';
 import AiHeroDiagram from '@/component/shared/AiHeroDiagram';
 import ExpertProfileCard from '@/component/shared/ExpertProfileCard';
+import ThreeParticleBackground from '@/component/shared/ThreeParticleBackground';
 
 export default function AboutHeroSection() {
   return (
     <section className="relative -mt-[3.75rem] flex min-h-[100dvh] flex-col overflow-hidden border-b border-violet-200/60 bg-gradient-to-br from-[#F8F7FF] via-white to-indigo-50/90 pt-[3.75rem]">
+      <ThreeParticleBackground />
       <div className="pointer-events-none absolute inset-0 opacity-[0.55]">
         <AiHeroDiagram theme="light" />
       </div>

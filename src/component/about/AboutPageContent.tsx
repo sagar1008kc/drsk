@@ -361,23 +361,17 @@ export default function AboutPageContent() {
               <span className={badgeClass}>Quick navigation</span>
               <h2 className={`${sectionTitle} mt-4`}>Contact and key pages</h2>
               <p className={`${sectionDesc} mt-3`}>
-                Short links to contact, services, projects, and dashboard access.
+                Short links to contact, services, and projects.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <Link href="/#contact" className={ctaSecondary}>
+                <Link href="/contact" className={ctaPrimary}>
                   Contact us
                 </Link>
                 <Link href="/services" className={ctaSecondary}>
                   Services
                 </Link>
-                <Link href="/project" className={ctaPrimary}>
+                <Link href="/project" className={ctaSecondary}>
                   Projects
-                </Link>
-                <Link
-                  href="/dashboard"
-                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-amber-300 bg-amber-50 px-6 py-2.5 text-sm font-semibold text-amber-900 transition hover:bg-amber-100 sm:w-auto"
-                >
-                  Premium
                 </Link>
               </div>
             </div>

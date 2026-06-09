@@ -1,5 +1,4 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import type { BookingRow } from '@/types/booking';
 
 let adminClient: SupabaseClient | null = null;
 
@@ -33,5 +32,3 @@ export function getSupabaseAdmin(): SupabaseClient {
 
   return adminClient;
 }
-
-export type BookingsTable = BookingRow;

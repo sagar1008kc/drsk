@@ -5,8 +5,8 @@ import {
 } from '@/lib/emails/template';
 
 /** Public site URLs for customer-facing transactional emails */
-const CUSTOMER_PORTAL_LOGIN_URL = 'https://www.skcreation.org/login';
 const CUSTOMER_SERVICES_URL = 'https://www.skcreation.org/services';
+const CUSTOMER_CONTACT_URL = 'https://www.skcreation.org/contact';
 
 export type ContactEmailInput = {
   requestType: string;
@@ -80,15 +80,12 @@ export function buildWebsiteQuoteCustomerConfirmationEmail(input: {
 
   const linksSection = `
       <p style="margin:0 0 14px 0;color:#111827;font-size:14px;line-height:22px;">
-        <strong>Sign in to your account:</strong><br />
-        <a href="${CUSTOMER_PORTAL_LOGIN_URL}" style="color:#2563eb;text-decoration:none;">${escapeHtml(CUSTOMER_PORTAL_LOGIN_URL)}</a>
-      </p>
-      <p style="margin:0 0 14px 0;color:#111827;font-size:14px;line-height:22px;">
         <strong>Browse our services:</strong><br />
         <a href="${CUSTOMER_SERVICES_URL}" style="color:#2563eb;text-decoration:none;">${escapeHtml(CUSTOMER_SERVICES_URL)}</a>
       </p>
-      <p style="margin:0;color:#64748b;font-size:13px;line-height:20px;">
-        If you have an account, signing in helps you track messages and updates in one place.
+      <p style="margin:0;color:#111827;font-size:14px;line-height:22px;">
+        <strong>Contact us:</strong><br />
+        <a href="${CUSTOMER_CONTACT_URL}" style="color:#2563eb;text-decoration:none;">${escapeHtml(CUSTOMER_CONTACT_URL)}</a>
       </p>`;
 
   const html = buildEmailTemplate({

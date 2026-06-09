@@ -268,7 +268,7 @@ export default function ProjectsPageContent() {
             </Link>{' '}
             or{' '}
             <Link
-              href="/#contact"
+              href="/contact"
               className="font-semibold text-violet-700 hover:text-violet-600 hover:underline"
             >
               get in touch

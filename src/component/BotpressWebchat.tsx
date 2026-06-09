@@ -44,7 +44,7 @@ declare global {
 }
 
 function shouldSkipBotpress(pathname: string) {
-  return pathname.startsWith('/login') || pathname.startsWith('/auth');
+  return false;
 }
 
 export default function BotpressWebchat() {

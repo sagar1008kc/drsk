@@ -12,24 +12,13 @@ export function buildHandbookThankYouEmail(input: { siteOrigin: string }): {
   html: string;
 } {
   const subject = "You're subscribed — SK Creation updates";
-  const dashboardUrl = `${input.siteOrigin}/dashboard`;
   const servicesUrl = `${input.siteOrigin}/services`;
-  const contactUrl = `${input.siteOrigin}/#contact`;
-  const loginUrl = `${input.siteOrigin}/login`;
+  const contactUrl = `${input.siteOrigin}/contact`;
 
   const linksSection = `
       <p style="margin:0 0 12px 0;color:#111827;font-size:14px;line-height:22px;">
-        <strong>Member resources</strong> (sign in required)<br />
-        <a href="${escapeHtml(loginUrl)}" style="color:#2563eb;text-decoration:none;">${escapeHtml(loginUrl)}</a>
-        — then open <a href="${escapeHtml(dashboardUrl)}" style="color:#2563eb;text-decoration:none;">${escapeHtml(dashboardUrl)}</a>
-      </p>
-      <p style="margin:0 0 12px 0;color:#111827;font-size:14px;line-height:22px;">
         <strong>Services</strong> (sessions, programs &amp; more)<br />
         <a href="${escapeHtml(servicesUrl)}" style="color:#2563eb;text-decoration:none;">${escapeHtml(servicesUrl)}</a>
-      </p>
-      <p style="margin:0 0 12px 0;color:#111827;font-size:14px;line-height:22px;">
-        <strong>Premium library</strong> (sign in)<br />
-        <a href="${escapeHtml(loginUrl)}" style="color:#2563eb;text-decoration:none;">${escapeHtml(loginUrl)}</a>
       </p>
       <p style="margin:0 0 0 0;color:#111827;font-size:14px;line-height:22px;">
         <strong>Contact or custom quote</strong><br />
@@ -50,7 +39,7 @@ export function buildHandbookThankYouEmail(input: { siteOrigin: string }): {
         bodyHtml: `
       <p style="margin:0 0 16px 0;color:#111827;font-size:14px;line-height:22px;">
         Thanks for subscribing. You’ll hear from us when there’s something useful to share
-        (new PDFs, session openings, or site updates). Here are quick links if you want to explore now:
+        (session openings, service updates, or site news). Here are quick links if you want to explore now:
       </p>
       ${linksSection}`,
       },
@@ -78,12 +67,10 @@ export function buildHandbookSubscribeAdminEmail(input: { subscriberEmail: strin
         title: 'Subscriber email',
         bodyHtml: `<p style="margin:0;color:#111827;font-size:14px;line-height:22px;"><strong>${escapeHtml(
           input.subscriberEmail
-        )}</strong></p>
-        <p style="margin:12px 0 0 0;color:#64748b;font-size:13px;line-height:20px;">
-          Source: the-mind-matters-handbook / site subscribe flow.
-        </p>`,
+        )}</strong></p>`,
       },
     ],
   });
+
   return { subject, html };
 }
