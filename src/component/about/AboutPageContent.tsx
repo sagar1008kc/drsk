@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import AboutHeroSection from '@/component/about/AboutHeroSection';
 import AiEngineeringSection from '@/component/home/AiEngineeringSection';
+import PortfolioFeaturedSystemDesignHero from '@/component/portfolio/PortfolioFeaturedSystemDesignHero';
 import PortfolioLiveProjectsSection from '@/component/portfolio/PortfolioLiveProjectsSection';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
 import {
@@ -100,7 +101,7 @@ const publicLinks = [
 ];
 
 const experience = [
-  { role: 'Software Engineer', org: 'Fortune500 Company · Full-time', loc: 'USA · On-site', dates: 'May 2019 – Present', current: true, icon: '💻' },
+  { role: 'Software Engineer', org: 'Fortune Top 25, Fortune Global 50 Company · Full-time', loc: 'USA · On-site', dates: 'May 2019 – Present', current: true, icon: '💻' },
   { role: 'Founder & CEO', org: 'SK Creation · Self-employed', loc: 'United States · Remote', dates: 'Apr 2023 – Present', current: true, icon: '🚀' },
   { role: 'IT Support Specialist', org: 'Experimax · Full-time', loc: 'USA · On-site', dates: 'Jan 2016 – Apr 2019', current: false, icon: '🛠️' },
   { role: 'Section Officer', org: 'Government of Nepal', loc: 'Nepal', dates: 'May 2011 – Jun 2014', current: false, icon: '🏛️' },
@@ -151,6 +152,7 @@ export default function AboutPageContent() {
   return (
     <main className={`min-h-screen ${aboutBg}`}>
       <AboutHeroSection />
+      <PortfolioFeaturedSystemDesignHero />
       <AiEngineeringSection />
       <PortfolioLiveProjectsSection />
 

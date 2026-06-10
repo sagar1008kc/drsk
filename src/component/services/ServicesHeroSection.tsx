@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bot, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import AiHeroDiagram from '@/component/shared/AiHeroDiagram';
 import PageHeroTitle from '@/component/shared/PageHeroTitle';
 import { SERVICE_AREAS } from '@/lib/service-areas';

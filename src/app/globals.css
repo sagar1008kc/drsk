@@ -317,3 +317,51 @@ a {
   transform: translateY(-2px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
 }
+
+/* Full-bleed section heroes (wave backgrounds) */
+@keyframes drsk-section-fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.drsk-section-fade-in-up {
+  animation: drsk-section-fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.drsk-section-delay-100 {
+  animation-delay: 100ms;
+}
+.drsk-section-delay-200 {
+  animation-delay: 200ms;
+}
+.drsk-section-delay-300 {
+  animation-delay: 300ms;
+}
+
+.drsk-glow-subtitle {
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+.drsk-glow-white {
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.4);
+}
+.drsk-glow-gray-light {
+  text-shadow: 0 0 15px rgba(200, 200, 200, 0.6), 0 0 30px rgba(200, 200, 200, 0.2);
+}
+.drsk-glow-gray-med {
+  text-shadow: 0 0 15px rgba(150, 150, 150, 0.5), 0 0 30px rgba(150, 150, 150, 0.2);
+}
+.drsk-glow-gray-dark {
+  text-shadow: 0 0 15px rgba(100, 100, 100, 0.5), 0 0 30px rgba(100, 100, 100, 0.2);
+}
+.drsk-glow-cyan {
+  text-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+}
+.drsk-cta-shadow-glow {
+  box-shadow: 0 10px 40px -10px rgba(20, 184, 166, 0.5);
+}

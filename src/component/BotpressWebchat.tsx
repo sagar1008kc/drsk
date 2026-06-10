@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 
 const BOTPRESS_WEBCHAT_SRC = 'https://cdn.botpress.cloud/webchat/v3.6/inject.js';
 const BOTPRESS_INIT_CONFIG = {
@@ -43,15 +42,13 @@ declare global {
   }
 }
 
-function shouldSkipBotpress(pathname: string) {
+function shouldSkipBotpress() {
   return false;
 }
 
 export default function BotpressWebchat() {
-  const pathname = usePathname();
-
   useEffect(() => {
-    if (shouldSkipBotpress(pathname)) return;
+    if (shouldSkipBotpress()) return;
 
     let cancelled = false;
     let attempts = 0;
@@ -100,7 +97,7 @@ export default function BotpressWebchat() {
     return () => {
       cancelled = true;
     };
-  }, [pathname]);
+  }, []);
 
   return null;
 }

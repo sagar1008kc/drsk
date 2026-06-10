@@ -4,7 +4,7 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Bot, Mail, Sparkles, type LucideIcon } from 'lucide-react';
+import { Bot, Sparkles } from 'lucide-react';
 import ServicesHeroSection from '@/component/services/ServicesHeroSection';
 import AiHeroDiagram from '@/component/shared/AiHeroDiagram';
 import {

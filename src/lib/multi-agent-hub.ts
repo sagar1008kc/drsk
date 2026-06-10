@@ -154,7 +154,7 @@ export const PARENT_AGENTS: Record<ParentAgentId, ParentAgentDef> = {
         name: 'Education & Experience',
         keywords: ['education', 'experience', 'dba', 'degree', 'certification', 'fortune', 'engineer', 'career history'],
         response:
-          'Education spans DBA (Information Systems), master’s and bachelor’s degrees, plus Fortune 500 engineering experience and certifications.',
+          'Education spans DBA (Information Systems), master’s and bachelor’s degrees, plus Fortune Top 25, Fortune Global 50 engineering experience and certifications.',
         ctas: [{ text: 'View experience', url: LINKS.portfolio }],
       },
     ],
@@ -810,7 +810,7 @@ export const FALLBACK_REPLY =
   "I'm not sure which area fits best. Try asking about Dr. SK & portfolio (RAG), books, live projects, or Salesforce OneCRM.";
 
 export const WELCOME_MESSAGE =
-  'Hi — I route through Chat → Identity → Safety → Supervisor → Specialist → Guardrails → Response. Ask about Dr. SK, books, projects, or CRM links.';
+  'Welcome to SK Creation Multi-Agent Hub. How can I assist you today?';
 
 export const SUB_AGENT_ICONS: Partial<Record<SubAgentId, LucideIcon>> = {
   career: Briefcase,
