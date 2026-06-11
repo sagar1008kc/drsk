@@ -165,7 +165,7 @@ export default function InteractiveFeaturedCard({ project, index }: Props) {
             </dl>
 
             <motion.span
-              className={`mt-6 inline-flex w-full min-h-[48px] items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-white sm:mt-auto md:max-w-xs lg:max-w-sm ${style.btn}`}
+              className="mt-6 inline-flex w-full min-h-[48px] items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 sm:mt-auto md:max-w-xs lg:max-w-sm"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >

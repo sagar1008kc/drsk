@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { createPageMetadata } from '@/lib/site-url';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
+  path: '/project/ai-poc',
   title: 'AI Tools & Integration Services POC',
   description:
     'Professional demo blueprint for an AI tools and AI integration services platform.',
-};
+});
 
 const inScope = [
   'AI-powered website assistant',

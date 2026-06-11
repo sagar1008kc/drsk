@@ -6,11 +6,14 @@ import * as THREE from 'three';
 type ThreeParticleBackgroundProps = {
   isLive?: boolean;
   className?: string;
+  /** `brand` matches nav teal (#0d9488); default keeps violet palette */
+  variant?: 'default' | 'brand';
 };
 
 export default function ThreeParticleBackground({
   isLive = false,
   className = 'absolute inset-0 z-0 pointer-events-none opacity-95',
+  variant = 'default',
 }: ThreeParticleBackgroundProps) {
   const mountRef = useRef<HTMLDivElement>(null);
 
@@ -19,7 +22,7 @@ export default function ThreeParticleBackground({
     if (!container) return;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0xf8f7ff, 0.028);
+    scene.fog = new THREE.FogExp2(variant === 'brand' ? 0xf0fdfa : 0xf8f7ff, 0.028);
 
     const camera = new THREE.PerspectiveCamera(70, 1, 0.1, 1000);
     camera.position.z = 14;
@@ -33,13 +36,22 @@ export default function ThreeParticleBackground({
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     const velocities: { x: number; y: number; z: number }[] = [];
-    const palette = [
-      new THREE.Color(0x8b5cf6),
-      new THREE.Color(0x6366f1),
-      new THREE.Color(0x06b6d4),
-      new THREE.Color(0xf43f5e),
-      new THREE.Color(0x4f46e5),
-    ];
+    const palette =
+      variant === 'brand'
+        ? [
+            new THREE.Color(0x0d9488),
+            new THREE.Color(0x14b8a6),
+            new THREE.Color(0x0f766e),
+            new THREE.Color(0x2dd4bf),
+            new THREE.Color(0x06b6d4),
+          ]
+        : [
+            new THREE.Color(0x8b5cf6),
+            new THREE.Color(0x6366f1),
+            new THREE.Color(0x06b6d4),
+            new THREE.Color(0xf43f5e),
+            new THREE.Color(0x4f46e5),
+          ];
 
     for (let i = 0; i < particleCount; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 45;
@@ -71,15 +83,16 @@ export default function ThreeParticleBackground({
     );
     scene.add(particles);
 
+    const accentColor = variant === 'brand' ? 0x0d9488 : 0x8b5cf6;
     const lines = new THREE.LineSegments(
       new THREE.BufferGeometry(),
-      new THREE.LineBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.14 })
+      new THREE.LineBasicMaterial({ color: accentColor, transparent: true, opacity: 0.14 })
     );
     scene.add(lines);
 
     const knot = new THREE.Mesh(
       new THREE.TorusKnotGeometry(2.8, 0.55, 100, 16),
-      new THREE.MeshBasicMaterial({ color: 0x8b5cf6, wireframe: true, transparent: true, opacity: 0.07 })
+      new THREE.MeshBasicMaterial({ color: accentColor, wireframe: true, transparent: true, opacity: 0.07 })
     );
     scene.add(knot);
 
@@ -141,7 +154,7 @@ export default function ThreeParticleBackground({
       (knot.material as THREE.Material).dispose();
       renderer.dispose();
     };
-  }, [isLive]);
+  }, [isLive, variant]);
 
   return <div ref={mountRef} className={className} aria-hidden />;
 }

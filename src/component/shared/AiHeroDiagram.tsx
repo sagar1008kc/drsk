@@ -1,16 +1,22 @@
 type AiHeroDiagramProps = {
-  /** `light` for About hero; `dark` for home hero */
-  theme?: 'light' | 'dark';
+  /** `light` for light heroes; `dark` for home hero; `brand` for nav teal accent */
+  theme?: 'light' | 'dark' | 'brand';
 };
 
 export default function AiHeroDiagram({ theme = 'light' }: AiHeroDiagramProps) {
-  const id = theme === 'dark' ? 'home' : 'about';
+  const id = theme === 'dark' ? 'home' : theme === 'brand' ? 'brand' : 'about';
   const isDark = theme === 'dark';
+  const isBrand = theme === 'brand';
 
   const lineGradient = isDark ? (
     <linearGradient id={`${id}-ai-line`} x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.45" />
       <stop offset="100%" stopColor="#6366f1" stopOpacity="0.2" />
+    </linearGradient>
+  ) : isBrand ? (
+    <linearGradient id={`${id}-ai-line`} x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#0d9488" stopOpacity="0.35" />
+      <stop offset="100%" stopColor="#14b8a6" stopOpacity="0.15" />
     </linearGradient>
   ) : (
     <linearGradient id={`${id}-ai-line`} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -21,13 +27,21 @@ export default function AiHeroDiagram({ theme = 'light' }: AiHeroDiagramProps) {
 
   const nodeGradient = (
     <radialGradient id={`${id}-ai-node`} cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stopColor={isDark ? '#c4b5fd' : '#a78bfa'} stopOpacity="0.95" />
-      <stop offset="100%" stopColor="#8b5cf6" stopOpacity={isDark ? 0.55 : 0.4} />
+      <stop
+        offset="0%"
+        stopColor={isDark ? '#c4b5fd' : isBrand ? '#5eead4' : '#a78bfa'}
+        stopOpacity="0.95"
+      />
+      <stop
+        offset="100%"
+        stopColor={isBrand ? '#0d9488' : '#8b5cf6'}
+        stopOpacity={isDark ? 0.55 : 0.4}
+      />
     </radialGradient>
   );
 
   const lineOpacity = isDark ? 0.85 : 0.7;
-  const arrowFill = isDark ? '#a78bfa' : '#8b5cf6';
+  const arrowFill = isDark ? '#a78bfa' : isBrand ? '#0d9488' : '#8b5cf6';
   const arrowOpacity = isDark ? 0.35 : 0.25;
 
   return (

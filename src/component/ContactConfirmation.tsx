@@ -80,7 +80,7 @@ export default function ContactConfirmation({
             href="/services"
             className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-violet-700 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800"
           >
-            Book a session
+            Explore services
           </a>
           <button
             type="button"

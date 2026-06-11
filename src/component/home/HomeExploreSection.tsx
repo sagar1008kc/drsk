@@ -28,7 +28,7 @@ const exploreCards = [
     ],
     footer: '1:1 private session or Group Session',
     href: '/services',
-    cta: 'Book a session',
+    cta: 'Explore services',
     primary: true,
     delay: 0,
   },

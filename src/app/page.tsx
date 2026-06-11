@@ -4,9 +4,17 @@ import SpaceForGrowth from '@/component/about/SpaceForGrowth';
 import HomeCollaborationsSection from '@/component/home/HomeCollaborationsSection';
 import HomeContactSection from '@/component/home/HomeContactSection';
 import HomeExploreSection from '@/component/home/HomeExploreSection';
-import { AgenticWorkflowSystemDesign } from '@/component/home/AgenticWorkflowSystemDesign';
+import PortfolioFeaturedSystemDesignHero from '@/component/portfolio/PortfolioFeaturedSystemDesignHero';
 import MultiAgentChatbotSection from '@/component/home/MultiAgentChatbotSection';
 import { homeBg } from '@/component/home/styles';
+import { createPageMetadata } from '@/lib/site-url';
+
+export const metadata = createPageMetadata({
+  path: '/',
+  title: 'Dr. SK | AI Engineer',
+  description:
+    'Official website of Dr. SK (also known as Dr SK and Dr. SK Author) - author, AI engineer, and founder of SK Creation.',
+});
 
 export default function Home() {
   return (
@@ -14,7 +22,7 @@ export default function Home() {
       <HashScrollOnLoad />
       <h1 className="sr-only">AI resources, books, and customer services — SK Creation</h1>
       <MultiAgentChatbotSection />
-      <AgenticWorkflowSystemDesign />
+      <PortfolioFeaturedSystemDesignHero />
       <HeroSection />
       <SpaceForGrowth />
       <HomeExploreSection />

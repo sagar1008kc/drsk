@@ -6,19 +6,19 @@ import {
   PROFILE_HERO_HEADLINE,
 } from '@/lib/profile-hero';
 import { PROFILE_TAGS } from '@/lib/profile-tags';
-import { aboutPadX, badgeClass, container, gradientText } from '@/component/about/styles';
+import { aboutPadX, badgeClass, container } from '@/component/about/styles';
 import AiHeroDiagram from '@/component/shared/AiHeroDiagram';
 import ExpertProfileCard from '@/component/shared/ExpertProfileCard';
 import ThreeParticleBackground from '@/component/shared/ThreeParticleBackground';
 
 export default function AboutHeroSection() {
   return (
-    <section className="relative -mt-[3.75rem] flex min-h-[100dvh] flex-col overflow-hidden border-b border-violet-200/60 bg-gradient-to-br from-[#F8F7FF] via-white to-indigo-50/90 pt-[3.75rem]">
-      <ThreeParticleBackground />
+    <section className="relative -mt-[3.75rem] flex min-h-[100dvh] flex-col overflow-hidden border-b border-teal-200/60 bg-gradient-to-br from-[#f0fdfa] via-white to-emerald-50/90 pt-[3.75rem]">
+      <ThreeParticleBackground variant="brand" />
       <div className="pointer-events-none absolute inset-0 opacity-[0.55]">
-        <AiHeroDiagram theme="light" />
+        <AiHeroDiagram theme="brand" />
       </div>
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_40%,rgba(139,92,246,0.14),transparent_55%),radial-gradient(ellipse_70%_50%_at_85%_60%,rgba(99,102,241,0.1),transparent_50%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_40%,rgba(13,148,136,0.14),transparent_55%),radial-gradient(ellipse_70%_50%_at_85%_60%,rgba(20,184,166,0.1),transparent_50%)]" />
       <div className="dot-pattern pointer-events-none absolute inset-0 opacity-30" />
 
       <div
@@ -41,8 +41,8 @@ export default function AboutHeroSection() {
             className="relative z-10"
           >
             <span className={badgeClass}>About Dr. SK</span>
-            <h1 className="mt-5 text-3xl font-bold leading-[1.2] tracking-tight text-zinc-900 sm:text-4xl md:text-5xl lg:text-[3.25rem]">
-              <span className={gradientText}>{PROFILE_HERO_HEADLINE.highlight}</span>
+            <h1 className="mt-5 text-3xl font-bold leading-[1.2] tracking-tight text-black sm:text-4xl md:text-5xl lg:text-[3.25rem]">
+              {PROFILE_HERO_HEADLINE.highlight}
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg sm:leading-8">
               {PROFILE_HERO_BODY}

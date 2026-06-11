@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { LegalProse } from '@/component/LegalProse';
+import { createPageMetadata } from '@/lib/site-url';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
+  path: '/terms',
   title: 'Terms of Service',
   description: 'Terms of Service for Dr. SK website, virtual sessions, and digital services.',
-};
+});
 
 export default function TermsPage() {
   return (

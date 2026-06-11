@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { LegalProse } from '@/component/LegalProse';
+import { createPageMetadata } from '@/lib/site-url';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
+  path: '/privacy',
   title: 'Privacy Policy',
   description: 'Privacy Policy for drsk website and services.',
-};
+});
 
 export default function PrivacyPage() {
   return (

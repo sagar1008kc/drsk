@@ -27,17 +27,17 @@ const toolGroups = [
   {
     label: 'Agentic Frameworks',
     color: 'indigo',
-    tools: ['LangChain', 'LangGraph', 'LlamaIndex', 'Semantic Kernel', 'CrewAI', 'AutoGen'],
+    tools: ['LangChain', 'LangGraph', 'ADK', 'CrewAI', 'AutoGen'],
   },
   {
     label: 'Retrieval & RAG',
     color: 'fuchsia',
-    tools: ['Pinecone', 'Weaviate', 'Qdrant', 'ChromaDB', 'Azure AI Search', 'Elasticsearch', 'pgvector'],
+    tools: ['Pinecone', 'Weaviate', 'ChromaDB', 'Azure AI Search', 'Qdrant', 'pgvector'],
   },
   {
     label: 'Dev Tools & MCP',
     color: 'sky',
-    tools: ['Cursor', 'GitHub Copilot', 'Model Context Protocol', 'LangSmith', 'Prompt Engineering', 'Tool Calling', 'Function Calling'],
+    tools: ['Cursor', 'GitHub Copilot','Claude Desktop','LangGraph Studio', 'LangChain MCP Adapter', 'LangSmith', 'Google ADK', 'ANY Learn & Adopt'],
   },
   {
     label: 'Cloud, MLOps & Deployment',

@@ -5,5 +5,5 @@ export const PROFILE_HERO_HEADLINE = {
 } as const;
 
 export const PROFILE_HERO_BODY =
-  'Fortune Global 50 AI Forward-Deployed Engineer architecting enterprise AI agents, multi-agent workflows, MCP-enabled integrations, RAG pipelines, LLM-powered applications, and full-stack digital platforms. USAII Certified AI Scientist focused on solving complex business flows, connecting AI with real enterprise systems, and delivering practical AI value at production scale.';
+  'Fortune Global 50 AI Forward-Deployed Engineer building production-ready AI agents, multi-agent workflows, RAG pipelines, MCP-enabled integrations, and full-stack AI applications that solve complex enterprise business flows. USAII Certified AI Scientist focused on connecting AI with real systems and delivering measurable business value.';
 export const PROFILE_HERO_RING = 'DR. SK';

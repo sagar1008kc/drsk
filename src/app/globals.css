@@ -365,3 +365,54 @@ a {
 .drsk-cta-shadow-glow {
   box-shadow: 0 10px 40px -10px rgba(20, 184, 166, 0.5);
 }
+
+/* Learn · Adapt · Lead portfolio closing section */
+@keyframes drsk-learn-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.02);
+  }
+}
+
+@keyframes drsk-learn-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.drsk-learn-word {
+  display: inline-block;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+  animation: drsk-learn-float 6s ease-in-out infinite;
+}
+
+.drsk-learn-white {
+  background-image: linear-gradient(135deg, #ffffff, #cbd5e1);
+  animation-delay: 0s;
+}
+
+.drsk-learn-blue {
+  background-image: linear-gradient(135deg, #90e0ef, #3b82f6);
+  animation-delay: 0.2s;
+}
+
+.drsk-learn-green {
+  background-image: linear-gradient(135deg, #a7f3d0, #10b981);
+  animation-delay: 0.4s;
+}
+
+.drsk-learn-subtitle {
+  animation: drsk-learn-fade-in 2s ease-out 0.6s forwards;
+  opacity: 0;
+}

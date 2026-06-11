@@ -98,9 +98,7 @@ export default function FeaturedProjectCard({ project, index }: Props) {
           ))}
         </dl>
 
-        <span
-          className={`mt-6 inline-flex w-full min-h-[44px] items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition sm:mt-auto ${style.btn}`}
-        >
+        <span className="mt-6 inline-flex w-full min-h-[44px] items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500 sm:mt-auto">
           {project.external ? 'Visit live site' : 'View blueprint'}
           {project.external ? <ExternalLinkIcon className="h-4 w-4" /> : null}
         </span>

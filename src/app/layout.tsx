@@ -9,6 +9,7 @@ import { SUBSCRIBE_DESCRIPTION, SUBSCRIBE_HEADING } from '@/lib/subscribe-copy';
 import Navbar from '@/component/Navbar';
 import PromoBannerSlot from '@/component/PromoBannerSlot';
 import Providers from '@/component/Providers';
+import { SITE_URL } from '@/lib/site-url';
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
@@ -34,13 +35,12 @@ const rubik80sFade = Rubik_80s_Fade({
   variable: '--font-rubik-80s-fade',
 });
 
-const siteUrl = 'https://www.skcreation.org';
 const seoTitle = 'Dr. SK | AI Engineer';
 const seoDescription =
-  'Official website of Dr. SK (also known as Dr SK and Dr. SK Author) - author, AI engineer, and founder of SK Creation.';
+  'Official website of Dr. SK - AI engineer & author';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   icons: {
     icon: [{ url: '/logo.png', type: 'image/png' }],
     shortcut: '/logo.png',
@@ -64,9 +64,6 @@ export const metadata: Metadata = {
   authors: [{ name: 'Dr. SK' }],
   creator: 'Dr. SK',
   publisher: 'SK Creation',
-  alternates: {
-    canonical: '/',
-  },
   robots: {
     index: true,
     follow: true,
@@ -80,7 +77,6 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    url: siteUrl,
     title: seoTitle,
     description: seoDescription,
     siteName: 'Dr. SK Official',
@@ -90,7 +86,7 @@ export const metadata: Metadata = {
         url: '/drsk.png',
         width: 1200,
         height: 1200,
-        alt: 'Dr. SK official profile image',
+        alt: 'Dr. SK official profile',
       },
     ],
   },
@@ -110,8 +106,8 @@ export default function RootLayout({
     '@type': 'Person',
     name: 'Dr. SK',
     alternateName: ['Dr SK', 'Dr. SK Author', 'Sagar Khatri'],
-    url: siteUrl,
-    image: `${siteUrl}/drsk.png`,
+    url: SITE_URL,
+    image: `${SITE_URL}/drsk.png`,
     jobTitle: 'AI Engineer',
     sameAs: [
       'https://www.amazon.com/author/drsk1',
@@ -128,7 +124,7 @@ export default function RootLayout({
     '@type': 'WebSite',
     name: 'Dr. SK Official Website',
     alternateName: ['Dr SK author', 'Dr. SK Author Website'],
-    url: siteUrl,
+    url: SITE_URL,
   };
 
   return (

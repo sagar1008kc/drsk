@@ -2,11 +2,11 @@
 
 import type { ReactNode } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import AboutHeroSection from '@/component/about/AboutHeroSection';
 import AiEngineeringSection from '@/component/home/AiEngineeringSection';
-import PortfolioFeaturedSystemDesignHero from '@/component/portfolio/PortfolioFeaturedSystemDesignHero';
+import { AgenticWorkflowSystemDesign } from '@/component/home/AgenticWorkflowSystemDesign';
+import LearnAdaptLeadSection from '@/component/portfolio/LearnAdaptLeadSection';
 import PortfolioLiveProjectsSection from '@/component/portfolio/PortfolioLiveProjectsSection';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
 import {
@@ -14,8 +14,6 @@ import {
   badgeClass,
   cardClass,
   container,
-  ctaPrimary,
-  ctaSecondary,
   glowBgLight,
   sectionBorder,
   sectionDesc,
@@ -70,24 +68,6 @@ const publicLinks = [
     color: 'from-blue-500/15 to-indigo-500/5 border-blue-200 hover:border-blue-400',
     dot: 'bg-blue-600',
     tag: 'LinkedIn',
-  },
-  {
-    label: 'TikTok',
-    href: 'https://www.tiktok.com/@drskauthor',
-    note: 'Short-form content',
-    emoji: '🎬',
-    color: 'from-fuchsia-500/15 to-pink-500/5 border-fuchsia-200 hover:border-fuchsia-400',
-    dot: 'bg-fuchsia-500',
-    tag: 'TikTok',
-  },
-  {
-    label: 'YouTube',
-    href: 'https://www.youtube.com/@drskauthor',
-    note: 'Video content',
-    emoji: '▶️',
-    color: 'from-red-500/15 to-rose-500/5 border-red-200 hover:border-red-300',
-    dot: 'bg-red-500',
-    tag: 'YouTube',
   },
   {
     label: 'Amazon Author Page',
@@ -152,7 +132,7 @@ export default function AboutPageContent() {
   return (
     <main className={`min-h-screen ${aboutBg}`}>
       <AboutHeroSection />
-      <PortfolioFeaturedSystemDesignHero />
+      <AgenticWorkflowSystemDesign />
       <AiEngineeringSection />
       <PortfolioLiveProjectsSection />
 
@@ -355,43 +335,7 @@ export default function AboutPageContent() {
         </div>
       </AboutSection>
 
-      <AboutSection>
-        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-          <div className={`${cardClass} relative overflow-hidden !p-8`}>
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(139,92,246,0.1),transparent_55%)]" />
-            <div className="relative">
-              <span className={badgeClass}>Quick navigation</span>
-              <h2 className={`${sectionTitle} mt-4`}>Contact and key pages</h2>
-              <p className={`${sectionDesc} mt-3`}>
-                Short links to contact, services, and projects.
-              </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <Link href="/contact" className={ctaPrimary}>
-                  Contact us
-                </Link>
-                <Link href="/services" className={ctaSecondary}>
-                  Services
-                </Link>
-                <Link href="/project" className={ctaSecondary}>
-                  Projects
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="hidden items-center justify-center lg:flex">
-            <div className="relative h-64 w-full max-w-md overflow-hidden rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 shadow-sm">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.15),transparent_70%)]" />
-              <div className="relative flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
-                <p className="text-sm font-semibold uppercase tracking-wider text-violet-600">
-                  SK Creation
-                </p>
-                <p className="text-2xl font-bold text-zinc-900">AI · Digital · Wellness</p>
-                <p className="text-sm text-zinc-600">Practical systems for real-world growth</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </AboutSection>
+      <LearnAdaptLeadSection />
     </main>
   );
 }

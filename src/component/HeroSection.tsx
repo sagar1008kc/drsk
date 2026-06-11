@@ -106,18 +106,11 @@ export default function HeroSection() {
                 className="flex flex-col gap-4 pt-2 sm:flex-row sm:flex-wrap sm:gap-5 lg:pt-0"
               >
                 <Link
-                  href="/project"
+                  href="/services"
                   className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] px-10 py-3.5 text-base font-semibold text-white shadow-[0_0_32px_rgba(139,92,246,0.45)] transition hover:brightness-110 sm:w-auto"
                 >
                   Get started
                   <ArrowRightIcon className="h-5 w-5" />
-                </Link>
-                <Link
-                  href="/services"
-                  className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full border border-violet-300 bg-white px-10 py-3.5 text-base font-semibold text-violet-800 transition hover:border-violet-400 hover:bg-violet-50 sm:w-auto"
-                >
-                  <PlayIcon className="h-5 w-5 text-violet-600" />
-                  Book a session
                 </Link>
               </motion.div>
             </div>

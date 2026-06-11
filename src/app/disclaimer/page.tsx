@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { LegalProse } from '@/component/LegalProse';
+import { createPageMetadata } from '@/lib/site-url';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
+  path: '/disclaimer',
   title: 'Session disclaimer',
   description:
     'Important limitations for virtual sessions, awareness discussions, and digital services.',
-};
+});
 
 export default function DisclaimerPage() {
   return (

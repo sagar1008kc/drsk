@@ -8,7 +8,7 @@ export default function PortfolioFeaturedSystemDesignHero() {
     <section
       id="featured-ai-system-design"
       aria-labelledby="featured-ai-system-design-heading"
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#050508] px-4 py-16 font-sans sm:px-8"
+      className="relative flex min-h-screen scroll-mt-[3.75rem] flex-col items-center justify-center overflow-hidden bg-[#050508] px-4 py-16 font-sans sm:px-8"
     >
       <ParticleWaveBackground variant="colorful" />
 

@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import { createPageMetadata } from '@/lib/site-url';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
+  path: '/books',
   title: 'Books',
   description: 'Browse all published books across emotional wellness and AI/career tracks.',
-};
+});
 
 export default function BooksPage() {
   return (
