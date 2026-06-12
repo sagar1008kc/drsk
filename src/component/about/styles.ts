@@ -1,5 +1,7 @@
 /** Light AI-themed styles for About page */
 
+import { ctaPrimaryClass, ctaSecondaryClass } from '@/lib/site-theme';
+
 export const aboutBg = 'bg-[#F8F7FF] text-zinc-900';
 
 /** Horizontal inset for all About sections — scales up on larger screens */
@@ -28,11 +30,9 @@ export const glowBgLight =
 export const gradientText =
   'bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent';
 
-export const ctaPrimary =
-  'inline-flex min-h-[44px] w-full items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(139,92,246,0.35)] transition hover:brightness-110 sm:w-auto';
+export const ctaPrimary = ctaPrimaryClass;
 
-export const ctaSecondary =
-  'inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-violet-300 bg-white px-6 py-2.5 text-sm font-semibold text-violet-800 transition hover:border-violet-400 hover:bg-violet-50 sm:w-auto';
+export const ctaSecondary = ctaSecondaryClass;
 
 export const ctaEmerald =
   'inline-flex min-h-[44px] w-full items-center justify-center rounded-full bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700 sm:w-auto';

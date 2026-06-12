@@ -304,7 +304,7 @@ export default function ContactForm({
             <button
               type="submit"
               disabled={!isFormReady || loading}
-              className="mx-auto flex min-h-[52px] w-1/2 min-w-[180px] items-center justify-center rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-500 to-sky-500 px-4 text-sm font-bold text-white shadow-lg shadow-violet-300/40 transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100 sm:text-base"
+              className="mx-auto flex min-h-[52px] w-1/2 min-w-[180px] items-center justify-center rounded-2xl bg-[#0d9488] px-4 text-sm font-bold text-white shadow-lg shadow-teal-500/30 transition hover:bg-teal-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-[#0d9488] sm:text-base"
             >
               {loading ? (
                 <span className="inline-flex items-center gap-2">

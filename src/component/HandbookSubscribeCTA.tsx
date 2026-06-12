@@ -2,6 +2,8 @@
 
 import { FormEvent, useRef, useState } from 'react';
 import { toast } from 'sonner';
+import { btnBrandSubscribe } from '@/lib/site-theme';
+
 type Variant = 'light' | 'dark' | 'home';
 
 const DEFAULT_FULL_HEADING = 'Subscribe for updates';
@@ -17,9 +19,6 @@ const emailFieldDarkClass =
 
 const subscribeButtonNeutralClass =
   'inline-flex min-h-[3rem] shrink-0 items-center justify-center rounded-xl bg-zinc-900 px-6 py-3.5 text-base font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60';
-
-const subscribeButtonVioletClass =
-  'inline-flex min-h-[3rem] shrink-0 items-center justify-center rounded-xl bg-violet-700 px-6 py-3.5 text-base font-semibold text-white shadow-sm transition hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-60';
 
 const subscribeButtonDarkClass =
   'inline-flex min-h-[3rem] shrink-0 items-center justify-center rounded-xl border border-[#8B7535] bg-gradient-to-b from-[#D4B96A] to-[#9A7B35] px-6 py-3.5 text-base font-bold uppercase tracking-wide text-zinc-950 shadow-md transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60';
@@ -224,10 +223,10 @@ export default function HandbookSubscribeCTA({
       : emailFieldLightOnWhiteClass;
 
   const buttonClass = isHome
-    ? subscribeButtonVioletClass
+    ? btnBrandSubscribe
     : isDark
       ? subscribeButtonDarkClass
-      : subscribeButtonVioletClass;
+      : btnBrandSubscribe;
 
   return (
     <div className={shellClass}>

@@ -124,7 +124,7 @@ function ServiceAreaCard({
           <button
             type="button"
             onClick={() => onQuote(area.title)}
-            className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-zinc-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-violet-700"
+            className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-zinc-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800"
           >
             <Sparkles className="h-4 w-4" aria-hidden />
             Request a quote
@@ -225,7 +225,7 @@ export default function Services() {
                 <button
                   type="button"
                   onClick={() => openQuote()}
-                  className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-violet-700 sm:w-auto"
+                  className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[#0d9488] px-6 py-3 text-sm font-semibold text-white transition hover:bg-teal-700 sm:w-auto"
                 >
                   <Sparkles className="h-4 w-4" aria-hidden />
                   Request a quote

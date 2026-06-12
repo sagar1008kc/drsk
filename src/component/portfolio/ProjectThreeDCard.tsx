@@ -15,6 +15,8 @@ type ProjectThreeDCardProps = {
 
 export default function ProjectThreeDCard({ project, index }: ProjectThreeDCardProps) {
   const style = accentMap[project.accent];
+  const visitBtnClass =
+    project.id === 'pilotmycareer' ? 'bg-blue-600 hover:bg-blue-500' : style.btn;
   const { rotateX, rotateY, glareX, glareY, onPointerMove, onPointerLeave } = usePointerTilt(14);
   const glareBackground = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.18), transparent 58%)`;
 
@@ -99,7 +101,7 @@ export default function ProjectThreeDCard({ project, index }: ProjectThreeDCardP
             </ul>
 
             <span
-              className={`mt-6 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition group-hover:brightness-110 ${style.btn}`}
+              className={`mt-6 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition group-hover:brightness-110 ${visitBtnClass}`}
             >
               Visit live site
               <ExternalLink className="h-4 w-4" aria-hidden />

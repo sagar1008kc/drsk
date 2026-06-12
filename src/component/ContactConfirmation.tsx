@@ -78,7 +78,7 @@ export default function ContactConfirmation({
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
             href="/services"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-violet-700 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-800"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#0d9488] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-700"
           >
             Explore services
           </a>

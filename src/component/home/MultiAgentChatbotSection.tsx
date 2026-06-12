@@ -198,19 +198,19 @@ export default function MultiAgentChatbotSection() {
     <section
       id="multi-agent-platform"
       aria-labelledby="multi-agent-platform-heading"
-      className="relative -mt-[3.75rem] min-h-[100dvh] w-full bg-gradient-to-br from-[#F8F7FF] via-white to-indigo-50/90 pt-[3.75rem] text-zinc-900 font-sans overflow-hidden scroll-mt-[3.75rem]"
+      className="relative -mt-[3.75rem] min-h-[100dvh] w-full bg-gradient-to-br from-[#f0fdfa] via-white to-emerald-50/90 pt-[3.75rem] text-zinc-900 font-sans overflow-hidden scroll-mt-[3.75rem]"
     >
       <h2 id="multi-agent-platform-heading" className="sr-only">SK Creation Multi-Agent Hub</h2>
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_40%,rgba(139,92,246,0.1),transparent_55%),radial-gradient(ellipse_70%_50%_at_85%_60%,rgba(99,102,241,0.07),transparent_50%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_40%,rgba(13,148,136,0.1),transparent_55%),radial-gradient(ellipse_70%_50%_at_85%_60%,rgba(37,99,235,0.07),transparent_50%)]" />
 
       <div className="relative z-10 mx-auto flex h-[calc(100dvh-3.75rem)] max-w-7xl flex-col gap-4 px-4 py-4 md:flex-row md:gap-6 md:py-6">
         {/* Routing flow — top to bottom */}
         <div className="hidden min-h-0 md:flex md:w-[40%] md:min-w-[300px] lg:w-[36%]">
-          <div className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-violet-200/80 bg-white/92 shadow-[0_12px_40px_rgba(139,92,246,0.14)] backdrop-blur-xl">
-            <div className="border-b border-violet-100 bg-gradient-to-r from-violet-50 to-indigo-50 px-4 py-3.5">
+          <div className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-teal-200/80 bg-white/92 shadow-[0_12px_40px_rgba(13,148,136,0.14)] backdrop-blur-xl">
+            <div className="border-b border-teal-100 bg-gradient-to-r from-teal-50 to-emerald-50 px-4 py-3.5">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600/10 ring-1 ring-violet-200">
-                  <Network className="h-4 w-4 text-violet-600" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-600/10 ring-1 ring-teal-200">
+                  <Network className="h-4 w-4 text-teal-600" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-zinc-900">Agentic Orchestration Layer</h3>
@@ -234,17 +234,17 @@ export default function MultiAgentChatbotSection() {
               <OrchestrationTracePanel events={flowEvents} isLive={isLive} flowStep={flowStep} />
             </div>
 
-            <div className="border-t border-violet-100 px-4 py-2 text-[10px] text-zinc-400">
+            <div className="border-t border-teal-100 px-4 py-2 text-[10px] text-zinc-400">
               Demo · routes to real pages on this site
             </div>
           </div>
         </div>
 
         {/* Chat */}
-        <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-violet-200/80 bg-white/92 shadow-[0_12px_40px_rgba(139,92,246,0.14)] backdrop-blur-xl">
-          <div className="bg-gradient-to-r from-violet-50 to-indigo-50 border-b border-violet-200/60 p-4 flex items-center gap-3">
+        <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-teal-200/80 bg-white/92 shadow-[0_12px_40px_rgba(13,148,136,0.14)] backdrop-blur-xl">
+          <div className="bg-gradient-to-r from-teal-50 to-emerald-50 border-b border-teal-200/60 p-4 flex items-center gap-3">
             <div className="relative shrink-0">
-              <div className="w-10 h-10 bg-gradient-to-tr from-violet-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg shadow-violet-500/25">
+              <div className="w-10 h-10 bg-[#0d9488] rounded-full flex items-center justify-center shadow-lg shadow-teal-500/25">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <motion.span
@@ -270,18 +270,18 @@ export default function MultiAgentChatbotSection() {
               ))}
               {isTyping && (
                 <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-violet-100 border border-violet-200 flex items-center justify-center shrink-0">
-                    <Loader2 className="w-4 h-4 text-violet-600 animate-spin" />
+                  <div className="w-8 h-8 rounded-full bg-teal-100 border border-teal-200 flex items-center justify-center shrink-0">
+                    <Loader2 className="w-4 h-4 text-teal-600 animate-spin" />
                   </div>
-                  <div className="bg-white border border-violet-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm min-w-[200px]">
-                    <p className="text-[11px] font-semibold text-violet-700 mb-2">
+                  <div className="bg-white border border-teal-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm min-w-[200px]">
+                    <p className="text-[11px] font-semibold text-black mb-2">
                       {flowStep !== 'idle' && flowStep !== 'complete'
                         ? FLOW_STEP_MESSAGES[flowStep as keyof typeof FLOW_STEP_MESSAGES]
                         : 'One moment…'}
                     </p>
-                    <div className="h-1.5 w-full rounded-full bg-violet-100 overflow-hidden">
+                    <div className="h-1.5 w-full rounded-full bg-teal-100 overflow-hidden">
                       <motion.div
-                        className="h-full bg-gradient-to-r from-violet-500 to-indigo-500"
+                        className="h-full bg-gradient-to-r from-teal-500 to-emerald-500"
                         animate={{ width: ['10%', '85%', '100%'] }}
                         transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
                       />
@@ -293,7 +293,7 @@ export default function MultiAgentChatbotSection() {
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-4 border-t border-violet-200/60 bg-white/95">
+          <div className="p-4 border-t border-teal-200/60 bg-white/95">
             {showSuggestions && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {SUGGESTIONS.map((s) => (
@@ -301,7 +301,7 @@ export default function MultiAgentChatbotSection() {
                     key={s}
                     type="button"
                     onClick={() => processMessage(s)}
-                    className="text-xs px-3 py-2 rounded-full border border-violet-200 bg-violet-50 text-violet-800 hover:bg-violet-100 hover:border-violet-300 transition-colors"
+                    className="text-xs px-3 py-2 rounded-full border border-teal-200 bg-teal-50 text-black hover:bg-teal-100 hover:border-teal-300 transition-colors"
                   >
                     {s}
                   </button>
@@ -314,13 +314,13 @@ export default function MultiAgentChatbotSection() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask about projects, Dr. SK, books, or articles…"
-                className="w-full bg-white border-2 border-violet-200 rounded-xl pl-4 pr-12 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 placeholder:text-zinc-400"
+                className="w-full bg-white border-2 border-teal-200 rounded-xl pl-4 pr-12 py-4 text-sm text-black focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 placeholder:text-zinc-400"
                 disabled={isTyping}
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isTyping}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-violet-600 hover:bg-violet-500 text-white rounded-lg disabled:opacity-50 transition-colors shadow-md shadow-violet-500/20"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg disabled:opacity-50 transition-colors shadow-md shadow-blue-500/20"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -331,22 +331,22 @@ export default function MultiAgentChatbotSection() {
 
       <style dangerouslySetInnerHTML={{ __html: `
         .custom-scrollbar::-webkit-scrollbar, .hub-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb, .hub-scroll::-webkit-scrollbar-thumb { background: #c4b5fd; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb, .hub-scroll::-webkit-scrollbar-thumb { background: #5eead4; border-radius: 8px; }
       `}} />
     </section>
   );
 }
 
 const LAYER_STYLES: Record<string, string> = {
-  'Chat Experience': 'bg-slate-100 text-slate-700 ring-slate-200',
-  Identity: 'bg-indigo-50 text-indigo-700 ring-indigo-200',
-  'Input Safety': 'bg-violet-50 text-violet-700 ring-violet-200',
-  Supervisor: 'bg-cyan-50 text-cyan-700 ring-cyan-200',
-  'Specialized Agent': 'bg-amber-50 text-amber-700 ring-amber-200',
-  Guardrails: 'bg-rose-50 text-rose-700 ring-rose-200',
+  'Chat Experience': 'bg-zinc-100 text-black ring-zinc-200',
+  Identity: 'bg-blue-50 text-blue-700 ring-blue-200',
+  'Input Safety': 'bg-teal-50 text-teal-700 ring-teal-200',
+  Supervisor: 'bg-green-50 text-green-700 ring-green-200',
+  'Specialized Agent': 'bg-blue-50 text-blue-700 ring-blue-200',
+  Guardrails: 'bg-teal-50 text-teal-700 ring-teal-200',
   'User Response': 'bg-emerald-50 text-emerald-700 ring-emerald-200',
-  Observability: 'bg-zinc-100 text-zinc-600 ring-zinc-200',
-  System: 'bg-zinc-50 text-zinc-500 ring-zinc-200',
+  Observability: 'bg-zinc-100 text-zinc-700 ring-zinc-200',
+  System: 'bg-zinc-50 text-zinc-600 ring-zinc-200',
 };
 
 function OrchestrationTracePanel({
@@ -359,10 +359,10 @@ function OrchestrationTracePanel({
   flowStep: FlowStep;
 }) {
   return (
-    <div className="mx-4 mb-4 mt-1 flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-violet-200/70 bg-[#0f1117]/[0.03]">
-      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-violet-100/80 bg-gradient-to-r from-violet-50/90 to-indigo-50/60 px-3 py-2.5">
+    <div className="mx-4 mb-4 mt-1 flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-teal-200/70 bg-[#0f1117]/[0.03]">
+      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-teal-100/80 bg-gradient-to-r from-teal-50/90 to-emerald-50/60 px-3 py-2.5">
         <div className="flex items-center gap-2">
-          <Terminal className="h-3.5 w-3.5 text-violet-600" aria-hidden />
+          <Terminal className="h-3.5 w-3.5 text-teal-600" aria-hidden />
           <p className="text-[11px] font-bold tracking-wide text-zinc-800">Orchestration trace</p>
         </div>
         <span
@@ -378,7 +378,7 @@ function OrchestrationTracePanel({
       <div className="flex-1 min-h-0 overflow-y-auto hub-scroll px-3 py-2.5">
         {events.length === 0 ? (
           <div className="flex h-full min-h-[120px] flex-col items-center justify-center gap-2 text-center px-4">
-            <Terminal className="h-5 w-5 text-violet-300" aria-hidden />
+            <Terminal className="h-5 w-5 text-teal-400" aria-hidden />
             <p className="text-[11px] font-medium text-zinc-500">No trace events yet</p>
             <p className="text-[10px] leading-relaxed text-zinc-400 max-w-[220px]">
               Send a query to trace chat → identity → PII safety → supervisor → specialist → guardrails → response.
@@ -389,7 +389,7 @@ function OrchestrationTracePanel({
             {events.map((ev) => (
               <li
                 key={ev.id}
-                className="rounded-lg border border-violet-100/80 bg-white/90 px-2.5 py-2 shadow-sm"
+                className="rounded-lg border border-teal-100/80 bg-white/90 px-2.5 py-2 shadow-sm"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex flex-wrap items-center gap-1.5 min-w-0">
@@ -403,7 +403,7 @@ function OrchestrationTracePanel({
                     </span>
                   </div>
                 </div>
-                <p className="mt-1 font-mono text-[10px] font-semibold text-violet-700 leading-snug">
+                <p className="mt-1 font-mono text-[10px] font-semibold text-black leading-snug">
                   {ev.action}
                 </p>
                 <p className="mt-0.5 text-[10px] leading-relaxed text-zinc-600">{ev.detail}</p>
@@ -441,9 +441,9 @@ function RagFlowStrip({ flowStep, isLive }: { flowStep: FlowStep; isLive: boolea
   const activeIdx = getRagStepIndex(flowStep);
 
   return (
-    <div className="rounded-xl border border-violet-200/60 bg-gradient-to-b from-violet-50/80 to-white px-3 py-3">
+    <div className="rounded-xl border border-teal-200/60 bg-gradient-to-b from-teal-50/80 to-white px-3 py-3">
       <div className="flex items-center justify-between gap-2 mb-2.5">
-        <p className="text-[11px] font-semibold text-zinc-700">Agentic pipeline</p>
+        <p className="text-[11px] font-semibold text-black">Agentic pipeline</p>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 ring-1 ring-emerald-200/80">
           <motion.span
             className="h-1.5 w-1.5 rounded-full bg-emerald-500"
@@ -459,14 +459,14 @@ function RagFlowStrip({ flowStep, isLive }: { flowStep: FlowStep; isLive: boolea
           const isDone = activeIdx > i;
           return (
             <React.Fragment key={step}>
-              {i > 0 && <span className="text-[10px] text-violet-300">→</span>}
+              {i > 0 && <span className="text-[10px] text-teal-400">→</span>}
               <span
                 className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold transition-colors ${
                   isActive
-                    ? 'bg-violet-600 text-white shadow-sm shadow-violet-500/30'
+                    ? 'bg-teal-600 text-white shadow-sm shadow-teal-500/30'
                     : isDone
                       ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/70'
-                      : 'bg-white text-zinc-400 ring-1 ring-violet-100'
+                      : 'bg-white text-zinc-500 ring-1 ring-teal-100'
                 }`}
               >
                 {step}
@@ -494,70 +494,70 @@ const STAGE_THEMES: Record<
   { text: string; border: string; bg: string; iconBorder: string; iconGlow: string; lineVia: string }
 > = {
   chat: {
-    text: 'text-violet-600',
-    border: 'border-violet-200/80',
-    bg: 'bg-violet-50/70',
-    iconBorder: 'border-violet-300',
-    iconGlow: 'shadow-[0_0_16px_rgba(139,92,246,0.35)]',
-    lineVia: 'via-violet-500',
+    text: 'text-black',
+    border: 'border-zinc-300/80',
+    bg: 'bg-zinc-50/70',
+    iconBorder: 'border-zinc-400',
+    iconGlow: 'shadow-[0_0_16px_rgba(0,0,0,0.12)]',
+    lineVia: 'via-zinc-700',
   },
   identity: {
-    text: 'text-indigo-600',
-    border: 'border-indigo-200/80',
-    bg: 'bg-indigo-50/70',
-    iconBorder: 'border-indigo-300',
-    iconGlow: 'shadow-[0_0_16px_rgba(99,102,241,0.35)]',
-    lineVia: 'via-indigo-500',
+    text: 'text-blue-600',
+    border: 'border-blue-200/80',
+    bg: 'bg-blue-50/70',
+    iconBorder: 'border-blue-400',
+    iconGlow: 'shadow-[0_0_16px_rgba(37,99,235,0.35)]',
+    lineVia: 'via-blue-500',
   },
   safety_input: {
-    text: 'text-fuchsia-600',
-    border: 'border-fuchsia-200/80',
-    bg: 'bg-fuchsia-50/70',
-    iconBorder: 'border-fuchsia-300',
-    iconGlow: 'shadow-[0_0_16px_rgba(217,70,239,0.3)]',
-    lineVia: 'via-fuchsia-500',
+    text: 'text-teal-600',
+    border: 'border-teal-200/80',
+    bg: 'bg-teal-50/70',
+    iconBorder: 'border-teal-400',
+    iconGlow: 'shadow-[0_0_16px_rgba(13,148,136,0.35)]',
+    lineVia: 'via-teal-500',
   },
   supervisor: {
-    text: 'text-cyan-600',
-    border: 'border-cyan-200/80',
-    bg: 'bg-cyan-50/70',
-    iconBorder: 'border-cyan-300',
-    iconGlow: 'shadow-[0_0_16px_rgba(6,182,212,0.35)]',
-    lineVia: 'via-cyan-500',
+    text: 'text-green-600',
+    border: 'border-green-200/80',
+    bg: 'bg-green-50/70',
+    iconBorder: 'border-green-400',
+    iconGlow: 'shadow-[0_0_16px_rgba(22,163,74,0.35)]',
+    lineVia: 'via-green-500',
   },
   specialized: {
-    text: 'text-amber-600',
-    border: 'border-amber-200/80',
-    bg: 'bg-amber-50/70',
-    iconBorder: 'border-amber-300',
-    iconGlow: 'shadow-[0_0_16px_rgba(245,158,11,0.35)]',
-    lineVia: 'via-amber-500',
+    text: 'text-blue-600',
+    border: 'border-blue-200/80',
+    bg: 'bg-blue-50/70',
+    iconBorder: 'border-blue-400',
+    iconGlow: 'shadow-[0_0_16px_rgba(37,99,235,0.35)]',
+    lineVia: 'via-blue-500',
   },
   safety_output: {
-    text: 'text-rose-600',
-    border: 'border-rose-200/80',
-    bg: 'bg-rose-50/70',
-    iconBorder: 'border-rose-300',
-    iconGlow: 'shadow-[0_0_16px_rgba(244,63,94,0.3)]',
-    lineVia: 'via-rose-500',
+    text: 'text-teal-600',
+    border: 'border-teal-200/80',
+    bg: 'bg-teal-50/70',
+    iconBorder: 'border-teal-400',
+    iconGlow: 'shadow-[0_0_16px_rgba(13,148,136,0.35)]',
+    lineVia: 'via-teal-500',
   },
   response: {
     text: 'text-emerald-600',
     border: 'border-emerald-200/80',
     bg: 'bg-emerald-50/70',
-    iconBorder: 'border-emerald-300',
+    iconBorder: 'border-emerald-400',
     iconGlow: 'shadow-[0_0_16px_rgba(16,185,129,0.35)]',
     lineVia: 'via-emerald-500',
   },
 };
 
 const FLOW_LINE_COLORS = [
-  'via-violet-500',
-  'via-indigo-500',
-  'via-fuchsia-500',
-  'via-cyan-400',
-  'via-amber-400',
-  'via-rose-400',
+  'via-zinc-700',
+  'via-blue-500',
+  'via-teal-500',
+  'via-green-500',
+  'via-blue-400',
+  'via-teal-400',
   'via-emerald-500',
 ] as const;
 
@@ -576,7 +576,7 @@ function OrchestrationDiagram({
 }) {
   return (
     <div className="relative mt-4">
-      <div className="absolute left-[22px] top-4 bottom-4 w-[2px] rounded-full bg-violet-100/90" />
+      <div className="absolute left-[22px] top-4 bottom-4 w-[2px] rounded-full bg-teal-100/90" />
       <div className="pointer-events-none absolute left-[22px] top-4 bottom-4 w-[2px] overflow-hidden rounded-full">
         {FLOW_LINE_COLORS.map((via, i) => (
           <div
@@ -712,7 +712,7 @@ function OrchestrationStageCard({
                     <span
                       key={sub.id}
                       className={`rounded-md px-1.5 py-0.5 text-[9px] font-semibold transition-colors ${
-                        activeSub === sub.id ? 'bg-violet-600 text-white' : 'bg-zinc-50 text-zinc-400'
+                        activeSub === sub.id ? 'bg-teal-600 text-white' : 'bg-zinc-50 text-zinc-500'
                       }`}
                     >
                       {sub.name}
@@ -741,9 +741,9 @@ function MessageBubble({ message }: { message: Message }) {
       className={`flex items-start gap-3 ${isUser ? 'flex-row-reverse' : ''}`}
     >
       <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border ${
-        isUser ? 'bg-violet-600 border-violet-500 text-white'
+        isUser ? 'bg-black border-black text-white'
           : parent ? `${parent.bgColor} ${parent.borderColor} ${parent.color}`
-          : 'bg-violet-100 border-violet-200 text-violet-600'
+          : 'bg-teal-100 border-teal-200 text-teal-600'
       }`}>
         {isUser ? <User className="w-4 h-4" /> : SubIcon ? <SubIcon className="w-4 h-4" /> : ParentIcon ? <ParentIcon className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
       </div>
@@ -755,7 +755,7 @@ function MessageBubble({ message }: { message: Message }) {
           </span>
         )}
         <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${
-          isUser ? 'bg-violet-600 text-white rounded-tr-sm' : 'bg-white border border-violet-200/80 text-zinc-800 rounded-tl-sm'
+          isUser ? 'bg-black text-white rounded-tr-sm' : 'bg-white border border-teal-200/80 text-black rounded-tl-sm'
         }`}>
           {message.content}
           {!isUser && message.ctas && message.ctas.length > 0 && parent && (

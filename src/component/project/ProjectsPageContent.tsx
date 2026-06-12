@@ -238,7 +238,7 @@ export default function ProjectsPageContent() {
               href="https://a.co/d/06z7LV25"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-2.5 text-sm font-bold text-white transition hover:brightness-110"
+              className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#0d9488] px-6 py-2.5 text-sm font-bold text-white transition hover:bg-teal-700"
             >
               View on Amazon
             </a>
@@ -252,7 +252,7 @@ export default function ProjectsPageContent() {
               href="https://www.amazon.com/author/drsk1"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex items-center justify-center rounded-full bg-violet-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500"
+              className="mt-4 inline-flex items-center justify-center rounded-full bg-[#0d9488] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-700"
             >
               Read books on Amazon
             </a>

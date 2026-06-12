@@ -1,5 +1,7 @@
 /** Shared mobile-first home page utilities (light theme, aligned with /about). */
 
+import { ctaPrimaryClass, ctaSecondaryClass } from '@/lib/site-theme';
+
 export const homeBg = 'bg-[#F8F7FF] text-zinc-900';
 
 export const sectionPad = 'px-5 py-12 sm:px-8 sm:py-14 md:px-10 md:py-16 lg:px-12 lg:py-20';
@@ -19,11 +21,9 @@ export const sectionDesc = 'mt-2 text-sm leading-relaxed text-zinc-600 sm:text-b
 export const glassCard =
   'flex h-full min-h-0 flex-col rounded-2xl border border-violet-200/80 bg-white/90 p-5 shadow-[0_8px_32px_rgba(139,92,246,0.08)] backdrop-blur-sm sm:p-6';
 
-export const ctaPrimary =
-  'inline-flex min-h-[44px] w-full items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(139,92,246,0.35)] transition hover:brightness-110 sm:w-auto';
+export const ctaPrimary = ctaPrimaryClass;
 
-export const ctaSecondary =
-  'inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-violet-300 bg-white px-6 py-2.5 text-sm font-semibold text-violet-800 transition hover:border-violet-400 hover:bg-violet-50 sm:w-auto';
+export const ctaSecondary = ctaSecondaryClass;
 
 export const gradientText =
   'bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent';

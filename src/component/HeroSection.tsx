@@ -107,7 +107,7 @@ export default function HeroSection() {
               >
                 <Link
                   href="/services"
-                  className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] px-10 py-3.5 text-base font-semibold text-white shadow-[0_0_32px_rgba(139,92,246,0.45)] transition hover:brightness-110 sm:w-auto"
+                  className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-[#0d9488] px-10 py-3.5 text-base font-semibold text-white shadow-[0_0_32px_rgba(13,148,136,0.4)] transition hover:bg-teal-700 sm:w-auto"
                 >
                   Get started
                   <ArrowRightIcon className="h-5 w-5" />

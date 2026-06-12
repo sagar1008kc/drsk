@@ -21,27 +21,27 @@ const focusTags = [
 const toolGroups = [
   {
     label: 'AI Models & APIs',
-    color: 'violet',
+    color: 'teal',
     tools: ['OpenAI', 'Anthropic Claude', 'Google Gemini', 'Meta Llama', 'Mistral AI', 'Multi-Model Routing'],
   },
   {
     label: 'Agentic Frameworks',
-    color: 'indigo',
+    color: 'blue',
     tools: ['LangChain', 'LangGraph', 'ADK', 'CrewAI', 'AutoGen'],
   },
   {
     label: 'Retrieval & RAG',
-    color: 'fuchsia',
+    color: 'green',
     tools: ['Pinecone', 'Weaviate', 'ChromaDB', 'Azure AI Search', 'Qdrant', 'pgvector'],
   },
   {
     label: 'Dev Tools & MCP',
-    color: 'sky',
+    color: 'blue',
     tools: ['Cursor', 'GitHub Copilot','Claude Desktop','LangGraph Studio', 'LangChain MCP Adapter', 'LangSmith', 'Google ADK', 'ANY Learn & Adopt'],
   },
   {
     label: 'Cloud, MLOps & Deployment',
-    color: 'emerald',
+    color: 'teal',
     tools: ['Azure OpenAI', 'Google Vertex AI', 'Google Cloud', 'Docker', 'Kubernetes', 'Vercel', 'Terraform', 'Weights & Biases'],
   },
 ] as const;
@@ -49,20 +49,53 @@ const toolGroups = [
 type ToolColor = (typeof toolGroups)[number]['color'];
 
 const toolChipClass: Record<ToolColor, string> = {
-  violet:  'border-violet-500/35 bg-violet-500/10 text-violet-300 hover:border-violet-400/60 hover:bg-violet-500/20',
-  indigo:  'border-indigo-500/35 bg-indigo-500/10 text-indigo-300 hover:border-indigo-400/60 hover:bg-indigo-500/20',
-  fuchsia: 'border-fuchsia-500/35 bg-fuchsia-500/10 text-fuchsia-300 hover:border-fuchsia-400/60 hover:bg-fuchsia-500/20',
-  sky:     'border-sky-500/35 bg-sky-500/10 text-sky-300 hover:border-sky-400/60 hover:bg-sky-500/20',
-  emerald: 'border-emerald-500/35 bg-emerald-500/10 text-emerald-300 hover:border-emerald-400/60 hover:bg-emerald-500/20',
+  teal:  'border-teal-500/35 bg-teal-500/10 text-teal-300 hover:border-teal-400/60 hover:bg-teal-500/20',
+  blue:  'border-blue-500/35 bg-blue-500/10 text-blue-300 hover:border-blue-400/60 hover:bg-blue-500/20',
+  green: 'border-green-500/35 bg-green-500/10 text-green-300 hover:border-green-400/60 hover:bg-green-500/20',
 };
 
 const toolLabelClass: Record<ToolColor, string> = {
-  violet:  'text-violet-500',
-  indigo:  'text-indigo-400',
-  fuchsia: 'text-fuchsia-400',
-  sky:     'text-sky-400',
-  emerald: 'text-emerald-400',
+  teal:  'text-teal-400',
+  blue:  'text-blue-400',
+  green: 'text-green-400',
 };
+
+const focusChipClasses = [
+  'rounded-md border border-teal-500/30 bg-teal-500/[0.12] px-3 py-1.5 font-mono text-xs font-medium text-teal-300 shadow-[0_0_14px_rgba(13,148,136,0.15)] backdrop-blur-sm transition hover:border-teal-400/60 hover:bg-teal-500/20 hover:text-teal-200 sm:text-[0.8125rem]',
+  'rounded-md border border-blue-500/30 bg-blue-500/[0.12] px-3 py-1.5 font-mono text-xs font-medium text-blue-300 shadow-[0_0_14px_rgba(37,99,235,0.15)] backdrop-blur-sm transition hover:border-blue-400/60 hover:bg-blue-500/20 hover:text-blue-200 sm:text-[0.8125rem]',
+  'rounded-md border border-green-500/30 bg-green-500/[0.12] px-3 py-1.5 font-mono text-xs font-medium text-green-300 shadow-[0_0_14px_rgba(22,163,74,0.15)] backdrop-blur-sm transition hover:border-green-400/60 hover:bg-green-500/20 hover:text-green-200 sm:text-[0.8125rem]',
+  'rounded-md border border-emerald-500/30 bg-emerald-500/[0.12] px-3 py-1.5 font-mono text-xs font-medium text-emerald-300 shadow-[0_0_14px_rgba(16,185,129,0.15)] backdrop-blur-sm transition hover:border-emerald-400/60 hover:bg-emerald-500/20 hover:text-emerald-200 sm:text-[0.8125rem]',
+];
+
+const pillarAccents = [
+  {
+    hover: 'hover:border-teal-500/50 hover:bg-teal-500/[0.08]',
+    glow: 'bg-[radial-gradient(ellipse_at_top_left,rgba(13,148,136,0.1),transparent_55%)]',
+    label: 'text-teal-400',
+  },
+  {
+    hover: 'hover:border-blue-500/50 hover:bg-blue-500/[0.08]',
+    glow: 'bg-[radial-gradient(ellipse_at_top_left,rgba(37,99,235,0.1),transparent_55%)]',
+    label: 'text-blue-400',
+  },
+  {
+    hover: 'hover:border-green-500/50 hover:bg-green-500/[0.08]',
+    glow: 'bg-[radial-gradient(ellipse_at_top_left,rgba(22,163,74,0.1),transparent_55%)]',
+    label: 'text-green-400',
+  },
+  {
+    hover: 'hover:border-emerald-500/50 hover:bg-emerald-500/[0.08]',
+    glow: 'bg-[radial-gradient(ellipse_at_top_left,rgba(16,185,129,0.1),transparent_55%)]',
+    label: 'text-emerald-400',
+  },
+] as const;
+
+const nodeColors = [
+  'bg-teal-400/60 shadow-[0_0_10px_rgba(13,148,136,0.7)]',
+  'bg-blue-400/60 shadow-[0_0_10px_rgba(37,99,235,0.7)]',
+  'bg-green-400/60 shadow-[0_0_10px_rgba(22,163,74,0.7)]',
+  'bg-emerald-400/60 shadow-[0_0_10px_rgba(16,185,129,0.7)]',
+];
 
 const pillars = [
   {
@@ -107,15 +140,15 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
     >
       {/* Background: radial glows */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_50%_-5%,rgba(139,92,246,0.22),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_45%_40%_at_85%_75%,rgba(99,102,241,0.14),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_35%_at_10%_85%,rgba(167,139,250,0.1),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_50%_-5%,rgba(13,148,136,0.22),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_45%_40%_at_85%_75%,rgba(37,99,235,0.14),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_35%_at_10%_85%,rgba(22,163,74,0.1),transparent_55%)]" />
         {/* Subtle grid */}
         <div
           className="absolute inset-0 opacity-[0.05]"
           style={{
             backgroundImage:
-              'linear-gradient(rgba(139,92,246,1) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,1) 1px,transparent 1px)',
+              'linear-gradient(rgba(13,148,136,1) 1px,transparent 1px),linear-gradient(90deg,rgba(13,148,136,1) 1px,transparent 1px)',
             backgroundSize: '64px 64px',
           }}
         />
@@ -125,7 +158,7 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
       {nodePositions.map((node, i) => (
         <span
           key={i}
-          className="drsk-hero-star pointer-events-none absolute h-1.5 w-1.5 rounded-full bg-violet-400/60 shadow-[0_0_10px_rgba(139,92,246,0.7)]"
+          className={`drsk-hero-star pointer-events-none absolute h-1.5 w-1.5 rounded-full ${nodeColors[i % nodeColors.length]}`}
           style={{ top: node.top, left: node.left, animationDelay: `${node.delay}s` }}
           aria-hidden
         />
@@ -140,8 +173,8 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
           transition={{ duration: 0.5 }}
           className="flex justify-center"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-violet-500/40 bg-violet-500/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-violet-300 sm:text-xs">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-400" aria-hidden />
+          <span className="inline-flex items-center gap-2 rounded-full border border-teal-500/40 bg-teal-500/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-teal-300 sm:text-xs">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-400" aria-hidden />
             Engineering Focus
           </span>
         </motion.div>
@@ -155,7 +188,7 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
           className="mt-5 text-center text-3xl font-bold leading-[1.18] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]"
         >
           AI-Native &amp;{' '}
-          <span className="bg-gradient-to-r from-violet-400 via-fuchsia-300 to-indigo-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-teal-400 via-blue-400 to-emerald-400 bg-clip-text text-transparent">
             Agentic Engineering
           </span>
         </motion.h2>
@@ -182,10 +215,10 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
           className="mt-8 flex flex-wrap justify-center gap-2 sm:gap-2.5"
           aria-label="Technical focus areas"
         >
-          {focusTags.map((tag) => (
+          {focusTags.map((tag, i) => (
             <span
               key={tag}
-              className="rounded-md border border-violet-500/30 bg-violet-500/[0.12] px-3 py-1.5 font-mono text-xs font-medium text-violet-300 shadow-[0_0_14px_rgba(139,92,246,0.15)] backdrop-blur-sm transition hover:border-violet-400/60 hover:bg-violet-500/20 hover:text-violet-200 sm:text-[0.8125rem]"
+              className={focusChipClasses[i % focusChipClasses.length]}
             >
               {tag}
             </span>
@@ -194,18 +227,20 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
 
         {/* Pillar cards */}
         <div className="mt-14 grid gap-4 sm:mt-16 sm:gap-5 md:grid-cols-2 lg:gap-6">
-          {pillars.map((pillar, i) => (
+          {pillars.map((pillar, i) => {
+            const accent = pillarAccents[i % pillarAccents.length];
+            return (
             <motion.article
               key={pillar.label}
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.45, delay: 0.08 + i * 0.08 }}
-              className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 backdrop-blur-sm transition hover:border-violet-500/50 hover:bg-violet-500/[0.08] sm:p-7"
+              className={`group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 backdrop-blur-sm transition sm:p-7 ${accent.hover}`}
             >
-              <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_top_left,rgba(139,92,246,0.1),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className={`pointer-events-none absolute inset-0 rounded-2xl ${accent.glow} opacity-0 transition-opacity duration-300 group-hover:opacity-100`} />
               <div className="relative">
-                <span className="font-mono text-xs font-bold tracking-widest text-violet-500">
+                <span className={`font-mono text-xs font-bold tracking-widest ${accent.label}`}>
                   {pillar.label}
                 </span>
                 <h3 className="mt-3 text-lg font-bold text-white sm:text-xl">{pillar.title}</h3>
@@ -220,7 +255,8 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
                 {pillar.label}
               </div>
             </motion.article>
-          ))}
+            );
+          })}
         </div>
 
         {/* 05 — Featured AI System Design */}
@@ -229,13 +265,13 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.45, delay: 0.1 }}
-          className="group relative mt-4 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 backdrop-blur-sm transition hover:border-cyan-500/50 hover:bg-cyan-500/[0.06] sm:mt-5 sm:p-7 lg:mt-6"
+          className="group relative mt-4 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 backdrop-blur-sm transition hover:border-teal-500/50 hover:bg-teal-500/[0.06] sm:mt-5 sm:p-7 lg:mt-6"
         >
-          <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_top_left,rgba(6,182,212,0.12),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_top_left,rgba(13,148,136,0.12),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <div className="relative">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className="font-mono text-xs font-bold tracking-widest text-cyan-400">05</span>
-              <span className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-widest text-cyan-300 sm:text-xs">
+              <span className="font-mono text-xs font-bold tracking-widest text-teal-400">05</span>
+              <span className="rounded-full border border-teal-500/30 bg-teal-500/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-widest text-teal-300 sm:text-xs">
                 Featured AI System Design
               </span>
             </div>
@@ -248,7 +284,7 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
             </p>
             <Link
               href="/portfolio/agentic-ai-system-design"
-              className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-cyan-300 transition hover:text-cyan-200"
+              className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-teal-300 transition hover:text-teal-200"
             >
               View interactive system design
               <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
@@ -270,13 +306,13 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.45, delay: 0.12 }}
-          className="group relative mt-4 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 backdrop-blur-sm transition hover:border-violet-500/50 hover:bg-violet-500/[0.06] sm:mt-5 sm:p-7 lg:mt-6"
+          className="group relative mt-4 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 backdrop-blur-sm transition hover:border-blue-500/50 hover:bg-blue-500/[0.06] sm:mt-5 sm:p-7 lg:mt-6"
         >
-          <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_top_right,rgba(139,92,246,0.1),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_top_right,rgba(37,99,235,0.1),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <div className="relative">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className="font-mono text-xs font-bold tracking-widest text-violet-500">06</span>
-              <span className="rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-widest text-violet-400 sm:text-xs">
+              <span className="font-mono text-xs font-bold tracking-widest text-blue-400">06</span>
+              <span className="rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-widest text-blue-300 sm:text-xs">
                 AI Engineering Stack
               </span>
             </div>
@@ -322,7 +358,7 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
           className="mt-12 text-center text-sm leading-relaxed text-zinc-500 sm:text-base"
         >
           Focused on{' '}
-          <span className="text-violet-400">design, build, and deploy production-ready AI solutions that transform business challenges into scalable, secure, and human-centered outcomes—specializing in agentic AI, multi-agent systems, RAG, LLM-powered applications, automation, and tool integration.</span>,{' '}
+          <span className="text-teal-400">design, build, and deploy production-ready AI solutions that transform business challenges into scalable, secure, and human-centered outcomes—specializing in agentic AI, multi-agent systems, RAG, LLM-powered applications, automation, and tool integration.</span>,{' '}
         </motion.p>
       </div>
     </section>

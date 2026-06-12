@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import {
   PROFILE_HERO_BODY,
   PROFILE_HERO_HEADLINE,
+  USAII_CAIS_CERT_LABEL,
+  USAII_CAIS_CERT_URL,
 } from '@/lib/profile-hero';
 import { PROFILE_TAGS } from '@/lib/profile-tags';
 import { aboutPadX, badgeClass, container } from '@/component/about/styles';
@@ -12,6 +14,8 @@ import ExpertProfileCard from '@/component/shared/ExpertProfileCard';
 import ThreeParticleBackground from '@/component/shared/ThreeParticleBackground';
 
 export default function AboutHeroSection() {
+  const [heroBodyBefore, heroBodyAfter] = PROFILE_HERO_BODY.split(USAII_CAIS_CERT_LABEL);
+
   return (
     <section className="relative -mt-[3.75rem] flex min-h-[100dvh] flex-col overflow-hidden border-b border-teal-200/60 bg-gradient-to-br from-[#f0fdfa] via-white to-emerald-50/90 pt-[3.75rem]">
       <ThreeParticleBackground variant="brand" />
@@ -45,7 +49,16 @@ export default function AboutHeroSection() {
               {PROFILE_HERO_HEADLINE.highlight}
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg sm:leading-8">
-              {PROFILE_HERO_BODY}
+              {heroBodyBefore}
+              <a
+                href={USAII_CAIS_CERT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-blue-600 underline decoration-blue-600/70 underline-offset-2 transition-colors hover:text-blue-700 hover:decoration-blue-700"
+              >
+                {USAII_CAIS_CERT_LABEL}
+              </a>
+              {heroBodyAfter}
             </p>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg sm:leading-8">
               <span className="mr-2 inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-violet-700">
