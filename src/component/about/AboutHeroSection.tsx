@@ -8,7 +8,7 @@ import {
   USAII_CAIS_CERT_URL,
 } from '@/lib/profile-hero';
 import { PROFILE_TAGS } from '@/lib/profile-tags';
-import { aboutPadX, badgeClass, container } from '@/component/about/styles';
+import { aboutPadX, container } from '@/component/about/styles';
 import AiHeroDiagram from '@/component/shared/AiHeroDiagram';
 import ExpertProfileCard from '@/component/shared/ExpertProfileCard';
 import ThreeParticleBackground from '@/component/shared/ThreeParticleBackground';
@@ -44,7 +44,9 @@ export default function AboutHeroSection() {
             transition={{ duration: 0.55 }}
             className="relative z-10"
           >
-            <span className={badgeClass}>About Dr. SK</span>
+            <span className="inline-flex items-center rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-sm font-semibold tracking-wide text-[#0d9488] sm:text-base">
+              About Sagar Khatri
+            </span>
             <h1 className="mt-5 text-3xl font-bold leading-[1.2] tracking-tight text-black sm:text-4xl md:text-5xl lg:text-[3.25rem]">
               {PROFILE_HERO_HEADLINE.highlight}
             </h1>
