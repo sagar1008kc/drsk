@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const scriptSrc =
   process.env.NODE_ENV === 'development'
-    ? "'self' 'unsafe-inline' 'unsafe-eval' https://cdn.botpress.cloud"
-    : "'self' 'unsafe-inline' https://cdn.botpress.cloud";
+    ? "'self' 'unsafe-inline' 'unsafe-eval' https://cdn.botpress.cloud https://files.bpcontent.cloud"
+    : "'self' 'unsafe-inline' https://cdn.botpress.cloud https://files.bpcontent.cloud";
 
 const nextConfig = {
   reactStrictMode: true,

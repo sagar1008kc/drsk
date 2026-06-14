@@ -71,7 +71,15 @@ export default function DisclaimerPage() {
             policies.
           </p>
 
-          <h2>6. Agreement</h2>
+          <h2>6. AI assistants &amp; chat</h2>
+          <p>
+            Site guides, chatbots, and other AI-assisted tools may produce inaccurate,
+            incomplete, or outdated responses. <strong>AI can make mistakes.</strong>{' '}
+            Verify important information before you rely on it for career, financial,
+            legal, or health decisions.
+          </p>
+
+          <h2>7. Agreement</h2>
           <p>
             By using this site, booking, or requesting services, you acknowledge this
             disclaimer and our{' '}

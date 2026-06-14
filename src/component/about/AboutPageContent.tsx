@@ -7,6 +7,7 @@ import AboutHeroSection from '@/component/about/AboutHeroSection';
 import AiEngineeringSection from '@/component/home/AiEngineeringSection';
 import { AgenticWorkflowSystemDesign } from '@/component/home/AgenticWorkflowSystemDesign';
 import LearnAdaptLeadSection from '@/component/portfolio/LearnAdaptLeadSection';
+import PortfolioAiCareerHubSection from '@/component/portfolio/PortfolioAiCareerHubSection';
 import PortfolioLiveProjectsSection from '@/component/portfolio/PortfolioLiveProjectsSection';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
 import {
@@ -134,6 +135,7 @@ export default function AboutPageContent() {
       <AboutHeroSection />
       <AgenticWorkflowSystemDesign />
       <AiEngineeringSection />
+      <PortfolioAiCareerHubSection />
       <PortfolioLiveProjectsSection />
 
       {/* ── Official Links ── */}

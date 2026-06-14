@@ -807,10 +807,10 @@ export const SUGGESTIONS = [
 ];
 
 export const FALLBACK_REPLY =
-  "I'm not sure which area fits best. Try asking about Dr. SK & portfolio (RAG), books, live projects, or Salesforce OneCRM.";
+  "I'm not sure which area fits best. Try Dr. SK & portfolio, books, live projects, or Salesforce OneCRM.";
 
 export const WELCOME_MESSAGE =
-  'Welcome to SK Creation Multi-Agent Hub. How can I assist you today?';
+  'Welcome! Ask about projects, Dr. SK, books, or articles.';
 
 export const SUB_AGENT_ICONS: Partial<Record<SubAgentId, LucideIcon>> = {
   career: Briefcase,

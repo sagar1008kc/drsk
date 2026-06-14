@@ -41,6 +41,7 @@ import {
   type RoutingStageId,
   type SubAgentId,
 } from '@/lib/multi-agent-hub';
+import { AI_CHAT_DISCLAIMER_SHORT } from '@/lib/ai-disclaimer';
 
 type AgentCta = { text: string; url: string };
 
@@ -325,6 +326,9 @@ export default function MultiAgentChatbotSection() {
                 <Send className="w-4 h-4" />
               </button>
             </form>
+            <p className="mt-2 text-center text-[10px] leading-snug text-zinc-400">
+              {AI_CHAT_DISCLAIMER_SHORT}
+            </p>
           </div>
         </div>
       </div>
