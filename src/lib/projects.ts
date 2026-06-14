@@ -1,5 +1,6 @@
 export type ProjectAccent =
   | 'violet'
+  | 'blue'
   | 'indigo'
   | 'emerald'
   | 'amber'
@@ -26,22 +27,22 @@ export const FEATURED_PROJECTS: ProjectItem[] = [
     id: 'pilotmycareer',
     title: 'Pilot My Career',
     domain: 'pilotmycareer.com',
-    tag: 'Live · AI career platform',
+    tag: 'For professionals · Free career check',
     description:
-      'You are the pilot — AI is your copilot. Career readiness checkups, resume + JD matching, LinkedIn optimization, AI career reports, and mental fitness tools in one cockpit.',
+      'You are the pilot. AI is your copilot. A free AI career hub for professionals — resume matching, interview prep, LinkedIn guidance, and wellness support.',
     href: 'https://www.pilotmycareer.com/',
     external: true,
-    accent: 'violet',
+    accent: 'blue',
     featured: true,
     highlights: [
-      'Career readiness scoring & pillar insights',
-      'Resume + JD alignment & ATS guidance',
-      'AI career reports & document vault',
-      'Stress check-ins & mindfulness for professionals',
+      'Navigate career uncertainty with confidence',
+      'Resume-to-job matching & interview prep',
+      'LinkedIn improvement & AI career resources',
+      'Wellness support for working professionals',
     ],
     meta: [
-      { label: 'Stack', value: 'Next.js · AI orchestration' },
-      { label: 'Focus', value: 'Career + wellness' },
+      { label: 'Audience', value: 'Professionals' },
+      { label: 'Focus', value: 'Career growth + wellness' },
     ],
   },
   {
@@ -79,9 +80,11 @@ export const FEATURED_PROJECTS: ProjectItem[] = [
     featured: true,
     highlights: [
       'Kid-friendly games hub',
+      'Tiktactoe game',
+      'Memory game & more',
       'Positive affirmations & coloring books',
       'Story-driven book storefront',
-      'YouTube and Amazon integrations',
+
     ],
     meta: [
       { label: 'Type', value: 'Games + publishing' },

@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 const focusTags = [
@@ -259,48 +258,7 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
           })}
         </div>
 
-        {/* 05 — Featured AI System Design */}
-        <motion.article
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.45, delay: 0.1 }}
-          className="group relative mt-4 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 backdrop-blur-sm transition hover:border-teal-500/50 hover:bg-teal-500/[0.06] sm:mt-5 sm:p-7 lg:mt-6"
-        >
-          <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_top_left,rgba(13,148,136,0.12),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          <div className="relative">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className="font-mono text-xs font-bold tracking-widest text-teal-400">05</span>
-              <span className="rounded-full border border-teal-500/30 bg-teal-500/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-widest text-teal-300 sm:text-xs">
-                Featured AI System Design
-              </span>
-            </div>
-            <h3 className="mt-3 text-lg font-bold text-white sm:text-xl">
-              Enterprise Multi-Agent AI System Design
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-400 sm:text-base">
-              A production-ready design for web/mobile AI assistants using multi-agent orchestration,
-              RAG, MCP tool execution, guardrails, human approval, observability, and evaluation.
-            </p>
-            <Link
-              href="/portfolio/agentic-ai-system-design"
-              className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-teal-300 transition hover:text-teal-200"
-            >
-              View interactive system design
-              <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
-                →
-              </span>
-            </Link>
-          </div>
-          <div
-            className="pointer-events-none absolute bottom-3 right-5 select-none font-mono text-5xl font-bold text-white/[0.04]"
-            aria-hidden
-          >
-            05
-          </div>
-        </motion.article>
-
-        {/* 06 — AI Toolchain card (full width) */}
+        {/* 05 — AI Toolchain card (full width) */}
         <motion.article
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -311,7 +269,7 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
           <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_top_right,rgba(37,99,235,0.1),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <div className="relative">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className="font-mono text-xs font-bold tracking-widest text-blue-400">06</span>
+              <span className="font-mono text-xs font-bold tracking-widest text-blue-400">05</span>
               <span className="rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-widest text-blue-300 sm:text-xs">
                 AI Engineering Stack
               </span>
@@ -345,7 +303,7 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
             className="pointer-events-none absolute bottom-3 right-5 select-none font-mono text-5xl font-bold text-white/[0.04]"
             aria-hidden
           >
-            06
+            05
           </div>
         </motion.article>
 

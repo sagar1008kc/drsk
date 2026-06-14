@@ -5,13 +5,13 @@ import { motion } from 'framer-motion';
 const DASHBOARD_URL = 'https://www.pilotmycareer.com/dashboard';
 
 const capabilities = [
-  'Practical architecture',
-  'Agentic AI workflows',
-  'Resume-to-JD matching',
-  'Document intelligence',
-  'Career readiness checkups',
-  'Skill alignment analysis',
-  'AI-assisted career guidance',
+  'Modern AI resources',
+  'System design insights',
+  'Resume-to-job matching',
+  'Interview preparation',
+  'LinkedIn improvement',
+  'Wellness support',
+  'Career readiness check · Free',
 ];
 
 export default function PortfolioAiCareerHubSection() {
@@ -42,25 +42,20 @@ export default function PortfolioAiCareerHubSection() {
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-teal-500/40 bg-teal-500/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-teal-300 sm:text-xs">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-400" aria-hidden />
-            AI Career Hub
+            For professionals
           </span>
           <h2
             id="ai-career-hub-heading"
             className="mt-4 text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl"
           >
-            PilotMyCareer{' '}
+            You are the pilot.{' '}
             <span className="bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              Dashboard
+              AI is your copilot.
             </span>
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-zinc-400 sm:text-base">
-            PilotMyCareer is my AI-powered career platform designed to demonstrate practical
-            architecture, agentic AI workflows, resume-to-job-description matching, document
-            intelligence, and career resources.
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-zinc-500 sm:text-base">
-            Open the dashboard to explore how the system analyzes career readiness checkups,
-            compares skill alignment, and supports AI-assisted career guidance.
+            A free AI career hub for professionals — resume matching, interview prep, LinkedIn
+            guidance, and wellness support to grow with clarity and confidence.
           </p>
         </motion.div>
 

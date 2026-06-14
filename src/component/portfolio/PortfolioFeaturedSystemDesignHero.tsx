@@ -8,11 +8,11 @@ export default function PortfolioFeaturedSystemDesignHero() {
     <section
       id="featured-ai-system-design"
       aria-labelledby="featured-ai-system-design-heading"
-      className="relative flex min-h-screen scroll-mt-[3.75rem] flex-col items-center justify-center overflow-hidden bg-[#050508] px-4 py-16 font-sans sm:px-8"
+      className="relative flex min-h-screen scroll-mt-[3.75rem] flex-col items-center justify-center overflow-hidden bg-[#050810] px-4 py-16 font-sans sm:px-8"
     >
-      <ParticleWaveBackground variant="colorful" />
+      <ParticleWaveBackground variant="brand" />
 
-      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#050508_90%)] opacity-95" />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,#050810_90%)] opacity-95" />
 
       <div className="relative z-10 flex w-full max-w-[1200px] flex-col items-center text-center">
         <div className="drsk-section-fade-in-up mb-[clamp(1.5rem,4vh,3rem)] inline-block opacity-0">

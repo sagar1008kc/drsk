@@ -807,7 +807,7 @@ export const SUGGESTIONS = [
 ];
 
 export const FALLBACK_REPLY =
-  "I'm not sure which area fits best. Try Dr. SK & portfolio, books, live projects, or Salesforce OneCRM.";
+  "I’m focused on Dr. SK Creation’s website knowledge. For general questions, please use the chatbot assistant on this page.";
 
 export const WELCOME_MESSAGE =
   'Welcome! Ask about projects, Dr. SK, books, or articles.';

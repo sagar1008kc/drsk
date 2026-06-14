@@ -90,12 +90,6 @@ export default function ThreeParticleBackground({
     );
     scene.add(lines);
 
-    const knot = new THREE.Mesh(
-      new THREE.TorusKnotGeometry(2.8, 0.55, 100, 16),
-      new THREE.MeshBasicMaterial({ color: accentColor, wireframe: true, transparent: true, opacity: 0.07 })
-    );
-    scene.add(knot);
-
     const resize = () => {
       const { clientWidth, clientHeight } = container;
       camera.aspect = clientWidth / clientHeight;
@@ -135,8 +129,6 @@ export default function ThreeParticleBackground({
       }
       lines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePos, 3));
 
-      knot.rotation.x += 0.002 * speed;
-      knot.rotation.y += 0.003 * speed;
       scene.rotation.y += 0.0008 * speed;
       renderer.render(scene, camera);
     };
@@ -150,8 +142,6 @@ export default function ThreeParticleBackground({
       particles.material.dispose();
       lines.geometry.dispose();
       lines.material.dispose();
-      knot.geometry.dispose();
-      (knot.material as THREE.Material).dispose();
       renderer.dispose();
     };
   }, [isLive, variant]);

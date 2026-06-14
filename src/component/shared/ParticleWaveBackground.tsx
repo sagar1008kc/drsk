@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-export type ParticleWaveVariant = 'light-interactive' | 'monochrome' | 'colorful';
+export type ParticleWaveVariant = 'light-interactive' | 'monochrome' | 'colorful' | 'brand';
 
 type ParticleWaveBackgroundProps = {
   variant: ParticleWaveVariant;
@@ -31,6 +31,7 @@ type VariantConfig = {
   saturation?: number;
   lightness?: number;
   solidColor?: number;
+  palette?: number[];
 };
 
 const VARIANTS: Record<ParticleWaveVariant, VariantConfig> = {
@@ -93,6 +94,23 @@ const VARIANTS: Record<ParticleWaveVariant, VariantConfig> = {
     saturation: 0.9,
     lightness: 0.6,
   },
+  brand: {
+    bg: 0x050810,
+    fog: 0.02,
+    separation: 1.5,
+    particleSize: 0.25,
+    particleOpacity: 0.85,
+    cameraY: 15,
+    cameraBaseY: 12,
+    mouseScale: 0.08,
+    waveAmplitude: 3,
+    waveSpeed: 0.04,
+    rotationSpeed: 0.001,
+    interactive: false,
+    additiveBlend: true,
+    colored: true,
+    palette: [0x0d9488, 0x14b8a6, 0x0f766e, 0x2dd4bf, 0x06b6d4],
+  },
 };
 
 function getGridSize() {
@@ -144,11 +162,15 @@ export default function ParticleWaveBackground({
         positions[i + 2] = iy * config.separation - (amountY * config.separation) / 2;
 
         if (colors) {
-          const hue =
-            (config.hueBase ?? 0) +
-            (ix / amountX) * (config.hueSpreadX ?? 0) +
-            (iy / amountY) * (config.hueSpreadY ?? 0);
-          color.setHSL(hue, config.saturation ?? 0.8, config.lightness ?? 0.5);
+          if (config.palette?.length) {
+            color.setHex(config.palette[(ix + iy) % config.palette.length]);
+          } else {
+            const hue =
+              (config.hueBase ?? 0) +
+              (ix / amountX) * (config.hueSpreadX ?? 0) +
+              (iy / amountY) * (config.hueSpreadY ?? 0);
+            color.setHSL(hue, config.saturation ?? 0.8, config.lightness ?? 0.5);
+          }
           colors[i] = color.r;
           colors[i + 1] = color.g;
           colors[i + 2] = color.b;

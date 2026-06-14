@@ -5,6 +5,7 @@ import type { ProjectAccent } from '@/lib/projects';
 
 const accentGlow: Record<ProjectAccent, string> = {
   violet: 'from-violet-500/40 via-indigo-500/20',
+  blue: 'from-blue-500/40 via-sky-500/20',
   indigo: 'from-indigo-500/40 via-violet-500/20',
   emerald: 'from-emerald-500/40 via-teal-500/20',
   amber: 'from-amber-500/40 via-orange-500/20',

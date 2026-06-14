@@ -6,6 +6,7 @@ import type { ProjectAccent } from '@/lib/projects';
 
 const ACCENT_HEX: Record<ProjectAccent, [number, number]> = {
   violet: [0x8b5cf6, 0x6366f1],
+  blue: [0x3b82f6, 0x2563eb],
   indigo: [0x6366f1, 0x4f46e5],
   emerald: [0x10b981, 0x06b6d4],
   amber: [0xf59e0b, 0xf97316],

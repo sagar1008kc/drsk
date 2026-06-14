@@ -33,6 +33,13 @@ function getWaveGridSize() {
   return { width: 60, depth: 60 };
 }
 
+const BRAND_WAVE_PALETTE = [
+  new THREE.Color(0x0d9488),
+  new THREE.Color(0x14b8a6),
+  new THREE.Color(0x0f766e),
+  new THREE.Color(0x2dd4bf),
+];
+
 function AgenticWaveBackground() {
   const mountRef = useRef<HTMLDivElement>(null);
 
@@ -52,6 +59,7 @@ function AgenticWaveBackground() {
 
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
     const scales = new Float32Array(count);
 
     let i = 0;
@@ -61,19 +69,28 @@ function AgenticWaveBackground() {
         positions[i * 3 + 1] = 0;
         positions[i * 3 + 2] = iz * 0.5 - (depth * 0.5) / 2;
         scales[i] = 1;
+
+        const waveColor = BRAND_WAVE_PALETTE[(ix + iz) % BRAND_WAVE_PALETTE.length];
+        colors[i * 3] = waveColor.r;
+        colors[i * 3 + 1] = waveColor.g;
+        colors[i * 3 + 2] = waveColor.b;
         i++;
       }
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
 
     const material = new THREE.PointsMaterial({
-      color: 0x3b82f6,
-      size: 0.12,
+      color: 0xffffff,
+      vertexColors: true,
+      size: 0.14,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.75,
       sizeAttenuation: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
     });
 
     const particles = new THREE.Points(geometry, material);
@@ -184,7 +201,7 @@ function AgenticWaveBackground() {
   return (
     <div
       ref={mountRef}
-      className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-70"
+      className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-85"
       aria-hidden
     />
   );
@@ -258,10 +275,10 @@ export function AgenticWorkflowSystemDesign() {
     <section
       id="agentic-workflow-system-design"
       aria-labelledby="agentic-workflow-system-design-heading"
-      className="relative flex min-h-[100dvh] scroll-mt-[3.75rem] flex-col justify-between overflow-hidden bg-[#030712] px-3 py-5 font-sans text-slate-200 sm:px-6 sm:py-8 lg:px-8 lg:py-10"
+      className="relative flex min-h-[100dvh] scroll-mt-[3.75rem] flex-col justify-between overflow-hidden bg-[#050810] px-3 py-5 font-sans text-slate-200 sm:px-6 sm:py-8 lg:px-8 lg:py-10"
     >
       <AgenticWaveBackground />
-      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.05)_0%,rgba(3,7,18,0.8)_80%)]" />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,rgba(13,148,136,0.12)_0%,rgba(5,8,16,0.75)_80%)]" />
 
       {/* Top nav — horizontal scroll on mobile */}
       <div className="relative z-10 mx-auto mb-6 w-full max-w-7xl lg:mb-0">
