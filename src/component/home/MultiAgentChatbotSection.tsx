@@ -201,10 +201,10 @@ export default function MultiAgentChatbotSection() {
     <section
       id="multi-agent-platform"
       aria-labelledby="multi-agent-platform-heading"
-      className="relative -mt-[3.75rem] min-h-[100dvh] w-full bg-white pt-[3.75rem] text-zinc-900 font-sans overflow-hidden scroll-mt-[3.75rem]"
+      className="relative -mt-[3.75rem] min-h-[100dvh] w-full bg-black pt-[3.75rem] text-zinc-900 font-sans overflow-hidden scroll-mt-[3.75rem]"
     >
       <h2 id="multi-agent-platform-heading" className="sr-only">SK Creation Multi-Agent Hub</h2>
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_20%_40%,rgba(13,148,136,0.04),transparent_55%),radial-gradient(ellipse_60%_45%_at_85%_60%,rgba(16,185,129,0.035),transparent_50%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_20%_40%,rgba(13,148,136,0.18),transparent_55%),radial-gradient(ellipse_60%_45%_at_85%_60%,rgba(16,185,129,0.12),transparent_50%)]" />
 
       <div className="relative z-10 mx-auto flex h-[calc(100dvh-3.75rem)] max-w-7xl flex-col gap-4 px-4 py-4 md:flex-row md:gap-6 md:py-6">
         {/* Routing flow — top to bottom */}
@@ -263,11 +263,11 @@ export default function MultiAgentChatbotSection() {
               />
             </div>
             <div className="min-w-0 flex-1">
-                <p className="font-semibold text-lg text-zinc-900">Site guide</p>
+                <p className="font-semibold text-lg text-zinc-900">SK Multi-Agent</p>
                 <p className="text-xs text-zinc-500 truncate">
                   {flowStep !== 'idle' && flowStep !== 'complete'
                     ? FLOW_STEP_MESSAGES[flowStep as keyof typeof FLOW_STEP_MESSAGES] ?? 'Working on it…'
-                    : 'Ask me where to go on this site'}
+                    : 'Agentic workflow demo'}
                 </p>
             </div>
           </div>
