@@ -53,11 +53,12 @@ function DesktopNavLink({
   return (
     <Link
       href={href}
-      className="group relative inline-flex h-9 items-center px-3.5 text-sm font-bold text-[#000000] transition-colors hover:text-[#000000] focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+      className={`group relative inline-flex h-9 items-center rounded-full px-3.5 text-sm font-bold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+        active
+          ? 'bg-[#0d9488] text-white shadow-sm shadow-teal-500/25'
+          : 'text-black hover:bg-[#0d9488] hover:text-white'
+      }`}
     >
-      {active ? (
-        <span className="absolute inset-0 rounded-full border border-black/10 bg-black/[0.06] shadow-sm" />
-      ) : null}
       <span className="relative z-10">{label}</span>
     </Link>
   );
@@ -69,7 +70,7 @@ function DesktopBookLink({ book }: { book: (typeof FEATURED_BOOKS)[number] }) {
       href={book.href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative inline-flex h-9 items-center gap-1.5 rounded-full border border-transparent px-3 text-sm font-bold text-[#000000] transition hover:border-black/10 hover:bg-black/[0.04]"
+      className="group relative inline-flex h-9 items-center gap-1.5 rounded-full border border-transparent px-3 text-sm font-bold text-black transition hover:border-[#0d9488] hover:bg-[#0d9488] hover:text-white"
     >
       <span>{book.shortTitle}</span>
       <ExternalIcon className="h-3 w-3 shrink-0 opacity-60 transition group-hover:opacity-100" />
@@ -95,15 +96,15 @@ function MobileNavLink({
         onClick={onNavigate}
         className={`flex min-h-[48px] w-full items-center justify-between rounded-xl border px-4 text-sm font-bold transition ${
           active
-            ? 'border-black/15 bg-white text-[#000000] shadow-sm'
-            : 'border-black/10 bg-white/90 text-[#000000] hover:border-black/20 hover:bg-white'
+            ? 'border-[#0d9488] bg-[#0d9488] text-white shadow-sm'
+            : 'border-black/10 bg-white/90 text-[#000000] hover:border-[#0d9488] hover:bg-[#0d9488] hover:text-white'
         }`}
       >
         <span>{label}</span>
         {active ? (
-          <span className="h-2 w-2 rounded-full bg-[#000000]" />
+          <span className="h-2 w-2 rounded-full bg-white" />
         ) : (
-          <span className="text-xs text-black/40">→</span>
+          <span className="text-xs opacity-60">→</span>
         )}
       </Link>
     </div>
@@ -248,7 +249,7 @@ export default function Navbar() {
                     href={book.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex min-h-[48px] w-full items-center justify-between rounded-xl border border-black/10 bg-white/90 px-4 text-sm font-bold text-[#000000] hover:border-black/20 hover:bg-white"
+                    className="flex min-h-[48px] w-full items-center justify-between rounded-xl border border-black/10 bg-white/90 px-4 text-sm font-bold text-[#000000] transition hover:border-[#0d9488] hover:bg-[#0d9488] hover:text-white"
                   >
                     {book.shortTitle}
                     <ExternalIcon className="h-3.5 w-3.5 opacity-70" />

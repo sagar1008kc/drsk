@@ -141,8 +141,23 @@ export default function RootLayout({
           {children}
         </div>
         {/* Footer */}
-        <footer className="relative overflow-hidden border-t border-violet-300/30 bg-[linear-gradient(160deg,rgba(7,7,10,1)_0%,rgba(18,11,31,1)_45%,rgba(39,17,63,1)_100%)] px-4 pb-10 pt-10 text-center text-sm text-zinc-300">
-          <div className="relative mx-auto mb-8 max-w-xl text-left sm:max-w-2xl">
+        <footer className="relative overflow-hidden bg-[#FFFDF5] px-4 pb-10 pt-10 text-center text-sm text-zinc-700">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-10" aria-hidden>
+            <svg
+              viewBox="0 0 1440 80"
+              preserveAspectRatio="none"
+              className="h-full w-full"
+            >
+              <path
+                d="M0,36 C250,70 462,58 712,34 C950,10 1165,62 1440,30"
+                fill="none"
+                stroke="#0d9488"
+                strokeOpacity="0.26"
+                strokeWidth="2"
+              />
+            </svg>
+          </div>
+          <div className="relative mx-auto max-w-xl text-left sm:max-w-2xl">
             <HandbookSubscribeCTA
               variant="home"
               flushTop
@@ -150,51 +165,40 @@ export default function RootLayout({
               description={SUBSCRIBE_DESCRIPTION}
             />
           </div>
-          <div className="relative left-1/2 h-16 w-screen -translate-x-1/2 overflow-hidden text-white/10">
-            <svg
-              viewBox="0 0 1200 120"
-              preserveAspectRatio="none"
-              className="h-full w-full"
-              aria-hidden
+          <div className="relative mx-auto mt-10 max-w-3xl border-t border-stone-200 pt-6">
+            <p className="relative text-zinc-600">
+              SK Creation • © {new Date().getFullYear()} • All rights reserved.
+            </p>
+            <nav
+              className="relative mx-auto mt-4 flex max-w-md flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-zinc-600 sm:text-sm"
+              aria-label="Legal"
             >
-              <path
-                d="M0,14 C180,118 360,118 540,48 C740,-20 920,-20 1200,62 L1200,120 L0,120 Z"
-                fill="currentColor"
-              />
-            </svg>
+              <Link
+                href="/terms"
+                className="font-medium text-teal-700 underline-offset-2 hover:text-teal-800 hover:underline"
+              >
+                Terms of Service
+              </Link>
+              <span className="text-stone-300" aria-hidden>
+                |
+              </span>
+              <Link
+                href="/privacy"
+                className="font-medium text-teal-700 underline-offset-2 hover:text-teal-800 hover:underline"
+              >
+                Privacy Policy
+              </Link>
+              <span className="text-stone-300" aria-hidden>
+                |
+              </span>
+              <Link
+                href="/disclaimer"
+                className="font-medium text-teal-700 underline-offset-2 hover:text-teal-800 hover:underline"
+              >
+                Session disclaimer
+              </Link>
+            </nav>
           </div>
-          <p className="relative mt-4 text-zinc-400">
-            SK Creation • © {new Date().getFullYear()} • All rights reserved.
-          </p>
-          <nav
-            className="relative mx-auto mt-6 flex max-w-md flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-zinc-400 sm:text-sm"
-            aria-label="Legal"
-          >
-            <Link
-              href="/terms"
-              className="text-violet-200 underline-offset-2 hover:text-violet-100 hover:underline"
-            >
-              Terms of Service
-            </Link>
-            <span className="text-violet-200/35" aria-hidden>
-              |
-            </span>
-            <Link
-              href="/privacy"
-              className="text-violet-200 underline-offset-2 hover:text-violet-100 hover:underline"
-            >
-              Privacy Policy
-            </Link>
-            <span className="text-violet-200/35" aria-hidden>
-              |
-            </span>
-            <Link
-              href="/disclaimer"
-              className="text-violet-200 underline-offset-2 hover:text-violet-100 hover:underline"
-            >
-              Session disclaimer
-            </Link>
-          </nav>
         </footer>
 
         <BotpressWebchat />
