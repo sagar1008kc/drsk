@@ -7,15 +7,15 @@ import * as THREE from 'three';
 import { SERVICE_AREAS } from '@/lib/service-areas';
 
 const accentRing: Record<string, string> = {
-  violet: 'hover:border-[#9b87f5] text-[#9b87f5] hover:shadow-[0_20px_40px_-10px_rgba(155,135,245,0.18)]',
-  indigo: 'hover:border-blue-500 text-blue-500 hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.18)]',
+  violet: 'hover:border-teal-500 text-teal-600 hover:shadow-[0_20px_40px_-10px_rgba(13,148,136,0.18)]',
+  indigo: 'hover:border-cyan-500 text-cyan-600 hover:shadow-[0_20px_40px_-10px_rgba(6,182,212,0.18)]',
   emerald: 'hover:border-emerald-500 text-emerald-500 hover:shadow-[0_20px_40px_-10px_rgba(16,185,129,0.18)]',
   amber: 'hover:border-amber-500 text-amber-500 hover:shadow-[0_20px_40px_-10px_rgba(245,158,11,0.18)]',
 };
 
 const accentGlow: Record<string, string> = {
-  violet: 'from-[#f0eaff]/60',
-  indigo: 'from-blue-50/70',
+  violet: 'from-teal-50/70',
+  indigo: 'from-cyan-50/70',
   emerald: 'from-emerald-50/70',
   amber: 'from-amber-50/70',
 };
@@ -47,7 +47,7 @@ export default function ServicesHeroSection() {
     const particlesData: { velocity: THREE.Vector3 }[] = [];
     const particleGeometry = new THREE.BufferGeometry();
     const particleMaterial = new THREE.PointsMaterial({
-      color: 0x9b87f5,
+      color: 0x0d9488,
       opacity: 0.55,
       size: 3,
       sizeAttenuation: true,
@@ -81,7 +81,7 @@ export default function ServicesHeroSection() {
       new THREE.BufferAttribute(linePositions, 3).setUsage(THREE.DynamicDrawUsage)
     );
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x9b87f5,
+      color: 0x0d9488,
       opacity: 0.13,
       transparent: true,
     });
@@ -171,15 +171,15 @@ export default function ServicesHeroSection() {
   }, []);
 
   return (
-    <section className="relative -mt-[3.75rem] flex min-h-[100dvh] flex-col overflow-hidden border-b border-violet-200/60 bg-[#fbfbfe] pt-[3.75rem] text-zinc-900">
+    <section className="relative -mt-[3.75rem] flex min-h-[100dvh] flex-col overflow-hidden border-b border-teal-200/60 bg-[#f8fffd] pt-[3.75rem] text-zinc-900">
       <div
         ref={mountRef}
         className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-1000"
         style={{ opacity: isMounted ? 1 : 0 }}
       />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(at_50%_0%,rgba(237,233,254,0.95),transparent_54%),radial-gradient(at_10%_84%,rgba(209,250,229,0.55),transparent_42%),radial-gradient(at_92%_82%,rgba(219,234,254,0.7),transparent_44%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(at_50%_0%,rgba(204,251,241,0.95),transparent_54%),radial-gradient(at_10%_84%,rgba(209,250,229,0.65),transparent_42%),radial-gradient(at_92%_82%,rgba(207,250,254,0.7),transparent_44%)]" />
       <svg
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[38%] w-full text-violet-200/70"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[38%] w-full text-teal-200/70"
         viewBox="0 0 1440 420"
         preserveAspectRatio="none"
         aria-hidden
@@ -201,7 +201,7 @@ export default function ServicesHeroSection() {
           }}
           transition={{ type: 'spring', stiffness: 45, damping: 20 }}
           fill="none"
-          stroke="rgba(139,92,246,0.26)"
+          stroke="rgba(13,148,136,0.28)"
           strokeWidth="3"
         />
       </svg>
@@ -214,14 +214,14 @@ export default function ServicesHeroSection() {
           transition={{ duration: 0.55 }}
           className="mx-auto w-full max-w-4xl text-center"
         >
-          <div className="absolute left-1/2 top-8 h-72 w-72 -translate-x-1/2 rounded-full bg-[#9b87f5] opacity-20 blur-[80px]" />
+          <div className="absolute left-1/2 top-8 h-72 w-72 -translate-x-1/2 rounded-full bg-teal-500 opacity-20 blur-[80px]" />
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="relative z-10 mt-5 font-sans text-[clamp(3.75rem,10vw,7rem)] font-extrabold leading-none tracking-tight"
           >
-            <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-emerald-600 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(139,92,246,0.25)]">
+            <span className="bg-gradient-to-r from-teal-600 via-cyan-600 to-emerald-600 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(13,148,136,0.25)]">
               Services
             </span>
           </motion.h1>
@@ -275,7 +275,7 @@ export default function ServicesHeroSection() {
             opacity: { duration: 0.5, delay: 0.45 },
             y: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
           }}
-          className="mx-auto mt-10 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-6 py-3 text-sm font-semibold text-[#4a4a68] shadow-sm backdrop-blur-md transition hover:border-[#9b87f5] hover:text-[#9b87f5] hover:shadow-[0_8px_20px_rgba(155,135,245,0.15)]"
+          className="mx-auto mt-10 inline-flex items-center gap-2 rounded-full border border-teal-200 bg-white/80 px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur-md transition hover:border-teal-400 hover:text-teal-700 hover:shadow-[0_8px_20px_rgba(13,148,136,0.15)]"
         >
           <Sparkles className="h-4 w-4" aria-hidden />
           Explore service paths

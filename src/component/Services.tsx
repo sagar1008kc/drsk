@@ -34,26 +34,26 @@ const accentStyles: Record<
   }
 > = {
   violet: {
-    ring: 'ring-violet-400/30',
-    glow: 'shadow-[0_0_40px_rgba(139,92,246,0.14)]',
-    eyebrow: 'bg-violet-500/10 text-violet-700 ring-violet-200',
-    icon: 'bg-violet-500/15 text-violet-600',
-    dot: 'bg-violet-500',
-    border: 'border-violet-200/70 hover:border-violet-300',
-    panel: 'from-violet-50/95 via-white to-white',
-    text: 'text-violet-700',
-    wave: 'text-violet-200/60',
+    ring: 'ring-teal-400/30',
+    glow: 'shadow-[0_0_40px_rgba(13,148,136,0.14)]',
+    eyebrow: 'bg-teal-500/10 text-teal-700 ring-teal-200',
+    icon: 'bg-teal-500/15 text-teal-600',
+    dot: 'bg-teal-500',
+    border: 'border-teal-200/70 hover:border-teal-300',
+    panel: 'from-teal-50/95 via-white to-white',
+    text: 'text-teal-700',
+    wave: 'text-teal-200/60',
   },
   indigo: {
-    ring: 'ring-indigo-400/30',
-    glow: 'shadow-[0_0_40px_rgba(99,102,241,0.14)]',
-    eyebrow: 'bg-indigo-500/10 text-indigo-700 ring-indigo-200',
-    icon: 'bg-indigo-500/15 text-indigo-600',
-    dot: 'bg-indigo-500',
-    border: 'border-indigo-200/70 hover:border-indigo-300',
-    panel: 'from-indigo-50/95 via-white to-white',
-    text: 'text-indigo-700',
-    wave: 'text-indigo-200/60',
+    ring: 'ring-cyan-400/30',
+    glow: 'shadow-[0_0_40px_rgba(6,182,212,0.14)]',
+    eyebrow: 'bg-cyan-500/10 text-cyan-700 ring-cyan-200',
+    icon: 'bg-cyan-500/15 text-cyan-600',
+    dot: 'bg-cyan-500',
+    border: 'border-cyan-200/70 hover:border-cyan-300',
+    panel: 'from-cyan-50/95 via-white to-white',
+    text: 'text-cyan-700',
+    wave: 'text-cyan-200/60',
   },
   emerald: {
     ring: 'ring-emerald-400/30',
@@ -88,7 +88,7 @@ function ServicesWaveLayer() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
       <svg
-        className="absolute left-0 top-0 h-full w-full text-violet-100/80"
+        className="absolute left-0 top-0 h-full w-full text-teal-100/80"
         viewBox="0 0 1440 3600"
         preserveAspectRatio="none"
       >
@@ -105,7 +105,7 @@ function ServicesWaveLayer() {
         />
       </svg>
       <svg
-        className="absolute left-0 top-[12%] h-[78%] w-full text-indigo-200/35"
+        className="absolute left-0 top-[12%] h-[78%] w-full text-cyan-200/35"
         viewBox="0 0 1440 2800"
         preserveAspectRatio="none"
       >
@@ -123,7 +123,7 @@ function ServicesWaveLayer() {
           strokeWidth="5"
         />
       </svg>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(139,92,246,0.10),transparent_30%),radial-gradient(circle_at_86%_38%,rgba(59,130,246,0.08),transparent_28%),radial-gradient(circle_at_16%_74%,rgba(16,185,129,0.08),transparent_30%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(13,148,136,0.12),transparent_30%),radial-gradient(circle_at_86%_38%,rgba(6,182,212,0.08),transparent_28%),radial-gradient(circle_at_16%_74%,rgba(16,185,129,0.1),transparent_30%)]" />
     </div>
   );
 }
@@ -224,13 +224,15 @@ function ServiceDetailSection({ area, index }: { area: ServiceArea; index: numbe
       id={area.id}
       variants={fadeUp}
       transition={{ duration: 0.45 }}
-      className="relative flex min-h-[100dvh] w-full scroll-mt-20 items-center overflow-hidden px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
+      className="relative flex min-h-[100dvh] w-full scroll-mt-20 items-center overflow-hidden bg-slate-950 px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
     >
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/82 to-teal-950/58" aria-hidden />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_22%,rgba(13,148,136,0.24),transparent_34%),radial-gradient(circle_at_82%_76%,rgba(16,185,129,0.18),transparent_34%)]" aria-hidden />
       <ServiceSectionVectorBackground style={style} index={index} />
       <div
-        className={`relative z-10 mx-auto flex min-h-[74dvh] w-full max-w-6xl items-center overflow-hidden rounded-[2rem] border bg-gradient-to-br p-5 shadow-[0_18px_60px_rgba(15,23,42,0.06)] backdrop-blur-sm sm:p-8 lg:p-10 ${style.border} ${style.panel}`}
+        className={`relative z-10 mx-auto flex min-h-[74dvh] w-full max-w-6xl items-center overflow-hidden rounded-[2rem] border bg-gradient-to-br p-5 shadow-[0_18px_60px_rgba(15,23,42,0.18)] backdrop-blur-md sm:p-8 lg:p-10 ${style.border} ${style.panel}`}
       >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(139,92,246,0.1),transparent_32%),radial-gradient(circle_at_85%_80%,rgba(16,185,129,0.08),transparent_34%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(13,148,136,0.12),transparent_32%),radial-gradient(circle_at_85%_80%,rgba(16,185,129,0.08),transparent_34%)]" />
         <div className={`relative grid w-full gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center ${reverse ? 'lg:grid-flow-col-dense' : ''}`}>
           <div className={reverse ? 'lg:col-start-2' : ''}>
             <span
@@ -307,11 +309,11 @@ export default function Services() {
 
         <section
           id="services"
-          className="relative scroll-mt-20 overflow-hidden border-t border-violet-200/60 bg-gradient-to-b from-white via-[#FAFAFF] to-violet-50/40"
+          className="relative scroll-mt-20 overflow-hidden border-t border-teal-200/60 bg-gradient-to-b from-white via-[#F0FDFA] to-emerald-50/40"
         >
           <ServicesWaveLayer />
           <div className="dot-pattern pointer-events-none absolute inset-0 opacity-25" />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(139,92,246,0.09),transparent_55%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(13,148,136,0.12),transparent_55%)]" />
 
           <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
             <motion.div
@@ -322,7 +324,7 @@ export default function Services() {
               transition={{ duration: 0.5 }}
               className="mx-auto max-w-2xl text-center"
             >
-              <span className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-violet-700 shadow-sm backdrop-blur-sm sm:text-xs">
+              <span className="inline-flex items-center gap-2 rounded-full border border-teal-200 bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-teal-700 shadow-sm backdrop-blur-sm sm:text-xs">
                 <Sparkles className="h-3.5 w-3.5" aria-hidden />
                 Service paths
               </span>
@@ -358,11 +360,11 @@ export default function Services() {
               viewport={{ once: true, amount: 0.2 }}
               variants={fadeUp}
               transition={{ duration: 0.5 }}
-              className="relative mx-auto mt-12 max-w-2xl overflow-hidden rounded-2xl border border-violet-200/80 bg-white/90 p-6 text-center shadow-[0_16px_48px_rgba(139,92,246,0.1)] backdrop-blur-sm sm:mt-14 sm:p-8"
+              className="relative mx-auto mt-12 max-w-2xl overflow-hidden rounded-2xl border border-teal-200/80 bg-white/90 p-6 text-center shadow-[0_16px_48px_rgba(13,148,136,0.12)] backdrop-blur-sm sm:mt-14 sm:p-8"
             >
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(139,92,246,0.1),transparent_65%)]" />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(13,148,136,0.12),transparent_65%)]" />
               <div className="relative">
-                <p className="text-sm font-semibold uppercase tracking-wider text-violet-700">
+                <p className="text-sm font-semibold uppercase tracking-wider text-teal-700">
                   Start the conversation
                 </p>
                 <h3 className="mt-2 text-xl font-bold text-zinc-900 sm:text-2xl">
@@ -375,22 +377,22 @@ export default function Services() {
                 <button
                   type="button"
                   onClick={() => openQuote()}
-                  className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(99,102,241,0.25)] transition hover:shadow-[0_16px_36px_rgba(99,102,241,0.32)] sm:w-auto"
+                  className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-600 via-cyan-600 to-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(13,148,136,0.25)] transition hover:shadow-[0_16px_36px_rgba(13,148,136,0.32)] sm:w-auto"
                 >
                   <Sparkles className="h-4 w-4" aria-hidden />
                   Request a Quote
                 </button>
 
-                <div className="mt-8 border-t border-violet-100 pt-6">
+                <div className="mt-8 border-t border-teal-100 pt-6">
                   <p className="text-sm leading-relaxed text-zinc-600">
                     You can also reach us directly using our{' '}
-                    <Link href="/contact" className="font-semibold text-violet-700 hover:underline">
+                    <Link href="/contact" className="font-semibold text-teal-700 hover:underline">
                       contact form
                     </Link>{' '}
                     on the home page, or email{' '}
                     <a
                       href={`mailto:${CONTACT_EMAIL}`}
-                      className="font-semibold text-violet-700 hover:underline"
+                      className="font-semibold text-teal-700 hover:underline"
                     >
                       {CONTACT_EMAIL}
                     </a>

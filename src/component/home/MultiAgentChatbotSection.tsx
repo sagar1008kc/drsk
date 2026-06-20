@@ -147,6 +147,7 @@ export default function MultiAgentChatbotSection() {
         { id: (Date.now() + 1).toString(), role: 'agent', content: FALLBACK_REPLY, isFallback: true },
       ]);
       setFlowStep('complete');
+      pushEvent('complete', { ...traceCtx, fallback: true });
       setIsTyping(false);
       await new Promise((r) => setTimeout(r, 1400));
       setFlowStep('idle');
@@ -186,6 +187,7 @@ export default function MultiAgentChatbotSection() {
     ]);
 
     setFlowStep('complete');
+    pushEvent('complete', routedCtx);
     setIsTyping(false);
     await new Promise((r) => setTimeout(r, 1600));
     setFlowStep('idle');
@@ -199,16 +201,16 @@ export default function MultiAgentChatbotSection() {
     <section
       id="multi-agent-platform"
       aria-labelledby="multi-agent-platform-heading"
-      className="relative -mt-[3.75rem] min-h-[100dvh] w-full bg-gradient-to-br from-[#f0fdfa] via-white to-emerald-50/90 pt-[3.75rem] text-zinc-900 font-sans overflow-hidden scroll-mt-[3.75rem]"
+      className="relative -mt-[3.75rem] min-h-[100dvh] w-full bg-white pt-[3.75rem] text-zinc-900 font-sans overflow-hidden scroll-mt-[3.75rem]"
     >
       <h2 id="multi-agent-platform-heading" className="sr-only">SK Creation Multi-Agent Hub</h2>
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_40%,rgba(13,148,136,0.1),transparent_55%),radial-gradient(ellipse_70%_50%_at_85%_60%,rgba(37,99,235,0.07),transparent_50%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_20%_40%,rgba(13,148,136,0.04),transparent_55%),radial-gradient(ellipse_60%_45%_at_85%_60%,rgba(16,185,129,0.035),transparent_50%)]" />
 
       <div className="relative z-10 mx-auto flex h-[calc(100dvh-3.75rem)] max-w-7xl flex-col gap-4 px-4 py-4 md:flex-row md:gap-6 md:py-6">
         {/* Routing flow — top to bottom */}
         <div className="hidden min-h-0 md:flex md:w-[40%] md:min-w-[300px] lg:w-[36%]">
-          <div className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-teal-200/80 bg-white/92 shadow-[0_12px_40px_rgba(13,148,136,0.14)] backdrop-blur-xl">
-            <div className="border-b border-teal-100 bg-gradient-to-r from-teal-50 to-emerald-50 px-4 py-3.5">
+          <div className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border-2 border-teal-500/70 bg-white shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+            <div className="border-b border-zinc-200/80 bg-gradient-to-r from-zinc-50 to-teal-50/70 px-4 py-3.5">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-600/10 ring-1 ring-teal-200">
                   <Network className="h-4 w-4 text-teal-600" />
@@ -221,8 +223,14 @@ export default function MultiAgentChatbotSection() {
             </div>
 
             <div className="flex flex-1 min-h-0 flex-col overflow-hidden">
-              <div className="shrink-0 overflow-y-auto p-4 pb-2 hub-scroll">
+              <div className="min-h-0 flex-[0_0_58%] overflow-y-auto p-4 pb-2 hub-scroll">
                 <RagFlowStrip flowStep={flowStep} isLive={isLive} />
+                <AgentRunMetrics
+                  routeResult={routeResult}
+                  events={flowEvents}
+                  isLive={isLive}
+                  flowStep={flowStep}
+                />
                 <OrchestrationDiagram
                   flowStep={flowStep}
                   isLive={isLive}
@@ -242,8 +250,8 @@ export default function MultiAgentChatbotSection() {
         </div>
 
         {/* Chat */}
-        <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-teal-200/80 bg-white/92 shadow-[0_12px_40px_rgba(13,148,136,0.14)] backdrop-blur-xl">
-          <div className="bg-gradient-to-r from-teal-50 to-emerald-50 border-b border-teal-200/60 p-4 flex items-center gap-3">
+        <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border-2 border-teal-500/70 bg-white shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+          <div className="bg-gradient-to-r from-zinc-50 to-teal-50/70 border-b border-zinc-200/80 p-4 flex items-center gap-3">
             <div className="relative shrink-0">
               <div className="w-10 h-10 bg-[#0d9488] rounded-full flex items-center justify-center shadow-lg shadow-teal-500/25">
                 <Sparkles className="w-5 h-5 text-white" />
@@ -261,6 +269,18 @@ export default function MultiAgentChatbotSection() {
                     ? FLOW_STEP_MESSAGES[flowStep as keyof typeof FLOW_STEP_MESSAGES] ?? 'Working on it…'
                     : 'Ask me where to go on this site'}
                 </p>
+            </div>
+          </div>
+
+          <div className="border-b border-zinc-200/70 px-3 py-3 md:hidden">
+            <AgentRunMetrics
+              routeResult={routeResult}
+              events={flowEvents}
+              isLive={isLive}
+              flowStep={flowStep}
+            />
+            <div className="mt-3 max-h-48 overflow-hidden">
+              <OrchestrationTracePanel events={flowEvents} isLive={isLive} flowStep={flowStep} compact />
             </div>
           </div>
 
@@ -357,13 +377,19 @@ function OrchestrationTracePanel({
   events,
   isLive,
   flowStep,
+  compact = false,
 }: {
   events: FlowEvent[];
   isLive: boolean;
   flowStep: FlowStep;
+  compact?: boolean;
 }) {
   return (
-    <div className="mx-4 mb-4 mt-1 flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-teal-200/70 bg-[#0f1117]/[0.03]">
+    <div
+      className={`flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-zinc-200/80 bg-[#0f1117]/[0.03] ${
+        compact ? 'h-48' : 'mx-4 mb-4 mt-1'
+      }`}
+    >
       <div className="flex shrink-0 items-center justify-between gap-2 border-b border-teal-100/80 bg-gradient-to-r from-teal-50/90 to-emerald-50/60 px-3 py-2.5">
         <div className="flex items-center gap-2">
           <Terminal className="h-3.5 w-3.5 text-teal-600" aria-hidden />
@@ -381,7 +407,7 @@ function OrchestrationTracePanel({
 
       <div className="flex-1 min-h-0 overflow-y-auto hub-scroll px-3 py-2.5">
         {events.length === 0 ? (
-          <div className="flex h-full min-h-[120px] flex-col items-center justify-center gap-2 text-center px-4">
+          <div className={`flex h-full flex-col items-center justify-center gap-2 text-center px-4 ${compact ? 'min-h-[92px]' : 'min-h-[120px]'}`}>
             <Terminal className="h-5 w-5 text-teal-400" aria-hidden />
             <p className="text-[11px] font-medium text-zinc-500">No trace events yet</p>
             <p className="text-[10px] leading-relaxed text-zinc-400 max-w-[220px]">
@@ -416,6 +442,67 @@ function OrchestrationTracePanel({
           </ul>
         )}
       </div>
+    </div>
+  );
+}
+
+function AgentRunMetrics({
+  routeResult,
+  events,
+  isLive,
+  flowStep,
+}: {
+  routeResult: RouteResult | null;
+  events: FlowEvent[];
+  isLive: boolean;
+  flowStep: FlowStep;
+}) {
+  const confidence = routeResult ? `${routeResult.confidence}%` : isLive ? 'scoring' : 'idle';
+  const specialist = routeResult?.subAgentName ?? (isLive ? 'selecting' : 'standby');
+  const matchedTerms = routeResult?.matchedTerms.slice(0, 3).join(', ') || 'awaiting query';
+
+  const metrics = [
+    {
+      label: 'Confidence',
+      value: confidence,
+      tone: routeResult ? 'text-emerald-700 bg-emerald-50 ring-emerald-200' : 'text-zinc-600 bg-zinc-50 ring-zinc-200',
+    },
+    {
+      label: 'Specialist',
+      value: specialist,
+      tone: routeResult ? 'text-teal-700 bg-teal-50 ring-teal-200' : 'text-zinc-600 bg-zinc-50 ring-zinc-200',
+    },
+    {
+      label: 'Trace events',
+      value: String(events.length),
+      tone: events.length ? 'text-cyan-700 bg-cyan-50 ring-cyan-200' : 'text-zinc-600 bg-zinc-50 ring-zinc-200',
+    },
+    {
+      label: 'State',
+      value: isLive ? flowStep : 'ready',
+      tone: isLive ? 'text-emerald-700 bg-emerald-50 ring-emerald-200' : 'text-zinc-600 bg-zinc-50 ring-zinc-200',
+    },
+  ];
+
+  return (
+    <div className="mt-3 rounded-xl border border-zinc-200/80 bg-white/90 p-3 shadow-sm">
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <p className="text-[11px] font-bold text-zinc-900">Agent run metrics</p>
+        <span className="rounded-full bg-teal-50 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-teal-700 ring-1 ring-teal-200">
+          agentic
+        </span>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        {metrics.map((metric) => (
+          <div key={metric.label} className={`rounded-lg px-2.5 py-2 ring-1 ${metric.tone}`}>
+            <p className="text-[9px] font-semibold uppercase tracking-wide opacity-70">{metric.label}</p>
+            <p className="mt-0.5 truncate text-[11px] font-bold">{metric.value}</p>
+          </div>
+        ))}
+      </div>
+      <p className="mt-2 truncate text-[10px] text-zinc-500">
+        Matched terms: <span className="font-medium text-zinc-700">{matchedTerms}</span>
+      </p>
     </div>
   );
 }
