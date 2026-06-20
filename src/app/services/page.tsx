@@ -4,9 +4,9 @@ import { createPageMetadata } from '@/lib/site-url';
 
 export const metadata: Metadata = createPageMetadata({
   path: '/services',
-  title: 'Services',
+  title: 'Services | SK Creation',
   description:
-    'Explore Dr. SK services in AI solutions, software projects, and practical digital transformation support.',
+    'Explore SK Creation services for practical AI integration, career strategy, digital solutions, book publishing support, and wellness education.',
 });
 
 export default function ServicesPage() {

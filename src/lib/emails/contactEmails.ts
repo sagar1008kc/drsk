@@ -26,7 +26,7 @@ export function buildContactNotificationEmail(input: ContactEmailInput): {
   const isWebsiteQuote = input.requestType === 'website_quote';
 
   const subject = isWebsiteQuote
-    ? sanitizeEmailHeader(`New Digital solutions quote request from ${input.name}`)
+    ? sanitizeEmailHeader(`New SK Creation service request from ${input.name}`)
     : sanitizeEmailHeader(`New Contact Form Message from ${input.name}`);
 
   const details = isWebsiteQuote
@@ -47,7 +47,7 @@ export function buildContactNotificationEmail(input: ContactEmailInput): {
 
   const html = buildEmailTemplate({
     title: isWebsiteQuote
-      ? 'New Digital Solutions Quote Request'
+      ? 'New SK Creation Service Request'
       : 'New Contact Form Message',
     subtitle: isWebsiteQuote
       ? 'A website/service request was submitted'
@@ -71,10 +71,10 @@ export function buildWebsiteQuoteCustomerConfirmationEmail(input: {
   serviceType?: string;
   otherServiceType?: string;
 }): { subject: string; html: string } {
-  const subject = 'We received your digital solutions quote request';
+  const subject = 'We received your SK Creation service request';
   const greetingName = escapeHtml(input.name.trim().split(/\s+/)[0] || input.name.trim());
   const serviceLine =
-    input.serviceType === 'Other' && input.otherServiceType?.trim()
+    input.serviceType === 'Other / Not Sure' && input.otherServiceType?.trim()
       ? `${input.serviceType} (${input.otherServiceType.trim()})`
       : input.serviceType || '—';
 
@@ -91,7 +91,7 @@ export function buildWebsiteQuoteCustomerConfirmationEmail(input: {
   const html = buildEmailTemplate({
     title: 'Thank you for your quote request',
     subtitle:
-      'We received your details and will follow up by email about your digital solutions project.',
+      'We received your details and will follow up by email with the best next step.',
     sections: [
       {
         title: 'Hello',

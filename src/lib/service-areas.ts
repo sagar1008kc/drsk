@@ -1,17 +1,21 @@
 import {
-  BrainCircuit,
+  BookOpen,
   Code2,
-  HeartHandshake,
-  Users,
+  Cpu,
+  Flower2,
+  Lightbulb,
+  Route,
   type LucideIcon,
 } from 'lucide-react';
 
 export const SERVICE_QUOTE_OPTIONS = [
-  'Virtual Session',
+  'AI Integration & Agentic Workflow',
+  'Career Strategy & AI-Era Branding',
   'Digital Solutions',
-  'Group Session',
-  'Volunteering',
-  'Other',
+  'Book Writing & Publishing Support',
+  'Mental Health Awareness & Wellness Education',
+  'Business Development & R&D Strategy',
+  'Other / Not Sure',
 ] as const;
 
 export type ServiceQuoteType = (typeof SERVICE_QUOTE_OPTIONS)[number];
@@ -20,74 +24,135 @@ export type ServiceAccent = 'violet' | 'indigo' | 'emerald' | 'amber';
 
 export type ServiceArea = {
   id: string;
-  title: ServiceQuoteType;
+  title: string;
   eyebrow: string;
+  navTitle: string;
+  navKicker: string;
   subtitle: string;
   bullets: string[];
   note: string;
+  disclaimer?: string;
   icon: LucideIcon;
   accent: ServiceAccent;
 };
 
 export const SERVICE_AREAS: ServiceArea[] = [
   {
-    id: 'virtual-session',
-    title: 'Virtual Session',
-    eyebrow: 'Agentic AI · 1:1',
-    subtitle: 'Private sessions for career, brand, wellness awareness, publishing, and more.',
+    id: 'ai-integration',
+    title: 'AI Integration & Agentic Workflows',
+    eyebrow: 'AI Integration',
+    navTitle: 'AI Integration & Agentic Workflow',
+    navKicker: 'Systems · Automation',
+    subtitle: 'Build practical AI systems that automate work, improve decisions, and connect with real tools.',
     bullets: [
-      'Career development and strategy',
-      'Personal brand guidance',
-      'Mental health awareness',
-      'Book writing and publishing guidance',
+      'AI chatbot or website assistant',
+      'RAG knowledge assistant using business documents',
+      'Workflow automation with APIs, forms, email, and dashboards',
+      'Agentic workflow planning for business operations',
+      'AI readiness guidance for teams or personal productivity',
     ],
-    note: 'From $99 / session (1 hour)',
-    icon: BrainCircuit,
+    note: 'Quote-based',
+    icon: Cpu,
     accent: 'violet',
+  },
+  {
+    id: 'career-brand',
+    title: 'Career Strategy & AI-Era Branding',
+    eyebrow: 'Career + Brand',
+    navTitle: 'Career Strategy & Personal Brand',
+    navKicker: 'Growth · Identity',
+    subtitle:
+      'Guidance for professionals who feel stuck, uncertain, or ready to reposition themselves in the AI-powered job market.',
+    bullets: [
+      'Career direction and role positioning',
+      'Resume and LinkedIn improvement',
+      'Interview preparation',
+      'AI career transition planning',
+      'Portfolio and project guidance',
+    ],
+    note: 'From $99 / 1:1 session',
+    icon: Route,
+    accent: 'amber',
   },
   {
     id: 'digital-solutions',
     title: 'Digital Solutions',
-    eyebrow: 'AI integration · build',
-    subtitle: 'Websites, integrations, hosting, and ongoing support — tailored to your stack.',
+    eyebrow: 'Digital Solutions',
+    navTitle: 'Digital Solutions',
+    navKicker: 'Build · Scale',
+    subtitle:
+      'From idea to live website, business platform, portfolio, or digital presence with ongoing support.',
     bullets: [
       'Website design and development',
-      'Hosting setup and deployment',
-      'Ongoing maintenance',
-      'AI integration and smart features',
+      'Portfolio or business website',
+      'Landing pages and service pages',
+      'Hosting, domain, and deployment',
+      'Website maintenance and basic marketing setup',
     ],
-    note: 'Quote — tailored pricing',
+    note: 'Quote-based',
     icon: Code2,
     accent: 'indigo',
   },
   {
-    id: 'group-session',
-    title: 'Group Session',
-    eyebrow: 'Mental health · cohort',
-    subtitle: 'Small-group sessions on fixed dates with set topics.',
+    id: 'book-publishing',
+    title: 'Book Writing & Publishing Support',
+    eyebrow: 'Book + Publishing',
+    navTitle: 'Book Writing & Publishing',
+    navKicker: 'Author · Distribute',
+    subtitle:
+      'Support for authors, professionals, and creators who want to turn ideas into a structured book and publish with confidence.',
     bullets: [
-      'May 16, 2026 — Career development and strategy',
-      'June 20, 2026 — Mental health awareness',
-      'June 27, 2026 — Book writing and publishing guidance',
+      'Book idea validation',
+      'Chapter outline and structure',
+      'Manuscript review and improvement',
+      'Motivational or self-help book guidance',
+      'Amazon KDP publishing support',
+      'Book title, description, and launch planning',
     ],
-    note: 'From $49 / seat (90 min)',
-    icon: Users,
-    accent: 'emerald',
+    note: 'Session or quote-based',
+    icon: BookOpen,
+    accent: 'violet',
   },
   {
-    id: 'volunteering',
-    title: 'Volunteering',
-    eyebrow: 'Community · nonprofit',
+    id: 'business-rd',
+    title: 'Business Development & R&D Strategy',
+    eyebrow: 'Business + R&D',
+    navTitle: 'Business Development & R&D Strategy',
+    navKicker: 'Research · Growth',
     subtitle:
-      'Complimentary sessions for registered nonprofits and volunteer-led work when capacity allows.',
+      'Practical support for entrepreneurs, creators, and small businesses exploring new ideas, market opportunities, product direction, or AI-enabled growth.',
     bullets: [
-      'No payment — mission-driven contexts',
-      'Educational and supportive focus',
-      'Subject to availability',
-      'Confirmation by email after review',
+      'Business idea review and validation',
+      'Market and competitor research guidance',
+      'Product/service positioning',
+      'Go-to-market and growth strategy',
+      'AI use-case discovery for business improvement',
+      'R&D planning for new digital or AI-powered solutions',
+      'Proposal, pitch, and concept-document support',
     ],
-    note: 'Complimentary',
-    icon: HeartHandshake,
-    accent: 'amber',
+    note: 'Quote-based',
+    icon: Lightbulb,
+    accent: 'indigo',
+  },
+  {
+    id: 'wellness-education',
+    title: 'Mental Health Awareness & Wellness Education',
+    eyebrow: 'Wellness Education',
+    navTitle: 'Wellness Education',
+    navKicker: 'Balance · Focus',
+    subtitle:
+      'Educational support for stress awareness, resilience, emotional balance, and personal growth.',
+    bullets: [
+      'Stress and burnout awareness',
+      'Emotional resilience education',
+      'Wellness-focused group sessions',
+      'Motivation and mindset guidance',
+      'Workplace or community awareness sessions',
+      'Mental Health First Aid-informed education',
+    ],
+    disclaimer: 'Educational support only. Not therapy, diagnosis, or emergency care.',
+    note: 'From $49 / group seat or quote-based',
+    icon: Flower2,
+    accent: 'emerald',
   },
 ];

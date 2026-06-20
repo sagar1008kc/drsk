@@ -24,8 +24,6 @@ type WebsiteQuoteDialogProps = {
 
 type FieldErrors = Record<string, string>;
 
-const CORE_SERVICES = SERVICE_QUOTE_OPTIONS.filter((o) => o !== 'Other');
-
 export default function WebsiteQuoteDialog({
   visible,
   onHide,
@@ -33,8 +31,13 @@ export default function WebsiteQuoteDialog({
 }: WebsiteQuoteDialogProps) {
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
+  const fullNameFieldId = useId();
+  const emailFieldId = useId();
   const companyFieldId = useId();
   const phoneFieldId = useId();
+  const serviceFieldId = useId();
+  const timelineFieldId = useId();
+  const detailsFieldId = useId();
   const mounted = useClientMounted();
 
   const [fullName, setFullName] = useState('');
@@ -43,6 +46,7 @@ export default function WebsiteQuoteDialog({
   const [serviceType, setServiceType] = useState<ServiceQuoteType | ''>('');
   const [otherServiceType, setOtherServiceType] = useState('');
   const [projectDetails, setProjectDetails] = useState('');
+  const [timeline, setTimeline] = useState('');
   const [company, setCompany] = useState('');
 
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -57,6 +61,7 @@ export default function WebsiteQuoteDialog({
     setServiceType('');
     setOtherServiceType('');
     setProjectDetails('');
+    setTimeline('');
     setCompany('');
     setTouched({});
     setSubmitting(false);
@@ -98,25 +103,25 @@ export default function WebsiteQuoteDialog({
       errors.serviceType = 'Please select a service type.';
     }
 
-    if (serviceType === 'Other' && !otherServiceType.trim()) {
-      errors.otherServiceType = 'Please tell us what service you need.';
-    }
-
     if (!projectDetails.trim() || projectDetails.trim().length < 10) {
-      errors.projectDetails = 'Please share a few project details.';
+      errors.projectDetails = 'Please share your message or goals.';
     }
     if (projectDetails.length > 1000) {
-      errors.projectDetails = 'Project details must be 1000 characters or fewer.';
+      errors.projectDetails = 'Message must be 1000 characters or fewer.';
+    }
+
+    if (timeline.length > 200) {
+      errors.timeline = 'Timeline or urgency must be 200 characters or fewer.';
     }
 
     return errors;
   }, [
     email,
     fullName,
-    otherServiceType,
     phone,
     projectDetails,
     serviceType,
+    timeline,
   ]);
 
   const canSubmit = Object.keys(validation).length === 0 && !company.trim();
@@ -143,6 +148,10 @@ export default function WebsiteQuoteDialog({
 
     setSubmitting(true);
     try {
+      const requestDetails = timeline.trim()
+        ? `${projectDetails.trim()}\n\nTimeline or urgency: ${timeline.trim()}`
+        : projectDetails.trim();
+
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -153,9 +162,9 @@ export default function WebsiteQuoteDialog({
           phone: phonePayloadFromInternational(phone),
           serviceType,
           otherServiceType:
-            serviceType === 'Other' ? otherServiceType.trim() : undefined,
-          message: projectDetails.trim(),
-          projectDetails: projectDetails.trim(),
+            serviceType === 'Other / Not Sure' ? otherServiceType.trim() : undefined,
+          message: requestDetails,
+          projectDetails: requestDetails,
           company: company.trim() || undefined,
         }),
       });
@@ -206,10 +215,10 @@ export default function WebsiteQuoteDialog({
               SK Creation services
             </div>
             <h2 id={titleId} className="mt-2 text-xl font-bold md:text-2xl">
-              Request a quote
+              Request a Quote
             </h2>
             <p className="mt-2 text-sm leading-6 text-gray-600">
-              Select a service area and share your goals — we&apos;ll reply with tailored next steps.
+              Select a service area and share your goals. We&apos;ll reply with the best next step.
             </p>
           </div>
           <button
@@ -276,16 +285,18 @@ export default function WebsiteQuoteDialog({
 
               <div className="grid gap-5 md:grid-cols-2">
                 <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-semibold text-gray-800">
+                  <label htmlFor={fullNameFieldId} className="mb-2 block text-sm font-semibold text-gray-800">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id={fullNameFieldId}
                     type="text"
                     value={fullName}
                     onBlur={() => markTouched('fullName')}
                     onChange={(e) => setFullName(e.target.value)}
                     autoComplete="name"
                     placeholder="Your full name"
+                    aria-invalid={showError('fullName')}
                     className={`${inputClass}${showError('fullName') ? inputErrorClass : ''}`}
                   />
                   {showError('fullName') ? (
@@ -294,16 +305,18 @@ export default function WebsiteQuoteDialog({
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-semibold text-gray-800">
+                  <label htmlFor={emailFieldId} className="mb-2 block text-sm font-semibold text-gray-800">
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id={emailFieldId}
                     type="email"
                     value={email}
                     onBlur={() => markTouched('email')}
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
                     placeholder="you@example.com"
+                    aria-invalid={showError('email')}
                     className={`${inputClass}${showError('email') ? inputErrorClass : ''}`}
                   />
                   <p className="mt-1.5 text-xs leading-relaxed text-gray-500">
@@ -330,25 +343,26 @@ export default function WebsiteQuoteDialog({
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-semibold text-gray-800">
+                  <label htmlFor={serviceFieldId} className="mb-2 block text-sm font-semibold text-gray-800">
                     Service <span className="text-red-500">*</span>
                   </label>
                   <p className="mb-3 text-xs leading-relaxed text-gray-600">
-                    Virtual Session · Digital Solutions · Group Session · Volunteering
+                    Choose the closest area. Select Other / Not Sure if you need help deciding.
                   </p>
                   <select
+                    id={serviceFieldId}
                     value={serviceType}
                     onBlur={() => markTouched('serviceType')}
                     onChange={(e) => setServiceType(e.target.value as ServiceQuoteType)}
+                    aria-invalid={showError('serviceType')}
                     className={`${inputClass}${showError('serviceType') ? inputErrorClass : ''}`}
                   >
                     <option value="">Select a service</option>
-                    {CORE_SERVICES.map((option) => (
+                    {SERVICE_QUOTE_OPTIONS.map((option) => (
                       <option key={option} value={option}>
                         {option}
                       </option>
                     ))}
-                    <option value="Other">Other</option>
                   </select>
                   {showError('serviceType') ? (
                     <p className="mt-1.5 text-sm text-red-600">{validation.serviceType}</p>
@@ -356,7 +370,7 @@ export default function WebsiteQuoteDialog({
                 </div>
 
                 <AnimatePresence initial={false}>
-                  {serviceType === 'Other' ? (
+                  {serviceType === 'Other / Not Sure' ? (
                     <motion.div
                       key="other-service-type"
                       initial={{ opacity: 0, height: 0 }}
@@ -364,15 +378,16 @@ export default function WebsiteQuoteDialog({
                       exit={{ opacity: 0, height: 0 }}
                       className="overflow-hidden md:col-span-2"
                     >
-                      <label className="mb-2 block text-sm font-semibold text-gray-800">
-                        Please specify <span className="text-red-500">*</span>
+                      <label htmlFor="other-service-type" className="mb-2 block text-sm font-semibold text-gray-800">
+                        Optional service note
                       </label>
                       <input
+                        id="other-service-type"
                         type="text"
                         value={otherServiceType}
                         onBlur={() => markTouched('otherServiceType')}
                         onChange={(e) => setOtherServiceType(e.target.value)}
-                        placeholder="Tell us what you need"
+                        placeholder="Tell us what you may need"
                         className={`${inputClass}${showError('otherServiceType') ? inputErrorClass : ''}`}
                       />
                       {showError('otherServiceType') ? (
@@ -385,21 +400,23 @@ export default function WebsiteQuoteDialog({
                 </AnimatePresence>
 
                 <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-semibold text-gray-800">
-                    Details <span className="text-red-500">*</span>
+                  <label htmlFor={detailsFieldId} className="mb-2 block text-sm font-semibold text-gray-800">
+                    Message / goals <span className="text-red-500">*</span>
                   </label>
                   <textarea
+                    id={detailsFieldId}
                     rows={5}
                     maxLength={1000}
                     value={projectDetails}
                     onBlur={() => markTouched('projectDetails')}
                     onChange={(e) => setProjectDetails(e.target.value)}
-                    placeholder="Share goals, timeline, session focus, project scope, or nonprofit context."
+                    placeholder="Share your goals, current challenge, project scope, or session focus."
+                    aria-invalid={showError('projectDetails')}
                     className={`${inputClass} resize-none${showError('projectDetails') ? inputErrorClass : ''}`}
                   />
                   <div className="mt-1.5 flex items-center justify-between">
                     <p className="text-xs font-medium text-gray-700">
-                      We reply by email with tailored pricing or next steps
+                      We&apos;ll review your request and reply by email with the best next step.
                     </p>
                     <p className="text-xs text-gray-500">{projectDetails.length}/1000</p>
                   </div>
@@ -407,6 +424,26 @@ export default function WebsiteQuoteDialog({
                     <p className="mt-1.5 text-sm text-red-600">
                       {validation.projectDetails}
                     </p>
+                  ) : null}
+                </div>
+
+                <div className="md:col-span-2">
+                  <label htmlFor={timelineFieldId} className="mb-2 block text-sm font-semibold text-gray-800">
+                    Timeline or urgency <span className="text-gray-500">(optional)</span>
+                  </label>
+                  <input
+                    id={timelineFieldId}
+                    type="text"
+                    value={timeline}
+                    maxLength={200}
+                    onBlur={() => markTouched('timeline')}
+                    onChange={(e) => setTimeline(e.target.value)}
+                    placeholder="Example: within 2 weeks, flexible, urgent, or planning for next month"
+                    aria-invalid={showError('timeline')}
+                    className={`${inputClass}${showError('timeline') ? inputErrorClass : ''}`}
+                  />
+                  {showError('timeline') ? (
+                    <p className="mt-1.5 text-sm text-red-600">{validation.timeline}</p>
                   ) : null}
                 </div>
               </div>
@@ -419,7 +456,7 @@ export default function WebsiteQuoteDialog({
                 <div>
                   <h3 className="text-lg font-bold text-gray-900">Submit request</h3>
                   <p className="mt-1 text-sm text-gray-600">
-                    We will review your project and reply by email.
+                    We&apos;ll review your request and reply by email with the best next step.
                   </p>
                 </div>
                 <button
@@ -428,7 +465,7 @@ export default function WebsiteQuoteDialog({
                   onClick={() => void handleSubmit()}
                   className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border-2 border-black bg-black px-8 py-3 text-sm font-semibold text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:border-gray-300 disabled:bg-gray-200 disabled:text-gray-500 sm:w-auto"
                 >
-                  {submitting ? 'Sending…' : 'Send for Quote'}
+                  {submitting ? 'Sending...' : 'Send Request'}
                 </button>
               </div>
               {!canSubmit && !submitting ? (
