@@ -463,7 +463,7 @@ export default function WebsiteQuoteDialog({
                   type="button"
                   disabled={!canSubmit || submitting}
                   onClick={() => void handleSubmit()}
-                  className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border-2 border-black bg-black px-8 py-3 text-sm font-semibold text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:border-gray-300 disabled:bg-gray-200 disabled:text-gray-500 sm:w-auto"
+                  className="inline-flex min-h-[48px] w-full items-center justify-center whitespace-nowrap rounded-full border-2 border-black bg-black px-8 py-3 text-sm font-semibold text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:border-gray-300 disabled:bg-gray-200 disabled:text-gray-500 sm:w-auto"
                 >
                   {submitting ? 'Sending...' : 'Send Request'}
                 </button>

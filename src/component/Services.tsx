@@ -375,7 +375,7 @@ export default function Services() {
                 <button
                   type="button"
                   onClick={() => openQuote()}
-                  className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 sm:w-auto"
+                  className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(99,102,241,0.25)] transition hover:shadow-[0_16px_36px_rgba(99,102,241,0.32)] sm:w-auto"
                 >
                   <Sparkles className="h-4 w-4" aria-hidden />
                   Request a Quote
