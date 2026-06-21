@@ -270,6 +270,8 @@ const BOTTOM_NAV: Array<{ icon: LucideIcon; label: string; delay: number }> = [
   { icon: InfinityIcon, label: 'Improve', delay: 1.0 },
 ];
 
+const MULTI_AGENT_WORKFLOW_MAP_HREF = '/portfolio/multi-agent-workflow-map';
+
 export function AgenticWorkflowSystemDesign() {
   return (
     <section
@@ -379,6 +381,13 @@ export function AgenticWorkflowSystemDesign() {
               </div>
             </motion.div>
           </div>
+          <Link
+            href={MULTI_AGENT_WORKFLOW_MAP_HREF}
+            className="group mt-4 inline-flex min-h-[44px] items-center gap-2 rounded-full border border-teal-400/45 bg-teal-500/10 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-teal-100 shadow-[0_0_18px_rgba(13,148,136,0.22)] transition hover:scale-105 hover:border-teal-300/70 hover:bg-teal-500/20 hover:text-white sm:text-sm"
+          >
+            <Play className="h-4 w-4 fill-current" aria-hidden />
+            <span>Visual Demo</span>
+          </Link>
         </div>
 
         {/* Side panels — hidden on small mobile, 2-col on sm+, full on lg */}
