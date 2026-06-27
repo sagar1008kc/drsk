@@ -235,14 +235,24 @@ function FloatingPanel({
   );
 }
 
-function NavIcon({ icon: Icon, label, delay }: { icon: LucideIcon; label: string; delay: number }) {
-  return (
+function NavIcon({
+  icon: Icon,
+  label,
+  delay,
+  href,
+}: {
+  icon: LucideIcon;
+  label: string;
+  delay: number;
+  href?: string;
+}) {
+  const content = (
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.5 }}
-      className="group flex shrink-0 flex-col items-center gap-1.5 sm:gap-2"
+      className={`group flex shrink-0 flex-col items-center gap-1.5 sm:gap-2 ${href ? 'cursor-pointer' : ''}`}
     >
       <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-800/50 transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.4)] sm:h-12 sm:w-12">
         <Icon className="h-4 w-4 text-slate-300 transition-colors group-hover:text-blue-400 sm:h-5 sm:w-5" />
@@ -252,12 +262,30 @@ function NavIcon({ icon: Icon, label, delay }: { icon: LucideIcon; label: string
       </span>
     </motion.div>
   );
+
+  if (!href) return content;
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Open ${label} demo in a new tab`}
+      className="shrink-0 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050810]"
+    >
+      {content}
+    </a>
+  );
 }
 
-const TOP_NAV: Array<{ icon: LucideIcon; label: string; delay: number }> = [
-  { icon: Bot, label: 'Agents', delay: 0.1 },
-  { icon: Wrench, label: 'Tools', delay: 0.2 },
-  { icon: Brain, label: 'LLMs', delay: 0.3 },
+const SMART_AGENT_HREF = '/portfolio/smart-agent';
+const AGENTIC_TOOLS_HUB_HREF = '/portfolio/agentic-tools-hub';
+const ENTERPRISE_LLM_GUIDE_HREF = '/portfolio/enterprise-llm-guide';
+
+const TOP_NAV: Array<{ icon: LucideIcon; label: string; delay: number; href?: string }> = [
+  { icon: Bot, label: 'Agents', delay: 0.1, href: SMART_AGENT_HREF },
+  { icon: Wrench, label: 'Tools', delay: 0.2, href: AGENTIC_TOOLS_HUB_HREF },
+  { icon: Brain, label: 'LLMs', delay: 0.3, href: ENTERPRISE_LLM_GUIDE_HREF },
   { icon: Database, label: 'Data', delay: 0.4 },
   { icon: Users, label: 'Users', delay: 0.5 },
 ];
