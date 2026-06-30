@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 import {
@@ -19,10 +19,12 @@ import {
   Rocket,
   Settings,
   ShieldCheck,
-  Users,
+  UserCheck,
   Wrench,
   type LucideIcon,
 } from 'lucide-react';
+import AgenticDataFlipbookModal from '@/component/portfolio/AgenticDataFlipbookModal';
+import HitlBookShowcaseModal from '@/component/portfolio/HitlBookShowcaseModal';
 
 function getWaveGridSize() {
   if (typeof window === 'undefined') return { width: 50, depth: 50 };
@@ -240,11 +242,13 @@ function NavIcon({
   label,
   delay,
   href,
+  onClick,
 }: {
   icon: LucideIcon;
   label: string;
   delay: number;
   href?: string;
+  onClick?: () => void;
 }) {
   const content = (
     <motion.div
@@ -252,7 +256,7 @@ function NavIcon({
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.5 }}
-      className={`group flex shrink-0 flex-col items-center gap-1.5 sm:gap-2 ${href ? 'cursor-pointer' : ''}`}
+      className={`group flex shrink-0 flex-col items-center gap-1.5 sm:gap-2 ${href || onClick ? 'cursor-pointer' : ''}`}
     >
       <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-800/50 transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.4)] sm:h-12 sm:w-12">
         <Icon className="h-4 w-4 text-slate-300 transition-colors group-hover:text-blue-400 sm:h-5 sm:w-5" />
@@ -262,6 +266,19 @@ function NavIcon({
       </span>
     </motion.div>
   );
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={`Open ${label} deep dive`}
+        className="shrink-0 rounded-full border-0 bg-transparent p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050810]"
+      >
+        {content}
+      </button>
+    );
+  }
 
   if (!href) return content;
 
@@ -282,12 +299,18 @@ const SMART_AGENT_HREF = '/portfolio/smart-agent';
 const AGENTIC_TOOLS_HUB_HREF = '/portfolio/agentic-tools-hub';
 const ENTERPRISE_LLM_GUIDE_HREF = '/portfolio/enterprise-llm-guide';
 
-const TOP_NAV: Array<{ icon: LucideIcon; label: string; delay: number; href?: string }> = [
+const TOP_NAV: Array<{
+  icon: LucideIcon;
+  label: string;
+  delay: number;
+  href?: string;
+  action?: 'data-flipbook' | 'hitl-showcase';
+}> = [
   { icon: Bot, label: 'Agents', delay: 0.1, href: SMART_AGENT_HREF },
   { icon: Wrench, label: 'Tools', delay: 0.2, href: AGENTIC_TOOLS_HUB_HREF },
   { icon: Brain, label: 'LLMs', delay: 0.3, href: ENTERPRISE_LLM_GUIDE_HREF },
-  { icon: Database, label: 'Data', delay: 0.4 },
-  { icon: Users, label: 'Users', delay: 0.5 },
+  { icon: Database, label: 'Data', delay: 0.4, action: 'data-flipbook' },
+  { icon: UserCheck, label: 'HITL', delay: 0.5, action: 'hitl-showcase' },
 ];
 
 const BOTTOM_NAV: Array<{ icon: LucideIcon; label: string; delay: number }> = [
@@ -301,6 +324,9 @@ const BOTTOM_NAV: Array<{ icon: LucideIcon; label: string; delay: number }> = [
 const MULTI_AGENT_WORKFLOW_MAP_HREF = '/portfolio/multi-agent-workflow-map';
 
 export function AgenticWorkflowSystemDesign() {
+  const [dataFlipbookOpen, setDataFlipbookOpen] = useState(false);
+  const [hitlShowcaseOpen, setHitlShowcaseOpen] = useState(false);
+
   return (
     <section
       id="agentic-workflow-system-design"
@@ -317,7 +343,20 @@ export function AgenticWorkflowSystemDesign() {
         </div>
         <div className="-mx-1 flex gap-4 overflow-x-auto px-1 pb-1 [scrollbar-width:none] sm:justify-center sm:gap-8 md:gap-12 [&::-webkit-scrollbar]:hidden">
           {TOP_NAV.map((item) => (
-            <NavIcon key={item.label} {...item} />
+            <NavIcon
+              key={item.label}
+              icon={item.icon}
+              label={item.label}
+              delay={item.delay}
+              href={item.href}
+              onClick={
+                item.action === 'data-flipbook'
+                  ? () => setDataFlipbookOpen(true)
+                  : item.action === 'hitl-showcase'
+                    ? () => setHitlShowcaseOpen(true)
+                    : undefined
+              }
+            />
           ))}
         </div>
         <div className="hidden md:mt-4 md:flex md:items-center md:gap-4">
@@ -520,6 +559,15 @@ export function AgenticWorkflowSystemDesign() {
           ))}
         </div>
       </div>
+
+      <AgenticDataFlipbookModal
+        open={dataFlipbookOpen}
+        onClose={() => setDataFlipbookOpen(false)}
+      />
+      <HitlBookShowcaseModal
+        open={hitlShowcaseOpen}
+        onClose={() => setHitlShowcaseOpen(false)}
+      />
     </section>
   );
 }

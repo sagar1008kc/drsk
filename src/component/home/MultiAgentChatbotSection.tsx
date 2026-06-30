@@ -196,6 +196,7 @@ export default function MultiAgentChatbotSection() {
   };
 
   const showSuggestions = !isTyping && (messages.length < 3 || messages.some((m) => m.isFallback));
+  const hasAgentRun = isTyping || flowEvents.length > 0;
 
   return (
     <section
@@ -223,14 +224,7 @@ export default function MultiAgentChatbotSection() {
             </div>
 
             <div className="flex flex-1 min-h-0 flex-col overflow-hidden">
-              <div className="min-h-0 flex-[0_0_58%] overflow-y-auto p-4 pb-2 hub-scroll">
-                <RagFlowStrip flowStep={flowStep} isLive={isLive} />
-                <AgentRunMetrics
-                  routeResult={routeResult}
-                  events={flowEvents}
-                  isLive={isLive}
-                  flowStep={flowStep}
-                />
+              <div className="min-h-0 flex-1 overflow-y-auto p-4 pb-2 hub-scroll">
                 <OrchestrationDiagram
                   flowStep={flowStep}
                   isLive={isLive}
@@ -238,9 +232,19 @@ export default function MultiAgentChatbotSection() {
                   activeSub={activeSub}
                   routeResult={routeResult}
                 />
+                {hasAgentRun && (
+                  <AgentRunMetrics
+                    routeResult={routeResult}
+                    events={flowEvents}
+                    isLive={isLive}
+                    flowStep={flowStep}
+                  />
+                )}
               </div>
 
-              <OrchestrationTracePanel events={flowEvents} isLive={isLive} flowStep={flowStep} />
+              {hasAgentRun && (
+                <OrchestrationTracePanel events={flowEvents} isLive={isLive} flowStep={flowStep} />
+              )}
             </div>
 
             <div className="border-t border-teal-100 px-4 py-2 text-[10px] text-zinc-400">
@@ -272,17 +276,19 @@ export default function MultiAgentChatbotSection() {
             </div>
           </div>
 
-          <div className="border-b border-zinc-200/70 px-3 py-3 md:hidden">
-            <AgentRunMetrics
-              routeResult={routeResult}
-              events={flowEvents}
-              isLive={isLive}
-              flowStep={flowStep}
-            />
-            <div className="mt-3 max-h-48 overflow-hidden">
-              <OrchestrationTracePanel events={flowEvents} isLive={isLive} flowStep={flowStep} compact />
+          {hasAgentRun && (
+            <div className="border-b border-zinc-200/70 px-3 py-3 md:hidden">
+              <AgentRunMetrics
+                routeResult={routeResult}
+                events={flowEvents}
+                isLive={isLive}
+                flowStep={flowStep}
+              />
+              <div className="mt-4 max-h-48 overflow-hidden">
+                <OrchestrationTracePanel events={flowEvents} isLive={isLive} flowStep={flowStep} compact />
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-5 custom-scrollbar">
             <AnimatePresence initial={false}>
@@ -386,8 +392,8 @@ function OrchestrationTracePanel({
 }) {
   return (
     <div
-      className={`flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-zinc-200/80 bg-[#0f1117]/[0.03] ${
-        compact ? 'h-48' : 'mx-4 mb-4 mt-1'
+      className={`flex min-h-0 flex-col overflow-hidden rounded-xl border border-zinc-200/80 bg-[#0f1117]/[0.03] ${
+        compact ? 'h-48' : 'mx-4 mb-4 mt-4 max-h-[38%] shrink-0'
       }`}
     >
       <div className="flex shrink-0 items-center justify-between gap-2 border-b border-teal-100/80 bg-gradient-to-r from-teal-50/90 to-emerald-50/60 px-3 py-2.5">
@@ -485,7 +491,7 @@ function AgentRunMetrics({
   ];
 
   return (
-    <div className="mt-3 rounded-xl border border-zinc-200/80 bg-white/90 p-3 shadow-sm">
+    <div className="mt-4 rounded-xl border border-zinc-200/80 bg-white/90 p-3 shadow-sm">
       <div className="mb-2 flex items-center justify-between gap-2">
         <p className="text-[11px] font-bold text-zinc-900">Agent run metrics</p>
         <span className="rounded-full bg-teal-50 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-teal-700 ring-1 ring-teal-200">
@@ -503,69 +509,6 @@ function AgentRunMetrics({
       <p className="mt-2 truncate text-[10px] text-zinc-500">
         Matched terms: <span className="font-medium text-zinc-700">{matchedTerms}</span>
       </p>
-    </div>
-  );
-}
-
-const RAG_PIPELINE = [
-  'Chat',
-  'Identity',
-  'PII Safety',
-  'Supervisor',
-  'Specialist',
-  'Guardrails',
-  'Response',
-] as const;
-
-function getRagStepIndex(flowStep: FlowStep): number {
-  if (flowStep === 'idle') return -1;
-  if (flowStep === 'ingesting') return 0;
-  if (flowStep === 'classifying') return 1;
-  if (flowStep === 'routing') return 2;
-  if (flowStep === 'delegating') return 3;
-  if (flowStep === 'retrieving') return 4;
-  if (flowStep === 'synthesizing') return 5;
-  return 6;
-}
-
-function RagFlowStrip({ flowStep, isLive }: { flowStep: FlowStep; isLive: boolean }) {
-  const activeIdx = getRagStepIndex(flowStep);
-
-  return (
-    <div className="rounded-xl border border-teal-200/60 bg-gradient-to-b from-teal-50/80 to-white px-3 py-3">
-      <div className="flex items-center justify-between gap-2 mb-2.5">
-        <p className="text-[11px] font-semibold text-black">Agentic pipeline</p>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 ring-1 ring-emerald-200/80">
-          <motion.span
-            className="h-1.5 w-1.5 rounded-full bg-emerald-500"
-            animate={{ opacity: isLive ? [1, 0.35, 1] : 0.5 }}
-            transition={{ duration: 1.4, repeat: isLive ? Infinity : 0 }}
-          />
-          live
-        </span>
-      </div>
-      <div className="flex flex-wrap items-center gap-x-1 gap-y-1.5">
-        {RAG_PIPELINE.map((step, i) => {
-          const isActive = activeIdx === i;
-          const isDone = activeIdx > i;
-          return (
-            <React.Fragment key={step}>
-              {i > 0 && <span className="text-[10px] text-teal-400">→</span>}
-              <span
-                className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold transition-colors ${
-                  isActive
-                    ? 'bg-teal-600 text-white shadow-sm shadow-teal-500/30'
-                    : isDone
-                      ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/70'
-                      : 'bg-white text-zinc-500 ring-1 ring-teal-100'
-                }`}
-              >
-                {step}
-              </span>
-            </React.Fragment>
-          );
-        })}
-      </div>
     </div>
   );
 }
@@ -666,7 +609,7 @@ function OrchestrationDiagram({
   routeResult: RouteResult | null;
 }) {
   return (
-    <div className="relative mt-4">
+    <div className="relative">
       <div className="absolute left-[22px] top-4 bottom-4 w-[2px] rounded-full bg-teal-100/90" />
       <div className="pointer-events-none absolute left-[22px] top-4 bottom-4 w-[2px] overflow-hidden rounded-full">
         {FLOW_LINE_COLORS.map((via, i) => (
