@@ -1,21 +1,7 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
-
-const focusTags = [
-  'Agentic AI',
-  'RAG',
-  "MCP",
-  'LLM-Powered Apps',
-  'Automation',
-  'Tool Integration',
-  'Enterprise Agents',
-  'Intelligent Workflows',
-  'Retrieval Systems',
-  'Multi-Agentic Systems',
-  'Secure Architecture',
-  'Human-Centered AI',
-];
 
 const toolGroups = [
   {
@@ -59,13 +45,6 @@ const toolLabelClass: Record<ToolColor, string> = {
   green: 'text-green-400',
 };
 
-const focusChipClasses = [
-  'rounded-md border border-teal-500/30 bg-teal-500/[0.12] px-3 py-1.5 font-mono text-xs font-medium text-teal-300 shadow-[0_0_14px_rgba(13,148,136,0.15)] backdrop-blur-sm transition hover:border-teal-400/60 hover:bg-teal-500/20 hover:text-teal-200 sm:text-[0.8125rem]',
-  'rounded-md border border-blue-500/30 bg-blue-500/[0.12] px-3 py-1.5 font-mono text-xs font-medium text-blue-300 shadow-[0_0_14px_rgba(37,99,235,0.15)] backdrop-blur-sm transition hover:border-blue-400/60 hover:bg-blue-500/20 hover:text-blue-200 sm:text-[0.8125rem]',
-  'rounded-md border border-green-500/30 bg-green-500/[0.12] px-3 py-1.5 font-mono text-xs font-medium text-green-300 shadow-[0_0_14px_rgba(22,163,74,0.15)] backdrop-blur-sm transition hover:border-green-400/60 hover:bg-green-500/20 hover:text-green-200 sm:text-[0.8125rem]',
-  'rounded-md border border-emerald-500/30 bg-emerald-500/[0.12] px-3 py-1.5 font-mono text-xs font-medium text-emerald-300 shadow-[0_0_14px_rgba(16,185,129,0.15)] backdrop-blur-sm transition hover:border-emerald-400/60 hover:bg-emerald-500/20 hover:text-emerald-200 sm:text-[0.8125rem]',
-];
-
 const pillarAccents = [
   {
     hover: 'hover:border-teal-500/50 hover:bg-teal-500/[0.08]',
@@ -106,6 +85,7 @@ const pillars = [
     label: '02',
     title: 'RAG & Retrieval Systems',
     desc: 'Production retrieval-augmented pipelines connecting LLMs to proprietary knowledge, delivering accurate, context-aware responses.',
+    href: '/portfolio/rag-systems',
   },
   {
     label: '03',
@@ -205,55 +185,55 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
           <span className="font-semibold text-white">practical business value</span>.
         </motion.p>
 
-        {/* Focus tech chips */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 0.55, delay: 0.26 }}
-          className="mt-8 flex flex-wrap justify-center gap-2 sm:gap-2.5"
-          aria-label="Technical focus areas"
-        >
-          {focusTags.map((tag, i) => (
-            <span
-              key={tag}
-              className={focusChipClasses[i % focusChipClasses.length]}
-            >
-              {tag}
-            </span>
-          ))}
-        </motion.div>
-
         {/* Pillar cards */}
-        <div className="mt-14 grid gap-4 sm:mt-16 sm:gap-5 md:grid-cols-2 lg:gap-6">
+        <div className="mt-10 grid gap-4 sm:mt-12 sm:gap-5 md:grid-cols-2 lg:mt-14 lg:gap-6">
           {pillars.map((pillar, i) => {
             const accent = pillarAccents[i % pillarAccents.length];
+            const cardClassName = `group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 backdrop-blur-sm transition sm:p-7 ${accent.hover}${
+              pillar.href ? ' cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(13,148,136,0.12)]' : ''
+            }`;
+            const inner = (
+              <>
+                <div className={`pointer-events-none absolute inset-0 rounded-2xl ${accent.glow} opacity-0 transition-opacity duration-300 group-hover:opacity-100`} />
+                <div className="relative">
+                  <span className={`font-mono text-xs font-bold tracking-widest ${accent.label}`}>
+                    {pillar.label}
+                  </span>
+                  <h3 className="mt-3 text-lg font-bold text-white sm:text-xl">{pillar.title}</h3>
+                  <p className="mt-2.5 text-sm leading-relaxed text-zinc-400 sm:text-base">
+                    {pillar.desc}
+                  </p>
+                  {pillar.href ? (
+                    <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-teal-400/90 transition group-hover:text-teal-300">
+                      Explore pipeline →
+                    </p>
+                  ) : null}
+                </div>
+                <div
+                  className="pointer-events-none absolute bottom-3 right-5 select-none font-mono text-5xl font-bold text-white/[0.04]"
+                  aria-hidden
+                >
+                  {pillar.label}
+                </div>
+              </>
+            );
+
             return (
-            <motion.article
+            <motion.div
               key={pillar.label}
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.45, delay: 0.08 + i * 0.08 }}
-              className={`group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 backdrop-blur-sm transition sm:p-7 ${accent.hover}`}
             >
-              <div className={`pointer-events-none absolute inset-0 rounded-2xl ${accent.glow} opacity-0 transition-opacity duration-300 group-hover:opacity-100`} />
-              <div className="relative">
-                <span className={`font-mono text-xs font-bold tracking-widest ${accent.label}`}>
-                  {pillar.label}
-                </span>
-                <h3 className="mt-3 text-lg font-bold text-white sm:text-xl">{pillar.title}</h3>
-                <p className="mt-2.5 text-sm leading-relaxed text-zinc-400 sm:text-base">
-                  {pillar.desc}
-                </p>
-              </div>
-              <div
-                className="pointer-events-none absolute bottom-3 right-5 select-none font-mono text-5xl font-bold text-white/[0.04]"
-                aria-hidden
-              >
-                {pillar.label}
-              </div>
-            </motion.article>
+              {pillar.href ? (
+                <Link href={pillar.href} className={`block ${cardClassName}`}>
+                  {inner}
+                </Link>
+              ) : (
+                <article className={cardClassName}>{inner}</article>
+              )}
+            </motion.div>
             );
           })}
         </div>
