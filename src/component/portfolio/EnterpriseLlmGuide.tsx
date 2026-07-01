@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import Link from 'next/link';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import PortfolioBackLink from '@/component/portfolio/PortfolioBackLink';
 import {
   ArrowRight,
   BrainCircuit,
@@ -10,7 +12,6 @@ import {
   Gauge,
   Layers,
   Lock,
-  Network,
   Scale,
   Server,
   ShieldCheck,
@@ -244,30 +245,217 @@ const providers: Record<
   },
 };
 
-const integrationPatterns = [
+const integrationDeepLinks = [
+  { href: '/portfolio/smart-agent', label: 'Live agent demo' },
+  { href: '/portfolio/multi-agent-workflow-map', label: 'Visual workflow map' },
+  { href: '/portfolio/rag-systems', label: 'RAG pipeline' },
+  { href: '/portfolio/agentic-tools-hub', label: 'Tool integration hub' },
+];
+
+type ImplementationPhaseId =
+  | 'prompt'
+  | 'structured'
+  | 'rag'
+  | 'tools'
+  | 'guardrails'
+  | 'evaluation';
+
+type ImplementationPhase = {
+  id: ImplementationPhaseId;
+  step: number;
+  pattern: string;
+  title: string;
+  concept: string;
+  copilotAction: string;
+  boundaryNote: string;
+  terminal: string;
+  code?: string;
+  streamEvents: string[];
+  checks: string[];
+  metrics?: { label: string; value: string }[];
+};
+
+const IMPLEMENTATION_PHASES: ImplementationPhase[] = [
   {
-    title: 'Prompt + Context',
-    description: 'The app passes task instructions, user context, and constraints into the model.',
+    id: 'prompt',
+    step: 1,
+    pattern: 'Prompt + Context',
+    title: 'Ingress & context assembly',
+    concept:
+      'The app passes task instructions, user context, and constraints into the model — never raw browser access to production APIs.',
+    copilotAction:
+      'Authenticated user sends: “Use my rewards and upgrade to Pro.” The API gateway validates JWT, attaches account/session context, and builds the system + user prompt bundle.',
+    boundaryNote:
+      'Session, RBAC scope, and tenant metadata are resolved server-side before the LLM sees anything.',
+    terminal:
+      'POST /v1/copilot/chat\nJWT: valid | scope: commerce.read, commerce.write\nSESSION: user_id=882 plan=Starter\nPROMPT: system + user message assembled',
+    streamEvents: [
+      'event: session_bound',
+      'data: {"user_id":"882","channel":"web"}',
+      'event: prompt_ready',
+      'data: {"tokens_in":412,"model":"gpt-4o"}',
+    ],
+    checks: [
+      'Identity verified at gateway — not inside the model',
+      'System prompt defines allowed tools and tone',
+      'PII redacted from logs where policy requires',
+    ],
   },
   {
-    title: 'RAG',
-    description: 'Relevant documents are retrieved and inserted into the prompt to ground the answer.',
+    id: 'structured',
+    step: 2,
+    pattern: 'Structured Output',
+    title: 'Intent classification & routing plan',
+    concept:
+      'The model returns JSON that downstream systems can validate and consume — intent, entities, confidence, and proposed tool plan.',
+    copilotAction:
+      'LLM responds with a schema-validated plan: target plan Pro, apply rewards, confidence 0.94, and an ordered tool-call list. The orchestrator rejects malformed JSON before any side effect.',
+    boundaryNote:
+      'Structured output is parsed and validated by application code — the LLM proposes; the app decides whether to proceed.',
+    terminal:
+      'LLM_RESPONSE: structured_json\nSCHEMA_VALIDATE: pass\nROUTER: intent=plan_upgrade_with_rewards\nCONFIDENCE: 0.94 → auto_route',
+    code: `{
+  "intent": "plan_upgrade_with_rewards",
+  "entities": { "target_plan": "Pro", "use_rewards": true },
+  "confidence": 0.94,
+  "tool_calls": [
+    { "name": "verify_identity", "args": { "user_id": "882" } },
+    { "name": "get_rewards_balance", "args": { "user_id": "882" } },
+    { "name": "search_policy", "args": { "query": "Pro upgrade eligibility" } }
+  ],
+  "requires_hitl": false
+}`,
+    streamEvents: [
+      'event: reasoning_delta',
+      'data: {"text":"Classifying upgrade intent…"}',
+      'event: structured_output',
+      'data: {"intent":"plan_upgrade_with_rewards","confidence":0.94}',
+    ],
+    checks: [
+      'JSON schema validation before tool dispatch',
+      'Confidence threshold gates auto vs. review path',
+      'Intent logged with trace_id for audit',
+    ],
   },
   {
-    title: 'Tool Calling',
-    description: 'The model selects a function/API call, but the application executes it safely.',
+    id: 'rag',
+    step: 3,
+    pattern: 'RAG',
+    title: 'Policy grounding via retrieval',
+    concept:
+      'Relevant documents are retrieved and inserted into the prompt to ground the answer in enterprise policy — not model memory alone.',
+    copilotAction:
+      'Hybrid search pulls “Pro upgrade eligibility”, proration rules, and rewards redemption policy. Chunks pass RBAC filter; top passages are injected into the agent context with citation IDs.',
+    boundaryNote:
+      'Retrieval runs in the trusted data plane. Unauthorized chunks never reach the generation context.',
+    terminal:
+      'RAG: hybrid_search query="Pro upgrade eligibility"\nRETRIEVED: 4 chunks | min_score=0.72\nRBAC_FILTER: 4→3 authorized\nINJECT: policy_ctx[3] with citations',
+    streamEvents: [
+      'event: retrieval_start',
+      'data: {"index":"commerce-policies","query":"Pro upgrade eligibility"}',
+      'event: retrieval_complete',
+      'data: {"chunks":3,"top_score":0.89,"citations":["POL-441","POL-882"]}',
+    ],
+    checks: [
+      'Hybrid vector + keyword retrieval with score floor',
+      'Document-level ACL enforced pre-generation',
+      'Citations preserved for grounded responses',
+    ],
+    metrics: [
+      { label: 'Retrieval hit rate', value: '94%' },
+      { label: 'Groundedness score', value: '0.91' },
+    ],
   },
   {
-    title: 'Structured Output',
-    description: 'The model returns JSON that downstream systems can validate and consume.',
+    id: 'tools',
+    step: 4,
+    pattern: 'Tool Calling',
+    title: 'Server-side tool execution',
+    concept:
+      'The model selects a function/API call, but the application executes it safely — with auth, rate limits, idempotency, and audit trails.',
+    copilotAction:
+      'Orchestrator runs verify_identity → get_rewards_balance (1,200 pts) → create_checkout_session. Each tool call uses managed identity, timeout budgets, and retries with circuit breaker.',
+    boundaryNote:
+      'Tools never run in the browser or inside the model weights. The LLM only emits a call plan; your API layer executes.',
+    terminal:
+      'TOOL verify_identity → 200 OK | tier=verified\nTOOL get_rewards_balance → 1200 pts available\nTOOL create_checkout_session → cs_live_… amount=49.99\nAUDIT: trace_id=tr_8f2a logged',
+    streamEvents: [
+      'event: tool_call',
+      'data: {"name":"verify_identity","status":"success","latency_ms":84}',
+      'event: tool_call',
+      'data: {"name":"get_rewards_balance","result":1200}',
+      'event: tool_call',
+      'data: {"name":"create_checkout_session","session_id":"cs_live_…"}',
+    ],
+    checks: [
+      'Managed identity / service principal per tool',
+      'Idempotency keys on payment and ledger writes',
+      'Per-tool timeout, retry, and circuit breaker',
+    ],
+    metrics: [
+      { label: 'Tool success rate', value: '99.2%' },
+      { label: 'P95 tool latency', value: '142 ms' },
+    ],
   },
   {
-    title: 'Evaluation Loop',
-    description: 'Outputs are tested for accuracy, groundedness, safety, latency, and cost.',
+    id: 'guardrails',
+    step: 5,
+    pattern: 'Guardrail Layer',
+    title: 'Validation, policy & human-in-the-loop',
+    concept:
+      'Policies, validators, permissions, and human review control model behavior before irreversible actions execute.',
+    copilotAction:
+      'Guardrail agent checks amount threshold, rewards eligibility against RAG policy, and output safety. Low confidence or high value would open HITL; this request passes auto-approval at $49.99 with 0.94 confidence.',
+    boundaryNote:
+      'Human approval for high-risk actions is a first-class workflow state — not an afterthought modal.',
+    terminal:
+      'GUARDRAIL: amount_check pass ($49.99 < $500 threshold)\nGUARDRAIL: policy_match POL-441 satisfied\nHITL: skipped (confidence=0.94, risk=low)\nAPPROVE: transition → payment_capture',
+    streamEvents: [
+      'event: guardrail_check',
+      'data: {"rules":["amount","policy","safety"],"passed":3}',
+      'event: hitl_decision',
+      'data: {"required":false,"reason":"below_threshold"}',
+      'event: approval_granted',
+      'data: {"actor":"system","trace_id":"tr_8f2a"}',
+    ],
+    checks: [
+      'Amount and scope validators before payment capture',
+      'HITL queue for low confidence or high-risk writes',
+      'Every approval logged with actor and trace_id',
+    ],
   },
   {
-    title: 'Guardrail Layer',
-    description: 'Policies, validators, permissions, and human review control model behavior.',
+    id: 'evaluation',
+    step: 6,
+    pattern: 'Evaluation Loop',
+    title: 'Streaming UX & production observability',
+    concept:
+      'Outputs are tested for accuracy, groundedness, safety, latency, and cost — continuously in production, not only offline.',
+    copilotAction:
+      'WebSocket streams each phase to the UI. Settlement events update subscription and rewards ledger. Traces, token cost, groundedness, and completion rate feed dashboards and alerting.',
+    boundaryNote:
+      'Performance metrics belong in the same trace as business outcomes — latency, cost, and quality are one story.',
+    terminal:
+      'STREAM: checkout_complete → UI\nKAFKA: payment.confirmed\nSUBSCRIPTION: Starter→Pro\nREWARDS: -500 pts\nOTEL: span closed | cost=$0.018 | e2e=4.2s\nALERT: none',
+    streamEvents: [
+      'event: stream_complete',
+      'data: {"message":"Upgrade to Pro confirmed. 500 rewards applied."}',
+      'event: settlement',
+      'data: {"subscription":"Pro","rewards_delta":-500}',
+      'event: trace_export',
+      'data: {"trace_id":"tr_8f2a","latency_ms":4200,"cost_usd":0.018}',
+    ],
+    checks: [
+      'End-to-end trace across prompt, tools, and settlement',
+      'Groundedness and hallucination rate monitored',
+      'Token cost and latency tracked per successful workflow',
+    ],
+    metrics: [
+      { label: 'Task completion', value: '97.8%' },
+      { label: 'Human escalation', value: '2.1%' },
+      { label: 'E2E latency', value: '4.2 s' },
+      { label: 'Cost / workflow', value: '$0.018' },
+    ],
   },
 ];
 
@@ -334,7 +522,42 @@ const azureLlmMetrics = [
 
 export default function EnterpriseLlmGuide() {
   const [activeProvider, setActiveProvider] = useState<ProviderKey>('openai');
+  const [activePhaseId, setActivePhaseId] = useState<ImplementationPhaseId>('prompt');
+  const [isSimulating, setIsSimulating] = useState(false);
   const provider = providers[activeProvider];
+
+  const activePhaseIndex = IMPLEMENTATION_PHASES.findIndex((phase) => phase.id === activePhaseId);
+  const activePhase = IMPLEMENTATION_PHASES[activePhaseIndex >= 0 ? activePhaseIndex : 0];
+
+  const cumulativeStreamEvents = useMemo(
+    () =>
+      IMPLEMENTATION_PHASES.slice(0, activePhaseIndex + 1).flatMap((phase) =>
+        phase.streamEvents.map((event) => ({ phase: phase.step, event })),
+      ),
+    [activePhaseIndex],
+  );
+
+  const runSimulation = useCallback(() => {
+    setIsSimulating(true);
+    setActivePhaseId('prompt');
+  }, []);
+
+  useEffect(() => {
+    if (!isSimulating) return;
+
+    const intervalId = window.setInterval(() => {
+      setActivePhaseId((current) => {
+        const currentIndex = IMPLEMENTATION_PHASES.findIndex((phase) => phase.id === current);
+        if (currentIndex >= IMPLEMENTATION_PHASES.length - 1) {
+          setIsSimulating(false);
+          return current;
+        }
+        return IMPLEMENTATION_PHASES[currentIndex + 1].id;
+      });
+    }, 2200);
+
+    return () => window.clearInterval(intervalId);
+  }, [isSimulating]);
 
   return (
     <main className="min-h-[calc(100dvh-3.75rem)] bg-slate-50 font-sans text-slate-900 selection:bg-teal-100 selection:text-teal-900">
@@ -342,6 +565,7 @@ export default function EnterpriseLlmGuide() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex min-h-16 flex-col gap-3 py-3 md:flex-row md:items-center md:justify-between md:py-0">
             <div className="flex items-center gap-2">
+              <PortfolioBackLink variant="light" />
               <BrainCircuit className="h-8 w-8 text-teal-600" />
               <span className="text-xl font-bold tracking-tight">
                 Enterprise<span className="text-teal-600">LLM</span> Guide
@@ -352,7 +576,7 @@ export default function EnterpriseLlmGuide() {
               <a href="#how-it-works" className="whitespace-nowrap transition hover:text-teal-700">How it works</a>
               <a href="#llm-layers" className="whitespace-nowrap transition hover:text-teal-700">Layers</a>
               <a href="#choose-model" className="whitespace-nowrap transition hover:text-teal-700">Choose model</a>
-              <a href="#integration" className="whitespace-nowrap transition hover:text-teal-700">Integration</a>
+              <a href="#integration" className="whitespace-nowrap transition hover:text-teal-700">Implementation</a>
             </div>
           </div>
         </div>
@@ -698,27 +922,221 @@ export default function EnterpriseLlmGuide() {
 
       <section id="integration" className="scroll-mt-36 bg-slate-50 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto mb-12 max-w-3xl text-center">
+          <div className="mx-auto mb-10 max-w-3xl text-center">
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-teal-700">
               Implementation
             </p>
-            <h2 className="mb-4 text-3xl font-bold text-slate-900">How LLMs are integrated in AI systems</h2>
+            <h2 className="mb-4 text-3xl font-bold text-slate-900">
+              How LLMs integrate in production — Commerce Copilot walkthrough
+            </h2>
             <p className="text-slate-600">
-              The LLM should sit behind an application boundary where prompts, context, tools,
-              policies, logs, and outputs can be controlled.
+              Integration patterns are not abstract checkboxes. Each phase below maps a real
+              enterprise pattern to a concrete step in an LLM-powered application — prompts, JSON
+              routing, RAG, server-side tools, guardrails, and observability behind one API boundary.
             </p>
           </div>
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {integrationPatterns.map((pattern) => (
-              <div key={pattern.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-teal-100 text-teal-700">
-                  <Network className="h-5 w-5" />
-                </div>
-                <h3 className="font-bold text-slate-900">{pattern.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{pattern.description}</p>
-              </div>
-            ))}
+
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm font-medium text-slate-600">
+              Reference request:{' '}
+              <span className="font-semibold text-slate-900">
+                “Use my rewards and upgrade to Pro.”
+              </span>
+            </p>
+            <button
+              type="button"
+              onClick={runSimulation}
+              disabled={isSimulating}
+              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isSimulating ? (
+                <>
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
+                  Running phase {activePhase.step} of {IMPLEMENTATION_PHASES.length}…
+                </>
+              ) : (
+                <>
+                  <Zap className="h-4 w-4" />
+                  Simulate full request
+                </>
+              )}
+            </button>
           </div>
+
+          <div className="mb-8 flex gap-2 overflow-x-auto pb-2">
+            {IMPLEMENTATION_PHASES.map((phase) => {
+              const isActive = phase.id === activePhaseId;
+              const isComplete = phase.step < activePhase.step;
+              return (
+                <button
+                  key={phase.id}
+                  type="button"
+                  onClick={() => {
+                    setIsSimulating(false);
+                    setActivePhaseId(phase.id);
+                  }}
+                  className={`min-w-[9.5rem] shrink-0 rounded-xl border px-3 py-3 text-left transition ${
+                    isActive
+                      ? 'border-teal-500 bg-teal-50 shadow-sm'
+                      : isComplete
+                        ? 'border-teal-200 bg-white'
+                        : 'border-slate-200 bg-white hover:border-teal-200'
+                  }`}
+                >
+                  <p
+                    className={`text-[10px] font-bold uppercase tracking-wider ${
+                      isActive ? 'text-teal-700' : 'text-slate-400'
+                    }`}
+                  >
+                    Phase {phase.step}
+                  </p>
+                  <p className={`mt-1 text-xs font-bold ${isActive ? 'text-teal-900' : 'text-slate-800'}`}>
+                    {phase.pattern}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-12">
+            <div className="space-y-5 lg:col-span-7">
+              <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-4 flex flex-wrap items-center gap-2">
+                  <span className="rounded-full bg-teal-100 px-3 py-1 text-xs font-bold text-teal-800">
+                    {activePhase.pattern}
+                  </span>
+                  <span className="text-xs font-medium text-slate-500">
+                    Phase {activePhase.step} · {activePhase.title}
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-slate-900">Pattern</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{activePhase.concept}</p>
+                <h3 className="mt-5 text-xl font-bold text-slate-900">In Commerce Copilot</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{activePhase.copilotAction}</p>
+                <div className="mt-5 rounded-xl border border-teal-100 bg-teal-50/80 p-4">
+                  <p className="text-xs font-bold uppercase tracking-wider text-teal-800">
+                    Application boundary
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-teal-900">{activePhase.boundaryNote}</p>
+                </div>
+                <ul className="mt-5 space-y-2">
+                  {activePhase.checks.map((check) => (
+                    <li key={check} className="flex gap-2 text-sm text-slate-700">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" />
+                      <span>{check}</span>
+                    </li>
+                  ))}
+                </ul>
+                {activePhase.metrics?.length ? (
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {activePhase.metrics.map((metric) => (
+                      <span
+                        key={metric.label}
+                        className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700"
+                      >
+                        {metric.label}: {metric.value}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </article>
+
+              {activePhase.code ? (
+                <article className="rounded-2xl border border-slate-200 bg-slate-950 p-5 text-white">
+                  <p className="text-xs font-bold uppercase tracking-wider text-teal-300">
+                    Structured output (validated before tools run)
+                  </p>
+                  <pre className="mt-3 max-h-64 overflow-auto font-mono text-[11px] leading-relaxed text-emerald-300">
+                    {activePhase.code}
+                  </pre>
+                </article>
+              ) : null}
+            </div>
+
+            <aside className="space-y-5 lg:col-span-5">
+              <article className="rounded-2xl border border-slate-200 bg-slate-950 p-5 text-white">
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Orchestrator terminal
+                </p>
+                <pre className="mt-3 max-h-40 overflow-auto whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-emerald-300">
+                  {activePhase.terminal}
+                </pre>
+              </article>
+
+              <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    WebSocket stream (SSE)
+                  </p>
+                  {isSimulating ? (
+                    <span className="flex items-center gap-1.5 text-[10px] font-semibold text-teal-600">
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-500" />
+                      Live
+                    </span>
+                  ) : null}
+                </div>
+                <div className="max-h-56 space-y-1 overflow-y-auto rounded-xl bg-slate-950 p-3 font-mono text-[10px] leading-relaxed">
+                  {cumulativeStreamEvents.map(({ phase, event }, i) => (
+                    <p
+                      key={`${phase}-${i}`}
+                      className={
+                        phase === activePhase.step
+                          ? 'text-emerald-300'
+                          : 'text-slate-500'
+                      }
+                    >
+                      {event}
+                    </p>
+                  ))}
+                </div>
+              </article>
+
+              <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Progress through the request
+                </p>
+                <ol className="space-y-2">
+                  {IMPLEMENTATION_PHASES.map((phase) => {
+                    const status =
+                      phase.step < activePhase.step
+                        ? 'complete'
+                        : phase.step === activePhase.step
+                          ? 'active'
+                          : 'pending';
+                    return (
+                      <li
+                        key={phase.id}
+                        className={`flex items-start gap-2 rounded-lg px-2 py-1.5 text-xs ${
+                          status === 'active'
+                            ? 'bg-teal-50 font-semibold text-teal-900'
+                            : status === 'complete'
+                              ? 'text-slate-600'
+                              : 'text-slate-400'
+                        }`}
+                      >
+                        <span
+                          className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+                            status === 'active'
+                              ? 'bg-teal-600 text-white'
+                              : status === 'complete'
+                                ? 'bg-teal-100 text-teal-700'
+                                : 'bg-slate-100 text-slate-400'
+                          }`}
+                        >
+                          {phase.step}
+                        </span>
+                        <span>
+                          <span className="font-semibold">{phase.pattern}</span>
+                          <span className="block text-[11px] font-normal opacity-80">{phase.title}</span>
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </article>
+            </aside>
+          </div>
+
           <div className="mt-10 rounded-3xl border border-slate-200 bg-slate-950 p-8 text-white">
             <h3 className="mb-4 flex items-center gap-2 text-xl font-bold">
               <ShieldCheck className="h-5 w-5 text-teal-300" />
@@ -739,6 +1157,28 @@ export default function EnterpriseLlmGuide() {
                   <Icon className="mb-2 h-5 w-5 text-teal-300" />
                   <p className="font-semibold">{label as string}</p>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
+              Explore each layer in depth
+            </p>
+            <p className="mt-2 max-w-2xl text-sm text-slate-600">
+              This walkthrough shows how patterns connect. Open dedicated demos for retrieval, tools,
+              agents, and the full workflow map.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {integrationDeepLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-800 transition hover:border-teal-300 hover:bg-teal-100"
+                >
+                  {item.label}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               ))}
             </div>
           </div>

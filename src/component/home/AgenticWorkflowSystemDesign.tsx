@@ -282,6 +282,20 @@ function NavIcon({
 
   if (!href) return content;
 
+  const isInternal = href.startsWith('/');
+
+  if (isInternal) {
+    return (
+      <Link
+        href={href}
+        aria-label={`Open ${label}`}
+        className="shrink-0 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050810]"
+      >
+        {content}
+      </Link>
+    );
+  }
+
   return (
     <a
       href={href}

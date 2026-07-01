@@ -1,6 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { Bot, GitMerge, Layers, ShieldCheck, Wrench } from 'lucide-react';
+import PortfolioBackLink from '@/component/portfolio/PortfolioBackLink';
 
 type LayerId = 'user' | 'gateway' | 'chat' | 'orchestration' | 'payment' | 'settlement' | 'observability';
 
@@ -126,6 +129,40 @@ const LAYERS: Record<LayerId, LayerContent> = {
 };
 
 const METRIC_LABELS = ['Auth/Security', 'AI Reasoning', 'RAG Lookup', 'Fulfillment', 'Notification'];
+
+const PLATFORM_CAPABILITIES = [
+  {
+    icon: GitMerge,
+    title: 'LangGraph orchestration',
+    detail: 'Supervisor routes intent, manages state, and coordinates specialist agents through explicit graph transitions.',
+  },
+  {
+    icon: Bot,
+    title: 'Specialized agents',
+    detail: 'Identity, policy, rewards, payment, and notification agents each own a scoped domain with clear handoffs.',
+  },
+  {
+    icon: Wrench,
+    title: 'Enterprise tools',
+    detail: 'CRM, ERP, payment, and notification systems are invoked through governed tool interfaces — not free-form prompts.',
+  },
+  {
+    icon: Layers,
+    title: 'Contextual knowledge',
+    detail: 'RAG and structured records ground decisions in approved business rules before high-impact actions run.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Human-in-the-loop',
+    detail: 'Low confidence, policy conflicts, or high-risk steps pause for human review before the workflow continues.',
+  },
+];
+
+const RELATED_DEEP_DIVES = [
+  { label: 'RAG pipeline', href: '/portfolio/rag-systems' },
+  { label: 'Agent tools hub', href: '/portfolio/agentic-tools-hub' },
+  { label: 'Live agent demo', href: '/portfolio/smart-agent' },
+];
 
 const AGENTS = [
   {
@@ -264,19 +301,46 @@ export default function AiCommerceOrchestrationPage() {
 
   return (
     <main className="min-h-[calc(100dvh-3.75rem)] bg-slate-50 px-4 py-5 text-slate-900 sm:px-6 lg:px-8 lg:py-6">
-      <header className="mx-auto mb-5 max-w-7xl">
-        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-950 sm:text-3xl">
-            Multi-Agent Workflow Map
-            </h1>
-            <p className="mt-1 max-w-2xl text-xs leading-relaxed text-slate-500 sm:text-sm">
-              Visualizing the full journey from natural language intent to agentic reasoning,
-              payment orchestration, settlement, telemetry, and notifications.
-            </p>
+      <header className="mx-auto mb-6 max-w-7xl">
+        <div className="mb-4 flex items-center gap-3">
+          <PortfolioBackLink variant="light" className="bg-white hover:bg-slate-50" />
+        </div>
+        <div className="rounded-2xl border border-teal-100 bg-gradient-to-br from-white via-teal-50/40 to-white p-5 shadow-sm sm:p-7">
+          <span className="inline-flex rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-teal-700 sm:text-xs">
+            Enterprise AI · Multi-Agent Platform
+          </span>
+          <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950 sm:text-3xl">
+            Multi-Agent AI Platform
+          </h1>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
+            Autonomous agents execute complex workflows, reason over structured data, and integrate
+            with enterprise tooling at scale. Built with LangChain and LangGraph to coordinate
+            specialized agents, retrieve contextual knowledge, manage workflow state, and support
+            human-in-the-loop decision-making for reliable automation.
+          </p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            {PLATFORM_CAPABILITIES.map(({ icon: Icon, title, detail }) => (
+              <div
+                key={title}
+                className="rounded-xl border border-slate-200/80 bg-white/80 p-3.5 sm:p-4"
+              >
+                <Icon className="mb-2 h-4 w-4 text-teal-600" aria-hidden />
+                <p className="text-xs font-bold text-slate-900 sm:text-sm">{title}</p>
+                <p className="mt-1 text-[11px] leading-relaxed text-slate-500 sm:text-xs">{detail}</p>
+              </div>
+            ))}
           </div>
         </div>
       </header>
+
+      <div className="mx-auto mb-4 max-w-7xl">
+        <h2 className="text-lg font-bold text-slate-950 sm:text-xl">Visual workflow demo</h2>
+        <p className="mt-1 max-w-2xl text-xs leading-relaxed text-slate-500 sm:text-sm">
+          Explore a production-style journey from natural language intent through trust boundary,
+          orchestration, payment, settlement, and observability — one centralized map for the full
+          multi-agent stack.
+        </p>
+      </div>
 
       <nav className="mx-auto mb-5 grid max-w-7xl grid-cols-2 gap-2 md:grid-cols-4 xl:grid-cols-7" aria-label="Architecture layers">
         {(Object.keys(LAYERS) as LayerId[]).map((id) => (
@@ -478,6 +542,25 @@ export default function AiCommerceOrchestrationPage() {
           </article>
         </aside>
       </section>
+
+      <footer className="mx-auto mt-8 max-w-7xl rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+        <p className="text-xs font-bold uppercase tracking-widest text-slate-500">Related deep dives</p>
+        <p className="mt-2 text-sm text-slate-600">
+          Explore dedicated experiences for retrieval, tools, and live agent demos — without repeating
+          this platform overview.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {RELATED_DEEP_DIVES.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="inline-flex min-h-[40px] items-center rounded-lg border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-800 transition hover:border-teal-300 hover:bg-teal-100"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      </footer>
     </main>
   );
 }

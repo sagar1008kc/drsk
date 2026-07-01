@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import PortfolioBackLink from '@/component/portfolio/PortfolioBackLink';
+import EnterpriseAiAgentsSection from '@/component/portfolio/EnterpriseAiAgentsSection';
 
 type Particle = {
   x: number;
@@ -428,20 +430,29 @@ export default function SmartAgentExperience() {
   );
 
   return (
-    <main className="relative flex min-h-[calc(100dvh-3.75rem)] flex-col overflow-hidden bg-[#050505] font-sans text-white selection:bg-teal-500 selection:text-white">
-      <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-black/80 via-transparent to-black/80" />
-      <BackgroundAnimation />
-      <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-3.75rem)] h-full w-full max-w-7xl flex-col justify-between">
-        <SponsorHeader />
-        <MainTitle
-          onOpenChat={() => setIsChatOpen(true)}
-          onOpenIdGen={() => setIsIdGenOpen(true)}
-          onOpenBounty={() => setIsBountyOpen(true)}
-        />
-      </div>
+    <>
+      <main className="bg-[#050505] font-sans text-white selection:bg-teal-500 selection:text-white">
+        <section className="relative flex min-h-[calc(100dvh-3.75rem)] flex-col overflow-hidden">
+          <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-black/80 via-transparent to-black/80" />
+          <BackgroundAnimation />
+          <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-3.75rem)] h-full w-full max-w-7xl flex-col justify-between">
+            <div className="absolute left-4 top-4 z-20 sm:left-6 sm:top-6">
+              <PortfolioBackLink className="border-teal-500/30 hover:border-teal-400/60 hover:text-teal-100" />
+            </div>
+            <SponsorHeader />
+            <MainTitle
+              onOpenChat={() => setIsChatOpen(true)}
+              onOpenIdGen={() => setIsIdGenOpen(true)}
+              onOpenBounty={() => setIsBountyOpen(true)}
+            />
+          </div>
+        </section>
+
+        <EnterpriseAiAgentsSection />
+      </main>
       {modals.chat ? <SmartAgentChat onClose={() => setIsChatOpen(false)} /> : null}
       {modals.id ? <AgentIdGenerator onClose={() => setIsIdGenOpen(false)} /> : null}
       {modals.bounty ? <BountyGenerator onClose={() => setIsBountyOpen(false)} /> : null}
-    </main>
+    </>
   );
 }

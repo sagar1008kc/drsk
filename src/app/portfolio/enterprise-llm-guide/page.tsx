@@ -6,7 +6,7 @@ export const metadata: Metadata = createPageMetadata({
   path: '/portfolio/enterprise-llm-guide',
   title: 'Enterprise LLM Guide',
   description:
-    'Enterprise guide to LLM architecture, agentic patterns, RAG, fine-tuning, governance, security, and AI application design.',
+    'Enterprise guide to LLM architecture, agentic patterns, RAG, fine-tuning, governance, security, and LLM-powered applications with structured outputs, tool calling, streaming, and HITL.',
   openGraphTitle: 'Enterprise LLM Guide | Dr. SK',
 });
 

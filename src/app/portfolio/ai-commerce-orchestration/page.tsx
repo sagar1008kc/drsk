@@ -4,10 +4,10 @@ import { createPageMetadata } from '@/lib/site-url';
 
 export const metadata: Metadata = createPageMetadata({
   path: '/portfolio/multi-agent-workflow-map',
-  title: 'AI Commerce Orchestration Blueprint',
+  title: 'Multi-Agent AI Platform',
   description:
-    'Interactive architecture blueprint for an AI commerce orchestration flow from user intent through agentic workflow, payment, settlement, and observability.',
-  openGraphTitle: 'AI Commerce Orchestration Blueprint | Dr. SK',
+    'Enterprise multi-agent AI platform with LangChain and LangGraph — specialized agents, tool integration, RAG, workflow state, HITL, and an interactive 7-layer visual workflow demo.',
+  openGraphTitle: 'Multi-Agent AI Platform | Dr. SK',
 });
 
 export default function AiCommerceOrchestrationRoute() {

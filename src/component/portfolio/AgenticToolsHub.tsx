@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import PortfolioBackLink from '@/component/portfolio/PortfolioBackLink';
 import {
   Activity,
   ArrowRight,
@@ -353,6 +354,9 @@ export default function AgenticToolsHub() {
   return (
     <main className="min-h-[calc(100dvh-3.75rem)] bg-slate-950 font-sans text-slate-200 selection:bg-indigo-500/30">
       <header className="relative overflow-hidden border-b border-slate-800/60 bg-slate-900/50 pb-16 pt-20">
+        <div className="absolute left-4 top-4 z-20 sm:left-6 sm:top-6">
+          <PortfolioBackLink className="border-slate-700 hover:border-indigo-500/50 hover:text-indigo-200" />
+        </div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.22),transparent_45%)]" />
         <div className="relative z-10 mx-auto max-w-6xl px-6 text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1 text-sm font-medium text-indigo-400">

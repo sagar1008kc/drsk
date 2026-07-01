@@ -1,8 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { useState, useEffect, useRef, useCallback, type CSSProperties } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import PortfolioBackLink from '@/component/portfolio/PortfolioBackLink';
 
 type PipelineStage = {
   id: string;
@@ -936,13 +935,7 @@ export default function EnterpriseRagPipelinePage() {
 
       <header className="sticky top-0 z-30 border-b border-[#1E3A5F] bg-[#060B14]/95 backdrop-blur-md">
         <div className="flex items-center gap-3 px-4 py-3 sm:px-5 lg:px-6">
-          <Link
-            href="/portfolio"
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#1E3A5F] text-slate-400 transition hover:border-blue-500/50 hover:text-white"
-            aria-label="Back to portfolio"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
+          <PortfolioBackLink className="border-[#1E3A5F] hover:border-blue-500/50" />
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-cyan-500 text-sm font-bold">
             ⊕
           </div>
