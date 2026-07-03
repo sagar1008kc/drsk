@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import PortfolioBackLink from '@/component/portfolio/PortfolioBackLink';
 import {
   MessageSquare,
   Fingerprint, 
@@ -893,7 +894,10 @@ export default function AgenticWorkflowPage() {
       </div>
 
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto py-16 flex flex-col items-center">
-        
+        <div className="absolute left-0 top-6 z-20 sm:left-2">
+          <PortfolioBackLink className="border-slate-700/80 hover:border-cyan-500/50 hover:text-white" />
+        </div>
+
         {/* Header Text */}
         <div className="text-center mb-16 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/50 border border-slate-700 mb-6">

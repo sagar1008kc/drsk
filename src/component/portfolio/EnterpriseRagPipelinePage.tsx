@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, type CSSProperties } from 'react';
 import PortfolioBackLink from '@/component/portfolio/PortfolioBackLink';
+import RagFundamentalsSection from '@/component/portfolio/RagFundamentalsSection';
 
 type PipelineStage = {
   id: string;
@@ -920,6 +921,7 @@ export default function EnterpriseRagPipelinePage() {
     });
 
   return (
+    <>
     <div className="flex min-h-[100dvh] flex-col bg-[#060B14] font-sans text-slate-50">
       <style>{`
         @keyframes rag-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
@@ -942,6 +944,18 @@ export default function EnterpriseRagPipelinePage() {
           <h1 className="truncate text-sm font-bold tracking-tight sm:text-base">
             SK Enterprise RAG Pipeline
           </h1>
+          <a
+            href="#rag-fundamentals"
+            className="ml-auto hidden shrink-0 rounded-lg border border-[#1E3A5F] px-3 py-1.5 font-mono text-[10px] text-slate-400 transition hover:border-teal-500/40 hover:text-teal-300 sm:inline-block"
+          >
+            RAG fundamentals ↓
+          </a>
+          <a
+            href="#hybrid-retrieval"
+            className="hidden shrink-0 rounded-lg border border-[#1E3A5F] px-3 py-1.5 font-mono text-[10px] text-slate-400 transition hover:border-amber-500/40 hover:text-amber-300 md:inline-block"
+          >
+            Hybrid RRF ↓
+          </a>
         </div>
       </header>
 
@@ -1141,5 +1155,8 @@ export default function EnterpriseRagPipelinePage() {
         </div>
       </div>
     </div>
+
+    <RagFundamentalsSection />
+    </>
   );
 }
