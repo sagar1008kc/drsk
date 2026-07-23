@@ -3,6 +3,11 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
+const TOOL_HREFS: Record<string, string> = {
+  ADK: '/portfolio/adk-system-design-interview',
+  'Google ADK': '/portfolio/adk-system-design-interview',
+};
+
 const toolGroups = [
   {
     label: 'AI Models & APIs',
@@ -22,7 +27,7 @@ const toolGroups = [
   {
     label: 'Dev Tools & MCP',
     color: 'blue',
-    tools: ['Cursor', 'GitHub Copilot','Claude Desktop','LangGraph Studio', 'LangChain MCP Adapter', 'LangSmith', 'Google ADK', 'ANY Learn & Adopt'],
+    tools: ['Cursor', 'GitHub Copilot', 'Claude Desktop', 'LangGraph Studio', 'LangChain MCP Adapter', 'LangSmith', 'Google ADK', 'ANY Learn & Adopt'],
   },
   {
     label: 'Cloud, MLOps & Deployment',
@@ -269,14 +274,27 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
                     {group.label}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {group.tools.map((tool) => (
-                      <span
-                        key={tool}
-                        className={`rounded border px-2 py-1 font-mono text-[11px] font-medium transition sm:text-xs ${toolChipClass[group.color]}`}
-                      >
-                        {tool}
-                      </span>
-                    ))}
+                    {group.tools.map((tool) => {
+                      const href = TOOL_HREFS[tool];
+                      const chipClass = `rounded border px-2 py-1 font-mono text-[11px] font-medium transition sm:text-xs ${toolChipClass[group.color]}`;
+                      if (href) {
+                        return (
+                          <Link
+                            key={tool}
+                            href={href}
+                            className={`${chipClass} underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400`}
+                            aria-label={`Open ${tool} Google ADK system design interview`}
+                          >
+                            {tool}
+                          </Link>
+                        );
+                      }
+                      return (
+                        <span key={tool} className={chipClass}>
+                          {tool}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               ))}

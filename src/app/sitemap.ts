@@ -18,6 +18,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.75,
     },
     {
+      url: `${SITE_URL}/portfolio/adk-system-design-interview`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
       url: `${SITE_URL}/portfolio/multi-agent-workflow-map`,
       lastModified: now,
       changeFrequency: 'monthly',
