@@ -3,53 +3,6 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
-const TOOL_HREFS: Record<string, string> = {
-  ADK: '/portfolio/adk-system-design-interview',
-  'Google ADK': '/portfolio/adk-system-design-interview',
-};
-
-const toolGroups = [
-  {
-    label: 'AI Models & APIs',
-    color: 'teal',
-    tools: ['OpenAI', 'Anthropic Claude', 'Google Gemini', 'Meta Llama', 'Mistral AI', 'Multi-Model Routing'],
-  },
-  {
-    label: 'Agentic Frameworks',
-    color: 'blue',
-    tools: ['LangChain', 'LangGraph', 'ADK', 'CrewAI', 'AutoGen'],
-  },
-  {
-    label: 'Retrieval & RAG',
-    color: 'green',
-    tools: ['Pinecone', 'Weaviate', 'ChromaDB', 'Azure AI Search', 'Qdrant', 'pgvector'],
-  },
-  {
-    label: 'Dev Tools & MCP',
-    color: 'blue',
-    tools: ['Cursor', 'GitHub Copilot', 'Claude Desktop', 'LangGraph Studio', 'LangChain MCP Adapter', 'LangSmith', 'Google ADK', 'ANY Learn & Adopt'],
-  },
-  {
-    label: 'Cloud, MLOps & Deployment',
-    color: 'teal',
-    tools: ['Azure OpenAI', 'Google Vertex AI', 'Google Cloud', 'Docker', 'Kubernetes', 'Vercel', 'Terraform', 'Weights & Biases'],
-  },
-] as const;
-
-type ToolColor = (typeof toolGroups)[number]['color'];
-
-const toolChipClass: Record<ToolColor, string> = {
-  teal:  'border-teal-500/35 bg-teal-500/10 text-teal-300 hover:border-teal-400/60 hover:bg-teal-500/20',
-  blue:  'border-blue-500/35 bg-blue-500/10 text-blue-300 hover:border-blue-400/60 hover:bg-blue-500/20',
-  green: 'border-green-500/35 bg-green-500/10 text-green-300 hover:border-green-400/60 hover:bg-green-500/20',
-};
-
-const toolLabelClass: Record<ToolColor, string> = {
-  teal:  'text-teal-400',
-  blue:  'text-blue-400',
-  green: 'text-green-400',
-};
-
 const pillarAccents = [
   {
     hover: 'hover:border-teal-500/50 hover:bg-teal-500/[0.08]',
@@ -245,80 +198,6 @@ export default function AiEngineeringSection({ firstSection = false }: { firstSe
             );
           })}
         </div>
-
-        {/* 05 — AI Toolchain card (full width) */}
-        <motion.article
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.45, delay: 0.12 }}
-          className="group relative mt-4 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-6 backdrop-blur-sm transition hover:border-blue-500/50 hover:bg-blue-500/[0.06] sm:mt-5 sm:p-7 lg:mt-6"
-        >
-          <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_top_right,rgba(37,99,235,0.1),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          <div className="relative">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className="font-mono text-xs font-bold tracking-widest text-blue-400">05</span>
-              <span className="rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-widest text-blue-300 sm:text-xs">
-                AI Engineering Stack
-              </span>
-            </div>
-            <h3 className="mt-3 text-lg font-bold text-white sm:text-xl">AI Engineering Stack</h3>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-400 sm:text-base">
-              Tools, frameworks, and platforms used across the AI-native software engineering lifecycle — from LLM integration and agentic workflows to retrieval, automation, observability, and cloud deployment.
-            </p>
-
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-              {toolGroups.map((group) => (
-                <div key={group.label}>
-                  <p className={`mb-2.5 font-mono text-[10px] font-bold uppercase leading-tight tracking-widest ${toolLabelClass[group.color]}`}>
-                    {group.label}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {group.tools.map((tool) => {
-                      const href = TOOL_HREFS[tool];
-                      const chipClass = `rounded border px-2 py-1 font-mono text-[11px] font-medium transition sm:text-xs ${toolChipClass[group.color]}`;
-                      if (href) {
-                        return (
-                          <Link
-                            key={tool}
-                            href={href}
-                            className={`${chipClass} underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400`}
-                            aria-label={`Open ${tool} Google ADK system design interview`}
-                          >
-                            {tool}
-                          </Link>
-                        );
-                      }
-                      return (
-                        <span key={tool} className={chipClass}>
-                          {tool}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div
-            className="pointer-events-none absolute bottom-3 right-5 select-none font-mono text-5xl font-bold text-white/[0.04]"
-            aria-hidden
-          >
-            05
-          </div>
-        </motion.article>
-
-        {/* Bottom focused areas tagline */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5, delay: 0.25 }}
-          className="mt-12 text-center text-sm leading-relaxed text-zinc-500 sm:text-base"
-        >
-          Focused on{' '}
-          <span className="text-teal-400">design, build, and deploy production-ready AI solutions that transform business challenges into scalable, secure, and human-centered outcomes—specializing in agentic AI, multi-agent systems, RAG, LLM-powered applications, automation, and tool integration.</span>,{' '}
-        </motion.p>
       </div>
     </section>
   );

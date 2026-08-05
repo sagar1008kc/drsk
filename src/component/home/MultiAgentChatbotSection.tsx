@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Send,
@@ -19,6 +20,7 @@ import {
   Shield,
   ShieldCheck,
   UserCircle,
+  X,
   type LucideIcon,
 } from 'lucide-react';
 import {
@@ -42,6 +44,19 @@ import {
   type SubAgentId,
 } from '@/lib/multi-agent-hub';
 import { AI_CHAT_DISCLAIMER_SHORT } from '@/lib/ai-disclaimer';
+import {
+  useBodyScrollLock,
+  useClientMounted,
+  useEscapeKey,
+  useInitialDialogFocus,
+} from '@/component/shared/modal-hooks';
+
+type MultiAgentChatbotSectionProps = {
+  /** Full-page section (default) or overlay opened by a CTA button */
+  variant?: 'section' | 'modal';
+  open?: boolean;
+  onClose?: () => void;
+};
 
 type AgentCta = { text: string; url: string };
 
@@ -73,7 +88,15 @@ function formatTime() {
   return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
-export default function MultiAgentChatbotSection() {
+export default function MultiAgentChatbotSection({
+  variant = 'section',
+  open = true,
+  onClose,
+}: MultiAgentChatbotSectionProps) {
+  const isModal = variant === 'modal';
+  const mounted = useClientMounted();
+  const panelRef = useRef<HTMLDivElement>(null);
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -92,6 +115,11 @@ export default function MultiAgentChatbotSection() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const isLive = ACTIVE_STEPS.has(flowStep) || flowStep === 'complete';
+  const hubVisible = !isModal || open;
+
+  useBodyScrollLock(isModal && open);
+  useEscapeKey(isModal && open, () => onClose?.());
+  useInitialDialogFocus(isModal && open, panelRef);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -198,16 +226,18 @@ export default function MultiAgentChatbotSection() {
   const showSuggestions = !isTyping && (messages.length < 3 || messages.some((m) => m.isFallback));
   const hasAgentRun = isTyping || flowEvents.length > 0;
 
-  return (
-    <section
-      id="multi-agent-platform"
-      aria-labelledby="multi-agent-platform-heading"
-      className="relative -mt-[3.75rem] min-h-[100dvh] w-full bg-black pt-[3.75rem] text-zinc-900 font-sans overflow-hidden scroll-mt-[3.75rem]"
-    >
-      <h2 id="multi-agent-platform-heading" className="sr-only">SK Creation Multi-Agent Hub</h2>
+  const hubContent = (
+    <>
+      <h2 id="multi-agent-platform-heading" className="sr-only">
+        SK Creation Multi-Agent Hub
+      </h2>
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_20%_40%,rgba(13,148,136,0.18),transparent_55%),radial-gradient(ellipse_60%_45%_at_85%_60%,rgba(16,185,129,0.12),transparent_50%)]" />
 
-      <div className="relative z-10 mx-auto flex h-[calc(100dvh-3.75rem)] max-w-7xl flex-col gap-4 px-4 py-4 md:flex-row md:gap-6 md:py-6">
+      <div
+        className={`relative z-10 mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 md:flex-row md:gap-6 md:py-6 ${
+          isModal ? 'h-full min-h-0' : 'h-[calc(100dvh-3.75rem)]'
+        }`}
+      >
         {/* Routing flow — top to bottom */}
         <div className="hidden min-h-0 md:flex md:w-[40%] md:min-w-[300px] lg:w-[36%]">
           <div className="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl border-2 border-teal-500/70 bg-white shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur-xl">
@@ -218,12 +248,14 @@ export default function MultiAgentChatbotSection() {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-zinc-900">Agentic Orchestration Layer</h3>
-                  <p className="text-[11px] text-zinc-500">Chat → Identity → Safety → Supervisor → Specialist → Guardrails → Response</p>
+                  <p className="text-[11px] text-zinc-500">
+                    Chat → Identity → Safety → Supervisor → Specialist → Guardrails → Response
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-1 min-h-0 flex-col overflow-hidden">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
               <div className="min-h-0 flex-1 overflow-y-auto p-4 pb-2 hub-scroll">
                 <OrchestrationDiagram
                   flowStep={flowStep}
@@ -255,10 +287,10 @@ export default function MultiAgentChatbotSection() {
 
         {/* Chat */}
         <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border-2 border-teal-500/70 bg-white shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur-xl">
-          <div className="bg-gradient-to-r from-zinc-50 to-teal-50/70 border-b border-zinc-200/80 p-4 flex items-center gap-3">
+          <div className="flex items-center gap-3 border-b border-zinc-200/80 bg-gradient-to-r from-zinc-50 to-teal-50/70 p-4">
             <div className="relative shrink-0">
-              <div className="w-10 h-10 bg-[#0d9488] rounded-full flex items-center justify-center shadow-lg shadow-teal-500/25">
-                <Sparkles className="w-5 h-5 text-white" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0d9488] shadow-lg shadow-teal-500/25">
+                <Sparkles className="h-5 w-5 text-white" />
               </div>
               <motion.span
                 className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-emerald-500"
@@ -267,13 +299,23 @@ export default function MultiAgentChatbotSection() {
               />
             </div>
             <div className="min-w-0 flex-1">
-                <p className="font-semibold text-lg text-zinc-900">SK Multi-Agent</p>
-                <p className="text-xs text-zinc-500 truncate">
-                  {flowStep !== 'idle' && flowStep !== 'complete'
-                    ? FLOW_STEP_MESSAGES[flowStep as keyof typeof FLOW_STEP_MESSAGES] ?? 'Working on it…'
-                    : 'Agentic workflow demo'}
-                </p>
+              <p className="text-lg font-semibold text-zinc-900">SK Multi-Agent</p>
+              <p className="truncate text-xs text-zinc-500">
+                {flowStep !== 'idle' && flowStep !== 'complete'
+                  ? (FLOW_STEP_MESSAGES[flowStep as keyof typeof FLOW_STEP_MESSAGES] ?? 'Working on it…')
+                  : 'Agentic workflow demo'}
+              </p>
             </div>
+            {isModal && onClose ? (
+              <button
+                type="button"
+                onClick={onClose}
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-600 transition hover:bg-zinc-50 hover:text-zinc-900"
+                aria-label="Close multi-agent hub"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            ) : null}
           </div>
 
           {hasAgentRun && (
@@ -290,23 +332,27 @@ export default function MultiAgentChatbotSection() {
             </div>
           )}
 
-          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-5 custom-scrollbar">
+          <div className="custom-scrollbar flex-1 space-y-5 overflow-y-auto p-4 md:p-6">
             <AnimatePresence initial={false}>
               {messages.map((msg) => (
                 <MessageBubble key={msg.id} message={msg} />
               ))}
               {isTyping && (
-                <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-teal-100 border border-teal-200 flex items-center justify-center shrink-0">
-                    <Loader2 className="w-4 h-4 text-teal-600 animate-spin" />
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-start gap-3"
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-teal-200 bg-teal-100">
+                    <Loader2 className="h-4 w-4 animate-spin text-teal-600" />
                   </div>
-                  <div className="bg-white border border-teal-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm min-w-[200px]">
-                    <p className="text-[11px] font-semibold text-black mb-2">
+                  <div className="min-w-[200px] rounded-2xl rounded-tl-sm border border-teal-200 bg-white px-4 py-3 shadow-sm">
+                    <p className="mb-2 text-[11px] font-semibold text-black">
                       {flowStep !== 'idle' && flowStep !== 'complete'
                         ? FLOW_STEP_MESSAGES[flowStep as keyof typeof FLOW_STEP_MESSAGES]
                         : 'One moment…'}
                     </p>
-                    <div className="h-1.5 w-full rounded-full bg-teal-100 overflow-hidden">
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-teal-100">
                       <motion.div
                         className="h-full bg-gradient-to-r from-teal-500 to-emerald-500"
                         animate={{ width: ['10%', '85%', '100%'] }}
@@ -320,36 +366,42 @@ export default function MultiAgentChatbotSection() {
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-4 border-t border-teal-200/60 bg-white/95">
+          <div className="border-t border-teal-200/60 bg-white/95 p-4">
             {showSuggestions && (
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="mb-4 flex flex-wrap gap-2">
                 {SUGGESTIONS.map((s) => (
                   <button
                     key={s}
                     type="button"
                     onClick={() => processMessage(s)}
-                    className="text-xs px-3 py-2 rounded-full border border-teal-200 bg-teal-50 text-black hover:bg-teal-100 hover:border-teal-300 transition-colors"
+                    className="rounded-full border border-teal-200 bg-teal-50 px-3 py-2 text-xs text-black transition-colors hover:border-teal-300 hover:bg-teal-100"
                   >
                     {s}
                   </button>
                 ))}
               </div>
             )}
-            <form onSubmit={(e) => { e.preventDefault(); processMessage(input); }} className="relative">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                processMessage(input);
+              }}
+              className="relative"
+            >
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask about projects, Dr. SK, books, or articles…"
-                className="w-full bg-white border-2 border-teal-200 rounded-xl pl-4 pr-12 py-4 text-sm text-black focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 placeholder:text-zinc-400"
+                className="w-full rounded-xl border-2 border-teal-200 bg-white py-4 pl-4 pr-12 text-sm text-black placeholder:text-zinc-400 focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/30"
                 disabled={isTyping}
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isTyping}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg disabled:opacity-50 transition-colors shadow-md shadow-blue-500/20"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-blue-600 p-2.5 text-white shadow-md shadow-blue-500/20 transition-colors hover:bg-blue-500 disabled:opacity-50"
               >
-                <Send className="w-4 h-4" />
+                <Send className="h-4 w-4" />
               </button>
             </form>
             <p className="mt-2 text-center text-[10px] leading-snug text-zinc-400">
@@ -359,10 +411,66 @@ export default function MultiAgentChatbotSection() {
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .custom-scrollbar::-webkit-scrollbar, .hub-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb, .hub-scroll::-webkit-scrollbar-thumb { background: #5eead4; border-radius: 8px; }
-      `}} />
+      `,
+        }}
+      />
+    </>
+  );
+
+  if (isModal) {
+    if (!mounted) return null;
+
+    return createPortal(
+      <AnimatePresence>
+        {hubVisible ? (
+          <motion.div
+            key="multi-agent-hub-modal"
+            className="fixed inset-0 z-[1100] flex items-stretch justify-center p-0 sm:items-center sm:p-4 md:p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <button
+              type="button"
+              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+              aria-label="Close multi-agent hub backdrop"
+              onClick={onClose}
+            />
+            <motion.div
+              ref={panelRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="multi-agent-platform-heading"
+              tabIndex={-1}
+              id="multi-agent-platform"
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 16, scale: 0.98 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className="relative z-10 flex h-[100dvh] w-full max-w-7xl flex-col overflow-hidden bg-black text-zinc-900 shadow-2xl outline-none sm:h-[min(92dvh,920px)] sm:rounded-2xl"
+            >
+              {hubContent}
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>,
+      document.body
+    );
+  }
+
+  return (
+    <section
+      id="multi-agent-platform"
+      aria-labelledby="multi-agent-platform-heading"
+      className="relative -mt-[3.75rem] min-h-[100dvh] w-full scroll-mt-[3.75rem] overflow-hidden bg-black pt-[3.75rem] font-sans text-zinc-900"
+    >
+      {hubContent}
     </section>
   );
 }

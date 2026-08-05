@@ -81,6 +81,34 @@ const publicLinks = [
   },
 ];
 
+const githubLinks = [
+  {
+    label: 'sagar1008kc',
+    href: 'https://github.com/sagar1008kc',
+    note: 'GitHub profile — AI agent, RAG, MCP, multi-agent workflows & fullstack projects',
+  },
+  {
+    label: 'sk-beta2.0',
+    href: 'https://github.com/sagar1008kc/sk-beta2.0',
+    note: 'Secure enterprise hybrid RAG on GCP — DLP, Model Armor, adaptive routing, RRF',
+  },
+  {
+    label: 'pilotmycareer-ai-backend',
+    href: 'https://github.com/sagar1008kc/pilotmycareer-ai-backend',
+    note: 'FastAPI + LangGraph multi-agent runtime for Pilot My Career',
+  },
+  {
+    label: 'get-auction-list-api',
+    href: 'https://github.com/sagar1008kc/get-auction-list-api',
+    note: 'GetAuctionList AI front door — LangGraph chat, RAG, MCP tools',
+  },
+  {
+    label: 'tech-ocean',
+    href: 'https://github.com/sagar1008kc/tech-ocean',
+    note: 'Streamlit AI learning studio with RAG-lite tutoring and progress tracking',
+  },
+];
+
 const experience = [
   { role: 'Software Engineer', org: 'Fortune Top 25, Fortune Global 50 Company · Full-time', loc: 'USA · On-site', dates: 'May 2019 – Present', current: true, icon: '💻' },
   { role: 'Founder & CEO', org: 'SK Creation · Self-employed', loc: 'United States · Remote', dates: 'Apr 2023 – Present', current: true, icon: '🚀' },
@@ -170,6 +198,50 @@ export default function AboutPageContent() {
                 <div className="flex items-center gap-1.5">
                   <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${item.dot}`} />
                   <h3 className="truncate text-sm font-semibold text-zinc-900">{item.label}</h3>
+                </div>
+                <p className="mt-1 text-xs leading-relaxed text-zinc-500">{item.note}</p>
+              </div>
+              <span className="absolute bottom-4 right-4 text-lg opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                ↗
+              </span>
+            </motion.a>
+          ))}
+        </div>
+
+        <div className="mx-auto mt-12 max-w-2xl text-center sm:mt-14">
+          <span className={badgeClass}>Source code</span>
+          <h3 className={`${sectionTitle} mt-3 text-2xl sm:text-3xl`}>GitHub</h3>
+          <p className={sectionDesc}>
+            Open repositories for production AI systems, backends, and learning platforms.
+          </p>
+        </div>
+        <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-5">
+          {githubLinks.map((item, i) => (
+            <motion.a
+              key={item.href}
+              href={safeExternalHref(item.href)}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.35, delay: i * 0.05 }}
+              className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 to-white p-5 shadow-sm transition hover:border-zinc-400 hover:shadow-[0_12px_36px_rgba(24,24,27,0.1)]"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-900 text-lg text-white shadow-sm">
+                  {'</>'}
+                </div>
+                <span className="rounded-full border border-zinc-200 bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+                  GitHub
+                </span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-zinc-800" />
+                  <h4 className="truncate font-mono text-sm font-semibold text-zinc-900">
+                    {item.label}
+                  </h4>
                 </div>
                 <p className="mt-1 text-xs leading-relaxed text-zinc-500">{item.note}</p>
               </div>
