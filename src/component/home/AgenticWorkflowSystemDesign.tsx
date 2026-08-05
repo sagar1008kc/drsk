@@ -5,7 +5,6 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 import {
-  BarChart3,
   Bell,
   Bot,
   Brain,
@@ -13,12 +12,8 @@ import {
   Database,
   DollarSign,
   GitMerge,
-  Infinity as InfinityIcon,
   PieChart,
   Play,
-  Rocket,
-  Settings,
-  ShieldCheck,
   UserCheck,
   Wrench,
   type LucideIcon,
@@ -327,16 +322,8 @@ const TOP_NAV: Array<{
   { icon: UserCheck, label: 'HITL', delay: 0.5, action: 'hitl-showcase' },
 ];
 
-const BOTTOM_NAV: Array<{ icon: LucideIcon; label: string; delay: number }> = [
-  { icon: Rocket, label: 'Deploy', delay: 0.6 },
-  { icon: Settings, label: 'Automate', delay: 0.7 },
-  { icon: ShieldCheck, label: 'Guardrails', delay: 0.8 },
-  { icon: BarChart3, label: 'Optimize', delay: 0.9 },
-  { icon: InfinityIcon, label: 'Improve', delay: 1.0 },
-];
-
 const MULTI_AGENT_WORKFLOW_MAP_HREF = '/portfolio/multi-agent-workflow-map';
-
+const RESOURCES_HREF = '/portfolio/resources';
 export function AgenticWorkflowSystemDesign() {
   const [dataFlipbookOpen, setDataFlipbookOpen] = useState(false);
   const [hitlShowcaseOpen, setHitlShowcaseOpen] = useState(false);
@@ -565,13 +552,26 @@ export function AgenticWorkflowSystemDesign() {
         </div>
       </div>
 
-      {/* Bottom nav */}
-      <div className="relative z-10 mx-auto mt-6 w-full max-w-7xl lg:mt-0">
-        <div className="-mx-1 flex gap-4 overflow-x-auto px-1 pb-1 [scrollbar-width:none] sm:justify-center sm:gap-8 md:gap-12 [&::-webkit-scrollbar]:hidden">
-          {BOTTOM_NAV.map((item) => (
-            <NavIcon key={item.label} {...item} />
-          ))}
-        </div>
+      {/* CTA → AI engineering resources */}
+      <div className="relative z-10 mx-auto mt-6 flex w-full max-w-7xl flex-col items-center lg:mt-8">
+        <Link
+          href={RESOURCES_HREF}
+          className="group inline-flex max-w-full flex-col items-center gap-3 rounded-2xl border border-teal-500/35 bg-[#06060f]/70 px-5 py-5 text-center backdrop-blur-md transition hover:border-teal-400/55 hover:bg-teal-500/10 hover:shadow-[0_0_40px_-12px_rgba(13,148,136,0.55)] sm:px-8 sm:py-6"
+        >
+          <span className="inline-flex items-center gap-2 rounded-full border border-teal-500/40 bg-teal-500/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-teal-300 sm:text-xs">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-400" aria-hidden />
+            Engineering Focus
+          </span>
+          <span className="text-2xl font-bold leading-tight tracking-tight text-white sm:text-3xl md:text-4xl">
+            AI-Native &amp;{' '}
+            <span className="bg-gradient-to-r from-teal-400 via-blue-400 to-emerald-400 bg-clip-text text-transparent">
+              Agentic Engineering
+            </span>
+          </span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-teal-400/90 transition group-hover:text-teal-300 sm:text-sm">
+            Explore resources →
+          </span>
+        </Link>
       </div>
 
       <AgenticDataFlipbookModal

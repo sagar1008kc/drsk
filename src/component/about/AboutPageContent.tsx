@@ -4,10 +4,8 @@ import type { ReactNode } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import AboutHeroSection from '@/component/about/AboutHeroSection';
-import AiEngineeringSection from '@/component/home/AiEngineeringSection';
 import { AgenticWorkflowSystemDesign } from '@/component/home/AgenticWorkflowSystemDesign';
 import LearnAdaptLeadSection from '@/component/portfolio/LearnAdaptLeadSection';
-import PortfolioAiCareerHubSection from '@/component/portfolio/PortfolioAiCareerHubSection';
 import PortfolioLiveProjectsSection from '@/component/portfolio/PortfolioLiveProjectsSection';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
 import {
@@ -162,8 +160,6 @@ export default function AboutPageContent() {
     <main className={`min-h-screen ${aboutBg}`}>
       <AboutHeroSection />
       <AgenticWorkflowSystemDesign />
-      <AiEngineeringSection />
-      <PortfolioAiCareerHubSection />
       <PortfolioLiveProjectsSection />
 
       {/* ── Official Links ── */}

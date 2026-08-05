@@ -4,6 +4,7 @@ import SpaceForGrowth from '@/component/about/SpaceForGrowth';
 import HomeCollaborationsSection from '@/component/home/HomeCollaborationsSection';
 import HomeContactSection from '@/component/home/HomeContactSection';
 import HomeLandingHero from '@/component/home/HomeLandingHero';
+import PortfolioAiCareerHubSection from '@/component/portfolio/PortfolioAiCareerHubSection';
 import PortfolioFeaturedSystemDesignHero from '@/component/portfolio/PortfolioFeaturedSystemDesignHero';
 import { homeBg } from '@/component/home/styles';
 import { createPageMetadata } from '@/lib/site-url';
@@ -20,8 +21,9 @@ export default function Home() {
     <main className={`min-h-screen ${homeBg}`}>
       <HashScrollOnLoad />
       <HomeLandingHero />
-      <PortfolioFeaturedSystemDesignHero />
+      <PortfolioAiCareerHubSection />
       <HeroSection />
+      <PortfolioFeaturedSystemDesignHero />
       <SpaceForGrowth />
       <HomeContactSection />
       <HomeCollaborationsSection />

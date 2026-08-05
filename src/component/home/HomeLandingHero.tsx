@@ -120,13 +120,9 @@ export default function HomeLandingHero() {
         />
 
         <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-4 py-8 text-center sm:px-6 sm:py-10 lg:px-8">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-400 sm:text-xs sm:tracking-[0.35em]">
-            AI Forward Deployed Engineering
-          </p>
-
           <h1
             id="home-landing-heading"
-            className="mt-3 max-w-3xl text-[1.65rem] font-extrabold leading-[1.15] tracking-tight text-white sm:mt-4 sm:text-4xl sm:leading-[1.12] lg:text-5xl"
+            className="max-w-3xl text-[1.65rem] font-extrabold leading-[1.15] tracking-tight text-white sm:text-4xl sm:leading-[1.12] lg:text-5xl"
           >
             From complex business problems to{' '}
             <span className="text-cyan-400">production-ready AI.</span>
