@@ -4,11 +4,14 @@ import { ArrowLeft } from 'lucide-react';
 type PortfolioBackLinkProps = {
   className?: string;
   variant?: 'dark' | 'light';
+  /** Destination for the back control — defaults to main home after agentic pages moved under /home */
+  href?: string;
 };
 
 export default function PortfolioBackLink({
   className = '',
   variant = 'dark',
+  href = '/home',
 }: PortfolioBackLinkProps) {
   const variantClass =
     variant === 'dark'
@@ -17,9 +20,9 @@ export default function PortfolioBackLink({
 
   return (
     <Link
-      href="/portfolio"
+      href={href}
       className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border bg-black/20 backdrop-blur-sm transition ${variantClass} ${className}`}
-      aria-label="Back to portfolio"
+      aria-label="Back to home"
     >
       <ArrowLeft className="h-4 w-4" aria-hidden />
     </Link>

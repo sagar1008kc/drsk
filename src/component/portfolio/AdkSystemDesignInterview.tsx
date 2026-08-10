@@ -900,10 +900,10 @@ export default function AdkSystemDesignInterview() {
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">Related</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {[
-              { href: '/portfolio/agentic-ai-system-design', label: 'Enterprise multi-agent design' },
-              { href: '/portfolio/rag-systems', label: 'RAG pipeline' },
-              { href: '/portfolio/agentic-tools-hub', label: 'Tools hub' },
-              { href: '/portfolio/enterprise-llm-guide', label: 'LLM guide' },
+              { href: '/home/agentic-ai-system-design', label: 'Enterprise multi-agent design' },
+              { href: '/home/rag-systems', label: 'RAG pipeline' },
+              { href: '/home/agentic-tools-hub', label: 'Tools hub' },
+              { href: '/home/enterprise-llm-guide', label: 'LLM guide' },
             ].map((link) => (
               <Link
                 key={link.href}

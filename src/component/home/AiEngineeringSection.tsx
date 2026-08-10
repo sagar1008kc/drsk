@@ -38,25 +38,25 @@ const pillars = [
     label: '01',
     title: 'Enterprise AI Agents',
     desc: 'Autonomous agents that execute complex workflows, reason over structured data, and integrate with enterprise tooling at scale.',
-    href: '/portfolio/smart-agent',
+    href: '/home/smart-agent',
   },
   {
     label: '02',
     title: 'RAG & Retrieval Systems',
     desc: 'Production retrieval-augmented pipelines connecting LLMs to proprietary knowledge, delivering accurate, context-aware responses.',
-    href: '/portfolio/rag-systems',
+    href: '/home/rag-systems',
   },
   {
     label: '03',
     title: 'LLM-Powered Applications',
     desc: 'End-to-end AI apps with structured outputs, function calling, streaming, and human-in-the-loop patterns for real business impact.',
-    href: '/portfolio/enterprise-llm-guide',
+    href: '/home/enterprise-llm-guide',
   },
   {
     label: '04',
     title: 'Multi-Agent AI Platform',
     desc: 'Designed a multi-agent AI platform using LangChain and LangGraph to coordinate specialized agents, integrate enterprise tools, retrieve contextual knowledge, manage workflow state, and support human-in-the-loop decision-making for reliable automation.',
-    href: '/portfolio/multi-agent-workflow-map',
+    href: '/home/multi-agent-workflow-map',
   },
 ];
 

@@ -4,10 +4,11 @@ import type { ReactNode } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import AboutHeroSection from '@/component/about/AboutHeroSection';
-import { AgenticWorkflowSystemDesign } from '@/component/home/AgenticWorkflowSystemDesign';
+import HashScrollOnLoad from '@/component/home/HashScrollOnLoad';
 import LearnAdaptLeadSection from '@/component/portfolio/LearnAdaptLeadSection';
 import PortfolioLiveProjectsSection from '@/component/portfolio/PortfolioLiveProjectsSection';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
+import { GITHUB_REPO_LINKS } from '@/lib/github-repos';
 import {
   aboutBg,
   badgeClass,
@@ -79,34 +80,6 @@ const publicLinks = [
   },
 ];
 
-const githubLinks = [
-  {
-    label: 'sagar1008kc',
-    href: 'https://github.com/sagar1008kc',
-    note: 'GitHub profile — AI agent, RAG, MCP, multi-agent workflows & fullstack projects',
-  },
-  {
-    label: 'sk-beta2.0',
-    href: 'https://github.com/sagar1008kc/sk-beta2.0',
-    note: 'Secure enterprise hybrid RAG on GCP — DLP, Model Armor, adaptive routing, RRF',
-  },
-  {
-    label: 'pilotmycareer-ai-backend',
-    href: 'https://github.com/sagar1008kc/pilotmycareer-ai-backend',
-    note: 'FastAPI + LangGraph multi-agent runtime for Pilot My Career',
-  },
-  {
-    label: 'get-auction-list-api',
-    href: 'https://github.com/sagar1008kc/get-auction-list-api',
-    note: 'GetAuctionList AI front door — LangGraph chat, RAG, MCP tools',
-  },
-  {
-    label: 'tech-ocean',
-    href: 'https://github.com/sagar1008kc/tech-ocean',
-    note: 'Streamlit AI learning studio with RAG-lite tutoring and progress tracking',
-  },
-];
-
 const experience = [
   { role: 'Software Engineer', org: 'Fortune Top 25, Fortune Global 50 Company · Full-time', loc: 'USA · On-site', dates: 'May 2019 – Present', current: true, icon: '💻' },
   { role: 'Founder & CEO', org: 'SK Creation · Self-employed', loc: 'United States · Remote', dates: 'Apr 2023 – Present', current: true, icon: '🚀' },
@@ -158,8 +131,8 @@ function AboutSection({
 export default function AboutPageContent() {
   return (
     <main className={`min-h-screen ${aboutBg}`}>
+      <HashScrollOnLoad />
       <AboutHeroSection />
-      <AgenticWorkflowSystemDesign />
       <PortfolioLiveProjectsSection />
 
       {/* ── Official Links ── */}
@@ -212,7 +185,7 @@ export default function AboutPageContent() {
           </p>
         </div>
         <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-5">
-          {githubLinks.map((item, i) => (
+          {GITHUB_REPO_LINKS.map((item, i) => (
             <motion.a
               key={item.href}
               href={safeExternalHref(item.href)}

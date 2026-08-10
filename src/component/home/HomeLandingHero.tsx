@@ -227,10 +227,10 @@ export default function HomeLandingHero() {
               Open Multi-Agent Hub
             </button>
             <Link
-              href="/portfolio"
+              href="#live-projects"
               className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl border border-cyan-500/40 bg-[#06182c] px-6 py-3 text-xs font-bold uppercase tracking-wider text-cyan-300 transition hover:bg-cyan-950 sm:w-auto"
             >
-              Portfolio
+              Explore builds
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>

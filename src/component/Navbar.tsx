@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
 
 const PRIMARY_NAV = [
-  { href: '/', label: 'Home' },
+  { href: '/home', label: 'Home' },
   { href: '/services', label: 'Services' },
   { href: '/project', label: 'Project' },
   { href: '/books', label: 'Books' },
@@ -118,7 +118,7 @@ export default function Navbar() {
 
   const isActive = useCallback(
     (href: string) => {
-      if (href === '/') return pathname === '/';
+      if (href === '/home') return pathname === '/' || pathname === '/home';
       return pathname === href || pathname.startsWith(`${href}/`);
     },
     [pathname]
@@ -143,7 +143,7 @@ export default function Navbar() {
     >
       <div className="relative mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-3 sm:px-4">
         <Link
-          href="/"
+          href="/home"
           className="relative z-10 flex min-w-0 shrink items-center gap-1.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d9488]"
           aria-label="SK Creation home"
         >

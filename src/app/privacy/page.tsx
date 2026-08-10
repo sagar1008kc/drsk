@@ -14,7 +14,7 @@ export default function PrivacyPage() {
     <main className="min-h-screen bg-[#F8F7FF] px-5 pb-20 pt-0 text-zinc-900 sm:px-8">
       <div className="mx-auto max-w-3xl">
         <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-          <Link href="/" className="text-violet-700 hover:text-violet-600">
+          <Link href="/home" className="text-violet-700 hover:text-violet-600">
             Home
           </Link>
           <span className="mx-2 text-zinc-600">/</span>

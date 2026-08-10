@@ -121,13 +121,13 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="mt-auto shrink-0 border-t border-violet-200/60 pt-5 pb-3 sm:pt-6"
+          className="mt-auto shrink-0 border-t border-teal-200/60 pt-5 pb-3 sm:pt-6"
         >
           <div className="grid grid-cols-2 gap-x-4 gap-y-2.5 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-10">
             {PROFILE_TAGS.map((name) => (
               <span
                 key={name}
-                className="text-center text-xs font-semibold tracking-wide text-zinc-500 sm:text-left sm:text-sm"
+                className="text-center text-xs font-semibold tracking-wide text-teal-800 sm:text-left sm:text-sm"
               >
                 {name}
               </span>

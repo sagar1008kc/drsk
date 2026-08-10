@@ -12,7 +12,7 @@ const fadeUp = {
 
 export default function ProjectScreensShowcase() {
   return (
-    <div className="mt-8 flex w-full flex-col gap-5 sm:mt-10 sm:gap-6 lg:gap-8">
+    <div className="flex w-full flex-col gap-5 sm:gap-6 lg:gap-8">
       <motion.div
         initial="hidden"
         whileInView="visible"

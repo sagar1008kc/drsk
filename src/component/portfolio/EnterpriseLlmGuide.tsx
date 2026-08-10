@@ -246,10 +246,10 @@ const providers: Record<
 };
 
 const integrationDeepLinks = [
-  { href: '/portfolio/smart-agent', label: 'Live agent demo' },
-  { href: '/portfolio/multi-agent-workflow-map', label: 'Visual workflow map' },
-  { href: '/portfolio/rag-systems', label: 'RAG pipeline' },
-  { href: '/portfolio/agentic-tools-hub', label: 'Tool integration hub' },
+  { href: '/home/smart-agent', label: 'Live agent demo' },
+  { href: '/home/multi-agent-workflow-map', label: 'Visual workflow map' },
+  { href: '/home/rag-systems', label: 'RAG pipeline' },
+  { href: '/home/agentic-tools-hub', label: 'Tool integration hub' },
 ];
 
 type ImplementationPhaseId =

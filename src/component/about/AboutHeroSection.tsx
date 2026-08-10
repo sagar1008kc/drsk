@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import {
   PROFILE_HERO_BODY,
   PROFILE_HERO_HEADLINE,
@@ -63,11 +64,18 @@ export default function AboutHeroSection() {
               {heroBodyAfter}
             </p>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg sm:leading-8">
-              <span className="mr-2 inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-violet-700">
+              <span className="mr-2 inline-flex items-center rounded-full border border-teal-200 bg-teal-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-teal-800">
                 Strategic Leader
               </span>
               Strategic leader with a Doctorate in Business Administration, specializing in Information Systems and Enterprise Resource Management — with earlier leadership roles supervising 100+ schools in Nepal&apos;s education sector. Also an Author of practical AI and mental wellness books, and a Mental Health Advocate (MHFA-Certified), bringing clarity, resilience, and a human-centered perspective to high-performance teams.
             </p>
+            <a
+              href="#live-projects"
+              className="group mt-6 inline-flex min-h-[48px] items-center gap-2 rounded-full bg-[#0d9488] px-6 py-3 text-sm font-semibold text-white shadow-[0_0_24px_rgba(13,148,136,0.35)] transition hover:bg-teal-700"
+            >
+              Live projects
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden />
+            </a>
           </motion.div>
         </div>
 
@@ -81,7 +89,7 @@ export default function AboutHeroSection() {
             {PROFILE_TAGS.map((tag) => (
               <span
                 key={tag}
-                className="max-w-full shrink-0 rounded-full border border-violet-200/90 bg-white/80 px-2.5 py-1.5 text-center text-[10px] font-semibold leading-snug text-violet-800 shadow-sm backdrop-blur-sm sm:px-3 sm:py-2 sm:text-[11px] lg:px-3 lg:py-1.5 lg:text-xs xl:flex-1 xl:whitespace-nowrap xl:px-2 xl:text-[11px] 2xl:px-3 2xl:text-xs"
+                className="max-w-full shrink-0 rounded-full border border-teal-200/90 bg-teal-50/90 px-2.5 py-1.5 text-center text-[10px] font-semibold leading-snug text-teal-800 shadow-sm backdrop-blur-sm sm:px-3 sm:py-2 sm:text-[11px] lg:px-3 lg:py-1.5 lg:text-xs xl:flex-1 xl:whitespace-nowrap xl:px-2 xl:text-[11px] 2xl:px-3 2xl:text-xs"
               >
                 {tag}
               </span>

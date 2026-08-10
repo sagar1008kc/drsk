@@ -159,9 +159,9 @@ const PLATFORM_CAPABILITIES = [
 ];
 
 const RELATED_DEEP_DIVES = [
-  { label: 'RAG pipeline', href: '/portfolio/rag-systems' },
-  { label: 'Agent tools hub', href: '/portfolio/agentic-tools-hub' },
-  { label: 'Live agent demo', href: '/portfolio/smart-agent' },
+  { label: 'RAG pipeline', href: '/home/rag-systems' },
+  { label: 'Agent tools hub', href: '/home/agentic-tools-hub' },
+  { label: 'Live agent demo', href: '/home/smart-agent' },
 ];
 
 const AGENTS = [

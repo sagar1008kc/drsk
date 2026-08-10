@@ -14,6 +14,56 @@ const nextConfig = {
         destination: '/portfolio',
         permanent: true,
       },
+      {
+        source: '/portfolio/smart-agent',
+        destination: '/home/smart-agent',
+        permanent: true,
+      },
+      {
+        source: '/portfolio/agentic-tools-hub',
+        destination: '/home/agentic-tools-hub',
+        permanent: true,
+      },
+      {
+        source: '/portfolio/enterprise-llm-guide',
+        destination: '/home/enterprise-llm-guide',
+        permanent: true,
+      },
+      {
+        source: '/portfolio/multi-agent-workflow-map',
+        destination: '/home/multi-agent-workflow-map',
+        permanent: true,
+      },
+      {
+        source: '/portfolio/resources',
+        destination: '/home/resources',
+        permanent: true,
+      },
+      {
+        source: '/portfolio/agentic-ai-system-design',
+        destination: '/home/agentic-ai-system-design',
+        permanent: true,
+      },
+      {
+        source: '/portfolio/rag-systems',
+        destination: '/home/rag-systems',
+        permanent: true,
+      },
+      {
+        source: '/portfolio/adk-system-design-interview',
+        destination: '/home/adk-system-design-interview',
+        permanent: true,
+      },
+      {
+        source: '/portfolio/enterprise-ai-agents',
+        destination: '/home/smart-agent',
+        permanent: true,
+      },
+      {
+        source: '/portfolio/ai-commerce-orchestration',
+        destination: '/home/multi-agent-workflow-map',
+        permanent: true,
+      },
     ];
   },
   async headers() {
