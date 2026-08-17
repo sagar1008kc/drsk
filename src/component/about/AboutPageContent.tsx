@@ -6,9 +6,10 @@ import { motion } from 'framer-motion';
 import AboutHeroSection from '@/component/about/AboutHeroSection';
 import HashScrollOnLoad from '@/component/home/HashScrollOnLoad';
 import LearnAdaptLeadSection from '@/component/portfolio/LearnAdaptLeadSection';
+import PortfolioFdeBookSection from '@/component/portfolio/PortfolioFdeBookSection';
+import PortfolioFdeStackSection from '@/component/portfolio/PortfolioFdeStackSection';
 import PortfolioLiveProjectsSection from '@/component/portfolio/PortfolioLiveProjectsSection';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
-import { GITHUB_REPO_LINKS } from '@/lib/github-repos';
 import {
   aboutBg,
   badgeClass,
@@ -132,7 +133,9 @@ export default function AboutPageContent() {
   return (
     <main className={`min-h-screen ${aboutBg}`}>
       <HashScrollOnLoad />
+      <PortfolioFdeBookSection />
       <AboutHeroSection />
+      <PortfolioFdeStackSection />
       <PortfolioLiveProjectsSection />
 
       {/* ── Official Links ── */}
@@ -167,50 +170,6 @@ export default function AboutPageContent() {
                 <div className="flex items-center gap-1.5">
                   <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${item.dot}`} />
                   <h3 className="truncate text-sm font-semibold text-zinc-900">{item.label}</h3>
-                </div>
-                <p className="mt-1 text-xs leading-relaxed text-zinc-500">{item.note}</p>
-              </div>
-              <span className="absolute bottom-4 right-4 text-lg opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                ↗
-              </span>
-            </motion.a>
-          ))}
-        </div>
-
-        <div className="mx-auto mt-12 max-w-2xl text-center sm:mt-14">
-          <span className={badgeClass}>Source code</span>
-          <h3 className={`${sectionTitle} mt-3 text-2xl sm:text-3xl`}>GitHub</h3>
-          <p className={sectionDesc}>
-            Open repositories for production AI systems, backends, and learning platforms.
-          </p>
-        </div>
-        <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-5">
-          {GITHUB_REPO_LINKS.map((item, i) => (
-            <motion.a
-              key={item.href}
-              href={safeExternalHref(item.href)}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.35, delay: i * 0.05 }}
-              className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 to-white p-5 shadow-sm transition hover:border-zinc-400 hover:shadow-[0_12px_36px_rgba(24,24,27,0.1)]"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-900 text-lg text-white shadow-sm">
-                  {'</>'}
-                </div>
-                <span className="rounded-full border border-zinc-200 bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
-                  GitHub
-                </span>
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-zinc-800" />
-                  <h4 className="truncate font-mono text-sm font-semibold text-zinc-900">
-                    {item.label}
-                  </h4>
                 </div>
                 <p className="mt-1 text-xs leading-relaxed text-zinc-500">{item.note}</p>
               </div>
@@ -347,10 +306,10 @@ export default function AboutPageContent() {
       <AboutSection altBg>
         <div className="mx-auto max-w-2xl text-center">
           <span className={badgeClass}>Publications</span>
-          <h2 className={`${sectionTitle} mt-3`}>Featured author pages</h2>
-          <p className={sectionDesc}>Visit both official author pages to browse the full collection.</p>
+          <h2 className={`${sectionTitle} mt-3`}>Featured books</h2>
+          <p className={sectionDesc}>FDE system design, AI career titles, and wellness collections on Amazon.</p>
         </div>
-        <div className="mt-8 grid gap-5 md:grid-cols-2">
+        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {FEATURED_BOOKS.map((book, index) => (
             <motion.a
               key={book.id}
@@ -362,16 +321,31 @@ export default function AboutPageContent() {
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.4, delay: index * 0.08 }}
               className={`${cardClass} flex flex-col transition hover:border-violet-300 hover:shadow-[0_12px_36px_rgba(139,92,246,0.12)] ${
-                book.accent === 'indigo' ? 'ring-1 ring-indigo-100' : 'ring-1 ring-amber-100'
+                book.accent === 'indigo'
+                  ? 'ring-1 ring-indigo-100'
+                  : book.accent === 'amber'
+                    ? 'ring-1 ring-amber-100'
+                    : 'ring-1 ring-teal-100'
               }`}
             >
-              <span className="text-xs font-semibold uppercase tracking-wider text-violet-600">
+              <span
+                className={`text-xs font-semibold uppercase tracking-wider ${
+                  book.accent === 'teal' ? 'text-teal-700' : 'text-violet-600'
+                }`}
+              >
                 {book.shortTitle}
               </span>
               <h3 className="mt-2 text-lg font-bold text-zinc-900">{book.title}</h3>
+              {book.tagline ? (
+                <p className="mt-2 text-sm font-semibold text-zinc-800">{book.tagline}</p>
+              ) : null}
               <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-600">{book.body}</p>
-              <span className="mt-5 inline-flex text-sm font-semibold text-violet-700">
-                Open author page →
+              <span
+                className={`mt-5 inline-flex text-sm font-semibold ${
+                  book.accent === 'teal' ? 'text-teal-700' : 'text-violet-700'
+                }`}
+              >
+                {book.cta} →
               </span>
             </motion.a>
           ))}

@@ -71,7 +71,7 @@ export const LINKS = {
   services: '/services',
   medium: 'https://medium.com/@drskauthor',
   linkedin: 'https://www.linkedin.com/in/drskofficial',
-  wellnessAmazon: 'https://www.amazon.com/author/drsk1',
+  wellnessAmazon: 'https://a.co/d/04XV6CYh',
   aiAmazon: 'https://www.amazon.com/author/sagar2025',
   pilotmycareer: 'https://www.pilotmycareer.com/',
   getauctionlist: 'https://getauctionlist.com/',

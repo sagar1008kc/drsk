@@ -18,7 +18,7 @@ export default function AboutHeroSection() {
   const [heroBodyBefore, heroBodyAfter] = PROFILE_HERO_BODY.split(USAII_CAIS_CERT_LABEL);
 
   return (
-    <section className="relative -mt-[3.75rem] flex min-h-[100dvh] flex-col overflow-hidden border-b border-teal-200/60 bg-gradient-to-br from-[#f0fdfa] via-white to-emerald-50/90 pt-[3.75rem]">
+    <section className="relative flex min-h-[100dvh] flex-col overflow-hidden border-b border-teal-200/60 bg-gradient-to-br from-[#f0fdfa] via-white to-emerald-50/90">
       <ThreeParticleBackground variant="brand" />
       <div className="pointer-events-none absolute inset-0 opacity-[0.55]">
         <AiHeroDiagram theme="brand" />
@@ -48,9 +48,12 @@ export default function AboutHeroSection() {
             <span className="inline-flex items-center rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-sm font-semibold tracking-wide text-[#0d9488] sm:text-base">
               About Sagar Khatri
             </span>
-            <h1 className="mt-5 text-3xl font-bold leading-[1.2] tracking-tight text-black sm:text-4xl md:text-5xl lg:text-[3.25rem]">
+            <h2 className="mt-5 text-3xl font-bold leading-[1.2] tracking-tight text-black sm:text-4xl md:text-5xl lg:text-[3.25rem]">
               {PROFILE_HERO_HEADLINE.highlight}
-            </h1>
+            </h2>
+            <p className="mt-3 text-sm font-semibold tracking-wide text-teal-800 sm:text-base">
+              7+ years in Software Engineering &amp; Agentic AI
+            </p>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg sm:leading-8">
               {heroBodyBefore}
               <a

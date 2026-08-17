@@ -1,140 +1,205 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
-import HeroFeaturedBooks from '@/component/home/HeroFeaturedBooks';
+import { ArrowRight } from 'lucide-react';
+import { FEATURED_BOOKS, FDE_BOOK } from '@/lib/featured-books';
 import AiHeroDiagram from '@/component/shared/AiHeroDiagram';
 import { PROFILE_TAGS } from '@/lib/profile-tags';
 
-function ArrowRightIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden>
-      <path
-        fillRule="evenodd"
-        d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.06-1.06l5.5 5.25a.75.75 0 010 1.06l-5.5 5.25a.75.75 0 11-1.06-1.06l4.158-3.96H3.75A.75.75 0 013 10z"
-        clipRule="evenodd"
-      />
-    </svg>
-  );
-}
-
-function PlayIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden>
-      <path d="M6.3 4.2a1 1 0 011.4.2l6.4 8a1 1 0 010 1.2l-6.4 8a1 1 0 01-1.6-1.2L11.67 10 6.1 5.4a1 1 0 01.2-1.4z" />
-    </svg>
-  );
-}
-
-const heroStars = [
-  { top: '8%', left: '12%', size: 2, delay: 0 },
-  { top: '18%', left: '78%', size: 1.5, delay: 0.4 },
-  { top: '42%', left: '6%', size: 1, delay: 0.8 },
-  { top: '55%', left: '88%', size: 2, delay: 0.2 },
-  { top: '72%', left: '22%', size: 1.5, delay: 0.6 },
-  { top: '85%', left: '65%', size: 1, delay: 1 },
-  { top: '30%', left: '45%', size: 1, delay: 0.5 },
-  { top: '62%', left: '52%', size: 1.5, delay: 0.3 },
-];
+const otherBooks = FEATURED_BOOKS.filter((book) => book.id !== 'fde');
 
 export default function HeroSection() {
   return (
-    <section className="relative flex min-h-[100dvh] flex-col overflow-hidden border-b border-violet-200/60 bg-gradient-to-br from-[#F8F7FF] via-white to-indigo-50/90 text-zinc-900">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 opacity-[0.55]">
+    <>
+      <section
+        id="fde-release"
+        aria-labelledby="home-fde-heading"
+        className="relative flex min-h-[100dvh] flex-col overflow-hidden border-b border-teal-200/60 bg-gradient-to-br from-[#f0fdfa] via-white to-emerald-50/90 text-zinc-900"
+      >
+        <div className="pointer-events-none absolute inset-0 opacity-40">
+          <AiHeroDiagram theme="brand" />
+        </div>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_15%_45%,rgba(13,148,136,0.16),transparent_58%)]" />
+
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 items-center gap-8 px-5 py-10 sm:px-8 sm:py-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12 lg:px-10 xl:px-12">
+          <motion.a
+            href={FDE_BOOK.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55 }}
+            className="group relative mx-auto flex w-full max-w-[22rem] items-center justify-center sm:max-w-[26rem] lg:max-w-none"
+          >
+            <div className="absolute inset-[12%] rounded-full bg-teal-400/20 blur-3xl" />
+            <Image
+              src="/fde-book1.png"
+              alt={FDE_BOOK.alt}
+              width={1122}
+              height={1402}
+              className="relative h-auto w-full max-w-[20rem] rounded-2xl object-contain shadow-[0_24px_48px_rgba(15,23,42,0.18)] transition duration-500 group-hover:scale-[1.02] sm:max-w-[24rem] lg:max-w-[26rem]"
+              sizes="(max-width: 1024px) 70vw, 420px"
+              priority
+            />
+          </motion.a>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.08 }}
+          >
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white">
+                Hot
+              </span>
+              <span className="inline-flex items-center rounded-full border border-teal-300 bg-teal-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-teal-800">
+                New release
+              </span>
+              <span className="inline-flex items-center rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-amber-800">
+                Launch sale
+              </span>
+            </div>
+
+            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.2em] text-teal-700 sm:text-sm">
+              Fundamentals &amp; system design
+            </p>
+            <h2
+              id="home-fde-heading"
+              className="mt-2 text-3xl font-black tracking-tight text-zinc-900 sm:text-4xl md:text-[2.6rem] md:leading-[1.12]"
+            >
+              {FDE_BOOK.title}
+            </h2>
+            <p className="mt-3 text-lg font-semibold text-zinc-800">{FDE_BOOK.tagline}</p>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-600 sm:text-base">
+              {FDE_BOOK.body}
+            </p>
+
+            <div className="mt-6 grid max-w-md grid-cols-2 gap-3">
+              <div className="rounded-2xl border border-teal-200 bg-white/90 px-4 py-3 shadow-sm">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-teal-700">Ebook</p>
+                <p className="mt-1 text-2xl font-black tracking-tight text-zinc-900">
+                  {FDE_BOOK.pricing?.ebook}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-zinc-200 bg-white/90 px-4 py-3 shadow-sm">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+                  Paperback
+                </p>
+                <p className="mt-1 text-2xl font-black tracking-tight text-zinc-900">
+                  {FDE_BOOK.pricing?.paperback}
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-5 text-sm font-semibold text-zinc-800">
+              5 scenario-based system designs
+            </p>
+            <ul className="mt-2 grid gap-1.5 sm:grid-cols-2">
+              {FDE_BOOK.scenarios?.map((scenario) => (
+                <li key={scenario} className="flex gap-2 text-sm text-zinc-600">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500" />
+                  {scenario}
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-zinc-500">{FDE_BOOK.audience}</p>
+
+            <a
+              href={FDE_BOOK.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-7 inline-flex min-h-[52px] items-center gap-2 rounded-full bg-[#0d9488] px-7 py-3 text-sm font-bold text-white shadow-[0_0_28px_rgba(13,148,136,0.35)] transition hover:bg-teal-700"
+            >
+              {FDE_BOOK.cta}
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </a>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden border-b border-violet-200/60 bg-gradient-to-br from-[#F8F7FF] via-white to-indigo-50/90 text-zinc-900">
+        <div className="pointer-events-none absolute inset-0 opacity-[0.4]">
           <AiHeroDiagram theme="light" />
         </div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_20%_40%,rgba(139,92,246,0.14),transparent_55%),radial-gradient(ellipse_70%_50%_at_85%_60%,rgba(99,102,241,0.1),transparent_50%)]" />
-        <div className="dot-pattern absolute inset-0 opacity-30" />
-      </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col px-5 py-5 sm:px-8 sm:py-6 lg:px-10 lg:py-8 xl:px-12">
-        <div className="grid min-h-0 flex-1 grid-cols-1 items-stretch gap-6 sm:gap-8 lg:grid-cols-2 lg:items-center lg:gap-8 xl:gap-10">
-          {/* Left — books + copy (no cards) */}
-          <div className="order-2 flex h-full min-h-0 w-full lg:order-1">
-            <HeroFeaturedBooks />
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-14 lg:px-10 lg:py-16 xl:px-12">
+          <div className="max-w-3xl">
+            <h2 className="text-2xl font-bold leading-snug tracking-tight text-zinc-900 sm:text-3xl md:text-4xl">
+              AI, digital solutions, and{' '}
+              <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">
+                mental health awareness
+              </span>
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg">
+              AI-Native Full-Stack Engineering, 1:1 sessions, digital solutions, and wellness-oriented
+              frameworks designed to improve performance, increase income potential, and support
+              sustainable growth.
+            </p>
+            <Link
+              href="/services"
+              className="mt-6 inline-flex min-h-[48px] items-center gap-2 rounded-full bg-[#0d9488] px-7 py-3 text-sm font-semibold text-white transition hover:bg-teal-700"
+            >
+              Get started
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
           </div>
 
-          {/* Right — copy & CTAs (full AI starry background, no inner card) */}
-          <div className="relative order-1 flex h-full min-h-0 overflow-hidden lg:order-2">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_80%_at_70%_30%,rgba(139,92,246,0.12),transparent_55%)]" />
-            <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-violet-400/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-20 -left-12 h-64 w-64 rounded-full bg-indigo-400/15 blur-3xl" />
-            {heroStars.map((star, i) => (
-              <span
-                key={i}
-                className="drsk-hero-star pointer-events-none absolute rounded-full bg-violet-400/70 shadow-[0_0_8px_rgba(139,92,246,0.5)]"
-                style={{
-                  top: star.top,
-                  left: star.left,
-                  width: star.size,
-                  height: star.size,
-                  animationDelay: `${star.delay}s`,
-                }}
-                aria-hidden
-              />
-            ))}
-
-            <div className="relative flex h-full min-h-full w-full flex-col justify-between gap-6 px-4 py-8 sm:gap-8 sm:px-6 sm:py-10 lg:gap-10 lg:px-8 lg:py-10 xl:gap-12 xl:px-10 xl:py-12">
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55 }}
-                className="text-[1.75rem] font-bold leading-[1.28] tracking-tight text-zinc-900 sm:text-4xl sm:leading-[1.26] md:text-[2.75rem] md:leading-[1.24] lg:text-[3rem] lg:leading-[1.22] xl:text-[3.25rem]"
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            {otherBooks.map((book) => (
+              <article
+                key={book.id}
+                className="flex items-center gap-4 rounded-2xl border border-zinc-200/80 bg-white/80 p-4 shadow-sm"
               >
-                AI, digital solutions, and{' '}
-                <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">
-                  mental health awareness
-                </span>
-              </motion.h2>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.1 }}
-                className="max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8 md:text-xl md:leading-9"
-              >
-                AI-Native Full-Stack Engineering, 1:1 sessions, digital solutions, and wellness-oriented
-                frameworks designed to improve performance, increase income potential, and support
-                sustainable growth.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.18 }}
-                className="flex flex-col gap-4 pt-2 sm:flex-row sm:flex-wrap sm:gap-5 lg:pt-0"
-              >
-                <Link
-                  href="/services"
-                  className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-[#0d9488] px-10 py-3.5 text-base font-semibold text-white shadow-[0_0_32px_rgba(13,148,136,0.4)] transition hover:bg-teal-700 sm:w-auto"
+                <a
+                  href={book.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-[5.5rem] shrink-0 sm:w-[7rem]"
                 >
-                  Get started
-                  <ArrowRightIcon className="h-5 w-5" />
-                </Link>
-              </motion.div>
-            </div>
+                  <Image
+                    src={book.image}
+                    alt={book.alt}
+                    width={280}
+                    height={360}
+                    className="h-auto w-full object-contain"
+                  />
+                </a>
+                <div className="min-w-0">
+                  <p
+                    className={`text-[10px] font-semibold uppercase tracking-[0.14em] ${
+                      book.accent === 'amber' ? 'text-amber-700' : 'text-violet-600'
+                    }`}
+                  >
+                    {book.shortTitle}
+                  </p>
+                  <p className="mt-1 text-sm font-bold leading-snug text-zinc-900 sm:text-base">
+                    {book.title}
+                  </p>
+                  <a
+                    href={book.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex text-sm font-semibold text-teal-700 hover:underline"
+                  >
+                    {book.cta} →
+                  </a>
+                </div>
+              </article>
+            ))}
           </div>
-        </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="mt-auto shrink-0 border-t border-teal-200/60 pt-5 pb-3 sm:pt-6"
-        >
-          <div className="grid grid-cols-2 gap-x-4 gap-y-2.5 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-10">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 border-t border-teal-200/60 pt-6">
             {PROFILE_TAGS.map((name) => (
-              <span
-                key={name}
-                className="text-center text-xs font-semibold tracking-wide text-teal-800 sm:text-left sm:text-sm"
-              >
+              <span key={name} className="text-xs font-semibold tracking-wide text-teal-800 sm:text-sm">
                 {name}
               </span>
             ))}
           </div>
-        </motion.div>
-      </div>
-    </section>
+        </div>
+      </section>
+    </>
   );
 }
