@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import PortfolioBackLink from '@/component/portfolio/PortfolioBackLink';
+import AgentSecurityRisksTable from '@/component/shared/AgentSecurityRisksTable';
 import {
   FinanceArchitectureDiagram,
   FinanceInterviewNotes,
@@ -142,6 +143,7 @@ const GUARDRAIL_CHECKPOINTS = [
   {
     id: '1',
     title: 'User Input',
+    asi: ['ASI01', 'ASI06'],
     items: [
       'Authentication & token validation (Apigee / Firebase Auth / Identity Platform)',
       'Prompt-injection detection (Model Armor)',
@@ -151,6 +153,7 @@ const GUARDRAIL_CHECKPOINTS = [
   {
     id: '2',
     title: 'Retrieval',
+    asi: ['ASI06'],
     items: [
       'User-level ACL filtering at query time',
       'Multi-tenant isolation via tenant-ID metadata checks',
@@ -159,6 +162,7 @@ const GUARDRAIL_CHECKPOINTS = [
   {
     id: '3',
     title: 'Tool Execution',
+    asi: ['ASI02', 'ASI03', 'ASI04', 'ASI05'],
     items: [
       'Least-privilege service accounts with identity delegation',
       'Tool schema validation & input sanitization',
@@ -168,6 +172,7 @@ const GUARDRAIL_CHECKPOINTS = [
   {
     id: '4',
     title: 'Model Output',
+    asi: ['ASI09'],
     items: [
       'Groundedness verification against RAG / tool context',
       'Citation validation (sources must exist in retrieved context)',
@@ -177,6 +182,7 @@ const GUARDRAIL_CHECKPOINTS = [
   {
     id: '5',
     title: 'Post-Action',
+    asi: ['ASI07', 'ASI08', 'ASI10'],
     items: [
       'Idempotency keys to block duplicate tool calls',
       'Immutable audit logging (Cloud Logging → BigQuery)',
@@ -652,7 +658,10 @@ function PlaybookPanel() {
           </div>
           <div>
             <h2 className="text-xl font-bold text-white sm:text-2xl">Phase 3B — Five Guardrail Checkpoints</h2>
-            <p className="mt-1 text-sm text-zinc-400">Security is a vertical cross-cut — not a bolt-on.</p>
+            <p className="mt-1 text-sm text-zinc-400">
+              Security is a vertical cross-cut — not a bolt-on. Each checkpoint maps to agent security
+              risks ASI01–ASI10.
+            </p>
           </div>
         </div>
         <div className="space-y-3">
@@ -661,9 +670,21 @@ function PlaybookPanel() {
               key={cp.id}
               className="rounded-2xl border border-rose-500/20 bg-rose-500/[0.04] p-4 sm:p-5"
             >
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-rose-300">
-                Checkpoint {cp.id} · {cp.title}
-              </p>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-rose-300">
+                  Checkpoint {cp.id} · {cp.title}
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {cp.asi.map((id) => (
+                    <span
+                      key={id}
+                      className="rounded-md border border-rose-500/25 bg-rose-500/10 px-1.5 py-0.5 font-mono text-[10px] font-bold text-rose-200"
+                    >
+                      {id}
+                    </span>
+                  ))}
+                </div>
+              </div>
               <ul className="mt-3 space-y-1.5">
                 {cp.items.map((item) => (
                   <li key={item} className="flex gap-2 text-sm text-zinc-300">
@@ -675,6 +696,7 @@ function PlaybookPanel() {
             </article>
           ))}
         </div>
+        <AgentSecurityRisksTable className="mt-8" />
       </section>
 
       <section>

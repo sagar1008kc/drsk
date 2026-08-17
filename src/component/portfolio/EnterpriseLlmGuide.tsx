@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import PortfolioBackLink from '@/component/portfolio/PortfolioBackLink';
+import AgentSecurityRisksTable from '@/component/shared/AgentSecurityRisksTable';
 import {
   ArrowRight,
   BrainCircuit,
@@ -1136,6 +1137,12 @@ export default function EnterpriseLlmGuide() {
               </article>
             </aside>
           </div>
+
+          {activePhaseId === 'guardrails' ? (
+            <div className="mt-10">
+              <AgentSecurityRisksTable />
+            </div>
+          ) : null}
 
           <div className="mt-10 rounded-3xl border border-slate-200 bg-slate-950 p-8 text-white">
             <h3 className="mb-4 flex items-center gap-2 text-xl font-bold">

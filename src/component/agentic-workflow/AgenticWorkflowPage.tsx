@@ -2,6 +2,7 @@
 
 import React from 'react';
 import PortfolioBackLink from '@/component/portfolio/PortfolioBackLink';
+import AgentSecurityRisksTable from '@/component/shared/AgentSecurityRisksTable';
 import {
   MessageSquare,
   Fingerprint, 
@@ -943,7 +944,7 @@ export default function AgenticWorkflowPage() {
           {/* 3. Input Guardrail */}
           <SystemNode 
             title="Input Guardrail" 
-            description="Safety, PII, scope & permission checks" 
+            description="Safety, PII, injection & permission checks" 
             icon={Shield} 
             colorKey="pink" 
           />
@@ -1017,6 +1018,8 @@ export default function AgenticWorkflowPage() {
           <AsyncLoggingLayer />
 
         </div>
+
+        <AgentSecurityRisksTable className="mt-10" />
 
         {/* Bottom Production Impact Panel */}
         <ProductionImpactPanel />
