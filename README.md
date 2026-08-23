@@ -1,118 +1,71 @@
-## Dr. SK / SK Creation
+# Dr. SK / SK Creation
 
-Production Next.js 14 App Router site for SK Creation: marketing pages, Supabase auth, a member dashboard, Stripe checkout, protected PDF downloads, booking fulfillment, Google Calendar Meet creation, and email via Zoho SMTP or Resend.
+Personal portfolio and knowledge site for **Dr. SK** — bridging **agentic AI engineering** with **mental health awareness**, books, and live digital products.
 
-## Local Development
+[skcreation.org](https://www.skcreation.org)
 
-```bash
-npm install
-npm run dev
-```
+---
 
-Open `http://localhost:3000`.
+## What this site is
 
-Useful checks:
+A production Next.js experience that presents Dr. SK’s work across three pillars:
 
-```bash
-npm run lint
-npm run typecheck
-npm run test
-npm run build
-```
+1. **Agentic AI & system design** — enterprise multi-agent architectures, RAG, guardrails, LLM integration, and interview-ready playbooks  
+2. **Mental health & wellness** — emotional balance, stress clarity, and practical guides for life in an AI-accelerated world  
+3. **Live products & books** — shipped products people can use today, plus published titles on Amazon  
 
-## Required Services
+---
 
-- Supabase Auth, Postgres, and Storage.
-- Stripe Checkout and webhook delivery.
-- Zoho SMTP or Resend for transactional email.
-- Optional Google Calendar API for automatic Meet links.
-- Optional hosted handbook URL through `HANDBOOK_PUBLIC_URL`.
+## Portfolio highlights
 
-## Environment Variables
+### Agentic AI deep-dives
+Interactive architecture and engineering pages covering:
 
-Create `.env.local` locally. Do not commit env files.
+- Multi-agent orchestration, HITL, and production guardrails (ASI threat model)  
+- Hybrid RAG pipelines and retrieval strategies  
+- Enterprise LLM application patterns  
+- ADK-style system design interview playbooks  
+- Agentic operations — observability, evaluation, and control planes  
+- **AI Front Door** for [getauctionlist.com](https://getauctionlist.com/) — BFF, LangGraph, policy RAG, auction SQL, allowlisted tools  
 
-Core:
+### Live products
+- **[Pilot My Career](https://www.pilotmycareer.com/)** — AI career hub for professionals  
+- **[Get Auction List](https://getauctionlist.com/)** — Texas foreclosure & trustee sales research  
+- **[Avianaa](https://www.avianaa.com/)** — kids’ books, games, and family experiences  
 
-```bash
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-BOOKING_ACTION_TOKEN_SECRET=
-```
+### Books
+Published and featured titles spanning:
 
-Payments:
+- **AI Forward Deployed Engineering** — agents, RAG, MCP, A2A, production system design  
+- **AI literacy** — how AI is reshaping work and skills  
+- **Emotional wellness** — balance, overthinking, and clarity under modern stress  
 
-```bash
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-```
+---
 
-Email:
+## Experience themes
 
-```bash
-NOTIFICATION_TO_EMAIL=
-ZOHO_MAIL_USER=
-ZOHO_MAIL_PASS=
-ZOHO_MAIL_HOST=smtppro.zoho.com
-ZOHO_MAIL_PORT=465
-ZOHO_MAIL_SECURE=true
-# or
-RESEND_API_KEY=
-RESEND_FROM_EMAIL=
-```
+| Theme | Focus |
+|--------|--------|
+| **Software & Agentic AI** | 7+ years across engineering and agentic systems |
+| **Mental health** | Awareness, practical wellness resources, and grounded messaging |
+| **Forward-deployed mindset** | Designs that ship — not slideware |
 
-Google Calendar / Meet:
+---
 
-```bash
-ENABLE_GOOGLE_MEET_AUTOCREATE=false
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_REFRESH_TOKEN=
-GOOGLE_CALENDAR_ID=primary
-GOOGLE_OAUTH_SETUP_SECRET=
-```
+## Site map (public)
 
-Downloads:
+| Area | What you’ll find |
+|------|------------------|
+| `/home` | Landing — agentic workflows, books, explore |
+| `/portfolio` | Profile, FDE stack, live projects, career story |
+| `/project` | Product showcase and blueprints |
+| `/books` | Book catalog and featured releases |
+| `/services` · `/about` · `/contact` | Services, about, and reach-out |
 
-```bash
-SUPABASE_PREMIUM_DOWNLOADS_BUCKET=premium-downloads
-HANDBOOK_PUBLIC_URL=
-PREMIUM_PDF_PRICE_CENTS=599
-PREMIUM_PDF_CURRENCY=usd
-```
+Deeper AI guides live under `/home/*` (system design, RAG, LLM guide, operations, tools hub, and more).
 
-## Supabase Setup
+---
 
-Apply migrations in order from `supabase/migrations`.
+## Voice of the work
 
-Important migrations:
-
-- `004_customer_resources.sql` creates resources, access grants, and download logs.
-- `005_profiles_auth_trigger.sql` creates profiles and the auth trigger.
-- `007_lock_profile_roles.sql` prevents users from changing their own role.
-- `008_seed_default_resources.sql` seeds the default dashboard PDF catalog.
-
-Storage bucket `premium-downloads` should remain private. Downloads are served through authenticated API routes that create short-lived signed URLs.
-
-## Stripe Webhook
-
-Configure Stripe to send `checkout.session.completed` to:
-
-```text
-/api/stripe/webhook
-```
-
-Set `STRIPE_WEBHOOK_SECRET` in every deployed environment. The webhook grants premium PDF access and fulfills paid booking emails/Meet links.
-
-## Google Calendar Setup
-
-See `docs/GOOGLE_MEET_SETUP.md`. In production, `/api/google/oauth/start` is protected by `GOOGLE_OAUTH_SETUP_SECRET`; pass it as `?setup_secret=...` only during one-time setup.
-
-## Security Notes
-
-- Authenticated dashboard routes are protected by middleware and server-side Supabase checks.
-- Service-role Supabase access is server-only; keep API route validation strict.
-- Public write routes have lightweight in-process rate limits. For high traffic, replace with a durable store such as Redis or a managed edge rate limiter.
-- Do not place member-only PDFs under `public/`.
+Built to show **clarity under complexity**: production AI that respects safety and grounding, paired with human-centered mental health and learning resources — presented as a cohesive portfolio for Dr. SK and SK Creation.

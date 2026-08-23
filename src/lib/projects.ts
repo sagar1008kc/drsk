@@ -20,6 +20,9 @@ export type ProjectItem = {
   meta: { label: string; value: string }[];
   featured?: boolean;
   image?: string;
+  /** Optional secondary CTA (e.g. architecture deep-dive) */
+  detailHref?: string;
+  detailLabel?: string;
 };
 
 export const FEATURED_PROJECTS: ProjectItem[] = [
@@ -56,9 +59,11 @@ export const FEATURED_PROJECTS: ProjectItem[] = [
     external: true,
     accent: 'emerald',
     featured: true,
+    detailHref: '/home/getauctionlist-ai-front-door',
+    detailLabel: 'AI Front Door architecture',
     highlights: [
       'County auction rows in a single scrollable table',
-      'Web view and downloadable PDF exports',
+      'Authenticated AI Front Door (RAG + SQL + tools)',
       'Filter by county, city, ZIP, and sale month',
       'Links to official CAD & clerk records',
     ],

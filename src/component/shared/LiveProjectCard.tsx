@@ -89,6 +89,8 @@ function CardBody({
   variant,
   highlightLimit,
   index,
+  primaryLinkProps,
+  hasDetail,
 }: {
   project: ProjectItem;
   style: (typeof accentMap)[keyof typeof accentMap];
@@ -96,11 +98,29 @@ function CardBody({
   variant: LiveProjectCardVariant;
   highlightLimit?: number;
   index: number;
+  primaryLinkProps: { href: string; target?: '_blank'; rel?: string };
+  hasDetail: boolean;
 }) {
   const isDark = variant === 'dark';
   const tagParts = parseTagParts(project.tag);
   const highlights = highlightLimit ? project.highlights.slice(0, highlightLimit) : project.highlights;
   const ctaLabel = project.external ? 'Visit live site' : 'View blueprint';
+
+  const primaryCta = isDark ? (
+    <span
+      className={`inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition group-hover:brightness-110 ${darkStyle.btn}`}
+    >
+      {ctaLabel}
+      <ExternalLink className="h-4 w-4" aria-hidden />
+    </span>
+  ) : (
+    <span className={`inline-flex items-center gap-2 text-sm font-semibold ${style.link} group-hover:gap-2.5`}>
+      {ctaLabel}
+      {project.external ? (
+        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      ) : null}
+    </span>
+  );
 
   return (
     <>
@@ -180,20 +200,28 @@ function CardBody({
           ))}
         </dl>
 
-        {isDark ? (
-          <span
-            className={`mt-6 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition group-hover:brightness-110 ${darkStyle.btn}`}
-          >
-            {ctaLabel}
-            <ExternalLink className="h-4 w-4" aria-hidden />
-          </span>
+        {hasDetail ? (
+          <div className={`mt-6 space-y-2 ${isDark ? '' : 'relative'}`}>
+            <Link
+              {...primaryLinkProps}
+              className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded-xl"
+            >
+              {primaryCta}
+            </Link>
+            <Link
+              href={project.detailHref!}
+              className={
+                isDark
+                  ? 'inline-flex min-h-[40px] w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-emerald-400/40 hover:bg-emerald-500/10 hover:text-emerald-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400'
+                  : 'flex items-center gap-1.5 text-sm font-semibold text-teal-700 hover:text-teal-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded'
+              }
+            >
+              {project.detailLabel}
+              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+            </Link>
+          </div>
         ) : (
-          <span className={`relative mt-5 inline-flex items-center gap-2 text-sm font-semibold ${style.link} group-hover:gap-2.5`}>
-            {ctaLabel}
-            {project.external ? (
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            ) : null}
-          </span>
+          <div className={isDark ? 'mt-6' : 'relative mt-5'}>{primaryCta}</div>
         )}
       </div>
     </>
@@ -211,20 +239,20 @@ export default function LiveProjectCard({
   const darkStyle = accentDarkMap[project.accent];
   const tilt = usePointerTilt(12);
   const glareBackground = useMotionTemplate`radial-gradient(circle at ${tilt.glareX}% ${tilt.glareY}%, rgba(255,255,255,0.16), transparent 58%)`;
+  const hasDetail = Boolean(project.detailHref && project.detailLabel);
 
   const linkProps = project.external
     ? { href: project.href, target: '_blank' as const, rel: 'noopener noreferrer' }
     : { href: project.href };
 
-  const cardInner = (
-    <Link
-      {...linkProps}
-      className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 ${
-        isDark
-          ? `border-white/10 bg-[#0a0a12]/90 shadow-[0_24px_64px_rgba(0,0,0,0.45)] backdrop-blur-xl hover:border-white/20 ${darkStyle.border} ${darkStyle.glow}`
-          : `bg-white shadow-sm hover:-translate-y-1 hover:shadow-md ${style.border} ${style.glow}`
-      }`}
-    >
+  const shellClass = `group relative flex h-full flex-col overflow-hidden rounded-2xl border transition-all duration-500 focus-within:ring-2 focus-within:ring-teal-400 ${
+    isDark
+      ? `border-white/10 bg-[#0a0a12]/90 shadow-[0_24px_64px_rgba(0,0,0,0.45)] backdrop-blur-xl hover:border-white/20 ${darkStyle.border} ${darkStyle.glow}`
+      : `bg-white shadow-sm hover:-translate-y-1 hover:shadow-md ${style.border} ${style.glow}`
+  }`;
+
+  const cardBody = (
+    <>
       {!isDark ? (
         <>
           <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${style.gradient}`} />
@@ -247,7 +275,17 @@ export default function LiveProjectCard({
         variant={variant}
         highlightLimit={highlightLimit}
         index={index}
+        primaryLinkProps={linkProps}
+        hasDetail={hasDetail}
       />
+    </>
+  );
+
+  const cardInner = hasDetail ? (
+    <div className={shellClass}>{cardBody}</div>
+  ) : (
+    <Link {...linkProps} className={`${shellClass} focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400`}>
+      {cardBody}
     </Link>
   );
 

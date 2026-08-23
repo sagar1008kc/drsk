@@ -49,6 +49,46 @@ export default function PortfolioLiveProjectsSection() {
           className="mt-10 sm:mt-12"
         />
 
+        <motion.aside
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.45, delay: 0.08 }}
+          className="mt-8 overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/15 via-[#0a1210] to-transparent p-5 sm:mt-10 sm:p-6"
+        >
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-300">
+                Featured architecture · getauctionlist.com
+              </p>
+              <h3 className="mt-1.5 text-lg font-bold text-white sm:text-xl">
+                AI Front Door — BFF, LangGraph, hybrid RAG
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+                As-built docs for the authenticated assistant: policy RAG, auction SQL, allowlisted
+                county tools, grounding, and SSE — with a direct path to the live product.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 shrink-0">
+              <Link
+                href="/home/getauctionlist-ai-front-door"
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400"
+              >
+                Open architecture
+                <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
+              <Link
+                href="https://getauctionlist.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-5 py-2.5 text-sm font-semibold text-emerald-100 transition hover:border-emerald-400/60 hover:bg-emerald-500/20"
+              >
+                Visit live site
+              </Link>
+            </div>
+          </div>
+        </motion.aside>
+
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
