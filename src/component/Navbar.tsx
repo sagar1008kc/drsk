@@ -4,29 +4,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
-import { FDE_BOOK } from '@/lib/featured-books';
 
 const PRIMARY_NAV = [
   { href: '/home', label: 'Home' },
   { href: '/services', label: 'Services' },
-  { href: '/project', label: 'Project' },
-  { href: '/books', label: 'Books' },
+  { href: '/resources', label: 'Resources' },
+  { href: '/about', label: 'About' },
   { href: '/portfolio', label: 'Portfolio' },
 ] as const;
-
-function ExternalIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 12 12" fill="none" aria-hidden>
-      <path
-        d="M4 2h6v6M10 2 5 7M7 5H2v5"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 function useScrolled(threshold = 12) {
   const [scrolled, setScrolled] = useState(false);
@@ -61,23 +46,6 @@ function DesktopNavLink({
     >
       <span className="relative z-10">{label}</span>
     </Link>
-  );
-}
-
-function DesktopFdeBookLink() {
-  return (
-    <a
-      href={FDE_BOOK.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group relative inline-flex h-9 items-center gap-1.5 rounded-full border border-transparent px-3 text-sm font-bold text-black transition hover:border-[#0d9488] hover:bg-[#0d9488] hover:text-white"
-    >
-      <span>FDE Book</span>
-      <span className="inline-flex items-center rounded-full bg-red-600 px-1.5 py-px text-[9px] font-extrabold uppercase leading-4 tracking-wide text-white shadow-sm">
-        Hot
-      </span>
-      <ExternalIcon className="h-3 w-3 shrink-0 opacity-60 transition group-hover:opacity-100" />
-    </a>
   );
 }
 
@@ -122,6 +90,13 @@ export default function Navbar() {
   const isActive = useCallback(
     (href: string) => {
       if (href === '/home') return pathname === '/' || pathname === '/home';
+      if (href === '/resources') {
+        return (
+          pathname === '/resources' ||
+          pathname.startsWith('/resources/') ||
+          pathname.startsWith('/project/')
+        );
+      }
       return pathname === href || pathname.startsWith(`${href}/`);
     },
     [pathname]
@@ -176,8 +151,6 @@ export default function Navbar() {
               active={isActive(item.href)}
             />
           ))}
-          <span className="mx-0.5 h-5 w-px bg-black/15" aria-hidden />
-          <DesktopFdeBookLink />
         </nav>
 
         <button
@@ -241,23 +214,6 @@ export default function Navbar() {
                     onNavigate={() => setMobileOpen(false)}
                   />
                 ))}
-                <p className="mb-1 mt-3 px-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#000000]">
-                  Books
-                </p>
-                <a
-                  href={FDE_BOOK.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex min-h-[48px] w-full items-center justify-between rounded-xl border border-black/10 bg-white/90 px-4 text-sm font-bold text-[#000000] transition hover:border-[#0d9488] hover:bg-[#0d9488] hover:text-white"
-                >
-                  <span className="inline-flex items-center gap-2">
-                    FDE Book
-                    <span className="inline-flex items-center rounded-full bg-red-600 px-1.5 py-px text-[9px] font-extrabold uppercase leading-4 tracking-wide text-white">
-                      Hot
-                    </span>
-                  </span>
-                  <ExternalIcon className="h-3.5 w-3.5 opacity-70" />
-                </a>
               </div>
             </motion.nav>
           </>

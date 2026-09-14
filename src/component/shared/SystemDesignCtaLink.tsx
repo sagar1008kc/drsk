@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { RESOURCE_HREFS } from '@/lib/resource-hrefs';
 
 type SystemDesignCtaLinkProps = {
   className: string;
@@ -9,7 +10,7 @@ type SystemDesignCtaLinkProps = {
 export default function SystemDesignCtaLink({
   className,
   shimmerClassName = 'absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-white/0 via-white/20 to-white/0 transition-transform duration-1000 ease-in-out group-hover:translate-x-[100%]',
-  href = '/home/agentic-ai-system-design',
+  href = RESOURCE_HREFS.systemDesign,
 }: SystemDesignCtaLinkProps) {
   return (
     <Link href={href} className={className}>

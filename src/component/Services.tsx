@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
+import HashScrollOnLoad from '@/component/home/HashScrollOnLoad';
 import ServicesHeroSection from '@/component/services/ServicesHeroSection';
 import {
   SERVICE_AREAS,
@@ -305,6 +306,7 @@ export default function Services() {
   return (
     <>
       <main className="min-h-screen bg-[#F8F7FF] text-zinc-900">
+        <HashScrollOnLoad />
         <ServicesHeroSection />
 
         <section

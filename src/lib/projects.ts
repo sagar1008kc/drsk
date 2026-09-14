@@ -1,3 +1,5 @@
+import { RESOURCE_HREFS } from '@/lib/resource-hrefs';
+
 export type ProjectAccent =
   | 'violet'
   | 'blue'
@@ -59,7 +61,7 @@ export const FEATURED_PROJECTS: ProjectItem[] = [
     external: true,
     accent: 'emerald',
     featured: true,
-    detailHref: '/home/getauctionlist-ai-front-door',
+    detailHref: RESOURCE_HREFS.frontDoor,
     detailLabel: 'AI Front Door architecture',
     highlights: [
       'County auction rows in a single scrollable table',

@@ -247,10 +247,10 @@ const providers: Record<
 };
 
 const integrationDeepLinks = [
-  { href: '/home/smart-agent', label: 'Live agent demo' },
-  { href: '/home/multi-agent-workflow-map', label: 'Visual workflow map' },
-  { href: '/home/rag-systems', label: 'RAG pipeline' },
-  { href: '/home/agentic-tools-hub', label: 'Tool integration hub' },
+  { href: '/resources/smart-agent', label: 'Live agent demo' },
+  { href: '/resources/multi-agent-workflow-map', label: 'Visual workflow map' },
+  { href: '/resources/rag-systems', label: 'RAG pipeline' },
+  { href: '/resources/agentic-tools-hub', label: 'Tool integration hub' },
 ];
 
 type ImplementationPhaseId =
@@ -566,7 +566,7 @@ export default function EnterpriseLlmGuide() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex min-h-16 flex-col gap-3 py-3 md:flex-row md:items-center md:justify-between md:py-0">
             <div className="flex items-center gap-2">
-              <PortfolioBackLink variant="light" />
+              <PortfolioBackLink variant="light" href="/resources" />
               <BrainCircuit className="h-8 w-8 text-teal-600" />
               <span className="text-xl font-bold tracking-tight">
                 Enterprise<span className="text-teal-600">LLM</span> Guide

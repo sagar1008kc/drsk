@@ -1,4 +1,6 @@
-export const AI_FRONT_DOOR_HREF = '/home/getauctionlist-ai-front-door';
+import { RESOURCE_HREFS } from '@/lib/resource-hrefs';
+
+export const AI_FRONT_DOOR_HREF = RESOURCE_HREFS.frontDoor;
 export const GET_AUCTION_LIST_HREF = 'https://getauctionlist.com/';
 
 export const AI_FRONT_DOOR_META = {

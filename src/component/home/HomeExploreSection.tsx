@@ -43,7 +43,7 @@ const exploreCards = [
       'Smart Integrations and Assistants',
       'Operational Efficiency Solutions',
     ],
-    href: '/project',
+    href: '/resources',
     cta: 'Explore projects',
     primary: true,
     delay: 0.08,

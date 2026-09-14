@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { FEATURED_PROJECTS } from '@/lib/projects';
+import { AI_FRONT_DOOR_HREF, GET_AUCTION_LIST_HREF } from '@/lib/ai-front-door';
 import LiveProjectsGrid from '@/component/shared/LiveProjectsGrid';
 
 export default function PortfolioLiveProjectsSection() {
@@ -71,14 +72,14 @@ export default function PortfolioLiveProjectsSection() {
             </div>
             <div className="flex flex-wrap gap-2 shrink-0">
               <Link
-                href="/home/getauctionlist-ai-front-door"
+                href={AI_FRONT_DOOR_HREF}
                 className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400"
               >
                 Open architecture
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
               <Link
-                href="https://getauctionlist.com/"
+                href={GET_AUCTION_LIST_HREF}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-5 py-2.5 text-sm font-semibold text-emerald-100 transition hover:border-emerald-400/60 hover:bg-emerald-500/20"
@@ -97,10 +98,10 @@ export default function PortfolioLiveProjectsSection() {
           className="mt-10 flex flex-col items-center gap-4 sm:mt-12"
         >
           <p className="max-w-lg text-center text-sm text-zinc-500">
-            Blueprints, Streamlit apps, and interface concepts live on the full projects page.
+            Blueprints, Streamlit apps, and interface concepts live in Resources.
           </p>
           <Link
-            href="/project"
+            href="/resources#products"
             className="group inline-flex min-h-[48px] items-center gap-2 rounded-full border border-teal-500/40 bg-teal-500/10 px-6 py-3 text-sm font-semibold text-teal-200 transition hover:border-teal-400/60 hover:bg-teal-500/20 hover:text-white"
           >
             Explore all builds

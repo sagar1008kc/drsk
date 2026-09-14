@@ -1,15 +1,6 @@
-import type { Metadata } from 'next';
-import AgenticToolsHub from '@/component/portfolio/AgenticToolsHub';
-import { createPageMetadata } from '@/lib/site-url';
+import { redirect } from 'next/navigation';
+import { RESOURCE_HREFS } from '@/lib/resources';
 
-export const metadata: Metadata = createPageMetadata({
-  path: '/home/agentic-tools-hub',
-  title: 'Agentic Tools Hub',
-  description:
-    'Interactive educational hub explaining tools in agentic AI workflows, tool execution loops, and sandboxed tool-call simulation.',
-  openGraphTitle: 'Agentic Tools Hub | Dr. SK',
-});
-
-export default function AgenticToolsHubRoute() {
-  return <AgenticToolsHub />;
+export default function HomeAgenticToolsHubRedirect() {
+  redirect(RESOURCE_HREFS.toolsHub);
 }

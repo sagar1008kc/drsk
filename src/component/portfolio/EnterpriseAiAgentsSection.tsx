@@ -191,10 +191,10 @@ const BEST_PRACTICES = [
 ];
 
 const RELATED_LINKS = [
-  { href: '/home/multi-agent-workflow-map', label: 'Multi-agent workflow map' },
-  { href: '/home/agentic-tools-hub', label: 'Agent tools hub' },
-  { href: '/home/rag-systems', label: 'Enterprise RAG pipeline' },
-  { href: '/home/enterprise-llm-guide', label: 'Enterprise LLM guide' },
+  { href: '/resources/multi-agent-workflow-map', label: 'Multi-agent workflow map' },
+  { href: '/resources/agentic-tools-hub', label: 'Agent tools hub' },
+  { href: '/resources/rag-systems', label: 'Enterprise RAG pipeline' },
+  { href: '/resources/enterprise-llm-guide', label: 'Enterprise LLM guide' },
 ];
 
 export default function EnterpriseAiAgentsSection() {

@@ -65,7 +65,7 @@ export type ParentAgentDef = {
 };
 
 export const LINKS = {
-  projectsHub: '/project',
+  projectsHub: '/resources#products',
   portfolio: '/portfolio',
   books: '/books',
   services: '/services',

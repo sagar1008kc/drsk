@@ -8,60 +8,64 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   async redirects() {
+    const resourceSlugs = [
+      'agentic-ai-system-design',
+      'adk-system-design-interview',
+      'agentic-operations',
+      'agentic-tools-hub',
+      'enterprise-llm-guide',
+      'getauctionlist-ai-front-door',
+      'multi-agent-workflow-map',
+      'rag-systems',
+      'smart-agent',
+    ];
+
     return [
+      ...resourceSlugs.flatMap((slug) => [
+        {
+          source: `/home/${slug}`,
+          destination: `/resources/${slug}`,
+          permanent: true,
+        },
+        {
+          source: `/portfolio/${slug}`,
+          destination: `/resources/${slug}`,
+          permanent: true,
+        },
+      ]),
       {
-        source: '/about',
-        destination: '/portfolio',
-        permanent: true,
-      },
-      {
-        source: '/portfolio/smart-agent',
-        destination: '/home/smart-agent',
-        permanent: true,
-      },
-      {
-        source: '/portfolio/agentic-tools-hub',
-        destination: '/home/agentic-tools-hub',
-        permanent: true,
-      },
-      {
-        source: '/portfolio/enterprise-llm-guide',
-        destination: '/home/enterprise-llm-guide',
-        permanent: true,
-      },
-      {
-        source: '/portfolio/multi-agent-workflow-map',
-        destination: '/home/multi-agent-workflow-map',
-        permanent: true,
-      },
-      {
-        source: '/portfolio/resources',
-        destination: '/home/resources',
-        permanent: true,
-      },
-      {
-        source: '/portfolio/agentic-ai-system-design',
-        destination: '/home/agentic-ai-system-design',
-        permanent: true,
-      },
-      {
-        source: '/portfolio/rag-systems',
-        destination: '/home/rag-systems',
-        permanent: true,
-      },
-      {
-        source: '/portfolio/adk-system-design-interview',
-        destination: '/home/adk-system-design-interview',
+        source: '/home/enterprise-ai-agents',
+        destination: '/resources/smart-agent',
         permanent: true,
       },
       {
         source: '/portfolio/enterprise-ai-agents',
-        destination: '/home/smart-agent',
+        destination: '/resources/smart-agent',
+        permanent: true,
+      },
+      {
+        source: '/home/ai-commerce-orchestration',
+        destination: '/resources/multi-agent-workflow-map',
         permanent: true,
       },
       {
         source: '/portfolio/ai-commerce-orchestration',
-        destination: '/home/multi-agent-workflow-map',
+        destination: '/resources/multi-agent-workflow-map',
+        permanent: true,
+      },
+      {
+        source: '/portfolio/resources',
+        destination: '/resources',
+        permanent: true,
+      },
+      {
+        source: '/home/resources',
+        destination: '/resources',
+        permanent: true,
+      },
+      {
+        source: '/project',
+        destination: '/resources',
         permanent: true,
       },
     ];

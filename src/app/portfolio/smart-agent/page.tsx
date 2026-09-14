@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { RESOURCE_HREFS } from '@/lib/resources';
 
-export default function Portfoliosmart_agentRedirect() {
-  redirect('/home/smart-agent');
+export default function PortfolioSmartAgentRedirect() {
+  redirect(RESOURCE_HREFS.smartAgent);
 }

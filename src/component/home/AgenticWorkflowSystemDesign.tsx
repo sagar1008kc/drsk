@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 import {
@@ -19,8 +19,7 @@ import {
   ArrowRight,
   type LucideIcon,
 } from 'lucide-react';
-import AgenticDataFlipbookModal from '@/component/portfolio/AgenticDataFlipbookModal';
-import HitlBookShowcaseModal from '@/component/portfolio/HitlBookShowcaseModal';
+import { RESOURCE_HREFS } from '@/lib/resources';
 
 function getWaveGridSize() {
   if (typeof window === 'undefined') return { width: 50, depth: 50 };
@@ -333,34 +332,26 @@ function NavIcon({
   );
 }
 
-const SMART_AGENT_HREF = '/home/smart-agent';
-const AGENTIC_TOOLS_HUB_HREF = '/home/agentic-tools-hub';
-const ENTERPRISE_LLM_GUIDE_HREF = '/home/enterprise-llm-guide';
-
 const TOP_NAV: Array<{
   icon: LucideIcon;
   label: string;
   delay: number;
-  href?: string;
-  action?: 'data-flipbook' | 'hitl-showcase';
+  href: string;
 }> = [
-  { icon: Bot, label: 'Agents', delay: 0.1, href: SMART_AGENT_HREF },
-  { icon: Wrench, label: 'Tools', delay: 0.2, href: AGENTIC_TOOLS_HUB_HREF },
-  { icon: Brain, label: 'LLMs', delay: 0.3, href: ENTERPRISE_LLM_GUIDE_HREF },
-  { icon: Database, label: 'Data', delay: 0.4, action: 'data-flipbook' },
-  { icon: UserCheck, label: 'HITL', delay: 0.5, action: 'hitl-showcase' },
+  { icon: Bot, label: 'Agents', delay: 0.1, href: RESOURCE_HREFS.smartAgent },
+  { icon: Wrench, label: 'Tools', delay: 0.2, href: RESOURCE_HREFS.toolsHub },
+  { icon: Brain, label: 'LLMs', delay: 0.3, href: RESOURCE_HREFS.llmGuide },
+  { icon: Database, label: 'Data', delay: 0.4, href: RESOURCE_HREFS.data },
+  { icon: UserCheck, label: 'HITL', delay: 0.5, href: RESOURCE_HREFS.hitl },
 ];
 
-const MULTI_AGENT_WORKFLOW_MAP_HREF = '/home/multi-agent-workflow-map';
-const RESOURCES_HREF = '/home/resources';
-const OPERATIONS_HREF = '/home/agentic-operations';
-const SYSTEM_DESIGN_HREF = '/home/agentic-ai-system-design';
+const MULTI_AGENT_WORKFLOW_MAP_HREF = RESOURCE_HREFS.workflowMap;
+const RESOURCES_HREF = RESOURCE_HREFS.hub;
+const OPERATIONS_HREF = RESOURCE_HREFS.operations;
+const SYSTEM_DESIGN_HREF = RESOURCE_HREFS.systemDesign;
 const LIVE_PROJECTS_HREF = '/portfolio#live-projects';
 
 export function AgenticWorkflowSystemDesign() {
-  const [dataFlipbookOpen, setDataFlipbookOpen] = useState(false);
-  const [hitlShowcaseOpen, setHitlShowcaseOpen] = useState(false);
-
   return (
     <section
       id="agentic-workflow-system-design"
@@ -383,13 +374,6 @@ export function AgenticWorkflowSystemDesign() {
               label={item.label}
               delay={item.delay}
               href={item.href}
-              onClick={
-                item.action === 'data-flipbook'
-                  ? () => setDataFlipbookOpen(true)
-                  : item.action === 'hitl-showcase'
-                    ? () => setHitlShowcaseOpen(true)
-                    : undefined
-              }
             />
           ))}
         </div>
@@ -679,15 +663,6 @@ export function AgenticWorkflowSystemDesign() {
           </span>
         </Link>
       </div>
-
-      <AgenticDataFlipbookModal
-        open={dataFlipbookOpen}
-        onClose={() => setDataFlipbookOpen(false)}
-      />
-      <HitlBookShowcaseModal
-        open={hitlShowcaseOpen}
-        onClose={() => setHitlShowcaseOpen(false)}
-      />
     </section>
   );
 }

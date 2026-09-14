@@ -13,6 +13,9 @@ export const sectionBorder = 'border-b border-violet-200/60';
 export const badgeClass =
   'inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-violet-700 sm:text-xs';
 
+export const badgeTeal =
+  'inline-flex items-center rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-teal-800 sm:text-xs';
+
 export const sectionTitle =
   'text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl md:text-[2rem]';
 

@@ -1,6 +1,6 @@
 # Dr. SK / SK Creation
 
-Personal portfolio and knowledge site for **Dr. SK** — bridging **agentic AI engineering** with **mental health awareness**, books, and live digital products.
+Personal portfolio and knowledge site for **Dr. SK** — bridging **agentic AI engineering** and **mental health awareness**, books, and live digital products.
 
 [skcreation.org](https://www.skcreation.org)
 
@@ -56,13 +56,13 @@ Published and featured titles spanning:
 
 | Area | What you’ll find |
 |------|------------------|
-| `/home` | Landing — agentic workflows, books, explore |
+| `/home` | Landing — mission, agentic workflow, explore |
+| `/resources` | AI engineering, live products, architecture, and books |
 | `/portfolio` | Profile, FDE stack, live projects, career story |
-| `/project` | Product showcase and blueprints |
 | `/books` | Book catalog and featured releases |
 | `/services` · `/about` · `/contact` | Services, about, and reach-out |
 
-Deeper AI guides live under `/home/*` (system design, RAG, LLM guide, operations, tools hub, and more).
+Deeper AI guides live under `/resources`.
 
 ---
 

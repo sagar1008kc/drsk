@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { RESOURCE_HREFS } from '@/lib/resources';
 
-export default function Portfoliomulti_agent_workflow_mapRedirect() {
-  redirect('/home/multi-agent-workflow-map');
+export default function PortfolioMultiAgentWorkflowMapRedirect() {
+  redirect(RESOURCE_HREFS.workflowMap);
 }

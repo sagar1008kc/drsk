@@ -312,10 +312,10 @@ export default function AiPocPage() {
               Contact for pilot
             </Link>
             <Link
-              href="/project"
+              href="/resources#products"
               className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-5 py-2 text-sm font-semibold text-zinc-200 transition hover:bg-white/10 hover:text-zinc-900"
             >
-              Back to projects
+              Back to resources
             </Link>
           </div>
         </section>

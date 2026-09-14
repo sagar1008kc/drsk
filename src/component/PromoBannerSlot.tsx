@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import SitePromoBanner from '@/component/SitePromoBanner';
 
-const PROMO_PATHS = ['/services', '/project'];
+const PROMO_PATHS = ['/services', '/resources'];
 
 export default function PromoBannerSlot() {
   const pathname = usePathname();

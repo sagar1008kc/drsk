@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { BookOpen } from 'lucide-react';
 import AboutHeroSection from '@/component/about/AboutHeroSection';
 import HashScrollOnLoad from '@/component/home/HashScrollOnLoad';
 import LearnAdaptLeadSection from '@/component/portfolio/LearnAdaptLeadSection';
@@ -303,10 +304,9 @@ export default function AboutPageContent() {
         </div>
       </AboutSection>
 
-      <AboutSection altBg>
+      <AboutSection id="books" altBg>
         <div className="mx-auto max-w-2xl text-center">
           <span className={badgeClass}>Publications</span>
-          <h2 className={`${sectionTitle} mt-3`}>Featured books</h2>
           <p className={sectionDesc}>FDE system design, AI career titles, and wellness collections on Amazon.</p>
         </div>
         <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -328,11 +328,21 @@ export default function AboutPageContent() {
                     : 'ring-1 ring-teal-100'
               }`}
             >
+              <span className="mx-auto flex w-full max-w-[9.5rem] items-center justify-center">
+                <Image
+                  src={book.image}
+                  alt={book.alt}
+                  width={280}
+                  height={360}
+                  className="h-auto w-full object-contain"
+                />
+              </span>
               <span
-                className={`text-xs font-semibold uppercase tracking-wider ${
+                className={`mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider ${
                   book.accent === 'teal' ? 'text-teal-700' : 'text-violet-600'
                 }`}
               >
+                <BookOpen className="h-3.5 w-3.5" aria-hidden />
                 {book.shortTitle}
               </span>
               <h3 className="mt-2 text-lg font-bold text-zinc-900">{book.title}</h3>

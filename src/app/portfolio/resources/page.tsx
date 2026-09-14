@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default function PortfolioresourcesRedirect() {
-  redirect('/home/resources');
+export default function PortfolioResourcesRedirect() {
+  redirect('/resources');
 }

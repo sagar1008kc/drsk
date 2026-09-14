@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import PortfolioBackLink from '@/component/portfolio/PortfolioBackLink';
+import { RESOURCE_HREFS } from '@/lib/resource-hrefs';
 
 type Pillar = {
   id: string;
@@ -197,14 +198,14 @@ export default function AgenticOperationsPage() {
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href="/home/agentic-ai-system-design"
+              href={RESOURCE_HREFS.systemDesign}
               className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-blue-400/40 bg-blue-500/15 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-blue-100 transition hover:bg-blue-500/25"
             >
               System architecture
               <ArrowRight className="h-3.5 w-3.5" aria-hidden />
             </Link>
             <Link
-              href="/home/multi-agent-workflow-map"
+              href={RESOURCE_HREFS.workflowMap}
               className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-teal-400/40 bg-teal-500/10 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-teal-100 transition hover:bg-teal-500/20"
             >
               Visual workflow map
@@ -308,7 +309,7 @@ export default function AgenticOperationsPage() {
             explore the end-to-end architecture next.
           </p>
           <Link
-            href="/home/agentic-ai-system-design"
+            href={RESOURCE_HREFS.systemDesign}
             className="mt-5 inline-flex min-h-[48px] items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-[0_0_20px_rgba(59,130,246,0.45)] transition hover:from-blue-500 hover:to-cyan-400"
           >
             View system design

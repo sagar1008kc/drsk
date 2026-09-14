@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { RESOURCE_HREFS } from '@/lib/resources';
 
-export default function Portfolioenterprise_llm_guideRedirect() {
-  redirect('/home/enterprise-llm-guide');
+export default function PortfolioEnterpriseLlmGuideRedirect() {
+  redirect(RESOURCE_HREFS.llmGuide);
 }

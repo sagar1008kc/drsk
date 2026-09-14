@@ -27,49 +27,49 @@ const LAYERS: Layer[] = [
   {
     id: 1,
     title: 'Discover',
-    icon: <Search className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />,
+    icon: <Search className="h-4 w-4" aria-hidden />,
     description: 'Customer discovery and mapping complex problem spaces into clear AI opportunities.',
   },
   {
     id: 2,
     title: 'Design',
-    icon: <Edit3 className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />,
+    icon: <Edit3 className="h-4 w-4" aria-hidden />,
     description: 'Rapid prototyping and AI agent architecture with secure system boundaries.',
   },
   {
     id: 3,
     title: 'Build',
-    icon: <Code2 className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />,
+    icon: <Code2 className="h-4 w-4" aria-hidden />,
     description: 'Production-grade agents, RAG pipelines, and measurable MVP delivery.',
   },
   {
     id: 4,
     title: 'Integrate',
-    icon: <Puzzle className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />,
+    icon: <Puzzle className="h-4 w-4" aria-hidden />,
     description: 'Enterprise bridging — data pipelines, tools, and existing business systems.',
   },
   {
     id: 5,
     title: 'Evaluate',
-    icon: <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />,
+    icon: <TrendingUp className="h-4 w-4" aria-hidden />,
     description: 'Benchmarks, guardrails, safety tuning, and compliance-ready evaluation.',
   },
   {
     id: 6,
     title: 'Deploy',
-    icon: <Rocket className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />,
+    icon: <Rocket className="h-4 w-4" aria-hidden />,
     description: 'Scalable cloud orchestration and production rollout.',
   },
   {
     id: 7,
     title: 'Operate',
-    icon: <Settings className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />,
+    icon: <Settings className="h-4 w-4" aria-hidden />,
     description: 'Monitoring, reliability, and day-to-day agent operations in production.',
   },
   {
     id: 8,
     title: 'Improve',
-    icon: <RefreshCw className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />,
+    icon: <RefreshCw className="h-4 w-4" aria-hidden />,
     description: 'Continuous learning loops, feedback, and iterative system improvement.',
   },
 ];
@@ -160,41 +160,45 @@ export default function HomeLandingHero() {
             </div>
           </div>
 
-          <div className="w-full">
+          <div className="w-full min-w-0">
             <div
-              className="flex w-full items-center justify-between overflow-x-auto rounded-2xl border border-cyan-500/35 bg-[#06182c]/90 px-1.5 py-2 backdrop-blur-xl sm:rounded-full sm:px-3 sm:py-2.5"
+              className="flex snap-x snap-mandatory gap-1 overflow-x-auto overscroll-x-contain rounded-2xl border border-cyan-500/35 bg-[#06182c]/90 p-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-8 sm:gap-1 sm:overflow-visible sm:rounded-full sm:px-2 sm:py-1.5"
               role="list"
               aria-label="Engineering sequence"
             >
               {LAYERS.map((layer, idx) => {
                 const isActive = activeIndex === idx;
                 return (
-                  <div key={layer.id} className="flex min-w-0 flex-1 items-center" role="listitem">
+                  <div
+                    key={layer.id}
+                    className="relative w-[4.75rem] shrink-0 snap-center sm:w-auto sm:min-w-0"
+                    role="listitem"
+                  >
                     <button
                       type="button"
-                      onMouseEnter={() => setActiveIndex(idx)}
+                      onMouseEnter={() => {
+                        if (window.matchMedia('(hover: hover)').matches) setActiveIndex(idx);
+                      }}
                       onFocus={() => setActiveIndex(idx)}
                       onClick={() => setActiveIndex(idx)}
                       aria-pressed={isActive}
                       aria-controls="home-layer-detail"
-                      className={`flex w-full flex-col items-center rounded-xl border px-1 py-2 transition-colors duration-150 sm:rounded-2xl sm:px-1.5 ${
+                      className={`box-border flex h-16 w-full touch-manipulation flex-col items-center justify-center gap-1 rounded-xl border px-1 py-1.5 transition-colors duration-150 sm:h-[4.25rem] sm:rounded-2xl ${
                         isActive
-                          ? 'border-cyan-400 bg-cyan-500/20 text-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.35)]'
+                          ? 'border-cyan-400 bg-cyan-500/20 text-cyan-300'
                           : 'border-transparent text-slate-400 hover:bg-cyan-950/40 hover:text-cyan-400'
                       }`}
                     >
-                      <span className="mb-1">{layer.icon}</span>
-                      <span
-                        className={`font-mono text-[9px] tracking-wide sm:text-[11px] md:text-xs ${
-                          isActive ? 'font-bold text-white' : 'font-medium'
-                        }`}
-                      >
+                      <span className="flex h-4 w-4 shrink-0 items-center justify-center" aria-hidden>
+                        {layer.icon}
+                      </span>
+                      <span className="font-mono text-[9px] font-medium leading-none tracking-wide text-current sm:text-[11px]">
                         {layer.title}
                       </span>
                     </button>
                     {idx < LAYERS.length - 1 ? (
                       <span
-                        className="pointer-events-none hidden shrink-0 px-0.5 font-mono text-[10px] text-cyan-500/55 sm:inline md:px-1 md:text-xs"
+                        className="pointer-events-none absolute -right-1 top-1/2 hidden -translate-y-1/2 font-mono text-[10px] text-cyan-500/55 sm:block"
                         aria-hidden
                       >
                         →
@@ -205,19 +209,19 @@ export default function HomeLandingHero() {
               })}
             </div>
 
-            <div id="home-layer-detail" aria-live="polite" className="mx-auto mt-3 max-w-2xl text-left">
-              <div className="rounded-2xl border border-cyan-500/30 bg-[#06182c]/70 p-3.5 backdrop-blur-md sm:p-4">
-                <p className="font-mono text-[10px] uppercase tracking-widest text-cyan-300">
+            <div id="home-layer-detail" aria-live="polite" className="mt-3 w-full">
+              <div className="box-border min-h-[5.75rem] rounded-2xl border border-cyan-500/30 bg-[#06182c]/70 p-3.5 text-left sm:min-h-[5.25rem] sm:p-4">
+                <p className="font-mono text-[10px] font-medium uppercase leading-none tracking-widest text-cyan-300">
                   {activeLayer.title}
                 </p>
-                <p className="mt-1.5 text-sm leading-relaxed text-slate-200 sm:text-[15px]">
+                <p className="mt-2 text-sm leading-relaxed text-slate-200 sm:text-[15px]">
                   {activeLayer.description}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 flex w-full max-w-md flex-col gap-3 sm:mt-8 sm:max-w-none sm:flex-row sm:items-center sm:justify-center">
+          <div className="mt-6 flex w-full flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center sm:justify-center">
             <button
               type="button"
               onClick={openHub}

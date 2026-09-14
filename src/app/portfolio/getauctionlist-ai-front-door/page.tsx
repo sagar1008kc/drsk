@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { RESOURCE_HREFS } from '@/lib/resources';
 
-export default function PortfolioAiFrontDoorRedirect() {
-  redirect('/home/getauctionlist-ai-front-door');
+export default function PortfolioGetAuctionListAiFrontDoorRedirect() {
+  redirect(RESOURCE_HREFS.frontDoor);
 }

@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { RESOURCE_HREFS } from '@/lib/resources';
 
-export default function AiCommerceOrchestrationRedirect() {
-  redirect('/home/multi-agent-workflow-map');
+export default function PortfolioAiCommerceOrchestrationRedirect() {
+  redirect(RESOURCE_HREFS.workflowMap);
 }

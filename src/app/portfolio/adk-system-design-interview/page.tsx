@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { RESOURCE_HREFS } from '@/lib/resources';
 
-export default function Portfolioadk_system_design_interviewRedirect() {
-  redirect('/home/adk-system-design-interview');
+export default function PortfolioAdkSystemDesignInterviewRedirect() {
+  redirect(RESOURCE_HREFS.adkInterview);
 }
