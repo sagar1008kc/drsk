@@ -6,14 +6,6 @@ import { PROFILE_HERO_HEADLINE } from '@/lib/profile-hero';
 
 const barcodeWidths = [3, 1, 2, 4, 1, 1, 3, 2, 1, 3, 4, 1, 2, 2, 1, 3, 1, 2, 3];
 
-function ZapIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" />
-    </svg>
-  );
-}
-
 /** Push pin flush on the wall — head on surface, shaft toward viewer. */
 function WallThumbtack() {
   return (
@@ -136,7 +128,7 @@ export default function ExpertProfileCard() {
             <div className="flex items-center justify-between rounded-t-[22px] bg-[#0d9488] px-3 text-white">
               <Image
                 src="/logo.png"
-                alt="Dr. SK"
+                alt="SK Creation"
                 width={40}
                 height={40}
                 className="h-12 w-12 rounded-full object-cover"
@@ -147,24 +139,19 @@ export default function ExpertProfileCard() {
               </div>
             </div>
 
-            <div className="mt-10 flex flex-col items-center">
-              <div className="relative flex h-32 w-32 items-center justify-center overflow-visible rounded-full border-[6px] border-white bg-zinc-200 shadow-xl">
-                <div className="relative h-full w-full overflow-hidden rounded-full bg-[#e0dfdc]">
-                  <Image
-                    src="/drsk.png"
-                    alt="Dr. SK"
-                    fill
-                    className="object-cover object-top"
-                    sizes="128px"
-                    priority
-                  />
-                </div>
-                <div className="absolute -right-2 bottom-0 flex h-10 w-10 items-center justify-center rounded-full border-4 border-white bg-[#0d9488] shadow-lg">
-                  <ZapIcon className="h-[18px] w-[18px] text-white" />
-                </div>
+            <div className="mt-3 flex flex-col items-center px-4">
+              <div className="relative h-44 w-full overflow-hidden rounded-2xl bg-[#0d9488] shadow-xl sm:h-48">
+                <Image
+                  src="/drsk.png"
+                  alt="Dr. SK"
+                  fill
+                  className="object-cover object-[center_18%]"
+                  sizes="(max-width: 768px) 80vw, 340px"
+                  priority
+                />
               </div>
 
-              <div className="mt-6 space-y-1 text-center">
+              <div className="mt-4 space-y-1 text-center">
                 <h2 className="flex items-center justify-center gap-2 text-3xl font-bold tracking-tight text-zinc-900">
                   Dr. SK <span aria-hidden>🇺🇸</span>
                 </h2>
@@ -174,7 +161,7 @@ export default function ExpertProfileCard() {
               </div>
             </div>
 
-            <div className="mt-8 px-6">
+            <div className="mt-4 px-6">
               <div className="relative flex items-center rounded-[20px] border border-zinc-100 bg-white p-4 shadow-sm">
                 <div className="flex-1 text-center">
                   <h3 className="text-xl font-bold text-zinc-900">10+</h3>

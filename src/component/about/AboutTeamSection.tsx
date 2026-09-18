@@ -1,105 +1,55 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { badgeTeal, container, ctaSecondary, sectionDesc, sectionPad, sectionTitle } from '@/component/home/styles';
+import { container, sectionPad } from '@/component/home/styles';
 
 const FOUNDER = {
   name: 'Dr. SK',
   role: 'Founding Engineer',
   contribution:
-    'Designs and ships production AI systems, digital products, and the architecture behind SK Creation — from idea through reliable delivery.',
-  photo: '/drsk.png',
+    'Shapes the vision, leads enterprise AI strategy, and turns complex workflows into production-ready AI systems.',
+  photo: '/agent0.png',
 };
 
 const AGENTS = [
   {
-    name: 'Atlas',
-    role: 'Systems Architect',
+    name: 'Maya',
+    role: 'Solution Architect',
     contribution:
-      'Turns real problems into production multi-agent designs — clear boundaries, orchestration, and systems that can actually ship.',
-    photo: '/team/team-atlas.png',
+      'Designs AI agents, RAG pipelines, tool integrations, and reliable multi-agent workflows for real production systems.',
+    photo: '/agent2.png',
   },
   {
-    name: 'Nova',
-    role: 'Knowledge & RAG',
+    name: 'Ayan',
+    role: 'AI Advisor',
     contribution:
-      'Grounds answers in approved sources through retrieval, citations, and knowledge flows people can trust.',
-    photo: '/team/team-nova.png',
+      'Guides practical AI adoption — where agents belong, what to automate, and how to keep systems useful, safe, and grounded.',
+    photo: '/agent1.png',
   },
   {
-    name: 'Forge',
-    role: 'Tools & Integration',
+    name: 'Aria',
+    role: 'Creator',
     contribution:
-      'Connects agents to APIs, workflows, and allowlisted tools so work moves from conversation into action.',
-    photo: '/team/team-forge.png',
-  },
-  {
-    name: 'Sentinel',
-    role: 'Safety & HITL',
-    contribution:
-      'Keeps high-risk actions behind guardrails, human approval, and operating limits that protect users.',
-    photo: '/team/team-sentinel.png',
-  },
-  {
-    name: 'Pulse',
-    role: 'Operations',
-    contribution:
-      'Watches quality, cost, traces, and evaluations so systems stay measurable after they launch.',
-    photo: '/team/team-pulse.png',
-  },
-  {
-    name: 'Prism',
-    role: 'Market Analysis',
-    contribution:
-      'Reads markets, competitors, and demand signals so SK Creation builds where the opportunity is real — not assumed.',
-    photo: '/team/team-prism.png',
-  },
-  {
-    name: 'Scout',
-    role: 'Customer Discovery',
-    contribution:
-      'Listens to real user problems, jobs-to-be-done, and interviews so products start from people — not from a feature list.',
-    photo: '/team/team-scout.png',
-  },
-  {
-    name: 'Lyra',
-    role: 'Learning',
-    contribution:
-      'Turns shipped work into clear teaching — guides, walkthroughs, and learning paths people can actually follow.',
-    photo: '/team/team-lyra.png',
-  },
-  {
-    name: 'Quill',
-    role: 'Publishing',
-    contribution:
-      'Shapes books, articles, and public resources so knowledge leaves the workshop and reaches readers with care.',
-    photo: '/team/team-quill.png',
+      'Creates AI resources, books, community content, and wellness-focused learning experiences people can actually use.',
+    photo: '/agent3.png',
   },
 ] as const;
 
-function Avatar({
-  src,
-  alt,
-  size,
-  ring,
-}: {
-  src: string;
-  alt: string;
-  size: 'lg' | 'md';
-  ring?: string;
-}) {
-  const dim = size === 'lg' ? 'h-28 w-28 sm:h-32 sm:w-32' : 'h-20 w-20';
-  const px = size === 'lg' ? 128 : 80;
-
+function Portrait({ src, alt, featured = false }: { src: string; alt: string; featured?: boolean }) {
   return (
     <div
-      className={`relative shrink-0 overflow-hidden rounded-full bg-teal-50 ring-2 ${dim} ${
-        ring ?? 'ring-teal-200/80'
+      className={`relative mx-auto aspect-square w-full ${
+        featured ? 'max-w-[18rem] sm:max-w-[20rem]' : 'max-w-[15.5rem]'
       }`}
     >
-      <Image src={src} alt={alt} width={px} height={px} className="h-full w-full object-cover object-top" />
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-contain"
+        sizes="(max-width: 768px) 70vw, 320px"
+      />
     </div>
   );
 }
@@ -109,17 +59,18 @@ export default function AboutTeamSection() {
     <section
       id="team"
       aria-labelledby="team-heading"
-      className={`relative scroll-mt-20 overflow-hidden border-b border-teal-200/50 bg-white ${sectionPad}`}
+      className={`relative scroll-mt-20 overflow-hidden border-b border-teal-900/40 bg-[#05080c] text-white ${sectionPad}`}
     >
-      <div className={container}>
+      <div className={`relative ${container}`}>
         <div className="mx-auto max-w-3xl text-center">
-          <span className={badgeTeal}>People & agents</span>
-          <h2 id="team-heading" className={`${sectionTitle} mt-3`}>
+          <h2
+            id="team-heading"
+            className="text-[1.65rem] font-extrabold leading-tight tracking-tight sm:text-4xl md:text-[2.5rem]"
+          >
             Our Team
           </h2>
-          <p className={sectionDesc}>
-            One founding engineer, supported by specialized AI agents for building systems,
-            discovering what people need, and sharing knowledge.
+          <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base">
+            Build with AI. Learn. Adapt. Lead.
           </p>
         </div>
 
@@ -127,23 +78,14 @@ export default function AboutTeamSection() {
           id="founder"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.4 }}
-          className="mx-auto mt-10 flex max-w-3xl flex-col items-center gap-5 rounded-2xl border border-teal-200/70 bg-[#f8fffd] p-6 text-center sm:mt-12 sm:flex-row sm:items-center sm:gap-7 sm:p-7 sm:text-left"
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.45 }}
+          className="mx-auto mt-10 max-w-md p-4 text-center sm:mt-12 sm:p-5"
         >
-          <Avatar src={FOUNDER.photo} alt={FOUNDER.name} size="lg" ring="ring-teal-400/70" />
-          <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-700">
-              Founding Engineer
-            </p>
-            <h3 className="mt-1 text-2xl font-bold tracking-tight text-zinc-900">{FOUNDER.name}</h3>
-            <p className="mt-3 text-sm leading-relaxed text-zinc-600 sm:text-[0.95rem]">
-              {FOUNDER.contribution}
-            </p>
-            <Link href="/portfolio" className={`mt-5 ${ctaSecondary} sm:w-auto`}>
-              Explore Portfolio
-            </Link>
-          </div>
+          <Portrait src={FOUNDER.photo} alt={FOUNDER.name} featured />
+          <h3 className="mt-5 text-2xl font-bold tracking-tight text-white">{FOUNDER.name}</h3>
+          <p className="mt-1 text-sm font-semibold text-teal-300">{FOUNDER.role}</p>
+          <p className="mt-3 text-sm leading-relaxed text-slate-300">{FOUNDER.contribution}</p>
         </motion.article>
 
         <ul className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -153,20 +95,13 @@ export default function AboutTeamSection() {
               initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.35, delay: index * 0.05 }}
-              className="flex h-full flex-col rounded-2xl border border-teal-200/70 bg-white p-5 shadow-[0_6px_20px_rgba(13,148,136,0.04)] sm:p-6"
+              transition={{ duration: 0.4, delay: index * 0.08 }}
+              className="flex h-full flex-col p-3 text-center sm:p-4"
             >
-              <div className="flex items-center gap-4">
-                <Avatar src={agent.photo} alt={`${agent.name}, AI agent`} size="md" />
-                <div className="min-w-0">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-teal-700">
-                    AI Agent
-                  </p>
-                  <h3 className="mt-0.5 truncate text-lg font-bold text-zinc-900">{agent.name}</h3>
-                  <p className="mt-0.5 text-sm font-medium text-zinc-500">{agent.role}</p>
-                </div>
-              </div>
-              <p className="mt-4 flex-1 text-sm leading-relaxed text-zinc-600">{agent.contribution}</p>
+              <Portrait src={agent.photo} alt={`${agent.name}, ${agent.role}`} />
+              <h3 className="mt-4 text-xl font-bold text-white">{agent.name}</h3>
+              <p className="mt-1 text-sm font-semibold text-teal-300">{agent.role}</p>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-300">{agent.contribution}</p>
             </motion.li>
           ))}
         </ul>

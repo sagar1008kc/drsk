@@ -125,13 +125,18 @@ export default function Navbar() {
           className="relative z-10 flex min-w-0 shrink items-center gap-1.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d9488]"
           aria-label="SK Creation home"
         >
-          <span className="box-border flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-violet-300 bg-[#0d9488]">
+          <span className="relative flex h-12 w-12 shrink-0 items-center justify-center">
+            <span
+              className="drsk-nav-logo-glow pointer-events-none absolute inset-0 rounded-full bg-white/25 blur-[5px]"
+              aria-hidden
+            />
+            <span className="drsk-nav-logo-border pointer-events-none absolute inset-0" aria-hidden />
             <img
               src="/sk_logo.svg"
               alt=""
               width={48}
               height={48}
-              className="h-full w-full object-contain"
+              className="relative z-10 h-11 w-11 rounded-full object-contain"
             />
           </span>
           <span className="truncate font-gugi text-[1rem] font-bold leading-none tracking-wide text-white sm:text-[1.125rem]">
