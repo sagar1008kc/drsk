@@ -11,4 +11,5 @@ export const RESOURCE_HREFS = {
   llmGuide: '/resources/enterprise-llm-guide',
   frontDoor: '/resources/getauctionlist-ai-front-door',
   adkInterview: '/resources/adk-system-design-interview',
+  wellnessEducation: '/resources/wellness-education',
 } as const;

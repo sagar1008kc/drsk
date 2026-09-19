@@ -2,6 +2,7 @@ import {
   BookOpen,
   Briefcase,
   Database,
+  HeartHandshake,
   Home,
   Layers,
   Link2,
@@ -10,6 +11,8 @@ import {
   UserCircle,
   type LucideIcon,
 } from 'lucide-react';
+import { WELLNESS_EDUCATION_HREF } from '@/lib/mental-health-resources';
+import { RESOURCE_HREFS } from '@/lib/resource-hrefs';
 
 export type ParentAgentId = 'rag' | 'books' | 'projects' | 'link';
 
@@ -20,6 +23,8 @@ export type SubAgentId =
   | 'aviana'
   | 'sitemap_about'
   | 'sitemap_kb'
+  | 'resources_hub'
+  | 'services_hub'
   | 'portfolio'
   | 'education_exp'
   | 'pub_catalog'
@@ -65,10 +70,21 @@ export type ParentAgentDef = {
 };
 
 export const LINKS = {
-  projectsHub: '/resources#products',
+  home: '/home',
+  resources: RESOURCE_HREFS.hub,
+  wellness: WELLNESS_EDUCATION_HREF,
+  stopOverthinking: '/data/stop-overthinking.pdf',
+  workingWell: '/data/working-well-wellness-guide.pdf',
+  breathingReset: '/data/5-minute-breathing-reset.pdf',
+  jobSearchBurnout: '/data/job-search-burnout-signals.pdf',
+  rejectionRecovery: '/data/rejection-recovery-framework.pdf',
+  about: '/about',
+  contact: '/contact',
+  projectsHub: `${RESOURCE_HREFS.hub}#products`,
   portfolio: '/portfolio',
   books: '/books',
   services: '/services',
+  wellnessService: '/services#wellness-education',
   medium: 'https://medium.com/@drskauthor',
   linkedin: 'https://www.linkedin.com/in/drskofficial',
   wellnessAmazon: 'https://a.co/d/04XV6CYh',
@@ -107,38 +123,94 @@ export const PARENT_AGENTS: Record<ParentAgentId, ParentAgentDef> = {
       'tell me about',
       'engineer',
       'skcreation',
+      'sk creation',
       'site',
       'services',
+      'service',
       'knowledge',
+      'resources',
+      'resource',
+      'mission',
+      'organization',
+      'about page',
+      'nav',
+      'navigation',
     ],
     hubResponse:
-      'I can pull from the sitemap index — About Dr. SK, the SK Creation knowledge base, /portfolio, and education & experience. Which slice do you want?',
+      'SK Creation’s site is organized around Build · Share · Support. I can point you to About, Services, Resources (AI, Books, Wellness Education), or Portfolio. What do you need?',
     hubCtas: [
-      { text: 'About Dr. SK', url: LINKS.portfolio },
-      { text: 'Portfolio page', url: LINKS.portfolio },
+      { text: 'About SK Creation', url: LINKS.about },
       { text: 'Services', url: LINKS.services },
+      { text: 'Resources', url: LINKS.resources },
+      { text: 'Portfolio', url: LINKS.portfolio },
     ],
     subAgents: [
       {
         id: 'sitemap_about',
         name: 'About Dr. SK',
-        keywords: ['who is', 'tell me about', 'sagar khatri', 'story', 'bio', 'what does', 'about dr', 'dr sk'],
+        keywords: ['who is', 'tell me about', 'sagar khatri', 'story', 'bio', 'what does', 'about dr', 'dr sk', 'drsk', 'dr. sk'],
         response:
-          'Dr. SK is an AI forward deployed engineer who builds practical AI systems in production. He’s also a published author and MHFA-certified mental health advocate.',
+          'Dr. SK (Dr. Sagar Khatri) is an AI forward deployed engineer who builds practical production AI systems. He is also a published author and MHFA-informed mental-health advocate. His work on this site sits under SK Creation’s mission: Build, Share, and Support.',
         ctas: [
           { text: 'View portfolio', url: LINKS.portfolio },
+          { text: 'About SK Creation', url: LINKS.about },
           { text: 'LinkedIn', url: LINKS.linkedin },
         ],
       },
       {
         id: 'sitemap_kb',
-        name: 'SK Creation KB',
-        keywords: ['skcreation', 'site', 'services', 'knowledge', 'resource', 'home', 'what is this site'],
+        name: 'SK Creation',
+        keywords: ['skcreation', 'sk creation', 'this site', 'this website', 'organization', 'mission', 'about page', 'build share', 'what is this site'],
         response:
-          'The SK Creation knowledge base covers services, projects, books, and AI resources across skcreation.org.',
+          'SK Creation is a mission-driven AI and digital organization: Build practical systems, Share useful knowledge, and Support people in an AI-powered world. Main pages are Home, Services, Resources, Wellness, About, and Portfolio.',
         ctas: [
-          { text: 'Services', url: LINKS.services },
-          { text: 'Projects', url: LINKS.projectsHub },
+          { text: 'About SK Creation', url: LINKS.about },
+          { text: 'Home', url: LINKS.home },
+          { text: 'Contact', url: LINKS.contact },
+        ],
+      },
+      {
+        id: 'resources_hub',
+        name: 'Resources',
+        keywords: [
+          'resources',
+          'resource',
+          '/resources',
+          'ai resources',
+          'agentic',
+          'resource hub',
+          'knowledge for the ai era',
+        ],
+        response:
+          'The Resources page has three paths: AI (agentic systems, RAG, LLMs, architecture), Books, and Wellness Education. Open /resources, then pick a path — or go straight to the Wellness Education hub.',
+        ctas: [
+          { text: 'Resources', url: LINKS.resources },
+          { text: 'Wellness Education', url: LINKS.wellness },
+          { text: 'Books', url: LINKS.books },
+        ],
+      },
+      {
+        id: 'services_hub',
+        name: 'Services',
+        keywords: [
+          'services',
+          'service',
+          'offer',
+          'what can you',
+          'book a session',
+          'request a quote',
+          'ai integration',
+          'career strategy',
+          'digital solutions',
+          'publishing support',
+          'business r&d',
+        ],
+        response:
+          'SK Creation services cover: AI Integration & Agentic Workflows; Career Strategy & AI-Era Branding; Digital Solutions; Book Writing & Publishing Support; Business Development & R&D Strategy; and Mental Health Awareness & Wellness Education (education only, not therapy). Quotes and sessions are on the Services page.',
+        ctas: [
+          { text: 'Explore Services', url: LINKS.services },
+          { text: 'Wellness Education service', url: LINKS.wellnessService },
+          { text: 'Request a quote', url: LINKS.contact },
         ],
       },
       {
@@ -154,7 +226,7 @@ export const PARENT_AGENTS: Record<ParentAgentId, ParentAgentDef> = {
         name: 'Education & Experience',
         keywords: ['education', 'experience', 'dba', 'degree', 'certification', 'fortune', 'engineer', 'career history'],
         response:
-          'Education spans DBA (Information Systems), master’s and bachelor’s degrees, plus Fortune Top 25, Fortune Global 50 engineering experience and certifications.',
+          'Education spans DBA (Information Systems), master’s and bachelor’s degrees, plus Fortune Top 25 and Fortune Global 50 engineering experience and certifications. Details are on /portfolio.',
         ctas: [{ text: 'View experience', url: LINKS.portfolio }],
       },
     ],
@@ -182,7 +254,13 @@ export const PARENT_AGENTS: Record<ParentAgentId, ParentAgentDef> = {
       'emotional',
       'stress',
       'wellness',
+      'wellness education',
       'mental',
+      'mental health',
+      'mental health awareness',
+      'overthinking',
+      'inner peace',
+      'stop overthinking',
       'mindfulness',
       'anxiety',
       'burnout',
@@ -210,6 +288,12 @@ export const PARENT_AGENTS: Record<ParentAgentId, ParentAgentDef> = {
           'stress',
           'mental wellness',
           'wellness',
+          'wellness education',
+          'mental health',
+          'mental health awareness',
+          'overthinking',
+          'inner peace',
+          'stop overthinking',
           'mindfulness',
           'anxiety',
           'burnout',
@@ -217,12 +301,20 @@ export const PARENT_AGENTS: Record<ParentAgentId, ParentAgentDef> = {
           'mhfa',
           'happier',
           'emotional',
+          'breathing',
+          'rejection',
+          'job search burnout',
+          'working well',
+          'workplace wellness',
         ],
         response:
-          'For stress, emotional balance, and mental wellness, Dr. SK’s Emotional Wellness books are on Amazon.',
+          'Wellness Education on this site is at /resources/wellness-education. Start with the featured PDF How to Stop Overthinking & Find Inner Peace in 30 Days, or The Working Well — a five-module workplace wellness guide for professionals. There are also short Pilot My Career PDFs for a 5-minute breathing reset, job-search burnout signals, and rejection recovery, emotional wellness books on Amazon, and group wellness-education sessions under Services — education and awareness only, not therapy or emergency care.',
         ctas: [
+          { text: 'Wellness Education hub', url: LINKS.wellness },
+          { text: 'Open the featured PDF', url: LINKS.stopOverthinking },
+          { text: 'The Working Well PDF', url: LINKS.workingWell },
           { text: 'Wellness books on Amazon', url: LINKS.wellnessAmazon },
-          { text: 'Book catalog', url: LINKS.books },
+          { text: 'Wellness Education service', url: LINKS.wellnessService },
         ],
       },
       {
@@ -429,14 +521,30 @@ const SUB_AGENT_STRONG_KEYWORDS: Partial<Record<SubAgentId, string[]>> = {
   realestate: ['auction', 'foreclosure', 'texas', 'real estate', 'trustee', 'investor', 'county', 'get auction'],
   career: ['interview', 'resume', 'pilot', 'ats', 'prep', 'pilot my career', 'job description', 'linkedin'],
   aviana: ['aviana', 'coloring', 'affirmation', 'mini game', 'kids book', 'story-driven'],
-  wellness_books: ['wellness', 'stress', 'emotional', 'mindfulness', 'anxiety', 'burnout', 'mhfa', 'mental wellness'],
+  wellness_books: [
+    'wellness',
+    'wellness education',
+    'stress',
+    'emotional',
+    'mindfulness',
+    'anxiety',
+    'burnout',
+    'mhfa',
+    'mental wellness',
+    'mental health',
+    'overthinking',
+    'inner peace',
+    'stop overthinking',
+  ],
   ai_books: ['ai book', 'tech book', 'cybersecurity', 'machine learning', 'artificial intelligence', 'software engineer'],
   medium: ['medium', 'article', 'articles', 'essay', 'blog post'],
   onecrm: ['salesforce', 'crm', 'onecrm', 'one crm', 'enterprise crm'],
   sitemap_about: ['who is', 'about dr', 'dr sk', 'drsk', 'dr. sk', 'tell me about', 'sagar khatri', 'bio'],
   portfolio: ['portfolio', '/portfolio'],
   education_exp: ['education', 'experience', 'dba', 'certification', 'degree'],
-  sitemap_kb: ['skcreation', 'knowledge base', 'services'],
+  sitemap_kb: ['skcreation', 'sk creation', 'knowledge base', 'this site', 'this website', 'mission', 'organization'],
+  resources_hub: ['resources', 'resource', '/resources', 'ai resources', 'resource hub', 'agentic'],
+  services_hub: ['services', 'service', 'ai integration', 'career strategy', 'digital solutions', 'request a quote'],
 };
 
 function escapeRegExp(value: string) {
@@ -500,6 +608,8 @@ function isConfidentRoute(
       'pub_catalog',
       'sitemap_about',
       'sitemap_kb',
+      'resources_hub',
+      'services_hub',
       'portfolio',
       'education_exp',
     ];
@@ -594,6 +704,9 @@ export function buildAgentReply(route: RouteResult): { content: string; ctas: Ag
     (route.subAgent === 'projects_hub' ||
       route.subAgent === 'pub_catalog' ||
       route.subAgent === 'sitemap_about' ||
+      route.subAgent === 'sitemap_kb' ||
+      route.subAgent === 'resources_hub' ||
+      route.subAgent === 'services_hub' ||
       route.subAgent === 'onecrm');
 
   if (useHub) {
@@ -800,17 +913,18 @@ export const FLOW_DELAYS: Record<Exclude<FlowStep, 'idle' | 'complete'>, number>
 };
 
 export const SUGGESTIONS = [
-  'Which live project should I explore?',
   'Who is Dr. SK?',
-  'Books for stress and balance',
-  'Salesforce OneCRM integration',
+  'What services does SK Creation offer?',
+  'Where are the AI resources?',
+  'Where is wellness education?',
+  'Which live projects are on this site?',
 ];
 
 export const FALLBACK_REPLY =
   "I’m focused on Dr. SK Creation’s website knowledge. For general questions, please use the chatbot assistant on this page.";
 
 export const WELCOME_MESSAGE =
-  'Welcome! Ask about projects, Dr. SK, books, or articles.';
+  'Welcome! Ask about this website — Dr. SK, services, resources, wellness education, books, or live projects.';
 
 export const SUB_AGENT_ICONS: Partial<Record<SubAgentId, LucideIcon>> = {
   career: Briefcase,
@@ -819,6 +933,9 @@ export const SUB_AGENT_ICONS: Partial<Record<SubAgentId, LucideIcon>> = {
   medium: Newspaper,
   sitemap_about: UserCircle,
   sitemap_kb: Database,
+  resources_hub: Database,
+  services_hub: Layers,
+  wellness_books: HeartHandshake,
   portfolio: UserCircle,
   education_exp: UserCircle,
   onecrm: Link2,

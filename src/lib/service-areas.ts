@@ -1,12 +1,5 @@
-import {
-  BookOpen,
-  Code2,
-  Cpu,
-  Flower2,
-  Lightbulb,
-  Route,
-  type LucideIcon,
-} from 'lucide-react';
+import { BookOpen, Code2, Cpu, Flower2, Lightbulb, Route, type LucideIcon } from 'lucide-react';
+import { WELLNESS_EDUCATION_HREF } from '@/lib/mental-health-resources';
 
 export const SERVICE_QUOTE_OPTIONS = [
   'AI Integration & Agentic Workflow',
@@ -34,6 +27,8 @@ export type ServiceArea = {
   disclaimer?: string;
   icon: LucideIcon;
   accent: ServiceAccent;
+  resourcesHref?: string;
+  resourcesCta?: string;
 };
 
 export const SERVICE_AREAS: ServiceArea[] = [
@@ -154,5 +149,7 @@ export const SERVICE_AREAS: ServiceArea[] = [
     note: 'From $49 / group seat or quote-based',
     icon: Flower2,
     accent: 'emerald',
+    resourcesHref: WELLNESS_EDUCATION_HREF,
+    resourcesCta: 'Resources',
   },
 ];

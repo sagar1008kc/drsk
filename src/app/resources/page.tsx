@@ -6,7 +6,7 @@ export const metadata: Metadata = createPageMetadata({
   path: '/resources',
   title: 'Resources | SK Creation',
   description:
-    'Practical AI engineering resources from SK Creation — agentic systems, RAG, LLM applications, production architecture, and books.',
+    'SK Creation resources in three paths: AI engineering, books, and mental health awareness — including agentic systems, RAG, architecture, and practical wellness guides.',
 });
 
 export default function ResourcesPage() {

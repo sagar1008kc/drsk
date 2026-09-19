@@ -115,7 +115,7 @@ export default function HomeMissionHero() {
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
             <Link
-              href="/services#wellness-education"
+              href="/resources/wellness-education"
               className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full border border-teal-500/40 bg-[#062623] px-6 py-3 text-xs font-bold uppercase tracking-wider text-teal-300 transition hover:bg-teal-950 sm:w-auto"
             >
               Mental Health Awareness

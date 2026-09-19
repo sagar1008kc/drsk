@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Send,
@@ -9,7 +10,6 @@ import {
   User,
   GitMerge,
   CheckCircle2,
-  Sparkles,
   Loader2,
   ExternalLink,
   MessageSquare,
@@ -289,8 +289,14 @@ export default function MultiAgentChatbotSection({
         <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border-2 border-teal-500/70 bg-white shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur-xl">
           <div className="flex items-center gap-3 border-b border-zinc-200/80 bg-gradient-to-r from-zinc-50 to-teal-50/70 p-4">
             <div className="relative shrink-0">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0d9488] shadow-lg shadow-teal-500/25">
-                <Sparkles className="h-5 w-5 text-white" />
+              <div className="relative h-10 w-10 overflow-hidden rounded-full bg-[#0d9488] shadow-lg shadow-teal-500/25 ring-2 ring-white">
+                <Image
+                  src="/drsk.png"
+                  alt="Dr. SK"
+                  fill
+                  className="object-cover object-[center_18%]"
+                  sizes="40px"
+                />
               </div>
               <motion.span
                 className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-emerald-500"
@@ -299,11 +305,11 @@ export default function MultiAgentChatbotSection({
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-lg font-semibold text-zinc-900">SK Multi-Agent</p>
+              <p className="text-lg font-semibold text-zinc-900">SK-Agent</p>
               <p className="truncate text-xs text-zinc-500">
                 {flowStep !== 'idle' && flowStep !== 'complete'
                   ? (FLOW_STEP_MESSAGES[flowStep as keyof typeof FLOW_STEP_MESSAGES] ?? 'Working on it…')
-                  : 'Agentic workflow demo'}
+                  : 'Multi-agentic workflow demo'}
               </p>
             </div>
             {isModal && onClose ? (
@@ -392,7 +398,7 @@ export default function MultiAgentChatbotSection({
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about projects, Dr. SK, books, or articles…"
+                placeholder="Ask about this website — services, resources, wellness, books, or projects…"
                 className="w-full rounded-xl border-2 border-teal-200 bg-white py-4 pl-4 pr-12 text-sm text-black placeholder:text-zinc-400 focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-500/30"
                 disabled={isTyping}
               />

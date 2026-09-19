@@ -29,7 +29,39 @@ describe('resolveAgent confidence routing', () => {
 });
 
 describe('FALLBACK_REPLY', () => {
-  it('guides users toward supported topics', () => {
-    expect(FALLBACK_REPLY).toMatch(/not sure/i);
+  it('keeps general questions on the page chatbot', () => {
+    expect(FALLBACK_REPLY).toMatch(/website knowledge/i);
+    expect(FALLBACK_REPLY).toMatch(/chatbot assistant/i);
+  });
+});
+
+describe('site-grounded routing', () => {
+  it('routes resources questions to the resources hub', () => {
+    const route = resolveAgent('Where are the AI resources?');
+    expect(route?.parent).toBe('rag');
+    expect(route?.subAgent).toBe('resources_hub');
+  });
+
+  it('routes a bare resources query to the resources hub', () => {
+    const route = resolveAgent('resources');
+    expect(route?.parent).toBe('rag');
+    expect(route?.subAgent).toBe('resources_hub');
+  });
+
+  it('routes wellness education to the wellness hub', () => {
+    const route = resolveAgent('Where is wellness education?');
+    expect(route?.parent).toBe('books');
+    expect(route?.subAgent).toBe('wellness_books');
+  });
+
+  it('routes services questions to the services hub', () => {
+    const route = resolveAgent('What services does SK Creation offer?');
+    expect(route?.parent).toBe('rag');
+    expect(route?.subAgent).toBe('services_hub');
+  });
+
+  it('routes live project questions to the projects agent', () => {
+    const route = resolveAgent('Which live projects are on this site?');
+    expect(route?.parent).toBe('projects');
   });
 });

@@ -1,11 +1,13 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ArrowRight, BookOpen } from 'lucide-react';
+import { ArrowRight, BookOpen, Cpu, HeartHandshake } from 'lucide-react';
 import HashScrollOnLoad from '@/component/home/HashScrollOnLoad';
 import { FEATURED_BOOKS } from '@/lib/featured-books';
+import { WELLNESS_EDUCATION_HREF } from '@/lib/mental-health-resources';
 import { RESOURCE_GROUPS, type ResourceItem } from '@/lib/resources';
 import {
   badgeTeal,
@@ -20,10 +22,32 @@ import {
 const CARD_CLASS =
   'group flex h-full flex-col rounded-2xl border border-teal-200/70 bg-white p-5 shadow-sm transition hover:border-teal-400 hover:shadow-[0_10px_28px_rgba(13,148,136,0.1)] sm:p-6';
 
-const CATEGORIES = [
-  ...RESOURCE_GROUPS.map((group) => ({ id: group.id, label: group.title })),
-  { id: 'books', label: 'Books' },
-];
+const MAJOR_CTAS = [
+  {
+    href: '#ai',
+    title: 'AI',
+    kicker: 'Engineering',
+    body: 'Agentic systems, RAG, LLMs, tools, and production architecture.',
+    cta: 'Explore AI',
+    icon: Cpu,
+  },
+  {
+    href: '#books',
+    title: 'Books',
+    kicker: 'Publish',
+    body: 'Practical titles on production AI, career, and staying well in a digital world.',
+    cta: 'Explore books',
+    icon: BookOpen,
+  },
+  {
+    href: WELLNESS_EDUCATION_HREF,
+    title: 'Wellness Education',
+    kicker: 'Wellness',
+    body: 'Mental-health awareness guides and books for stress, overthinking, and healthier technology use.',
+    cta: 'Explore wellness',
+    icon: HeartHandshake,
+  },
+] as const;
 
 function ResourceCard({ item }: { item: ResourceItem }) {
   const cta = (
@@ -53,12 +77,21 @@ function ResourceCard({ item }: { item: ResourceItem }) {
 }
 
 export default function ResourcesPageContent() {
+  useEffect(() => {
+    if (
+      window.location.hash === '#mental-health-awareness' ||
+      window.location.hash === '#wellness-education'
+    ) {
+      window.location.replace(WELLNESS_EDUCATION_HREF);
+    }
+  }, []);
+
   return (
     <main className="min-h-screen bg-[#F8F7FF] text-zinc-900">
       <HashScrollOnLoad />
       <section
         aria-labelledby="resources-heading"
-        className="relative -mt-[3.75rem] flex min-h-[70dvh] flex-col overflow-hidden border-b border-teal-200/60 bg-[#f7fffd] pt-[3.75rem]"
+        className="relative -mt-[3.75rem] flex flex-col overflow-hidden border-b border-teal-200/60 bg-[#f7fffd] pt-[3.75rem]"
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_-8%,rgba(13,148,136,0.16),transparent_58%),radial-gradient(circle_at_88%_82%,rgba(6,182,212,0.1),transparent_42%)]" />
         <div
@@ -71,7 +104,7 @@ export default function ResourcesPageContent() {
           aria-hidden
         />
 
-        <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-4 py-12 text-center sm:px-8 sm:py-16">
+        <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-1 flex-col items-center px-4 pb-12 pt-16 text-center sm:px-8 sm:pb-16 sm:pt-20">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -97,23 +130,66 @@ export default function ResourcesPageContent() {
             transition={{ duration: 0.5, delay: 0.14 }}
             className="mt-6 max-w-2xl text-sm leading-relaxed text-zinc-600 sm:mt-8 sm:text-lg sm:leading-8"
           >
-            Practical AI engineering, live products, architecture examples, and books — organized in
-            one place.
+            Practical AI, books, and mental-health awareness — three paths, one place.
           </motion.p>
 
           <nav
-            aria-label="Resource categories"
-            className="mt-8 flex w-full max-w-3xl flex-wrap justify-center gap-2 sm:mt-10"
+            aria-label="Resource paths"
+            className="mt-8 grid w-full max-w-4xl gap-3 text-left sm:mt-10 sm:grid-cols-3 sm:gap-4"
           >
-            {CATEGORIES.map((category) => (
-              <a
-                key={category.id}
-                href={`#${category.id}`}
-                className="inline-flex min-h-11 items-center rounded-full border border-teal-200 bg-white px-3.5 py-2 text-xs font-semibold text-teal-800 transition hover:border-teal-400 hover:bg-teal-50 sm:text-sm"
-              >
-                {category.label}
-              </a>
-            ))}
+            {MAJOR_CTAS.map((item, index) => {
+              const Icon = item.icon;
+              const className =
+                'group flex h-full min-h-[14.5rem] flex-col rounded-2xl border-2 border-teal-200 bg-white p-5 shadow-sm transition hover:border-[#0d9488] hover:shadow-[0_12px_32px_rgba(13,148,136,0.14)] sm:min-h-[16rem] sm:p-6';
+              const inner = (
+                <>
+                  <span className="flex items-center justify-between gap-3">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-teal-800">
+                      {item.kicker}
+                    </span>
+                    <Icon className="h-5 w-5 shrink-0 text-teal-700" aria-hidden />
+                  </span>
+                  <span className="mt-3 min-h-[3.5rem] text-xl font-bold leading-tight tracking-tight text-zinc-900 sm:min-h-[3.75rem] sm:text-2xl">
+                    {item.title}
+                  </span>
+                  <span className="mt-2 flex-1 text-sm leading-relaxed text-zinc-600">{item.body}</span>
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-teal-800">
+                    {item.cta}
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden />
+                  </span>
+                </>
+              );
+              return (
+                <motion.div
+                  key={item.href}
+                  className="h-full"
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.16 + index * 0.06 }}
+                >
+                  {item.href.startsWith('/') ? (
+                    <Link href={item.href} className={className}>
+                      {inner}
+                    </Link>
+                  ) : (
+                    <a
+                      href={item.href}
+                      className={className}
+                      onClick={(event) => {
+                        const id = item.href.slice(1);
+                        const target = document.getElementById(id);
+                        if (!target) return;
+                        event.preventDefault();
+                        window.history.pushState(null, '', item.href);
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                    >
+                      {inner}
+                    </a>
+                  )}
+                </motion.div>
+              );
+            })}
           </nav>
         </div>
       </section>
@@ -121,7 +197,7 @@ export default function ResourcesPageContent() {
       {RESOURCE_GROUPS.map((group, groupIndex) => (
         <section
           key={group.id}
-          id={group.id}
+          id={groupIndex === 0 ? 'ai' : group.id}
           aria-labelledby={`${group.id}-heading`}
           className={`relative scroll-mt-20 overflow-hidden border-b border-teal-200/50 ${
             groupIndex % 2 === 0 ? 'bg-white' : 'bg-[#F8F7FF]'

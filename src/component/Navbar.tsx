@@ -91,11 +91,7 @@ export default function Navbar() {
     (href: string) => {
       if (href === '/home') return pathname === '/' || pathname === '/home';
       if (href === '/resources') {
-        return (
-          pathname === '/resources' ||
-          pathname.startsWith('/resources/') ||
-          pathname.startsWith('/project/')
-        );
+        return pathname === '/resources' || pathname.startsWith('/resources/') || pathname.startsWith('/project/');
       }
       return pathname === href || pathname.startsWith(`${href}/`);
     },

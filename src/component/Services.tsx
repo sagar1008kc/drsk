@@ -252,6 +252,14 @@ function ServiceDetailSection({ area, index }: { area: ServiceArea; index: numbe
                 {area.disclaimer}
               </p>
             ) : null}
+            {area.resourcesHref ? (
+              <Link
+                href={area.resourcesHref}
+                className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-[#0d9488] px-6 py-3 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(13,148,136,0.35)] transition hover:bg-teal-700 sm:w-auto"
+              >
+                {area.resourcesCta ?? 'Resources'}
+              </Link>
+            ) : null}
           </div>
 
           <div className={`relative ${reverse ? 'lg:col-start-1 lg:row-start-1' : ''}`}>

@@ -68,6 +68,16 @@ const nextConfig = {
         destination: '/resources',
         permanent: true,
       },
+      {
+        source: '/services/mental-health-awareness',
+        destination: '/resources/wellness-education',
+        permanent: true,
+      },
+      {
+        source: '/services/mental-health-awarness',
+        destination: '/resources/wellness-education',
+        permanent: true,
+      },
     ];
   },
   async headers() {

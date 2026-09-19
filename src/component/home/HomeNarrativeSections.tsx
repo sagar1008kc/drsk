@@ -97,7 +97,7 @@ const PILLARS: Array<{
       'We help people stay clear and human while the tools around them move faster.',
     ],
     note: 'This work is education and awareness. It is not therapy, diagnosis, or emergency care.',
-    href: '/services#wellness-education',
+    href: '/resources/wellness-education',
     cta: 'Explore wellness awareness',
   },
 ];
