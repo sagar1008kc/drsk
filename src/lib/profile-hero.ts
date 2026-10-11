@@ -1,7 +1,7 @@
 /** Recruiter-facing hero copy — engineering + AI integration first */
 
 export const PROFILE_HERO_HEADLINE = {
-  highlight: 'AI Forward Deployed Engineer',
+  highlight: 'Sr. AI Forward Deployed Engineer',
 } as const;
 
 export const PROFILE_HERO_BODY =
