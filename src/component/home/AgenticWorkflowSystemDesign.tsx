@@ -345,7 +345,7 @@ const TOP_NAV: Array<{
   { icon: UserCheck, label: 'HITL', delay: 0.5, href: RESOURCE_HREFS.hitl },
 ];
 
-const MULTI_AGENT_WORKFLOW_MAP_HREF = RESOURCE_HREFS.workflowMap;
+const VISUAL_DEMO_HREF = RESOURCE_HREFS.rag;
 const RESOURCES_HREF = RESOURCE_HREFS.hub;
 const OPERATIONS_HREF = RESOURCE_HREFS.operations;
 const SYSTEM_DESIGN_HREF = RESOURCE_HREFS.systemDesign;
@@ -480,7 +480,7 @@ export function AgenticWorkflowSystemDesign() {
             </motion.div>
           </div>
           <Link
-            href={MULTI_AGENT_WORKFLOW_MAP_HREF}
+            href={VISUAL_DEMO_HREF}
             className="group mt-3 inline-flex min-h-[44px] items-center gap-2 rounded-full border border-teal-400/45 bg-teal-500/10 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-teal-100 shadow-[0_0_18px_rgba(13,148,136,0.22)] transition hover:scale-105 hover:border-teal-300/70 hover:bg-teal-500/20 hover:text-white sm:mt-4 sm:text-sm"
           >
             <Play className="h-4 w-4 fill-current" aria-hidden />
