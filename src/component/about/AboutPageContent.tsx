@@ -83,9 +83,9 @@ const publicLinks = [
 ];
 
 const experience = [
-  { role: 'Software Engineer', org: 'Fortune Top 25, Fortune Global 50 Company · Full-time', loc: 'USA · On-site', dates: 'May 2019 – Present', current: true, icon: '💻' },
-  { role: 'Founder & CEO', org: 'SK Creation · Self-employed', loc: 'United States · Remote', dates: 'Apr 2023 – Present', current: true, icon: '🚀' },
-  { role: 'IT Support Specialist', org: 'Experimax · Full-time', loc: 'USA · On-site', dates: 'Jan 2016 – Apr 2019', current: false, icon: '🛠️' },
+  { role: 'Software Engineer', org: 'Fortune Top 25, Fortune Global 50 Company ', loc: 'USA · On-site', dates: 'May 2019 – Present', current: true, icon: '💻' },
+  { role: 'Founder & Principal AI Engineer', org: 'SK Creation · Self-employed-Personal Project', loc: 'United States · Remote', dates: 'Jan 2024 – Present', current: true, icon: '🚀' },
+  { role: 'IT Support Specialist', org: 'Experimax · Full-time', loc: 'USA · On-site', dates: 'Feb 2016 – Jan 2019', current: false, icon: '🛠️' },
   { role: 'Section Officer', org: 'Government of Nepal', loc: 'Nepal', dates: 'May 2011 – Jun 2014', current: false, icon: '🏛️' },
   { role: 'Lead Trainer | Motivational Speaker', org: 'Self-employed', loc: 'Nepal', dates: 'Jul 2009 – May 2014', current: false, icon: '🎤' },
   { role: 'Guest Lecturer', org: 'Gyan Deep College', loc: 'Nepal', dates: 'Mar 2012 – Sep 2013', current: false, icon: '📖' },
